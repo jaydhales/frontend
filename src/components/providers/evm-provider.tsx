@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+"use client";
 import "@rainbow-me/rainbowkit/styles.css";
 import { WagmiProvider } from "wagmi";
 import {
