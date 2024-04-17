@@ -43,7 +43,9 @@ export function UniswapForm() {
     userAddress: address ?? "0x",
   });
   useEffect(() => {
-    form.setError("swapToken", { message: error?.message });
+    if (error) {
+      form.setError("swapToken", { message: error?.message });
+    }
   }, [error]);
   const { writeContract } = useWriteContract();
   function onSubmit() {

@@ -17,6 +17,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { useSwapAndMint } from "./hooks/useSwapAndMint";
 import { useWriteContract } from "wagmi";
+import { Switch } from "../ui/switch";
 
 const FormSchema = z.object({
   collateralToken: z
@@ -32,6 +33,7 @@ const FormSchema = z.object({
     })
     .startsWith("0x", { message: "Token starts with 0x." }),
   amount: z.number().positive({ message: "Positive numbers only." }),
+  isApe: z.boolean(),
 });
 
 export function SwapMintForm() {
@@ -41,6 +43,7 @@ export function SwapMintForm() {
       collateralToken: "",
       debtToken: "",
       amount: 0,
+      isApe: true,
     },
   });
   const { collateralToken, debtToken } = form.getValues();
@@ -85,22 +88,41 @@ export function SwapMintForm() {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="amount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Amount</FormLabel>
+                <FormControl>
+                  <Input placeholder="0" type="number" {...field} />
+                </FormControl>
+                <FormDescription>Amount</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="isApe"
+            render={({ field }) => (
+              <FormItem className=" flex items-center justify-between">
+                <FormLabel>Is Ape</FormLabel>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    aria-readonly
+                  ></Switch>
+                  {/* <Input placeholder="0" type="number" {...field} /> */}
+                </FormControl>
+              </FormItem>
+            )}
+          />
         </div>
 
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Amount</FormLabel>
-              <FormControl>
-                <Input placeholder="0" type="number" {...field} />
-              </FormControl>
-              <FormDescription>Amount</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <Button disabled={!Boolean(data?.request)} type="submit">
           Submit
         </Button>

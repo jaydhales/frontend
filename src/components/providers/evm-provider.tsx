@@ -9,7 +9,11 @@ import {
 import { mainnet } from "wagmi/chains";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { RPC_URL } from "~/data/constants";
-const main = { ...mainnet, rpcUrls: { default: { http: [RPC_URL] } } };
+const main = {
+  ...mainnet,
+  rpcUrls: { default: { http: [RPC_URL] } },
+  id: 4321,
+};
 
 // const config = getDefaultConfig({
 //   appName: "RainbowKit App",
