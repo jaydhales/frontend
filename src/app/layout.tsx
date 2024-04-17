@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import { Inter } from "next/font/google";
 
+import "@radix-ui/themes/styles.css";
 import { TRPCReactProvider } from "~/trpc/react";
 import EvmProvider from "~/components/providers/evm-provider";
 
