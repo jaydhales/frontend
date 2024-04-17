@@ -55,6 +55,7 @@ export function UniswapForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className=" w-1/2 space-y-6">
+        <h1>Swap ETH for any token supported by uniswap.</h1>
         <div className="">
           <FormField
             control={form.control}
@@ -65,7 +66,7 @@ export function UniswapForm() {
                 <FormControl>
                   <Input placeholder="0x..." {...field} />
                 </FormControl>
-                <FormDescription>Collateral token address.</FormDescription>
+                <FormDescription>Swap token address.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
