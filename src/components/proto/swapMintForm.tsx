@@ -34,7 +34,7 @@ const FormSchema = z.object({
   amount: z.number().positive({ message: "Positive numbers only." }),
 });
 
-export function InputForm() {
+export function SwapMintForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
