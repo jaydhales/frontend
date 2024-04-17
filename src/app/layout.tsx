@@ -5,6 +5,7 @@ import "@radix-ui/themes/styles.css";
 import { TRPCReactProvider } from "~/trpc/react";
 import EvmProvider from "~/components/providers/evm-provider";
 import { headers } from "next/headers";
+import { Header } from "~/components/header";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,7 +30,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider>
-          <EvmProvider cookie={cookie}>{children}</EvmProvider>
+          <EvmProvider cookie={cookie}>
+            <Header />
+            {children}
+          </EvmProvider>
         </TRPCReactProvider>
       </body>
     </html>

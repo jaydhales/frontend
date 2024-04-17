@@ -58,7 +58,6 @@ export function SwapMintForm() {
       >
         <div className="grid grid-cols-2 gap-x-2">
           <FormField
-            disabled={Boolean(data?.request)}
             control={form.control}
             name="collateralToken"
             render={({ field }) => (
@@ -102,7 +101,9 @@ export function SwapMintForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={!Boolean(data?.request)} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );

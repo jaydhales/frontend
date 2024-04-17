@@ -15,10 +15,10 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { useSwapAndMint } from "./hooks/useSwapAndMint";
 import { useAccount, useWriteContract } from "wagmi";
 import { useUniswap } from "./hooks/useUniswap";
 import { TAddressString } from "~/lib/types";
+import { useEffect } from "react";
 
 const FormSchema = z.object({
   swapToken: z
@@ -38,10 +38,13 @@ export function UniswapForm() {
   });
   const { address } = useAccount();
   let { swapToken } = form.getValues();
-  const { data } = useUniswap({
+  const { data, error } = useUniswap({
     token: swapToken as TAddressString,
     userAddress: address ?? "0x",
   });
+  useEffect(() => {
+    form.setError("swapToken", { message: error?.message });
+  }, [error]);
   const { writeContract } = useWriteContract();
   function onSubmit() {
     writeContract(data!.request);
@@ -52,7 +55,6 @@ export function UniswapForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className=" w-1/2 space-y-6">
         <div className="">
           <FormField
-            disabled={Boolean(data?.request)}
             control={form.control}
             name="swapToken"
             render={({ field }) => (
@@ -68,7 +70,9 @@ export function UniswapForm() {
           />
         </div>
 
-        <Button type="submit">Submit</Button>
+        <Button disabled={!Boolean(data?.request)} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );

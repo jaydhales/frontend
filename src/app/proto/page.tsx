@@ -2,7 +2,7 @@
 import { SwapMintForm } from "~/components/proto/swapMintForm";
 import { UniswapForm } from "~/components/proto/uniswapForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-export default async function page() {
+export default function page() {
   return (
     <div className=" flex justify-center  pt-20">
       <Tabs defaultValue="swapMint" className="w-1/2">
