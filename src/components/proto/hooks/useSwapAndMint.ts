@@ -5,7 +5,7 @@ import { TAddressString } from "~/lib/types";
 interface Props {
   collateralToken: string;
   debtToken: string;
-  amount: BigInt;
+  amount: bigint;
 }
 export function useSwapAndMint({ debtToken, collateralToken }: Props) {
   const { data } = useSimulateContract({

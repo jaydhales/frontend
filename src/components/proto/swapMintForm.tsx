@@ -43,7 +43,7 @@ export function SwapMintForm() {
       amount: 0,
     },
   });
-  let { collateralToken, debtToken } = form.getValues();
+  const { collateralToken, debtToken } = form.getValues();
   const { data } = useSwapAndMint({ collateralToken, debtToken, amount: 0n });
   const { writeContract } = useWriteContract();
   function onSubmit() {

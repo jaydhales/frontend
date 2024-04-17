@@ -37,7 +37,7 @@ export function UniswapForm() {
     },
   });
   const { address } = useAccount();
-  let { swapToken } = form.getValues();
+  const { swapToken } = form.getValues();
   const { data, error } = useUniswap({
     token: swapToken as TAddressString,
     userAddress: address ?? "0x",

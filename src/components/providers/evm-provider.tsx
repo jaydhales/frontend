@@ -21,7 +21,7 @@ const main = { ...mainnet, rpcUrls: { default: { http: [RPC_URL] } } };
 export const wagmiConfig = getDefaultConfig({
   appName: "SIR",
   projectId:
-    process.env.NEXT_PUBLIC_PROJECT_ID || "934acc697f01fec33b75c19d9bb2e3c7",
+    process.env.NEXT_PUBLIC_PROJECT_ID ?? "934acc697f01fec33b75c19d9bb2e3c7",
   chains: [main],
   ssr: true,
   storage: createStorage({
