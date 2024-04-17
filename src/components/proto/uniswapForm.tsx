@@ -29,7 +29,7 @@ const FormSchema = z.object({
     .startsWith("0x", { message: "Token starts with 0x." }),
 });
 
-export function SwapMintForm() {
+export function UniswapForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

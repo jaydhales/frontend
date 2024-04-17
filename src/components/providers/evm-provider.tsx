@@ -1,33 +1,42 @@
 "use client";
 import "@rainbow-me/rainbowkit/styles.css";
-import { WagmiProvider } from "wagmi";
 import {
-  arbitrum,
-  base,
-  mainnet,
-  optimism,
-  polygon,
-  sepolia,
-} from "wagmi/chains";
+  cookieStorage,
+  cookieToInitialState,
+  createStorage,
+  WagmiProvider,
+} from "wagmi";
+import { mainnet } from "wagmi/chains";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { RPC_URL } from "~/data/constants";
+const main = { ...mainnet, rpcUrls: { default: { http: [RPC_URL] } } };
 
-const config = getDefaultConfig({
-  appName: "RainbowKit App",
-  projectId: "YOUR_PROJECT_ID",
-  chains: [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    base,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [sepolia] : []),
-  ],
+// const config = getDefaultConfig({
+//   appName: "RainbowKit App",
+//   projectId: "YOUR_PROJECT_ID",
+//   chains: [main],
+//   ssr: true,
+// });
+
+export const wagmiConfig = getDefaultConfig({
+  appName: "SIR",
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID || "",
+  chains: [main],
   ssr: true,
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
 });
-
-function EvmProvider({ children }: { children: React.ReactNode }) {
+function EvmProvider({
+  children,
+  cookie,
+}: {
+  children: React.ReactNode;
+  cookie: string | null;
+}) {
+  const initialState = cookieToInitialState(wagmiConfig, cookie);
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider config={wagmiConfig} initialState={initialState}>
       <RainbowKitProvider>{children}</RainbowKitProvider>
     </WagmiProvider>
   );

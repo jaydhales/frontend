@@ -52,7 +52,10 @@ export function SwapMintForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className=" w-1/2 space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className=" w-full space-y-6"
+      >
         <div className="grid grid-cols-2 gap-x-2">
           <FormField
             disabled={Boolean(data?.request)}

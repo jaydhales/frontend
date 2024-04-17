@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "@radix-ui/themes/styles.css";
 import { TRPCReactProvider } from "~/trpc/react";
 import EvmProvider from "~/components/providers/evm-provider";
+import { headers } from "next/headers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,11 +22,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const cookie = headers().get("cookie");
+  const headerList = headers();
+  const country = headerList.get("x-country");
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider>
-          <EvmProvider>{children}</EvmProvider>
+          <EvmProvider cookie={cookie}>{children}</EvmProvider>
         </TRPCReactProvider>
       </body>
     </html>
