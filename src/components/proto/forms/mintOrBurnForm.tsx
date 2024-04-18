@@ -44,6 +44,7 @@ const FormSchema = z.object({
     .positive({ message: "Positive numbers only." })
     .finite({ message: "Must be a number." }),
   type: z.union([z.literal("mint"), z.literal("burn")]),
+  assetType: z.union([z.literal("ape"), z.literal("tea")]),
 });
 
 export function MintOrBurnForm() {
@@ -54,15 +55,18 @@ export function MintOrBurnForm() {
       debtToken: "",
       amount: 0,
       type: "mint",
+      assetType: "ape",
     },
     mode: "onBlur",
   });
-  const { collateralToken, debtToken, type, amount } = form.getValues();
+  const { collateralToken, debtToken, type, amount, assetType } =
+    form.getValues();
   const { data } = useMintOrBurn({
     collateralToken,
     debtToken,
     amount: parseUnits(amount.toString(), 18),
     type,
+    assetType,
   });
   const { writeContract } = useWriteContract();
   function onSubmit() {
@@ -133,7 +137,7 @@ export function MintOrBurnForm() {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a verified email to display" />
+                      <SelectValue placeholder="Select action type." />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -143,6 +147,33 @@ export function MintOrBurnForm() {
                 </Select>
 
                 <FormDescription>Action type.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="assetType"
+            render={({ field }) => (
+              <FormItem className=" ">
+                <FormLabel>Asset</FormLabel>
+
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select asset type." />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="tea">Tea</SelectItem>
+                    <SelectItem value="ape">Ape</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <FormDescription>Asset type.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
