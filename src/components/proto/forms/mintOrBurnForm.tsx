@@ -15,9 +15,16 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { useSwapAndMint } from "./hooks/useSwapAndMint";
+import { useMintOrBurn } from "./hooks/useMintOrBurn";
 import { useWriteContract } from "wagmi";
-import { Switch } from "../ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import { parseUnits } from "viem";
 
 const FormSchema = z.object({
   collateralToken: z
@@ -32,22 +39,31 @@ const FormSchema = z.object({
       message: "Address length too short.",
     })
     .startsWith("0x", { message: "Token starts with 0x." }),
-  amount: z.number().positive({ message: "Positive numbers only." }),
-  isApe: z.boolean(),
+  amount: z.coerce
+    .number()
+    .positive({ message: "Positive numbers only." })
+    .finite({ message: "Must be a number." }),
+  type: z.union([z.literal("mint"), z.literal("burn")]),
 });
 
-export function SwapMintForm() {
+export function MintOrBurnForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       collateralToken: "",
       debtToken: "",
       amount: 0,
-      isApe: true,
+      type: "mint",
     },
+    mode: "onBlur",
   });
-  const { collateralToken, debtToken } = form.getValues();
-  const { data } = useSwapAndMint({ collateralToken, debtToken, amount: 0n });
+  const { collateralToken, debtToken, type, amount } = form.getValues();
+  const { data } = useMintOrBurn({
+    collateralToken,
+    debtToken,
+    amount: parseUnits(amount.toString(), 18),
+    type,
+  });
   const { writeContract } = useWriteContract();
   function onSubmit() {
     writeContract(data!.request);
@@ -59,7 +75,7 @@ export function SwapMintForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className=" w-full space-y-6"
       >
-        <div className="grid grid-cols-2 gap-x-2">
+        <div className="grid grid-cols-2 gap-2">
           <FormField
             control={form.control}
             name="collateralToken"
@@ -106,18 +122,28 @@ export function SwapMintForm() {
 
           <FormField
             control={form.control}
-            name="isApe"
+            name="type"
             render={({ field }) => (
-              <FormItem className=" flex items-center justify-between">
-                <FormLabel>Is Ape</FormLabel>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    aria-readonly
-                  ></Switch>
-                  {/* <Input placeholder="0" type="number" {...field} /> */}
-                </FormControl>
+              <FormItem className=" ">
+                <FormLabel>Action</FormLabel>
+
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a verified email to display" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="mint">Mint</SelectItem>
+                    <SelectItem value="burn">Burn</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <FormDescription>Action type.</FormDescription>
+                <FormMessage />
               </FormItem>
             )}
           />

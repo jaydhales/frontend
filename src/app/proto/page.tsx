@@ -1,6 +1,6 @@
 "use client";
-import { SwapMintForm } from "~/components/proto/swapMintForm";
-import { UniswapForm } from "~/components/proto/uniswapForm";
+import { MintOrBurnForm } from "~/components/proto/forms/mintOrBurnForm";
+import { UniswapForm } from "~/components/proto/forms/uniswapForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 export default function page() {
   return (
@@ -11,7 +11,7 @@ export default function page() {
           <TabsTrigger value="uniswap">Uniswap</TabsTrigger>
         </TabsList>
         <TabsContent value="swapMint">
-          <SwapMintForm />
+          <MintOrBurnForm />
         </TabsContent>
         <TabsContent value="uniswap">
           <UniswapForm />

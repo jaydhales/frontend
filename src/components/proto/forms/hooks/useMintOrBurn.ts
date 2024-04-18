@@ -6,12 +6,18 @@ interface Props {
   collateralToken: string;
   debtToken: string;
   amount: bigint;
+  type: "mint" | "burn";
 }
-export function useSwapAndMint({ debtToken, collateralToken }: Props) {
+export function useMintOrBurn({
+  debtToken,
+  collateralToken,
+  type,
+  amount,
+}: Props) {
   const { data } = useSimulateContract({
     abi: Assistant.abi,
     address: Assistant.address,
-    functionName: "swapAndMint",
+    functionName: type,
     args: [
       false,
       {
@@ -19,9 +25,7 @@ export function useSwapAndMint({ debtToken, collateralToken }: Props) {
         collateralToken: collateralToken as TAddressString,
         leverageTier: 1,
       },
-      0n,
-      0n,
-      0,
+      amount,
     ],
   });
   return { data };
