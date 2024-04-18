@@ -13,6 +13,6 @@ test("App Router: Works with Server Components", () => {
     </QueryClientProvider>,
   );
   expect(
-    screen.getByRole("heading", { level: 1, name: "PROTOTYPE" }),
+    screen.getByRole("heading", { level: 1, name: "PROTOTYPEi" }),
   ).toBeDefined();
 });
