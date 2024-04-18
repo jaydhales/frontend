@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function page() {
   return (
     <div className=" flex justify-center  pt-20">
+      <h1>PROTOTYPE</h1>
       <Tabs defaultValue="swapMint" className="w-1/2">
         <TabsList className="">
           <TabsTrigger value="swapMint">Swap & Mint</TabsTrigger>
