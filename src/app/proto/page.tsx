@@ -1,7 +1,7 @@
 "use client";
-import { MintOrBurnForm } from "~/components/proto/forms/mintOrBurnForm";
-import { UniswapForm } from "~/components/proto/forms/uniswapForm";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { MintOrBurnForm } from "@/components/proto/forms/mintOrBurnForm";
+import { UniswapForm } from "@/components/proto/forms/uniswapForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function page() {
   return (
     <div className=" flex justify-center  pt-20">

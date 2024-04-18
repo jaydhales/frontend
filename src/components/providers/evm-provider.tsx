@@ -8,7 +8,7 @@ import {
 } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { RPC_URL } from "~/data/constants";
+import { RPC_URL } from "@/data/constants";
 const main = {
   ...mainnet,
   rpcUrls: { default: { http: [RPC_URL] } },

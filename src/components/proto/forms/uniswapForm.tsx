@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "~/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,11 +13,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { useAccount, useWriteContract } from "wagmi";
 import { useUniswap } from "./hooks/useUniswap";
-import { TAddressString } from "~/lib/types";
+import { TAddressString } from "@/lib/types";
 import { useEffect } from "react";
 
 const FormSchema = z.object({

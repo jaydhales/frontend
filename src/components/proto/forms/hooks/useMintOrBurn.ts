@@ -1,7 +1,7 @@
 "use client";
 import { useSimulateContract } from "wagmi";
-import { Assistant } from "~/contracts/assistant";
-import { TAddressString } from "~/lib/types";
+import { Assistant } from "@/contracts/assistant";
+import { TAddressString } from "@/lib/types";
 interface Props {
   collateralToken: string;
   debtToken: string;

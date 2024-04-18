@@ -1,8 +1,8 @@
 import { useSimulateContract } from "wagmi";
-import { UniswapV2Router } from "~/contracts/uniswap-v2-router";
-import { TAddressString } from "~/lib/types";
+import { UniswapV2Router } from "@/contracts/uniswap-v2-router";
+import { TAddressString } from "@/lib/types";
 import { parseUnits } from "viem";
-import { WETH_ADDRESS } from "~/data/constants";
+import { WETH_ADDRESS } from "@/data/constants";
 interface Props {
   token: TAddressString;
   userAddress: TAddressString;

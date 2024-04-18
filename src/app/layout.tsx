@@ -1,17 +1,17 @@
 import "../styles/globals.css";
-import { Inter } from "next/font/google";
 
 import "@radix-ui/themes/styles.css";
-import { TRPCReactProvider } from "~/trpc/react";
-import EvmProvider from "~/components/providers/evm-provider";
+import { TRPCReactProvider } from "@/trpc/react";
+import EvmProvider from "@/components/providers/evm-provider";
 import { headers } from "next/headers";
-import { Header } from "~/components/header";
+import { Header } from "@/components/header";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+// const inter = (Inter as any)({
+//   subsets: ["latin"],
+//   variable: "--font-sans",
+// });
 
+// console.log(Inter, "INTER");
 export const metadata = {
   title: "Sir",
   description: "Sir frontend",
@@ -28,7 +28,7 @@ export default function RootLayout({
   const country = headerList.get("x-country");
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`font-sans `}>
         <TRPCReactProvider>
           <EvmProvider cookie={cookie}>
             <Header />
