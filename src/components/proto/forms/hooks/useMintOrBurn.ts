@@ -19,11 +19,11 @@ export function useMintOrBurn({
     address: Assistant.address,
     functionName: type,
     args: [
-      false,
+      true,
       {
         debtToken: debtToken as TAddressString,
         collateralToken: collateralToken as TAddressString,
-        leverageTier: 1,
+        leverageTier: -1,
       },
       amount,
     ],
