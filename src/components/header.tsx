@@ -22,7 +22,7 @@ export function Header() {
     <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
       <div className="flex items-center gap-x-2">
         <Image
-          src={sir_logo}
+          src={"sir-logo.svg"}
           alt="Sir-Trading Logo"
           className="h-[60px] w-auto"
         />
