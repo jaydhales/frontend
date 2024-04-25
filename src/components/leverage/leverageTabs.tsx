@@ -8,7 +8,7 @@ import MintForm from "./mintForm";
 
 export default function LeverageTabs() {
   return (
-    <Tabs>
+    <Tabs defaultValue="mint">
       <div className="flex justify-center">
         <TabsList defaultValue={"mint"}>
           <TabsTrigger value={"mint"}>Mint</TabsTrigger>
