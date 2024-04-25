@@ -4,7 +4,7 @@ import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { Button } from "./ui/button";
 import sir_logo from "@/../public/images/sir-logo.svg";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 import Link from "next/link";
 export function Header() {
   const { openAccountModal } = useAccountModal();
@@ -40,6 +40,7 @@ export function Header() {
       </div>
       <div className="flex justify-end">
         <Button
+          size="sm"
           onClick={open}
           className="rounded-full bg-accent text-accent-foreground text-white"
         >

@@ -1,6 +1,6 @@
 "use client";
 import { MintOrBurnForm } from "@/components/proto/forms/mintOrBurnForm";
-import {  UniswapV2Form } from "@/components/proto/forms/uniswapV2Form";
+import { UniswapV2Form } from "@/components/proto/forms/uniswapV2Form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function page() {
   return (
