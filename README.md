@@ -1,7 +1,6 @@
 # SIR-FRONTEND
 
 website:
-\n
 twitter:
 
 # DEPLOY LOCALLY

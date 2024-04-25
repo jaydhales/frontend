@@ -29,7 +29,7 @@ const FormSchema = z.object({
     .startsWith("0x", { message: "Token starts with 0x." }),
 });
 
-export function UniswapForm() {
+export function UniswapV2Form() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -51,10 +51,9 @@ export function UniswapForm() {
   function onSubmit() {
     writeContract(data!.request);
   }
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className=" w-1/2 space-y-6">
+      <form onSubmit={onSubmit} className=" w-1/2 space-y-6">
         <h1>Swap ETH for any token supported by uniswap.</h1>
         <div className="">
           <FormField

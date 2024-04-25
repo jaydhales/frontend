@@ -1,9 +1,11 @@
 "use client";
-
+import Image from "next/image";
 import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { Button } from "./ui/button";
-
+import sir_logo from "@/../public/images/sir-logo.svg";
+import { ReactNode } from "react";
+import Link from "next/link";
 export function Header() {
   const { openAccountModal } = useAccountModal();
   const { openConnectModal } = useConnectModal();
@@ -17,14 +19,45 @@ export function Header() {
     return;
   };
   return (
-    <div className="px-4 py-2">
-      <Button onClick={open}>
-        {!address && "Connect"}
-        {address &&
-          address.slice(0, 5) +
-            "..." +
-            address.slice(address.length - 5, address.length)}
-      </Button>
+    <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
+      <div className="flex items-center gap-x-2">
+        <Image
+          src={sir_logo}
+          alt="Sir-Trading Logo"
+          className="h-[60px] w-auto"
+        />
+        <h1 className="font-lora text-[24px] font-bold">SIR. Trading</h1>
+      </div>
+      <div className="col-span-3 flex justify-center">
+        <nav>
+          <ul className="flex gap-x-[16px] bg-[#0A0A0F] px-[12px] py-[12px] font-semibold text-muted-foreground">
+            <NavItem url={""}>Leverage</NavItem>
+            <NavItem url={""}>Provide Liquidity</NavItem>
+            <NavItem url={""}>Stake</NavItem>
+            <NavItem url={""}>My tokens</NavItem>
+          </ul>
+        </nav>
+      </div>
+      <div className="flex justify-end">
+        <Button
+          onClick={open}
+          className="rounded-full bg-accent text-accent-foreground text-white"
+        >
+          {!address && "Connect Wallet"}
+          {address &&
+            address.slice(0, 5) +
+              "..." +
+              address.slice(address.length - 5, address.length)}
+        </Button>
+      </div>
     </div>
+  );
+}
+
+function NavItem({ url, children }: { children: ReactNode; url: string }) {
+  return (
+    <Link href={url}>
+      <li className="cursor-pointer hover:text-white">{children}</li>
+    </Link>
   );
 }
