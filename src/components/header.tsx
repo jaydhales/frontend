@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { Button } from "./ui/button";
@@ -10,6 +10,7 @@ export function Header() {
   const { openAccountModal } = useAccountModal();
   const { openConnectModal } = useConnectModal();
   const { address } = useAccount();
+  const logo = sir_logo as StaticImageData;
   const open = () => {
     if (address) {
       openAccountModal?.();
@@ -21,11 +22,7 @@ export function Header() {
   return (
     <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
       <div className="flex items-center gap-x-2">
-        <Image
-          src={sir_logo}
-          alt="Sir-Trading Logo"
-          className="h-[60px] w-auto"
-        />
+        <Image src={logo} alt="Sir-Trading Logo" className="h-[60px] w-auto" />
         <h1 className="font-lora text-[24px] font-bold">SIR. Trading</h1>
       </div>
       <div className="col-span-3 flex justify-center">
