@@ -3,6 +3,8 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Container } from "../ui/container";
 import { Card } from "../ui/card";
+import { HeadOne } from "../ui/headers";
+import MintForm from "./mintForm";
 
 export default function LeverageTabs() {
   return (
@@ -17,15 +19,9 @@ export default function LeverageTabs() {
       <TabsContent value="mint">
         <Container>
           <div className="grid w-full grid-cols-2 gap-x-[16px]">
-            <Card className="bg-card p-[24px] text-white">
-              <div className="grid grid-cols-3">
-                <div>
-                  <h2>Go long:</h2>
-                </div>
-              </div>
-            </Card>
+            <MintForm />
             <Card>
-              <h1>Positions</h1>
+              <HeadOne>Popular Pools</HeadOne>
             </Card>
           </div>
         </Container>
@@ -34,7 +30,7 @@ export default function LeverageTabs() {
       <TabsContent value="burn">
         <Container>
           <Card>
-            <h1 className="text-center">Popular Pools</h1>
+            <h1>Pools</h1>
           </Card>
         </Container>
       </TabsContent>
