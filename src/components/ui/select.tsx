@@ -13,8 +13,8 @@ const SelectGroup = SelectPrimitive.Group;
 
 const SelectValue = SelectPrimitive.Value;
 const selectTriggerVariants = cva(
-  "flex h-10 w-full items-center justify-between rounded-md   px-3 py-2 text-sm ring-offset-white placeholder:text-muted-foreground" +
-    "focus:outline-none focus:ring focus:ring-ring  disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+  "flex h-10 w-full items-center justify-between rounded-md   px-3 py-2 text-sm  placeholder:text-muted-foreground" +
+    "focus:outline-none focus-visible:outline-none focus-visible:ring-offset-background focus:ring-offset-0  focus:ring focus:ring-ring  disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
   {
     variants: {
       colorScheme: {
