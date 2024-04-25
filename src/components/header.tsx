@@ -40,6 +40,7 @@ export function Header() {
       </div>
       <div className="flex justify-end">
         <Button
+          size="sm"
           onClick={open}
           className="rounded-full bg-accent text-accent-foreground text-white"
         >
