@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Input } from "../ui/input";
 // import { Input } from "../ui/input";
 const MintSchema = z.object({
   long: z.string(),
@@ -48,11 +49,7 @@ export default function MintForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <input
-                        className="w-20 bg-transparent p-1 text-[40px] text-white"
-                        placeholder="0"
-                        {...field}
-                      />
+                      <Input placeholder="0" textSize="xl" {...field}></Input>
                     </FormControl>
                   </FormItem>
                 )}
