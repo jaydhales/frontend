@@ -5,23 +5,38 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { type VariantProps, cva } from "class-variance-authority";
 
 const Select = SelectPrimitive.Root;
 
 const SelectGroup = SelectPrimitive.Group;
 
 const SelectValue = SelectPrimitive.Value;
-
+const selectTriggerVariants = cva(
+  "flex h-10 w-full items-center justify-between rounded-md   px-3 py-2 text-sm ring-offset-white placeholder:text-muted-foreground" +
+    "focus:outline-none focus:ring focus:ring-ring  disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+  {
+    variants: {
+      colorScheme: {
+        light: "bg-card-foreground",
+        dark: "bg-card",
+      },
+    },
+    defaultVariants: {
+      colorScheme: "light",
+    },
+  },
+);
+export interface SelectTriggerProps
+  extends VariantProps<typeof selectTriggerVariants>,
+    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {}
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  SelectTriggerProps
+>(({ className, colorScheme, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
-    className={cn(
-      "flex h-10 w-full items-center justify-between rounded-md  bg-card-foreground px-3 py-2 text-sm ring-offset-white placeholder:text-muted-foreground focus:outline-none focus:ring focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-      className,
-    )}
+    className={cn(selectTriggerVariants({ colorScheme, className }))}
     {...props}
   >
     {children}
