@@ -32,14 +32,14 @@ export default function RootLayout({
   const country = headerList.get("x-country");
   return (
     <html lang="en">
-      <body
-        className={`flex min-h-screen flex-col bg-background ${lora.variable} ${inter.className} `}
-      >
+      <body className={`bg-background ${lora.variable} ${inter.className} `}>
         <TRPCReactProvider>
           <EvmProvider cookie={cookie}>
-            <Header />
-            {children}
-            <Footer />
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              {children}
+              <Footer />
+            </div>
           </EvmProvider>
         </TRPCReactProvider>
       </body>
