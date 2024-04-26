@@ -2,14 +2,6 @@ import Leverage from "@/components/leverage/leverage";
 import { LeverageTier, type TPool } from "@/lib/types";
 // import { api } from "@/trpc/server";
 
-const mockPools: TPool[] = [
-  {
-    debtToken: "0x",
-    collateralToken: "0x",
-    leverageTier: LeverageTier.one,
-    vaultId: "123",
-  },
-];
 export default async function Home() {
   // const hello = await api.post.hello({ text: "from tRPC" });
   return (

@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Container } from "../ui/container";
 import { Card } from "../ui/card";
 import { HeadOne } from "../ui/headers";
-import MintForm from "./mintForm";
+import MintForm from "./mintForm/mintForm";
 import VaultTable from "./vaultTable";
 
 export default function LeverageTabs() {
