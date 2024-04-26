@@ -5,6 +5,7 @@ import { Container } from "../ui/container";
 import { Card } from "../ui/card";
 import { HeadOne } from "../ui/headers";
 import MintForm from "./mintForm";
+import VaultTable from "./vaultTable";
 
 export default function LeverageTabs() {
   return (
@@ -21,7 +22,8 @@ export default function LeverageTabs() {
           <div className="grid w-full grid-cols-2 gap-x-[16px]">
             <MintForm />
             <Card>
-              <HeadOne>Popular Pools</HeadOne>
+              <HeadOne>Popular Vaults</HeadOne>
+              <VaultTable />
             </Card>
           </div>
         </Container>
