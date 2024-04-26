@@ -34,7 +34,8 @@ export default function MintForm() {
   const form = useForm<z.infer<typeof MintSchema>>({
     resolver: zodResolver(MintSchema),
   });
-  const formData = form.getValues();
+  const formData = form.watch();
+
   const { versus, leverageTiers, long } = useSelectReducer({ formData });
 
   return (
@@ -58,7 +59,7 @@ export default function MintForm() {
           <Dropdown name="leverageTier" title="Leverage Ratio:" form={form}>
             {leverageTiers.map((e) => (
               <SelectItem value={e.toString()} key={e}>
-                {e}
+                {e.toString()}
               </SelectItem>
             ))}
           </Dropdown>
