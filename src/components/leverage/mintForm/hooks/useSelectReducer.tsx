@@ -30,14 +30,15 @@ const mockPools: TPool[] = [
     symbol: "",
   },
 ];
-//todo rename
+//TODO ====
+//set a parent selector
+//parent selector doesn't get options reduced
+//be able to set parent selector to null -> reset everything
+//     ====
 export function useSelectReducer({ formData }: Props) {
   const [matchingPools, setMatchingPools] = useState<TPool[]>(mockPools);
   useEffect(() => {
     if (formData.leverageTier) {
-      console.log({
-        tier: LeverageTiers[parseInt(formData.leverageTier) as LeverageTier],
-      });
       const newPools = mockPools.filter(
         (p) =>
           LeverageTiers[p.leverageTier] ===
@@ -49,6 +50,9 @@ export function useSelectReducer({ formData }: Props) {
 
   // Find selections for all dropdowns
   const { versus, leverageTiers, long } = useMemo(() => {
+    // TODO
+    // also filter for second option selected
+    // check if select is parent select
     const versus = matchingPools.map((e) => {
       return { symbol: e.collateralToken, imgUrl: e.iconUrl };
     });
