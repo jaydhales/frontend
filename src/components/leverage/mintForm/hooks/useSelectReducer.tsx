@@ -24,7 +24,7 @@ const mockPools: TPool[] = [
   {
     debtToken: "0x2",
     collateralToken: "0x3",
-    leverageTier: LeverageTier.one,
+    leverageTier: LeverageTier.two,
     vaultId: "123",
     name: "",
     symbol: "",
@@ -35,6 +35,9 @@ export function useSelectReducer({ formData }: Props) {
   const [matchingPools, setMatchingPools] = useState<TPool[]>(mockPools);
   useEffect(() => {
     if (formData.leverageTier) {
+      console.log({
+        tier: LeverageTiers[parseInt(formData.leverageTier) as LeverageTier],
+      });
       const newPools = mockPools.filter(
         (p) =>
           LeverageTiers[p.leverageTier] ===
