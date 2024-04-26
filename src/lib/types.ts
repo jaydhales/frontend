@@ -5,6 +5,9 @@ export type TPool = {
   collateralToken: TAddressString;
   leverageTier: LeverageTier;
   vaultId: string;
+  iconUrl?: string;
+  name: string;
+  symbol: string;
 };
 
 export enum LeverageTier {
