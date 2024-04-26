@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { type ReactNode } from "react";
 import { type UseFormReturn, useForm } from "react-hook-form";
 import { Card } from "../../ui/card";
 import { z } from "zod";
@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "../../ui/select";
 import { Input } from "../../ui/input";
+import { useSelectReducer } from "./hooks/useSelectReducer";
 // import { Input } from "../ui/input";
 const MintSchema = z.object({
   long: z.string(),
@@ -34,14 +35,33 @@ export default function MintForm() {
     resolver: zodResolver(MintSchema),
   });
   const formData = form.getValues();
+  const { versus, leverageTiers, long } = useSelectReducer({ formData });
 
   return (
     <Card className="space-y-4">
       <Form {...form}>
         <div className="grid grid-cols-3 gap-x-4">
-          <Dropdown name="long" title="Go long:" form={form} />
-          <Dropdown name="versus" title="Versus:" form={form} />
-          <Dropdown name="leverageTier" title="Leverage Ratio:" form={form} />
+          <Dropdown name="long" title="Go long:" form={form}>
+            {long.map((e) => (
+              <SelectItem value={e.symbol} key={e.symbol}>
+                {e.symbol}
+              </SelectItem>
+            ))}
+          </Dropdown>
+          <Dropdown name="versus" title="Versus:" form={form}>
+            {versus.map((e) => (
+              <SelectItem value={e.symbol} key={e.symbol}>
+                {e.symbol}
+              </SelectItem>
+            ))}
+          </Dropdown>
+          <Dropdown name="leverageTier" title="Leverage Ratio:" form={form}>
+            {leverageTiers.map((e) => (
+              <SelectItem value={e.toString()} key={e}>
+                {e}
+              </SelectItem>
+            ))}
+          </Dropdown>
         </div>
         <div>
           <FormLabel>Deposit:</FormLabel>
@@ -67,7 +87,9 @@ export default function MintForm() {
                 colorScheme={"dark"}
                 form={form}
                 title=""
-              />
+              >
+                <SelectItem value="burn">Burn</SelectItem>
+              </Dropdown>
               <h2 className="pt-1 text-sm text-[#B6B6C9]">Balance: $232.32</h2>
               <h2 className="text-[#26DEC8]">25% 50% Max</h2>
             </div>
@@ -101,8 +123,11 @@ function Dropdown({
   title,
   colorScheme,
   name,
+  placeholder,
+  children,
 }: {
   title: string;
+  placeholder?: string;
   name: "leverageTier" | "long" | "versus" | "depositToken";
   form: UseFormReturn<
     {
@@ -115,6 +140,7 @@ function Dropdown({
     undefined
   >;
   colorScheme?: "light" | "dark" | null;
+  children: ReactNode;
 }) {
   return (
     <div>
@@ -127,13 +153,10 @@ function Dropdown({
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger colorScheme={colorScheme}>
-                  <SelectValue placeholder="" />
+                  <SelectValue placeholder={placeholder} />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
-                <SelectItem value="mint">Mint</SelectItem>
-                <SelectItem value="burn">Burn</SelectItem>
-              </SelectContent>
+              <SelectContent>{children}</SelectContent>
             </Select>
             <FormMessage />
           </FormItem>
@@ -142,3 +165,5 @@ function Dropdown({
     </div>
   );
 }
+
+// <SelectItem value="mint">Mint</SelectItem>
