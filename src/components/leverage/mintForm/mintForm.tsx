@@ -27,32 +27,48 @@ const MintSchema = z.object({
   versus: z.string(),
   leverageTier: z.string(),
   depositToken: z.string(),
-  deposit: z.number(),
+  deposit: z.coerce.number(),
 });
 
 export default function MintForm() {
   const form = useForm<z.infer<typeof MintSchema>>({
     resolver: zodResolver(MintSchema),
+    defaultValues: {
+      leverageTier: "",
+      long: "",
+      versus: "",
+      deposit: 0,
+    },
   });
   const formData = form.watch();
-
+  console.log({ formData });
   const { versus, leverageTiers, long } = useSelectReducer({ formData });
 
   return (
     <Card className="space-y-4">
       <Form {...form}>
-        <div className="grid grid-cols-3 gap-x-4">
+        <div className="flex items-center">
+          <button
+            type="reset"
+            onClick={() => {
+              form.reset();
+            }}
+          >
+            <span className="text-blue-400">clear</span>
+          </button>
+        </div>
+        <div className=" grid grid-cols-3 gap-x-4">
           <Dropdown name="long" title="Go long:" form={form}>
-            {long.map((e) => (
-              <SelectItem value={e.symbol} key={e.symbol}>
-                {e.symbol}
+            {[...new Set(long)].map((e) => (
+              <SelectItem value={e} key={e}>
+                {e}
               </SelectItem>
             ))}
           </Dropdown>
           <Dropdown name="versus" title="Versus:" form={form}>
-            {versus.map((e) => (
-              <SelectItem value={e.symbol} key={e.symbol}>
-                {e.symbol}
+            {[...new Set(versus)].map((e) => (
+              <SelectItem value={e} key={e}>
+                {e}
               </SelectItem>
             ))}
           </Dropdown>
@@ -104,7 +120,6 @@ export default function MintForm() {
             <h2 className=" text-sm italic text-gray">{"$20.55 (-X.XX%)"}</h2>
           </div>
         </div>
-
         <div className="flex flex-col items-center justify-center gap-y-2">
           <p className="w-[450px]  pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
           <button
@@ -151,7 +166,7 @@ function Dropdown({
         render={({ field }) => (
           <FormItem>
             <FormLabel>{title}</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select onValueChange={field.onChange} value={field.value}>
               <FormControl>
                 <SelectTrigger colorScheme={colorScheme}>
                   <SelectValue placeholder={placeholder} />
