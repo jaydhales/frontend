@@ -3,6 +3,13 @@ export type TAddressString = `0x${string}`;
 export type TPool = {
   debtToken: TAddressString;
   collateralToken: TAddressString;
-  leverageTier: number;
+  leverageTier: LeverageTier;
   vaultId: string;
 };
+
+export enum LeverageTier {
+  "one",
+  "two",
+  "three",
+  "four",
+}
