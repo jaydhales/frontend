@@ -31,7 +31,7 @@ export default function MintForm() {
     resolver: zodResolver(MintSchema),
   });
   return (
-    <Card className="space-y-2">
+    <Card className="space-y-4">
       <Form {...form}>
         <div className="grid grid-cols-3 gap-x-4">
           <Dropdown title="Go long:" form={form} />
@@ -62,6 +62,24 @@ export default function MintForm() {
               <h2 className="text-[#26DEC8]">25% 50% Max</h2>
             </div>
           </div>
+        </div>
+        <div>
+          <h2 className="text-sm">You recieve:</h2>
+          <div className="pt-1"></div>
+          <div className="rounded-md bg-card-foreground p-3">
+            <h2 className="text-xl">12 APE</h2>
+            <h2 className=" text-sm italic text-gray">{"$20.55 (-X.XX%)"}</h2>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center gap-y-2">
+          <p className="w-[450px]  pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
+          <button
+            className="w-[450px] rounded-md bg-primary-foreground py-2 text-xl font-semibold hover:bg-primary-foreground/75"
+            type="submit"
+          >
+            Mint
+          </button>
         </div>
       </Form>
     </Card>
