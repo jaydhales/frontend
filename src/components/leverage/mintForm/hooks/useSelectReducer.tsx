@@ -62,7 +62,8 @@ export function useSelectReducer({ formData }: Props) {
   useEffect(() => {
     // TODO
     // CHECK IF PARENT IS ALREADY SET
-    if (formData.leverageTier && !parent) {
+    if (parent) return;
+    if (formData.leverageTier) {
       const newPools = mockPools.filter(
         (p) =>
           LeverageTiers[p.leverageTier] ===
@@ -71,7 +72,7 @@ export function useSelectReducer({ formData }: Props) {
       setParent(DropsList.leverageTier);
       setMatchingPools(newPools);
     }
-    if (formData.versus && !parent) {
+    if (formData.versus) {
       const newPools = mockPools.filter(
         (p) => p.collateralToken === formData.versus,
       );
@@ -79,11 +80,11 @@ export function useSelectReducer({ formData }: Props) {
       setParent(DropsList.versus);
       setMatchingPools(newPools);
     }
-    if (formData.long && !parent) {
+    if (formData.long) {
       const newPools = mockPools.filter((p) => {
         return p.debtToken === formData.long;
       });
-      console.log({ long: formData.long, newPools });
+
       setParent(DropsList.long);
       setMatchingPools(newPools);
     }
@@ -123,6 +124,7 @@ export function useSelectReducer({ formData }: Props) {
     let leverageTiers: LeverageTier[] = [];
     let versus: string[] = [];
     let long: string[] = [];
+
     if (parent !== DropsList.leverageTier) {
       const leverageArr = matchingPools.map((e) => e.leverageTier);
       // Get Unique leverage tiers
@@ -132,6 +134,7 @@ export function useSelectReducer({ formData }: Props) {
       // Get Unique leverage tiers
       leverageTiers = [...new Set(leverageArr)];
     }
+
     if (parent !== DropsList.versus) {
       versus = matchingPools.map((e) => {
         return e.collateralToken;
@@ -139,6 +142,7 @@ export function useSelectReducer({ formData }: Props) {
     } else {
       versus = mockPools.map((e) => e.collateralToken);
     }
+
     if (parent !== DropsList.long) {
       long = matchingPools.map((e) => {
         return e.debtToken;
