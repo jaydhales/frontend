@@ -58,21 +58,27 @@ export default function MintForm() {
           </button>
         </div>
         <div className=" grid grid-cols-3 gap-x-4">
-          <Dropdown name="long" title="Go long:" form={form}>
+          <Dropdown name="long" clear title="Go long:" form={form}>
             {long.map((e) => (
               <SelectItem value={e} key={e}>
                 {e}
               </SelectItem>
             ))}
           </Dropdown>
-          <Dropdown name="versus" title="Versus:" form={form}>
+
+          <Dropdown name="versus" clear title="Versus:" form={form}>
             {versus.map((e) => (
               <SelectItem value={e} key={e}>
                 {e}
               </SelectItem>
             ))}
           </Dropdown>
-          <Dropdown name="leverageTier" title="Leverage Ratio:" form={form}>
+          <Dropdown
+            name="leverageTier"
+            clear
+            title="Leverage Ratio:"
+            form={form}
+          >
             {leverageTiers.map((e) => (
               <SelectItem value={e.toString()} key={e}>
                 {e.toString()}
@@ -141,8 +147,11 @@ function Dropdown({
   name,
   placeholder,
   children,
+  className,
+  clear,
 }: {
   title: string;
+  clear?: boolean;
   placeholder?: string;
   name: "leverageTier" | "long" | "versus" | "depositToken";
   form: UseFormReturn<
@@ -157,27 +166,36 @@ function Dropdown({
   >;
   colorScheme?: "light" | "dark" | null;
   children: ReactNode;
+  className?: string;
 }) {
   return (
-    <div>
-      <FormField
-        control={form.control}
-        name={name}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{title}</FormLabel>
-            <Select onValueChange={field.onChange} value={field.value}>
-              <FormControl>
-                <SelectTrigger colorScheme={colorScheme}>
-                  <SelectValue placeholder={placeholder} />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>{children}</SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+    <div className={"flex items-center gap-x-2 " + className}>
+      <div className="flex-grow">
+        <FormField
+          control={form.control}
+          name={name}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{title}</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger colorScheme={colorScheme}>
+                    <SelectValue placeholder={placeholder} />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>{children}</SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      {clear && (
+        <button type="reset" onClick={() => form.setValue(name, "")}>
+          x
+        </button>
+      )}
     </div>
   );
 }
