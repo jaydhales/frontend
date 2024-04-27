@@ -59,14 +59,14 @@ export default function MintForm() {
         </div>
         <div className=" grid grid-cols-3 gap-x-4">
           <Dropdown name="long" title="Go long:" form={form}>
-            {[...new Set(long)].map((e) => (
+            {long.map((e) => (
               <SelectItem value={e} key={e}>
                 {e}
               </SelectItem>
             ))}
           </Dropdown>
           <Dropdown name="versus" title="Versus:" form={form}>
-            {[...new Set(versus)].map((e) => (
+            {versus.map((e) => (
               <SelectItem value={e} key={e}>
                 {e}
               </SelectItem>
