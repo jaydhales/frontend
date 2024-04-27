@@ -1,6 +1,7 @@
 import { LeverageTiers } from "@/data/constants";
+import { mockPools } from "@/data/mockPools";
 import { LeverageTier, type TPool } from "@/lib/types";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 interface Props {
   formData: {
@@ -12,45 +13,11 @@ interface Props {
   };
 }
 
-const mockPools: TPool[] = [
-  {
-    debtToken: "0x0",
-    collateralToken: "0x1",
-    leverageTier: LeverageTier.one,
-    vaultId: "123",
-    name: "",
-    symbol: "",
-  },
-  {
-    debtToken: "0x2",
-    collateralToken: "0x3",
-    leverageTier: LeverageTier.two,
-    vaultId: "123",
-    name: "",
-    symbol: "",
-  },
-  {
-    debtToken: "0x2",
-    collateralToken: "0x5",
-    leverageTier: LeverageTier.two,
-    vaultId: "123",
-    name: "",
-    symbol: "",
-  },
-  {
-    debtToken: "0x6",
-    collateralToken: "0x7",
-    leverageTier: LeverageTier.two,
-    vaultId: "123",
-    name: "",
-    symbol: "",
-  },
-];
-enum DropsList {
-  "leverageTier" = 1,
-  "versus" = 2,
-  "long" = 3,
-}
+// enum DropsList {
+//   "leverageTier" = 1,
+//   "versus" = 2,
+//   "long" = 3,
+// }
 //TODO ====
 //set a parent selector
 //parent selector doesn't get options reduced
@@ -168,17 +135,18 @@ export function useSelectReducer({ formData }: Props) {
         }
       }
       if (formData.versus) {
-        if (formData.versus === p.collateralToken) {
+        if (formData.versus !== p.collateralToken) {
           return false;
         }
       }
       if (formData.long) {
-        if (formData.long === p.debtToken) {
+        if (formData.long !== p.debtToken) {
           return false;
         }
       }
       return true;
     });
+    console.log({ formData, matchingPools }, "hello");
     const versus = [...new Set(matchingPools.map((p) => p.collateralToken))];
     const long = [...new Set(matchingPools.map((p) => p.debtToken))];
     const leverageTiers = [
