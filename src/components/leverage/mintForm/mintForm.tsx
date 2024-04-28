@@ -22,6 +22,7 @@ import {
 } from "../../ui/select";
 import { Input } from "../../ui/input";
 import { useSelectReducer } from "./hooks/useSelectReducer";
+import SearchSelect from "@/components/shared/SearchSelect";
 // import { Input } from "../ui/input";
 const MintSchema = z.object({
   long: z.string(),
@@ -59,7 +60,7 @@ export default function MintForm() {
           </button>
         </div>
         <div className=" grid grid-cols-3 gap-x-4">
-          <Dropdown name="long" clear title="Go long:" form={form}>
+          {/* <Dropdown name="long" clear title="Go long:" form={form}>
             {long.map((e) => (
               <SelectItem value={e} key={e}>
                 <div className="flex items-center gap-x-1">
@@ -74,7 +75,13 @@ export default function MintForm() {
                 </div>
               </SelectItem>
             ))}
-          </Dropdown>
+          </Dropdown> */}
+          <SearchSelect
+            name="long"
+            title="Go long:"
+            form={form}
+            items={long.map((e) => ({ label: e, value: e }))}
+          />
 
           <Dropdown name="versus" clear title="Versus:" form={form}>
             {versus.map((e) => (
