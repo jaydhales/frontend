@@ -20,7 +20,7 @@ import {
   Command,
   CommandList,
 } from "@/components/ui/command";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { type UseFormReturn } from "react-hook-form";
 
@@ -72,7 +72,7 @@ export default function SearchSelect({
                     ? items.find((language) => language.value === field.value)
                         ?.label
                     : "Select token"}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  <ChevronDown className="h-7 w-7" />
                 </Button>
               </FormControl>
             </PopoverTrigger>

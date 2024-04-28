@@ -207,12 +207,12 @@ function Dropdown({
           )}
         />
       </div>
-
+      {/* 
       {clear && (
         <button type="reset" onClick={() => form.setValue(name, "")}>
           x
         </button>
-      )}
+      )} */}
     </div>
   );
 }
