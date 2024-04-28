@@ -1,6 +1,6 @@
 "use client";
 import React, { type ReactNode } from "react";
-import Image from "next/image";
+
 import { type UseFormReturn, useForm } from "react-hook-form";
 import { Card } from "../../ui/card";
 import { z } from "zod";

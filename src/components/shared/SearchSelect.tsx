@@ -57,26 +57,26 @@ export default function SearchSelect({
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>{title}</FormLabel>
+          <div className="pt-1"></div>
           <Popover>
             <PopoverTrigger asChild>
-              <FormControl>
+              <FormControl className="">
                 <Button
-                  variant="outline"
                   role="combobox"
                   className={cn(
-                    "w-[200px] justify-between",
+                    " justify-between",
                     !field.value && "text-muted-foreground",
                   )}
                 >
                   {field.value
                     ? items.find((language) => language.value === field.value)
                         ?.label
-                    : "Select language"}
+                    : "Select token"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[180px] p-0">
               <Command>
                 <CommandInput placeholder="Search tokens" />
                 <CommandEmpty>No tokens found.</CommandEmpty>

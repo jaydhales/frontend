@@ -8,7 +8,7 @@
     --foreground: 240, 15%, 13%, 1;
 
     --card: 240, 15%, 13%, 1;
-    --card-foreground: 240, 15%, 30%, 1;
+    --card-foreground: 240, 15%, 30%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
