@@ -8,3 +8,5 @@ export const LeverageTiers = {
   [LeverageTier.three]: 30000n,
   [LeverageTier.four]: 40000n,
 };
+export const ASSET_URL =
+  "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/";

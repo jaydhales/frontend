@@ -1,5 +1,6 @@
 "use client";
 import React, { type ReactNode } from "react";
+import Image from "next/image";
 import { type UseFormReturn, useForm } from "react-hook-form";
 import { Card } from "../../ui/card";
 import { z } from "zod";
@@ -61,7 +62,16 @@ export default function MintForm() {
           <Dropdown name="long" clear title="Go long:" form={form}>
             {long.map((e) => (
               <SelectItem value={e} key={e}>
-                {e}
+                <div className="flex items-center gap-x-1">
+                  <Image
+                    className="h-[30px] w-auto"
+                    width={20}
+                    height={20}
+                    alt="asset-logo"
+                    src="https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/0x0000206329b97DB379d5E1Bf586BbDB969C63274/logo.png"
+                  />
+                  <p>{e}</p>
+                </div>
               </SelectItem>
             ))}
           </Dropdown>
@@ -69,7 +79,7 @@ export default function MintForm() {
           <Dropdown name="versus" clear title="Versus:" form={form}>
             {versus.map((e) => (
               <SelectItem value={e} key={e}>
-                {e}
+                <p>{e}</p>
               </SelectItem>
             ))}
           </Dropdown>
