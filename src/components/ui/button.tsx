@@ -12,7 +12,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary/60 hover:bg-primary text-primary-foreground",
-        accent: "bg-accent hover:bg-accent/60 text-accent-foreground",
+        accent: "bg-accent hover:bg-accent/60 text-[#FBDED0]",
+
+        card: "bg-card-foreground  text-white",
       },
       size: {
         default: "px-4 py-2",

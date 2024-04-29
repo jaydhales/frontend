@@ -36,11 +36,7 @@ export function Header() {
         </nav>
       </div>
       <div className="flex justify-end">
-        <Button
-          onClick={open}
-          variant={"accent"}
-          className="rounded-full  text-accent-foreground text-white"
-        >
+        <Button onClick={open} variant={"accent"} className="rounded-full">
           {!address && "Connect Wallet"}
           {address &&
             address.slice(0, 5) +

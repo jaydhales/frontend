@@ -22,7 +22,7 @@ import {
 } from "../../ui/select";
 import { Input } from "../../ui/input";
 import { useSelectReducer } from "./hooks/useSelectReducer";
-import SearchSelect from "@/components/shared/SearchSelect";
+import SearchSelect from "@/components/shared/searchSelect";
 // import { Input } from "../ui/input";
 const MintSchema = z.object({
   long: z.string(),
@@ -89,14 +89,18 @@ export default function MintForm() {
             form={form}
             items={versus.map((e) => ({ label: e, value: e }))}
           />
-          {/* <Dropdown name="versus" clear title="Versus:" form={form}>
-            {versus.map((e) => (
-              <SelectItem value={e} key={e}>
-                <p>{e}</p>
-              </SelectItem>
-            ))}
-          </Dropdown> */}
-          <Dropdown
+          <SearchSelect
+            placeholder="Select Tier"
+            items={leverageTiers.map((e) => ({
+              label: e.toString(),
+              value: e.toString(),
+            }))}
+            noSearch
+            name="leverageTier"
+            title="Leverage Tier:"
+            form={form}
+          />
+          {/* <Dropdown
             name="leverageTier"
             clear
             title="Leverage Ratio:"
@@ -107,7 +111,7 @@ export default function MintForm() {
                 {e.toString()}
               </SelectItem>
             ))}
-          </Dropdown>
+          </Dropdown> */}
         </div>
         <div>
           <FormLabel>Deposit:</FormLabel>
@@ -192,7 +196,7 @@ function Dropdown({
   className?: string;
 }) {
   return (
-    <div className={"flex items-center gap-x-2 " + className}>
+    <div className={"flex  gap-x-2 " + className}>
       <div className="flex-grow">
         <FormField
           control={form.control}

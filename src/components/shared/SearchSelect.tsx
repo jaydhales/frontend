@@ -27,11 +27,14 @@ import {
 export default function SearchSelect({
   form,
   name,
+  placeholder,
   title,
   items,
+  noSearch,
 }: {
   title: string;
   clear?: boolean;
+  noSearch?: boolean;
   items: { value: string; label: string }[];
   placeholder?: string;
   name: "leverageTier" | "long" | "versus" | "depositToken";
@@ -57,28 +60,30 @@ export default function SearchSelect({
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>{title}</FormLabel>
-          <div className="pt-1"></div>
+
           <Popover>
             <PopoverTrigger asChild>
               <FormControl className="">
                 <Button
                   role="combobox"
+                  variant="card"
                   className={cn(
-                    " justify-between",
-                    !field.value && "text-muted-foreground",
+                    " h-[40px] justify-between",
+                    !field.value && "  text-muted-foreground",
                   )}
                 >
                   {field.value
-                    ? items.find((language) => language.value === field.value)
-                        ?.label
-                    : "Select token"}
+                    ? items.find((item) => item.value === field.value)?.label
+                    : placeholder ?? "Select Token"}
                   <ChevronDown className="h-7 w-7" />
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-[180px] p-0">
+            <PopoverContent className=" w-[180px] p-0">
               <Command>
-                <CommandInput placeholder="Search tokens" />
+                {!field.value && !noSearch && (
+                  <CommandInput placeholder={placeholder ?? "Select Token"} />
+                )}
                 <CommandEmpty>No tokens found.</CommandEmpty>
                 {/* <CommandGroup> */}
                 <CommandList>
@@ -89,6 +94,7 @@ export default function SearchSelect({
                       onSelect={() => {
                         form.setValue(name, item.value);
                       }}
+                      className="h-[40px]"
                     >
                       <Check
                         className={cn(
