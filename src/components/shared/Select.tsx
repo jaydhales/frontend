@@ -26,6 +26,7 @@ import {
 } from "../ui/command";
 // TODO
 // rm default placeholders
+type TItem = { value: string; label: string; imageUrl?: string };
 export default function Select({
   form,
   name,
@@ -37,7 +38,7 @@ export default function Select({
   title: string;
   clear?: boolean;
   noSearch?: boolean;
-  items: { value: string; label: string; imageUrl?: string }[];
+  items: TItem[];
   placeholder?: string;
   name: "leverageTier" | "long" | "versus" | "depositToken";
   form: UseFormReturn<
@@ -74,9 +75,15 @@ export default function Select({
                     !field.value && "  text-muted-foreground",
                   )}
                 >
-                  {field.value
-                    ? items.find((item) => item.value === field.value)?.label
-                    : placeholder ?? "Select Token"}
+                  {field.value ? (
+                    <div className="flex items-center gap-x-2">
+                      <ImageLabel
+                        item={items.find((item) => item.value === field.value)}
+                      ></ImageLabel>
+                    </div>
+                  ) : (
+                    placeholder ?? "Select Token"
+                  )}
 
                   {!field.value ? (
                     <ChevronDown className="h-7 w-7" />
@@ -115,8 +122,9 @@ export default function Select({
                       <div className="flex items-center gap-x-2">
                         {item.imageUrl && (
                           <Image
-                            height={30}
-                            width={30}
+                            height={100}
+                            width={100}
+                            className="h-[28px] w-[28px]"
                             src={item.imageUrl}
                             alt={item.label}
                           />
@@ -125,7 +133,7 @@ export default function Select({
                       </div>
                       <Check
                         className={cn(
-                          "mr-2 h-4 w-4",
+                          "h-5 w-5 ",
                           item.value === field.value
                             ? "opacity-100"
                             : "opacity-0",
@@ -143,5 +151,23 @@ export default function Select({
         </FormItem>
       )}
     ></FormField>
+  );
+}
+
+function ImageLabel({ item }: { item?: TItem }) {
+  if (!item) return <></>;
+  return (
+    <div className="flex items-center gap-x-2">
+      {item.imageUrl && (
+        <Image
+          height={100}
+          width={100}
+          className="h-[28px] w-[28px]"
+          src={item.imageUrl}
+          alt={item.label}
+        />
+      )}
+      {item.label}
+    </div>
   );
 }

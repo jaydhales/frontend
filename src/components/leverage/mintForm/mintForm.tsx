@@ -65,7 +65,12 @@ export default function MintForm() {
             name="long"
             title="Go long:"
             form={form}
-            items={long.map((e) => ({ label: e, value: e }))}
+            items={long.map((e) => ({
+              label: e,
+              value: e,
+              imageUrl:
+                "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png",
+            }))}
           />
 
           <SearchSelect
@@ -76,7 +81,7 @@ export default function MintForm() {
               label: e,
               value: e,
               imageUrl:
-                "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/0x0000206329b97DB379d5E1Bf586BbDB969C63274/logo.png",
+                "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png",
             }))}
           />
           <SearchSelect
