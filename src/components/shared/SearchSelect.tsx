@@ -12,17 +12,17 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import {
-  CommandInput,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  Command,
-  CommandList,
-} from "@/components/ui/command";
-import { Check, ChevronDown, ChevronsUpDown } from "lucide-react";
+
+import { Check, ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { type UseFormReturn } from "react-hook-form";
+import {
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
 
 export default function SearchSelect({
   form,
