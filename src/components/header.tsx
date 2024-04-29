@@ -37,9 +37,9 @@ export function Header() {
       </div>
       <div className="flex justify-end">
         <Button
-          size="sm"
           onClick={open}
-          className="rounded-full bg-accent text-accent-foreground text-white"
+          variant={"accent"}
+          className="rounded-full  text-accent-foreground text-white"
         >
           {!address && "Connect Wallet"}
           {address &&

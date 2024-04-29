@@ -11,10 +11,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-card-foreground  hover:bg-card-foreground/90",
+        default: "bg-primary/60 hover:bg-primary text-primary-foreground",
+        accent: "bg-accent hover:bg-accent/60 text-accent-foreground",
       },
       size: {
-        default: "h-10 px-4 py-2",
+        default: "px-4 py-2",
       },
     },
     defaultVariants: {
