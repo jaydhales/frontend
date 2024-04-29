@@ -83,13 +83,19 @@ export default function MintForm() {
             items={long.map((e) => ({ label: e, value: e }))}
           />
 
-          <Dropdown name="versus" clear title="Versus:" form={form}>
+          <SearchSelect
+            name="versus"
+            title="Versus:"
+            form={form}
+            items={versus.map((e) => ({ label: e, value: e }))}
+          />
+          {/* <Dropdown name="versus" clear title="Versus:" form={form}>
             {versus.map((e) => (
               <SelectItem value={e} key={e}>
                 <p>{e}</p>
               </SelectItem>
             ))}
-          </Dropdown>
+          </Dropdown> */}
           <Dropdown
             name="leverageTier"
             clear
