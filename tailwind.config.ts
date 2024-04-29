@@ -45,8 +45,8 @@ const config = {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "hsl(var(--accent), <alpha-value>)",
+          foreground: "hsl(var(--accent-foreground), <alpha-value>)",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -54,7 +54,7 @@ const config = {
         },
         card: {
           DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          foreground: "hsl(var(--card-foreground), <alpha-value>)",
         },
       },
       borderRadius: {

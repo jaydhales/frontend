@@ -1,5 +1,5 @@
 "use client";
-import Image, { StaticImageData } from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { Button } from "./ui/button";
@@ -36,11 +36,7 @@ export function Header() {
         </nav>
       </div>
       <div className="flex justify-end">
-        <Button
-          size="sm"
-          onClick={open}
-          className="rounded-full bg-accent text-accent-foreground text-white"
-        >
+        <Button onClick={open} variant={"accent"} className="rounded-full">
           {!address && "Connect Wallet"}
           {address &&
             address.slice(0, 5) +
