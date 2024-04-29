@@ -50,32 +50,16 @@ export default function MintForm() {
     <Card className="space-y-4">
       <Form {...form}>
         <div className="flex items-center">
-          <button
+          {/* <button
             type="reset"
             onClick={() => {
               form.reset();
             }}
           >
             <span className="text-blue-400">clear</span>
-          </button>
+          </button> */}
         </div>
         <div className=" grid grid-cols-3 gap-x-4">
-          {/* <Dropdown name="long" clear title="Go long:" form={form}>
-            {long.map((e) => (
-              <SelectItem value={e} key={e}>
-                <div className="flex items-center gap-x-1">
-                  <Image
-                    className="h-[30px] w-auto"
-                    width={20}
-                    height={20}
-                    alt="asset-logo"
-                    src="https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/0x0000206329b97DB379d5E1Bf586BbDB969C63274/logo.png"
-                  />
-                  <p>{e}</p>
-                </div>
-              </SelectItem>
-            ))}
-          </Dropdown> */}
           <SearchSelect
             name="long"
             title="Go long:"
