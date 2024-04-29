@@ -18,8 +18,8 @@ export default function LeverageTabs() {
       </div>
       <br />
       <TabsContent value="mint">
-        <Container>
-          <div className="grid w-full grid-cols-2 gap-x-[16px]">
+        <Container className="px-4">
+          <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
             <MintForm />
             <Card>
               <VaultTable />
