@@ -14,10 +14,13 @@
     --popover-foreground: 222.2 84% 4.9%;
 
     --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 173deg, 73%, 31%;
+    --primary-foreground: 173, 73%, 31%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 19, 84%, 52%;
+    --secondary-foreground: 0, 0%, 100%;
+
+    --tertiary: 33, 91%, 59%;
+    --tertiary-foreground: 0, 0%, 100%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 240, 22%, 64%, 1;
@@ -33,10 +36,12 @@
     --ring: 360, 100%, 100%, 1;
 
     /* --dark-gray: 2E2E38; */
-    --gray: 40, 15%, 75%, 1;
+    --gray: 0, 0%, 62%, 1;
     --radius: 0.5rem;
   }
-
+  th {
+    font-weight: 400;
+  }
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
