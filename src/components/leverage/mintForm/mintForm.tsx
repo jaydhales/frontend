@@ -22,7 +22,7 @@ import {
 } from "../../ui/select";
 import { Input } from "../../ui/input";
 import { useSelectReducer } from "./hooks/useSelectReducer";
-import SearchSelect from "@/components/shared/searchSelect";
+import SearchSelect from "@/components/shared/Select";
 import { Button } from "@/components/ui/button";
 // import { Input } from "../ui/input";
 const MintSchema = z.object({

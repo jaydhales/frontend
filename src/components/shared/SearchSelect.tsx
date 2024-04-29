@@ -26,7 +26,7 @@ import {
 } from "../ui/command";
 // TODO
 // rm default placeholders
-export default function SearchSelect({
+export default function Select({
   form,
   name,
   placeholder,
