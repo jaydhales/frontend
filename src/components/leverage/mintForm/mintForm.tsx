@@ -87,7 +87,12 @@ export default function MintForm() {
             name="versus"
             title="Versus:"
             form={form}
-            items={versus.map((e) => ({ label: e, value: e }))}
+            items={versus.map((e) => ({
+              label: e,
+              value: e,
+              imageUrl:
+                "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/0x0000206329b97DB379d5E1Bf586BbDB969C63274/logo.png",
+            }))}
           />
           <SearchSelect
             placeholder="Select Tier"
