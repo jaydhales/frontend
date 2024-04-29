@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import {
   FormControl,
@@ -14,7 +14,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { type UseFormReturn } from "react-hook-form";
 import {
@@ -53,7 +53,7 @@ export default function SearchSelect({
 
   className?: string;
 }) {
-  console.log({ items });
+  const [open, setOpen] = useState(false);
   return (
     <FormField
       control={form.control}
@@ -62,7 +62,7 @@ export default function SearchSelect({
         <FormItem className="flex flex-col">
           <FormLabel>{title}</FormLabel>
 
-          <Popover>
+          <Popover onOpenChange={(b) => setOpen(b)} open={open}>
             <PopoverTrigger asChild>
               <FormControl className="">
                 <Button
@@ -76,7 +76,18 @@ export default function SearchSelect({
                   {field.value
                     ? items.find((item) => item.value === field.value)?.label
                     : placeholder ?? "Select Token"}
-                  <ChevronDown className="h-7 w-7" />
+
+                  {!field.value ? (
+                    <ChevronDown className="h-7 w-7" />
+                  ) : (
+                    <X
+                      className="h-5 w-5"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        form.setValue(name, "");
+                      }}
+                    ></X>
+                  )}
                 </Button>
               </FormControl>
             </PopoverTrigger>
@@ -93,7 +104,10 @@ export default function SearchSelect({
                       key={item.label}
                       value={item.value}
                       onSelect={() => {
-                        form.setValue(name, item.value);
+                        setOpen(false);
+                        setTimeout(() => {
+                          form.setValue(name, item.value);
+                        }, 100);
                       }}
                       className="flex h-[40px] justify-between px-2"
                     >
