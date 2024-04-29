@@ -23,6 +23,7 @@ import {
 import { Input } from "../../ui/input";
 import { useSelectReducer } from "./hooks/useSelectReducer";
 import SearchSelect from "@/components/shared/searchSelect";
+import { Button } from "@/components/ui/button";
 // import { Input } from "../ui/input";
 const MintSchema = z.object({
   long: z.string(),
@@ -132,12 +133,9 @@ export default function MintForm() {
         </div>
         <div className="flex flex-col items-center justify-center gap-y-2">
           <p className="w-[450px]  pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
-          <button
-            className="w-[450px] rounded-md bg-primary-foreground py-2 text-xl font-semibold hover:bg-primary-foreground/75"
-            type="submit"
-          >
+          <Button variant={"submit"} type="submit">
             Mint
-          </button>
+          </Button>
         </div>
       </Form>
     </Card>
