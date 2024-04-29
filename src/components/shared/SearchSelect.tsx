@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import {
   FormControl,
   FormField,
@@ -35,7 +36,7 @@ export default function SearchSelect({
   title: string;
   clear?: boolean;
   noSearch?: boolean;
-  items: { value: string; label: string }[];
+  items: { value: string; label: string; imageUrl?: string }[];
   placeholder?: string;
   name: "leverageTier" | "long" | "versus" | "depositToken";
   form: UseFormReturn<
@@ -94,8 +95,19 @@ export default function SearchSelect({
                       onSelect={() => {
                         form.setValue(name, item.value);
                       }}
-                      className="h-[40px]"
+                      className="flex h-[40px] justify-between px-2"
                     >
+                      <div className="flex items-center gap-x-2">
+                        {item.imageUrl && (
+                          <Image
+                            height={30}
+                            width={30}
+                            src={item.imageUrl}
+                            alt={item.label}
+                          />
+                        )}
+                        {item.label}
+                      </div>
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
@@ -104,7 +116,6 @@ export default function SearchSelect({
                             : "opacity-0",
                         )}
                       />
-                      {item.label}
                     </CommandItem>
                   ))}
                 </CommandList>
