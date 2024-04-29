@@ -11,7 +11,7 @@ export default function VaultTable() {
       </caption>
       <div className="flex flex-col gap-y-4">
         <VaultTableRowHeaders />
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => {
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
           return (
             <VaultTableRow
               key={i.toString()}
@@ -59,7 +59,7 @@ function VaultTableRow({
         <Image
           className="h-6 w-6 rounded-full "
           src={
-            "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png"
+            "https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/ethereum/assets/0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986/logo.png"
           }
           width={28}
           height={28}
