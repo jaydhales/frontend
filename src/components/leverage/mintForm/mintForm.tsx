@@ -89,18 +89,6 @@ export default function MintForm() {
             title="Leverage Tier:"
             form={form}
           />
-          {/* <Dropdown
-            name="leverageTier"
-            clear
-            title="Leverage Ratio:"
-            form={form}
-          >
-            {leverageTiers.map((e) => (
-              <SelectItem value={e.toString()} key={e}>
-                {e.toString()}
-              </SelectItem>
-            ))}
-          </Dropdown> */}
         </div>
         <div>
           <FormLabel>Deposit:</FormLabel>

@@ -24,7 +24,8 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
-
+// TODO
+// rm default placeholders
 export default function SearchSelect({
   form,
   name,
@@ -94,7 +95,7 @@ export default function SearchSelect({
             <PopoverContent className=" w-[180px] p-0">
               <Command>
                 {!field.value && !noSearch && (
-                  <CommandInput placeholder={placeholder ?? "Select Token"} />
+                  <CommandInput placeholder={placeholder ?? "Search..."} />
                 )}
                 <CommandEmpty>No tokens found.</CommandEmpty>
                 {/* <CommandGroup> */}
