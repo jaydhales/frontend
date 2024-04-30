@@ -1,10 +1,6 @@
 "use client";
 import React from "react";
-
-import { useForm } from "react-hook-form";
 import { Card } from "../../ui/card";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -18,25 +14,11 @@ import { useSelectReducer } from "./hooks/useSelectReducer";
 import SearchSelect from "@/components/shared/Select";
 import { Button } from "@/components/ui/button";
 import Dropdown from "@/components/shared/dropDown";
+import { useMintFormProvider } from "@/components/providers/mintFormProvider";
 // import { Input } from "../ui/input";
-const MintSchema = z.object({
-  long: z.string(),
-  versus: z.string(),
-  leverageTier: z.string(),
-  depositToken: z.string(),
-  deposit: z.coerce.number(),
-});
 
 export default function MintForm() {
-  const form = useForm<z.infer<typeof MintSchema>>({
-    resolver: zodResolver(MintSchema),
-    defaultValues: {
-      leverageTier: "",
-      long: "",
-      versus: "",
-      deposit: 0,
-    },
-  });
+  const { form } = useMintFormProvider();
   const formData = form.watch();
   console.log({ formData });
   const { versus, leverageTiers, long } = useSelectReducer({ formData });
