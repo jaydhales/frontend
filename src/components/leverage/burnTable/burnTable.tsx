@@ -1,15 +1,21 @@
-import React from "react";
-import { Button } from "../ui/button";
+import React, { useState } from "react";
+import { Button } from "../../ui/button";
+import { burnRows } from "./mockBurnRows";
+import { type TBurnRow } from "@/lib/types";
 
 export default function BurnTable() {
+  const [selectedRow, setSelectedRow] = useState<string | undefined>();
   return (
-    <table className="flex flex-col gap-y-4">
-      <caption className="hidden">Burn Tokens</caption>
-      <BurnTableHeaders />
-      <BurnTableRow />
-      <BurnTableRow />
-      <BurnTableRow />
-    </table>
+    <div>
+      <div></div>
+      <table className="flex flex-col gap-y-4">
+        <caption className="hidden">Burn Tokens</caption>
+        <BurnTableHeaders />
+        {burnRows.map((r) => (
+          <BurnTableRow {...r} key={r.tokenId}></BurnTableRow>
+        ))}
+      </table>
+    </div>
   );
 }
 
@@ -25,10 +31,10 @@ function BurnTableHeaders() {
     </tr>
   );
 }
-function BurnTableRow() {
+function BurnTableRow({ tokenId }: TBurnRow) {
   return (
     <tr className="grid grid-cols-6 text-left text-gray text-white">
-      <th>Token id</th>
+      <th>{tokenId}</th>
       <th>200</th>
       <th>0x</th>
       <th>0x1</th>
