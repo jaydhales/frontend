@@ -7,7 +7,7 @@ import { Card } from "../ui/card";
 import MintForm from "./mintForm/mintForm";
 import VaultTable from "./vaultTable";
 
-import BurnTable from "./burnTable";
+import BurnTable from "./burnTable/burnTable";
 
 export default function LeverageTabs() {
   return (
