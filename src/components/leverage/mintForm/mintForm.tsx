@@ -1,7 +1,7 @@
 "use client";
-import React, { type ReactNode } from "react";
+import React from "react";
 
-import { type UseFormReturn, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Card } from "../../ui/card";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,19 +11,13 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "../../ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
+import { SelectItem } from "../../ui/select";
 import { Input } from "../../ui/input";
 import { useSelectReducer } from "./hooks/useSelectReducer";
 import SearchSelect from "@/components/shared/Select";
 import { Button } from "@/components/ui/button";
+import Dropdown from "@/components/shared/dropDown";
 // import { Input } from "../ui/input";
 const MintSchema = z.object({
   long: z.string(),
@@ -145,66 +139,6 @@ export default function MintForm() {
         </div>
       </Form>
     </Card>
-  );
-}
-
-function Dropdown({
-  form,
-  title,
-  colorScheme,
-  name,
-  placeholder,
-  children,
-  className,
-  clear,
-}: {
-  title: string;
-  clear?: boolean;
-  placeholder?: string;
-  name: "leverageTier" | "long" | "versus" | "depositToken";
-  form: UseFormReturn<
-    {
-      long: string;
-      versus: string;
-      leverageTier: string;
-      deposit: number;
-      depositToken: string;
-    },
-    undefined
-  >;
-  colorScheme?: "light" | "dark" | null;
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <div className={"flex  gap-x-2 " + className}>
-      <div className="flex-grow">
-        <FormField
-          control={form.control}
-          name={name}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{title}</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger colorScheme={colorScheme}>
-                    <SelectValue placeholder={placeholder} />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>{children}</SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-      {/* 
-      {clear && (
-        <button type="reset" onClick={() => form.setValue(name, "")}>
-          x
-        </button>
-      )} */}
-    </div>
   );
 }
 
