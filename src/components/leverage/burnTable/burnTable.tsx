@@ -3,7 +3,7 @@ import { Button } from "../../ui/button";
 import { burnRows } from "./mockBurnRows";
 import { type TBurnRow } from "@/lib/types";
 import { X } from "lucide-react";
-
+import BurnForm from "../burnForm/burnForm";
 export default function BurnTable() {
   const [selectedRow, setSelectedRow] = useState<string | undefined>();
   const selectedRowParams = burnRows.find((r) => r.tokenId === selectedRow);
@@ -28,6 +28,11 @@ export default function BurnTable() {
               <th>1.4x</th>
               <th>201</th>
             </tr>
+          </div>
+          <div className="flex justify-center pt-4">
+            <div className="flex w-[500px] justify-between">
+              <BurnForm />
+            </div>
           </div>
         </div>
       )}
