@@ -97,7 +97,8 @@ export default function MintForm() {
           />
         </div>
         <div>
-          <FormLabel>Deposit:</FormLabel>
+          <FormLabel htmlFor="deposit">Deposit:</FormLabel>
+
           <div className="pt-1"></div>
           <div className="flex justify-between rounded-md bg-card-foreground p-3">
             <div>
@@ -119,7 +120,7 @@ export default function MintForm() {
                 name="depositToken"
                 colorScheme={"dark"}
                 form={form}
-                title=""
+                title="Deposit Token:"
               >
                 <SelectItem value="burn">Burn</SelectItem>
               </Dropdown>
