@@ -7,6 +7,9 @@ import { Card } from "../ui/card";
 import MintForm from "./mintForm/mintForm";
 import VaultTable from "./vaultTable";
 
+import BurnTable from "./burnTable/burnTable";
+import MintFormProvider from "../providers/mintFormProvider";
+
 export default function LeverageTabs() {
   return (
     <Tabs defaultValue="mint">
@@ -18,12 +21,14 @@ export default function LeverageTabs() {
       </div>
       <br />
       <TabsContent value="mint">
-        <Container className="px-4">
+        <Container>
           <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
-            <MintForm />
-            <Card>
-              <VaultTable />
-            </Card>
+            <MintFormProvider>
+              <MintForm />
+              <Card>
+                <VaultTable />
+              </Card>
+            </MintFormProvider>
           </div>
         </Container>
       </TabsContent>
@@ -31,7 +36,7 @@ export default function LeverageTabs() {
       <TabsContent value="burn">
         <Container>
           <Card>
-            <h1>Pools</h1>
+            <BurnTable />
           </Card>
         </Container>
       </TabsContent>

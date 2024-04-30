@@ -16,3 +16,12 @@ export enum LeverageTier {
   "three",
   "four",
 }
+
+export type TBurnRow = {
+  tokenId: string;
+  amount: string;
+  tokenLong: string;
+  tokenVersus: string;
+  leverageRatio: LeverageTier;
+  balance: string;
+};

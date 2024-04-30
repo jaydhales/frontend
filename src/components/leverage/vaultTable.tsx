@@ -2,6 +2,10 @@ import React from "react";
 import { Badge, type badgeVariants } from "../ui/badge";
 import Image from "next/image";
 import { type VariantProps } from "class-variance-authority";
+import { useMintFormProvider } from "../providers/mintFormProvider";
+import { mockPools } from "@/data/mockPools";
+import { type TPool } from "@/lib/types";
+import { LeverageTiers } from "@/data/constants";
 
 export default function VaultTable() {
   return (
@@ -11,12 +15,15 @@ export default function VaultTable() {
       </caption>
       <div className="flex flex-col gap-y-4">
         <VaultTableRowHeaders />
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
+        {mockPools.map((pool, ind) => {
           return (
             <VaultTableRow
-              key={i.toString()}
-              number={i.toString()}
-              badgeVariant={{ variant: i % 2 === 0 ? "secondary" : "tertiary" }}
+              key={pool.vaultId.toString()}
+              pool={pool}
+              number={ind.toString()}
+              badgeVariant={{
+                variant: ind % 2 === 0 ? "secondary" : "tertiary",
+              }}
             />
           );
         })}
@@ -27,7 +34,7 @@ export default function VaultTable() {
 
 function VaultTableRowHeaders() {
   return (
-    <tr className="grid grid-cols-8 text-left text-[14px] font-normal text-gray">
+    <tr className="grid grid-cols-8 px-1 text-left text-[14px] font-normal text-gray">
       <th>#</th>
       <th className="col-span-3">Pool</th>
       <th>Fees</th>
@@ -39,12 +46,22 @@ function VaultTableRowHeaders() {
 function VaultTableRow({
   number,
   badgeVariant,
+  pool,
 }: {
   badgeVariant: VariantProps<typeof badgeVariants>;
   number: string;
+  pool: TPool;
 }) {
+  const { form } = useMintFormProvider();
   return (
-    <tr className="grid grid-cols-8 text-left text-[16px] font-normal">
+    <tr
+      onClick={() => {
+        form.setValue("long", pool.debtToken);
+        form.setValue("versus", pool.collateralToken);
+        form.setValue("leverageTier", pool.leverageTier.toString());
+      }}
+      className="grid cursor-pointer grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal hover:bg-card-foreground/50"
+    >
       <th className="">{number}</th>
       <th className="col-span-3 flex">
         <Image
