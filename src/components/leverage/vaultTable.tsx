@@ -5,7 +5,6 @@ import { type VariantProps } from "class-variance-authority";
 import { useMintFormProvider } from "../providers/mintFormProvider";
 import { mockPools } from "@/data/mockPools";
 import { type TPool } from "@/lib/types";
-import { LeverageTiers } from "@/data/constants";
 
 export default function VaultTable() {
   return (
