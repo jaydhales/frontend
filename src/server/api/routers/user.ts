@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { viemClient } from "@/lib/viemClient";
+import { readContract } from "@/lib/viemClient";
 import { erc20Abi } from "viem";
 import { type TAddressString } from "@/lib/types";
 
@@ -17,7 +17,7 @@ export const userRouter = createTRPCRouter({
       if (!input.tokenAddress || !input.userAddress) {
         return {};
       }
-      const bal = await viemClient.readContract({
+      const bal = await readContract({
         address: input.tokenAddress as TAddressString,
         abi: erc20Abi,
         functionName: "balanceOf",
