@@ -15,6 +15,8 @@ import SearchSelect from "@/components/shared/Select";
 import { Button } from "@/components/ui/button";
 import Dropdown from "@/components/shared/dropDown";
 import { useMintFormProvider } from "@/components/providers/mintFormProvider";
+import { api } from "@/trpc/react";
+import { useAccount } from "wagmi";
 // import { Input } from "../ui/input";
 
 export default function MintForm() {
@@ -22,20 +24,17 @@ export default function MintForm() {
   const formData = form.watch();
   console.log({ formData });
   const { versus, leverageTiers, long } = useSelectReducer({ formData });
+  const { address } = useAccount();
+  const userBalance = api.user.getBalance.useQuery(
+    { userAddress: address },
+    { enabled: Boolean(address) && Boolean(false) },
+  );
+
+  console.log({ userBalance });
 
   return (
     <Card className="space-y-4">
       <Form {...form}>
-        <div className="flex items-center">
-          {/* <button
-            type="reset"
-            onClick={() => {
-              form.reset();
-            }}
-          >
-            <span className="text-blue-400">clear</span>
-          </button> */}
-        </div>
         <div className=" grid grid-cols-3 gap-x-4">
           <SearchSelect
             name="long"
