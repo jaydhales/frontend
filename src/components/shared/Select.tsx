@@ -109,7 +109,7 @@ export default function Select({
                 <CommandList>
                   {items.map((item) => (
                     <CommandItem
-                      key={item.label}
+                      key={item.value}
                       value={item.value}
                       onSelect={() => {
                         setOpen(false);
