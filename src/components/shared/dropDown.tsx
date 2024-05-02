@@ -13,7 +13,7 @@ import {
   FormControl,
   FormMessage,
 } from "../ui/form";
-
+//retrive FormField props
 export default function Dropdown({
   form,
   title,
@@ -22,6 +22,7 @@ export default function Dropdown({
   placeholder,
   children,
   className,
+  disabled,
 }: {
   title: string;
   clear?: boolean;
@@ -40,17 +41,23 @@ export default function Dropdown({
   colorScheme?: "light" | "dark" | null;
   children: ReactNode;
   className?: string;
+  disabled?: boolean;
 }) {
   return (
     <div className={"flex  gap-x-2 " + className}>
       <div className="flex-grow">
         <FormField
+          disabled={disabled}
           control={form.control}
           name={name}
           render={({ field }) => (
             <FormItem>
               <FormLabel>{title}</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                disabled={disabled}
+                onValueChange={field.onChange}
+                value={field.value}
+              >
                 <FormControl>
                   <SelectTrigger colorScheme={colorScheme}>
                     <SelectValue placeholder={placeholder} />
