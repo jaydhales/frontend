@@ -27,20 +27,26 @@ export function useSelectMemo({ formData }: Props) {
         }
       }
       if (formData.versus) {
-        if (formData.versus !== p.collateralToken) {
+        if (formData.versus.split(",")[0] !== p.collateralToken) {
           return false;
         }
       }
       if (formData.long) {
-        if (formData.long !== p.debtToken) {
+        if (formData.long.split(",")[0] !== p.debtToken) {
           return false;
         }
       }
       return true;
     });
 
-    const versus = [...new Set(matchingPools.map((p) => p.collateralToken))];
-    const long = [...new Set(matchingPools.map((p) => p.debtToken))];
+    const versus = [
+      ...new Map(
+        matchingPools.map((item) => [item.collateralToken, item]),
+      ).values(),
+    ];
+    const long = [
+      ...new Map(matchingPools.map((item) => [item.debtToken, item])).values(),
+    ];
     const leverageTiers = [
       ...new Set(matchingPools.map((p) => p.leverageTier)),
     ];
