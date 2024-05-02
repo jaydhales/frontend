@@ -10,13 +10,13 @@ import {
 } from "../../ui/form";
 import { SelectItem } from "../../ui/select";
 import { Input } from "../../ui/input";
-import { useSelectReducer } from "./hooks/useSelectReducer";
 import SearchSelect from "@/components/shared/Select";
 import { Button } from "@/components/ui/button";
 import Dropdown from "@/components/shared/dropDown";
 import { useMintFormProvider } from "@/components/providers/mintFormProvider";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
+import { useSelectMemo } from "./hooks/useSelectMemo";
 // import { Input } from "../ui/input";
 
 export default function MintForm() {
@@ -54,7 +54,7 @@ export default function MintForm() {
     tokenDeposits.long,
     form,
   ]);
-  const { versus, leverageTiers, long } = useSelectReducer({ formData });
+  const { versus, leverageTiers, long } = useSelectMemo({ formData });
   const tokenDepositSelects = Object.values(tokenDeposits).filter((s) => s);
   const { address } = useAccount();
   const userBalance = api.user.getBalance.useQuery(
