@@ -7,7 +7,8 @@ export const mockPools: TPool[] = [
     leverageTier: LeverageTier.one,
     vaultId: "123",
     name: "",
-    symbol: "",
+    debtTokenSymbol: "a",
+    collateralTokenSymbol: "b",
   },
   {
     debtToken: "0x2",
@@ -15,7 +16,8 @@ export const mockPools: TPool[] = [
     leverageTier: LeverageTier.two,
     vaultId: "123",
     name: "",
-    symbol: "",
+    debtTokenSymbol: "c",
+    collateralTokenSymbol: "d",
   },
   {
     debtToken: "0x2",
@@ -23,7 +25,8 @@ export const mockPools: TPool[] = [
     leverageTier: LeverageTier.two,
     vaultId: "123",
     name: "",
-    symbol: "",
+    debtTokenSymbol: "e",
+    collateralTokenSymbol: "f",
   },
   {
     debtToken: "0x6",
@@ -31,7 +34,8 @@ export const mockPools: TPool[] = [
     leverageTier: LeverageTier.two,
     vaultId: "123",
     name: "",
-    symbol: "",
+    debtTokenSymbol: "g",
+    collateralTokenSymbol: "g",
   },
   {
     debtToken: "0x8",
@@ -39,6 +43,7 @@ export const mockPools: TPool[] = [
     leverageTier: LeverageTier.three,
     vaultId: "123",
     name: "",
-    symbol: "",
+    debtTokenSymbol: "h",
+    collateralTokenSymbol: "i",
   },
 ];
