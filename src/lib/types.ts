@@ -7,7 +7,8 @@ export type TPool = {
   vaultId: string;
   iconUrl?: string;
   name: string;
-  symbol: string;
+  debtTokenSymbol: string;
+  collateralTokenSymbol: string;
 };
 
 export enum LeverageTier {

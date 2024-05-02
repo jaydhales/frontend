@@ -23,15 +23,21 @@ export default function MintForm() {
   const { form } = useMintFormProvider();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const [tokenDeposits, setTokenDeposits] = useState<{
-    versus: string | undefined;
-    long: string | undefined;
+    versus: { value: string; label: string } | undefined;
+    long: { value: string; label: string } | undefined;
   }>({ long: undefined, versus: undefined });
 
   const formData = form.watch();
   useEffect(() => {
     if (formData.versus) {
-      if (formData.versus !== tokenDeposits.versus) {
-        setTokenDeposits((s) => ({ ...s, versus: formData.versus }));
+      if (formData.versus !== tokenDeposits?.versus?.value) {
+        setTokenDeposits((s) => ({
+          ...s,
+          versus: {
+            value: formData.versus,
+            label: formData.versus.split(",")[1] ?? "",
+          },
+        }));
         form.setValue("depositToken", formData.versus);
       }
     }
@@ -40,11 +46,17 @@ export default function MintForm() {
       form.setValue("depositToken", "");
     }
     if (!formData.long) {
-      setTokenDeposits((s) => ({ ...s, long: "" }));
+      setTokenDeposits((s) => ({ ...s, long: undefined }));
     }
     if (formData.long) {
-      if (formData.long !== tokenDeposits.long) {
-        setTokenDeposits((s) => ({ ...s, long: formData.long }));
+      if (formData.long !== tokenDeposits?.long?.value) {
+        setTokenDeposits((s) => ({
+          ...s,
+          long: {
+            value: formData.long,
+            label: formData.long.split(",")[1] ?? "",
+          },
+        }));
       }
     }
   }, [
@@ -55,13 +67,17 @@ export default function MintForm() {
     form,
   ]);
   const { versus, leverageTiers, long } = useSelectMemo({ formData });
-  const tokenDepositSelects = Object.values(tokenDeposits).filter((s) => s);
+  const values = Object.values(tokenDeposits);
+  const tokenDepositSelects = values.filter((e) => e?.value !== undefined) as {
+    value: string;
+    label: string;
+  }[];
   const { address } = useAccount();
   const userBalance = api.user.getBalance.useQuery(
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(false) },
   );
-  console.log({ userBalance });
+  console.log({ userBalance, long, versus });
   return (
     <Card className="space-y-4">
       <Form {...form}>
@@ -71,8 +87,8 @@ export default function MintForm() {
             title="Go long:"
             form={form}
             items={long.map((e) => ({
-              label: e,
-              value: e,
+              label: e.debtTokenSymbol,
+              value: e.debtToken + "," + e.debtTokenSymbol,
               imageUrl:
                 "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png",
             }))}
@@ -83,8 +99,8 @@ export default function MintForm() {
             title="Versus:"
             form={form}
             items={versus.map((e) => ({
-              label: e,
-              value: e,
+              label: e.collateralTokenSymbol,
+              value: e.collateralToken + "," + e.collateralTokenSymbol,
               imageUrl:
                 "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png",
             }))}
@@ -129,8 +145,8 @@ export default function MintForm() {
                 title="Deposit Token:"
               >
                 {tokenDepositSelects.map((s) => (
-                  <SelectItem key={s} value={s ?? ""}>
-                    {s}
+                  <SelectItem key={s.value} value={s.value}>
+                    {s.label}
                   </SelectItem>
                 ))}
                 {/* <SelectItem value="burn">Burn</SelectItem> */}
