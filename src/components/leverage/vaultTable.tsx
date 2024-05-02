@@ -9,10 +9,10 @@ import { type TPool } from "@/lib/types";
 export default function VaultTable() {
   return (
     <table className="w-full ">
-      <caption className="pb-4  font-lora text-[1.95rem] font-bold">
+      <caption className="pb-2  font-lora text-[1.95rem] font-bold">
         Vaults
       </caption>
-      <div className="flex flex-col gap-y-4">
+      <div className="flex flex-col gap-y-2">
         <VaultTableRowHeaders />
         {mockPools.map((pool, ind) => {
           return (
