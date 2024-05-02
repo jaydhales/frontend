@@ -12,12 +12,10 @@ interface Props {
     deposit: number;
   };
 }
-//TODO ====
-//set a parent selector
-//parent selector doesn't get options reduced
-//be able to set parent selector to null -> reset everything
-//     ====
-export function useSelectReducer({ formData }: Props) {
+/**
+ * Narrows down dropdown items when other dropdowns are select.
+ */
+export function useSelectMemo({ formData }: Props) {
   const { versus, leverageTiers, long } = useMemo(() => {
     const matchingPools = mockPools.filter((p) => {
       if (formData.leverageTier) {
@@ -40,7 +38,7 @@ export function useSelectReducer({ formData }: Props) {
       }
       return true;
     });
-    console.log({ formData, matchingPools }, "hello");
+
     const versus = [...new Set(matchingPools.map((p) => p.collateralToken))];
     const long = [...new Set(matchingPools.map((p) => p.debtToken))];
     const leverageTiers = [

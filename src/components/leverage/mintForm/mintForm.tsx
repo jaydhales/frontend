@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "../../ui/card";
 import {
   Form,
@@ -10,28 +10,58 @@ import {
 } from "../../ui/form";
 import { SelectItem } from "../../ui/select";
 import { Input } from "../../ui/input";
-import { useSelectReducer } from "./hooks/useSelectReducer";
 import SearchSelect from "@/components/shared/Select";
 import { Button } from "@/components/ui/button";
 import Dropdown from "@/components/shared/dropDown";
 import { useMintFormProvider } from "@/components/providers/mintFormProvider";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
+import { useSelectMemo } from "./hooks/useSelectMemo";
 // import { Input } from "../ui/input";
 
 export default function MintForm() {
   const { form } = useMintFormProvider();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const [tokenDeposits, setTokenDeposits] = useState<{
+    versus: string | undefined;
+    long: string | undefined;
+  }>({ long: undefined, versus: undefined });
+
   const formData = form.watch();
-  console.log({ formData });
-  const { versus, leverageTiers, long } = useSelectReducer({ formData });
+  useEffect(() => {
+    if (formData.versus) {
+      if (formData.versus !== tokenDeposits.versus) {
+        setTokenDeposits((s) => ({ ...s, versus: formData.versus }));
+        form.setValue("depositToken", formData.versus);
+      }
+    }
+    if (!formData.versus) {
+      setTokenDeposits((s) => ({ ...s, versus: undefined }));
+      form.setValue("depositToken", "");
+    }
+    if (!formData.long) {
+      setTokenDeposits((s) => ({ ...s, long: "" }));
+    }
+    if (formData.long) {
+      if (formData.long !== tokenDeposits.long) {
+        setTokenDeposits((s) => ({ ...s, long: formData.long }));
+      }
+    }
+  }, [
+    formData.long,
+    formData.versus,
+    tokenDeposits.versus,
+    tokenDeposits.long,
+    form,
+  ]);
+  const { versus, leverageTiers, long } = useSelectMemo({ formData });
+  const tokenDepositSelects = Object.values(tokenDeposits).filter((s) => s);
   const { address } = useAccount();
   const userBalance = api.user.getBalance.useQuery(
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(false) },
   );
-
   console.log({ userBalance });
-
   return (
     <Card className="space-y-4">
       <Form {...form}>
@@ -95,9 +125,15 @@ export default function MintForm() {
                 name="depositToken"
                 colorScheme={"dark"}
                 form={form}
+                disabled={tokenDepositSelects.length === 0}
                 title="Deposit Token:"
               >
-                <SelectItem value="burn">Burn</SelectItem>
+                {tokenDepositSelects.map((s) => (
+                  <SelectItem key={s} value={s ?? ""}>
+                    {s}
+                  </SelectItem>
+                ))}
+                {/* <SelectItem value="burn">Burn</SelectItem> */}
               </Dropdown>
               <h2 className="pt-1 text-sm text-[#B6B6C9]">Balance: $232.32</h2>
               <h2 className="text-[#26DEC8]">25% 50% Max</h2>
