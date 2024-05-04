@@ -37,10 +37,8 @@ export default function BurnTable() {
           </div>
         </div>
       )}
-      {
-        <table
-          className={"flex flex-col gap-y-4 " + `${!selectedRow && "hidden"}`}
-        >
+      {!selectedRow && (
+        <table className="flex flex-col gap-y-4">
           <caption className="hidden">Burn Tokens</caption>
           <BurnTableHeaders />
           {burnRows.map((r) => (
@@ -51,7 +49,7 @@ export default function BurnTable() {
             ></BurnTableRow>
           ))}
         </table>
-      }
+      )}
     </div>
   );
 }
