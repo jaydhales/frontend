@@ -55,8 +55,11 @@ function VaultTableRow({
   return (
     <tr
       onClick={() => {
-        form.setValue("long", pool.debtToken);
-        form.setValue("versus", pool.collateralToken);
+        form.setValue("long", pool.debtToken + "," + pool.debtTokenSymbol);
+        form.setValue(
+          "versus",
+          pool.collateralToken + "," + pool.collateralTokenSymbol,
+        );
         form.setValue("leverageTier", pool.leverageTier.toString());
       }}
       className="grid cursor-pointer grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal hover:bg-card-foreground/50"
