@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { Card } from "../../ui/card";
 import {
   Form,
@@ -141,18 +142,29 @@ export default function MintForm() {
                 name="depositToken"
                 colorScheme={"dark"}
                 form={form}
+                className="w-[150px]"
                 disabled={tokenDepositSelects.length === 0}
                 title="Deposit Token:"
               >
                 {tokenDepositSelects.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    {s.label}
+                  <SelectItem key={s.value} value={s.value} className=" ">
+                    <div className="flex items-center gap-x-2">
+                      <Image
+                        src="https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png"
+                        alt=""
+                        width={28}
+                        height={28}
+                      />
+                      {s.label}
+                    </div>
                   </SelectItem>
                 ))}
                 {/* <SelectItem value="burn">Burn</SelectItem> */}
               </Dropdown>
-              <h2 className="pt-1 text-sm text-[#B6B6C9]">Balance: $232.32</h2>
-              <h2 className="text-[#26DEC8]">25% 50% Max</h2>
+              <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
+                Balance: $232.32
+              </h2>
+              <h2 className="text-right text-[#26DEC8]">25% 50% Max</h2>
             </div>
           </div>
         </div>
