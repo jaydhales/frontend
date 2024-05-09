@@ -24,6 +24,7 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
+import { TMintForm } from "@/lib/types";
 // TODO
 // rm default placeholders
 type TItem = { value: string; label: string; imageUrl?: string };
@@ -41,16 +42,7 @@ export default function Select({
   items: TItem[];
   placeholder?: string;
   name: "leverageTier" | "long" | "versus" | "depositToken";
-  form: UseFormReturn<
-    {
-      long: string;
-      versus: string;
-      leverageTier: string;
-      deposit: number;
-      depositToken: string;
-    },
-    undefined
-  >;
+  form: TMintForm;
   colorScheme?: "light" | "dark" | null;
 
   className?: string;

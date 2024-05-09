@@ -23,6 +23,7 @@ import { useMintOrBurn } from "@/components/shared/hooks/useMintOrBurn";
 import { parseUnits } from "viem";
 import { SubmitHandler } from "react-hook-form";
 import { TMintFormFields } from "@/lib/types";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 export default function MintForm() {
   const { form } = useMintFormProvider();
   const formData = form.watch();
@@ -35,7 +36,9 @@ export default function MintForm() {
     value: string;
     label: string;
   }[];
+
   const { address } = useAccount();
+  const { openConnectModal } = useConnectModal();
   const userBalance = api.user.getBalance.useQuery(
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(false) },
@@ -165,16 +168,30 @@ export default function MintForm() {
             {/* TODO */}
             {/* Dont set size w-[450px] on all elements. */}
             <p className="w-[450px]  pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
-            <Button
-              disabled={!form.formState.isValid || !Boolean(mintData?.request)}
-              variant={"submit"}
-              type="submit"
-            >
-              Mint
-            </Button>
+            {address && (
+              <Button
+                disabled={
+                  !form.formState.isValid || !Boolean(mintData?.request)
+                }
+                variant={"submit"}
+                type="submit"
+              >
+                Mint
+              </Button>
+            )}
+            {!address && (
+              <Button
+                onClick={() => openConnectModal()}
+                variant="submit"
+                type="button"
+              >
+                Connect Wallet
+              </Button>
+            )}
             <div className="w-[450px]">
               <p className="text-left text-sm text-red-400">
-                {form.formState.errors.root?.message}
+                {/* Don't show form errors if users is not connected. */}
+                {address && <>{form.formState.errors.root?.message}</>}
               </p>
             </div>
           </div>
