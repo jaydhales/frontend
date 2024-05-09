@@ -22,7 +22,7 @@ import useSetDepositToken from "./hooks/useSetDepositToken";
 import { useMintOrBurn } from "@/components/shared/hooks/useMintOrBurn";
 import { parseUnits } from "viem";
 import { SubmitHandler } from "react-hook-form";
-
+import { TMintFormFields } from "@/lib/types";
 export default function MintForm() {
   const { form } = useMintFormProvider();
   const formData = form.watch();
@@ -45,14 +45,16 @@ export default function MintForm() {
     debtToken: formData.long,
     collateralToken: formData.versus,
     type: "mint",
-    amount: parseUnits(formData.deposit.toString(), 18),
+    amount: formData.deposit
+      ? parseUnits(formData?.deposit.toString(), 18)
+      : undefined,
   });
 
   const { writeContract } = useWriteContract();
   const onSubmit: SubmitHandler<TMintFormFields> = (data) => {
     if (
       userBalance?.data?.tokenBalance ??
-      0n < parseUnits(data.deposit.toString(), 18)
+      0n < parseUnits((data.deposit ?? 0).toString(), 18)
     ) {
       form.setError("root", { message: "Insufficient token balance." });
       return;
@@ -62,7 +64,7 @@ export default function MintForm() {
       writeContract(mintData.request);
     }
   };
-
+  console.log({ mintData });
   return (
     <Card>
       <Form {...form}>
@@ -164,7 +166,7 @@ export default function MintForm() {
             {/* Dont set size w-[450px] on all elements. */}
             <p className="w-[450px]  pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
             <Button
-              disabled={!form.formState.isValid}
+              disabled={!form.formState.isValid && Boolean(mintData?.request)}
               variant={"submit"}
               type="submit"
             >

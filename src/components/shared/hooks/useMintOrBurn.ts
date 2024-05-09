@@ -5,7 +5,7 @@ import { TAddressString } from "@/lib/types";
 interface Props {
   collateralToken: string;
   debtToken: string;
-  amount: bigint;
+  amount: bigint | undefined;
   type: "mint" | "burn";
   assetType: "ape" | "tea";
 }
