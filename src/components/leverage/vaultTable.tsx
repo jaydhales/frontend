@@ -8,24 +8,25 @@ import { type TPool } from "@/lib/types";
 
 export default function VaultTable() {
   return (
-    <table className="w-full space-y-2">
+    <table className="w-full">
       <caption className="pb-2  font-lora text-[1.95rem] font-bold">
         Vaults
       </caption>
-
-      <VaultTableRowHeaders />
-      {mockPools.map((pool, ind) => {
-        return (
-          <VaultTableRow
-            key={pool.vaultId.toString()}
-            pool={pool}
-            number={ind.toString()}
-            badgeVariant={{
-              variant: ind % 2 === 0 ? "secondary" : "tertiary",
-            }}
-          />
-        );
-      })}
+      <tbody className="space-y-2">
+        <VaultTableRowHeaders />
+        {mockPools.map((pool, ind) => {
+          return (
+            <VaultTableRow
+              key={pool.vaultId.toString()}
+              pool={pool}
+              number={ind.toString()}
+              badgeVariant={{
+                variant: ind % 2 === 0 ? "secondary" : "tertiary",
+              }}
+            />
+          );
+        })}
+      </tbody>
     </table>
   );
 }
