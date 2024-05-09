@@ -31,7 +31,7 @@ export function useMintOrBurn({
         collateralToken: collateralToken as TAddressString,
         leverageTier: -1,
       },
-      amount,
+      amount ?? 0n,
     ],
   });
   return { data };
