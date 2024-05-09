@@ -32,6 +32,7 @@ const MintSchema = z.object({
   depositToken: z.string(),
   deposit: z.coerce.number(),
 });
+
 export default function MintFormProvider({
   children,
 }: {
@@ -39,6 +40,7 @@ export default function MintFormProvider({
 }) {
   const form = useForm<z.infer<typeof MintSchema>>({
     resolver: zodResolver(MintSchema),
+    mode: "onChange",
     defaultValues: {
       leverageTier: "",
       long: "",
