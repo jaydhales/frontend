@@ -1,16 +1,10 @@
 import { LeverageTiers } from "@/data/constants";
 import { mockPools } from "@/data/mockPools";
-import { type LeverageTier, type TPool } from "@/lib/types";
+import { TMintFormFields, type LeverageTier } from "@/lib/types";
 import { useMemo } from "react";
 
 interface Props {
-  formData: {
-    long: string;
-    versus: string;
-    leverageTier: string;
-    depositToken: string;
-    deposit: number;
-  };
+  formData: TMintFormFields;
 }
 /**
  * Narrows down dropdown items when other dropdowns are select.

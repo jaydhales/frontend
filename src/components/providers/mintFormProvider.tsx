@@ -1,18 +1,10 @@
+import { TMintForm } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { createContext, useContext } from "react";
-import { type UseFormReturn, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 interface state {
-  form: UseFormReturn<
-    {
-      long: string;
-      versus: string;
-      leverageTier: string;
-      depositToken: string;
-      deposit: number;
-    },
-    undefined
-  >;
+  form: TMintForm;
 }
 
 const MintFormProviderContext = createContext<state | undefined>(undefined);
@@ -25,12 +17,13 @@ export function useMintFormProvider() {
   }
   return context;
 }
+
 const MintSchema = z.object({
   long: z.string(),
   versus: z.string(),
   leverageTier: z.string(),
   depositToken: z.string(),
-  deposit: z.coerce.number(),
+  deposit: z.coerce.number().optional(),
 });
 
 export default function MintFormProvider({
@@ -45,7 +38,6 @@ export default function MintFormProvider({
       leverageTier: "",
       long: "",
       versus: "",
-      deposit: 0,
     },
   });
   const ContextValue: state = { form };

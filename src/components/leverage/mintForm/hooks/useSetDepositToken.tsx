@@ -1,5 +1,5 @@
+import { TMintFormFields, TMintForm } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { TMintForm, TMintFormFields } from "../types";
 
 export default function useSetDepositToken({
   formData,

@@ -1,3 +1,5 @@
+import { UseFormReturn } from "react-hook-form";
+
 export type TAddressString = `0x${string}`;
 // vaultParams.debtToken, vaultParams.collateralToken, vaultParams.leverageTier, vaultId
 export type TPool = {
@@ -26,3 +28,12 @@ export type TBurnRow = {
   leverageRatio: LeverageTier;
   balance: string;
 };
+
+export type TMintForm = UseFormReturn<TMintFormFields, undefined>;
+export interface TMintFormFields {
+  long: string;
+  versus: string;
+  leverageTier: string;
+  depositToken: string;
+  deposit?: number;
+}

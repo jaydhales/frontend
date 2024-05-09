@@ -22,7 +22,6 @@ import useSetDepositToken from "./hooks/useSetDepositToken";
 import { useMintOrBurn } from "@/components/shared/hooks/useMintOrBurn";
 import { parseUnits } from "viem";
 import { SubmitHandler } from "react-hook-form";
-import { TMintFormFields } from "./types";
 
 export default function MintForm() {
   const { form } = useMintFormProvider();
