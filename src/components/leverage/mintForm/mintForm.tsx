@@ -67,7 +67,6 @@ export default function MintForm() {
       writeContract(mintData.request);
     }
   };
-  console.log({ mintData });
   return (
     <Card>
       <Form {...form}>
@@ -181,7 +180,7 @@ export default function MintForm() {
             )}
             {!address && (
               <Button
-                onClick={() => openConnectModal()}
+                onClick={() => openConnectModal?.()}
                 variant="submit"
                 type="button"
               >
