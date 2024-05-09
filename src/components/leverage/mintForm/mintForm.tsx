@@ -166,7 +166,7 @@ export default function MintForm() {
             {/* Dont set size w-[450px] on all elements. */}
             <p className="w-[450px]  pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
             <Button
-              disabled={!form.formState.isValid && Boolean(mintData?.request)}
+              disabled={!form.formState.isValid || !Boolean(mintData?.request)}
               variant={"submit"}
               type="submit"
             >
