@@ -119,7 +119,7 @@ scalar Timestamp
 
 type Vault {
   id: String!
-  vaultId: BigInt!
+  vaultId: String!
   collateralToken: String!
   debtToken: String!
   collateralSymbol: String!
@@ -148,14 +148,26 @@ input Vault_filter {
   id_ends_with_nocase: String
   id_not_ends_with: String
   id_not_ends_with_nocase: String
-  vaultId: BigInt
-  vaultId_not: BigInt
-  vaultId_gt: BigInt
-  vaultId_lt: BigInt
-  vaultId_gte: BigInt
-  vaultId_lte: BigInt
-  vaultId_in: [BigInt!]
-  vaultId_not_in: [BigInt!]
+  vaultId: String
+  vaultId_not: String
+  vaultId_gt: String
+  vaultId_lt: String
+  vaultId_gte: String
+  vaultId_lte: String
+  vaultId_in: [String!]
+  vaultId_not_in: [String!]
+  vaultId_contains: String
+  vaultId_contains_nocase: String
+  vaultId_not_contains: String
+  vaultId_not_contains_nocase: String
+  vaultId_starts_with: String
+  vaultId_starts_with_nocase: String
+  vaultId_not_starts_with: String
+  vaultId_not_starts_with_nocase: String
+  vaultId_ends_with: String
+  vaultId_ends_with_nocase: String
+  vaultId_not_ends_with: String
+  vaultId_not_ends_with_nocase: String
   collateralToken: String
   collateralToken_not: String
   collateralToken_gt: String

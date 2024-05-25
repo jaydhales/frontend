@@ -106,7 +106,7 @@ export type Subscription_metaArgs = {
 
 export type Vault = {
   id: Scalars['String']['output'];
-  vaultId: Scalars['BigInt']['output'];
+  vaultId: Scalars['String']['output'];
   collateralToken: Scalars['String']['output'];
   debtToken: Scalars['String']['output'];
   collateralSymbol: Scalars['String']['output'];
@@ -135,14 +135,26 @@ export type Vault_filter = {
   id_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
   id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
   id_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
-  vaultId?: InputMaybe<Scalars['BigInt']['input']>;
-  vaultId_not?: InputMaybe<Scalars['BigInt']['input']>;
-  vaultId_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  vaultId_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  vaultId_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  vaultId_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  vaultId_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  vaultId_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  vaultId?: InputMaybe<Scalars['String']['input']>;
+  vaultId_not?: InputMaybe<Scalars['String']['input']>;
+  vaultId_gt?: InputMaybe<Scalars['String']['input']>;
+  vaultId_lt?: InputMaybe<Scalars['String']['input']>;
+  vaultId_gte?: InputMaybe<Scalars['String']['input']>;
+  vaultId_lte?: InputMaybe<Scalars['String']['input']>;
+  vaultId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  vaultId_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  vaultId_contains?: InputMaybe<Scalars['String']['input']>;
+  vaultId_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultId_not_contains?: InputMaybe<Scalars['String']['input']>;
+  vaultId_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultId_starts_with?: InputMaybe<Scalars['String']['input']>;
+  vaultId_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultId_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  vaultId_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultId_ends_with?: InputMaybe<Scalars['String']['input']>;
+  vaultId_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  vaultId_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  vaultId_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
   collateralToken?: InputMaybe<Scalars['String']['input']>;
   collateralToken_not?: InputMaybe<Scalars['String']['input']>;
   collateralToken_gt?: InputMaybe<Scalars['String']['input']>;
