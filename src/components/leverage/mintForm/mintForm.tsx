@@ -89,7 +89,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
               items={long.map((e) => ({
                 label: e.debtSymbol,
                 value: e.debtToken + "," + e.debtSymbol,
-                imageUrl: getLogoAsset(e.debtToken),
+                imageUrl: getLogoAsset(e.debtToken as `0x${string}`),
               }))}
             />
             <SearchSelect
@@ -99,7 +99,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
               items={versus.map((e) => ({
                 label: e.collateralSymbol,
                 value: e.collateralToken + "," + e.collateralSymbol,
-                imageUrl: getLogoAsset(e.collateralToken),
+                imageUrl: getLogoAsset(e.collateralToken as `0x${string}`),
               }))}
             />
             <SearchSelect
