@@ -1,6 +1,4 @@
-import { LeverageTiers } from "@/data/constants";
-import { mockPools } from "@/data/mockPools";
-import { TMintFormFields, TVaults, type LeverageTier } from "@/lib/types";
+import { TMintFormFields, TVaults } from "@/lib/types";
 import { useMemo } from "react";
 
 interface Props {

@@ -20,10 +20,12 @@ import { useAccount, useWriteContract } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
 import useSetDepositToken from "./hooks/useSetDepositToken";
 import { useMintOrBurn } from "@/components/shared/hooks/useMintOrBurn";
-import { parseUnits } from "viem";
+import { getAddress, parseUnits } from "viem";
 import { SubmitHandler } from "react-hook-form";
 import { TMintFormFields, TVaults } from "@/lib/types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+// https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png
+// https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0xdac17f958d2ee523a2206206994597c13d831ec7/logo.png
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { form } = useMintFormProvider();
   const formData = form.watch();
@@ -86,8 +88,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
               items={long.map((e) => ({
                 label: e.debtSymbol,
                 value: e.debtToken + "," + e.debtSymbol,
-                imageUrl:
-                  "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png",
+                imageUrl: getLogoAsset(e.debtToken),
               }))}
             />
             <SearchSelect
@@ -97,8 +98,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
               items={versus.map((e) => ({
                 label: e.collateralSymbol,
                 value: e.collateralToken + "," + e.collateralSymbol,
-                imageUrl:
-                  "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png",
+                imageUrl: getLogoAsset(e.collateralToken),
               }))}
             />
             <SearchSelect
@@ -141,19 +141,27 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
                   disabled={tokenDepositSelects.length === 0}
                   title="Deposit Token:"
                 >
-                  {tokenDepositSelects.map((s) => (
-                    <SelectItem key={s.value} value={s.value} className=" ">
-                      <div className="flex items-center gap-x-2">
-                        <Image
-                          src="https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png"
-                          alt=""
-                          width={28}
-                          height={28}
-                        />
-                        {s.label}
-                      </div>
-                    </SelectItem>
-                  ))}
+                  {tokenDepositSelects.map((s) => {
+                    console.log(
+                      `https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/${getAddress(s.value.split(",")[0] ?? "0x")}/logo.png`,
+                    );
+                    return (
+                      <SelectItem key={s.value} value={s.label} className=" ">
+                        <div className="flex items-center gap-x-2">
+                          <Image
+                            src={getLogoAsset(
+                              (s.value.split(",")[0] as `0x${string}`) ?? "0x",
+                            )}
+                            alt=""
+                            width={28}
+                            height={28}
+                            className="rounded-full"
+                          />
+                          {s.label}
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
                 </Dropdown>
                 <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
                   Balance: $232.32
@@ -208,3 +216,6 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
 }
 
 // <SelectItem value="mint">Mint</SelectItem>
+function getLogoAsset(address: `0x${string}`) {
+  return `https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/${getAddress(address)}/logo.png`;
+}
