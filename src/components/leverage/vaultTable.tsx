@@ -3,12 +3,10 @@ import { Badge, type badgeVariants } from "../ui/badge";
 import Image from "next/image";
 import { type VariantProps } from "class-variance-authority";
 import { useMintFormProvider } from "../providers/mintFormProvider";
-// import { mockPools } from "@/data/mockPools";
-import { api } from "@/trpc/react";
 import { vaultsQuery } from "../../../.graphclient";
+import { TVaults } from "@/lib/types";
 
-export default function VaultTable() {
-  const { data, error } = api.vault.getVaults.useQuery();
+export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
   return (
     <table className="w-full">
       <caption className="pb-2  font-lora text-[1.95rem] font-bold">
@@ -16,7 +14,7 @@ export default function VaultTable() {
       </caption>
       <tbody className="space-y-2">
         <VaultTableRowHeaders />
-        {data?.vaults.vaults.map((pool, ind) => {
+        {vaultQuery?.vaults.vaults.map((pool, ind) => {
           return (
             <VaultTableRow
               key={pool.vaultId.toString()}

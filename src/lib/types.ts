@@ -1,4 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
+import { vaultsQuery } from "../../.graphclient";
 
 export type TAddressString = `0x${string}`;
 // vaultParams.debtToken, vaultParams.collateralToken, vaultParams.leverageTier, vaultId
@@ -12,7 +13,11 @@ export type TPool = {
   debtTokenSymbol: string;
   collateralTokenSymbol: string;
 };
-
+export type TVaults =
+  | {
+      vaults: vaultsQuery;
+    }
+  | undefined;
 export enum LeverageTier {
   "one",
   "two",

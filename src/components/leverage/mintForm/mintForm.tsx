@@ -22,15 +22,18 @@ import useSetDepositToken from "./hooks/useSetDepositToken";
 import { useMintOrBurn } from "@/components/shared/hooks/useMintOrBurn";
 import { parseUnits } from "viem";
 import { SubmitHandler } from "react-hook-form";
-import { TMintFormFields } from "@/lib/types";
+import { TMintFormFields, TVaults } from "@/lib/types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-export default function MintForm() {
+export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { form } = useMintFormProvider();
   const formData = form.watch();
 
   const { tokenDeposits } = useSetDepositToken({ formData, form });
 
-  const { versus, leverageTiers, long } = useSelectMemo({ formData });
+  const { versus, leverageTiers, long } = useSelectMemo({
+    formData,
+    vaultsQuery,
+  });
   const values = Object.values(tokenDeposits);
   const tokenDepositSelects = values.filter((e) => e?.value !== undefined) as {
     value: string;
@@ -38,11 +41,14 @@ export default function MintForm() {
   }[];
 
   const { address } = useAccount();
+
   const { openConnectModal } = useConnectModal();
+
   const userBalance = api.user.getBalance.useQuery(
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(false) },
   );
+
   const { data: mintData } = useMintOrBurn({
     assetType: "ape",
     debtToken: formData.long,
@@ -67,7 +73,7 @@ export default function MintForm() {
       writeContract(mintData.request);
     }
   };
-  console.log({ mintData });
+
   return (
     <Card>
       <Form {...form}>
@@ -78,8 +84,8 @@ export default function MintForm() {
               title="Go long:"
               form={form}
               items={long.map((e) => ({
-                label: e.debtTokenSymbol,
-                value: e.debtToken + "," + e.debtTokenSymbol,
+                label: e.debtSymbol,
+                value: e.debtToken + "," + e.debtSymbol,
                 imageUrl:
                   "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png",
               }))}
@@ -89,8 +95,8 @@ export default function MintForm() {
               title="Versus:"
               form={form}
               items={versus.map((e) => ({
-                label: e.collateralTokenSymbol,
-                value: e.collateralToken + "," + e.collateralTokenSymbol,
+                label: e.collateralSymbol,
+                value: e.collateralToken + "," + e.collateralSymbol,
                 imageUrl:
                   "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png",
               }))}
@@ -181,7 +187,7 @@ export default function MintForm() {
             )}
             {!address && (
               <Button
-                onClick={() => openConnectModal()}
+                onClick={() => openConnectModal?.()}
                 variant="submit"
                 type="button"
               >
