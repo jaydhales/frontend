@@ -5,6 +5,7 @@ import { type VariantProps } from "class-variance-authority";
 import { useMintFormProvider } from "../providers/mintFormProvider";
 import { vaultsQuery } from "../../../.graphclient";
 import { TVaults } from "@/lib/types";
+import { getLogoAsset } from "@/lib/utils";
 
 export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
   return (
@@ -68,18 +69,14 @@ function VaultTableRow({
       <th className="col-span-3 flex">
         <Image
           className="h-6 w-6 rounded-full "
-          src={
-            "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png"
-          }
+          src={getLogoAsset(pool.collateralToken)}
           width={28}
           height={28}
           alt=""
         />
         <Image
           className="h-6 w-6 rounded-full "
-          src={
-            "https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/ethereum/assets/0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986/logo.png"
-          }
+          src={getLogoAsset(pool.debtToken)}
           width={28}
           height={28}
           alt=""
