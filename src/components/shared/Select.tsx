@@ -16,7 +16,6 @@ import {
 
 import { Check, ChevronDown, X } from "lucide-react";
 import { Button } from "../ui/button";
-import { type UseFormReturn } from "react-hook-form";
 import {
   Command,
   CommandEmpty,
