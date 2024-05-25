@@ -25,8 +25,6 @@ import { SubmitHandler } from "react-hook-form";
 import { TMintFormFields, TVaults } from "@/lib/types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { getLogoAsset } from "@/lib/utils";
-// https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png
-// https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0xdac17f958d2ee523a2206206994597c13d831ec7/logo.png
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { form } = useMintFormProvider();
   const formData = form.watch();
@@ -114,6 +112,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
               form={form}
             />
           </div>
+
           <div>
             <FormLabel htmlFor="deposit">Deposit:</FormLabel>
 
