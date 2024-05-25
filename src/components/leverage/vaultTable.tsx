@@ -69,14 +69,14 @@ function VaultTableRow({
       <th className="col-span-3 flex">
         <Image
           className="h-6 w-6 rounded-full "
-          src={getLogoAsset(pool.collateralToken)}
+          src={getLogoAsset(pool.collateralToken as `0x${string}`)}
           width={28}
           height={28}
           alt=""
         />
         <Image
           className="h-6 w-6 rounded-full "
-          src={getLogoAsset(pool.debtToken)}
+          src={getLogoAsset(pool.debtToken as `0x${string}`)}
           width={28}
           height={28}
           alt=""
