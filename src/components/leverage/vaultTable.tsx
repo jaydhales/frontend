@@ -18,7 +18,7 @@ export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
         {vaultQuery?.vaults.vaults.map((pool, ind) => {
           return (
             <VaultTableRow
-              key={pool.vaultId.toString()}
+              key={(pool.vaultId as number).toString()}
               pool={pool}
               number={ind.toString()}
               badgeVariant={{

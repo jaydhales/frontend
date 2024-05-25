@@ -3,14 +3,19 @@ import { graphqlClient } from "@/lib/graphqlClient";
 import { gql } from "graphql-request";
 const vaults = gql`
   #graphql
+
+  fragment VaultFields on Vault {
+    debtToken
+    debtSymbol
+    collateralToken
+    collateralSymbol
+    vaultId
+    leverageTier
+  }
+
   query vaults {
     vaults {
-      debtToken
-      debtSymbol
-      collateralToken
-      collateralSymbol
-      vaultId
-      leverageTier
+      ...VaultFields
     }
   }
 `;

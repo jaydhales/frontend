@@ -120,8 +120,8 @@ scalar Timestamp
 type Vault {
   id: String!
   vaultId: BigInt!
-  collateralToken: Bytes!
-  debtToken: Bytes!
+  collateralToken: String!
+  debtToken: String!
   collateralSymbol: String!
   debtSymbol: String!
   leverageTier: Int!
@@ -156,26 +156,46 @@ input Vault_filter {
   vaultId_lte: BigInt
   vaultId_in: [BigInt!]
   vaultId_not_in: [BigInt!]
-  collateralToken: Bytes
-  collateralToken_not: Bytes
-  collateralToken_gt: Bytes
-  collateralToken_lt: Bytes
-  collateralToken_gte: Bytes
-  collateralToken_lte: Bytes
-  collateralToken_in: [Bytes!]
-  collateralToken_not_in: [Bytes!]
-  collateralToken_contains: Bytes
-  collateralToken_not_contains: Bytes
-  debtToken: Bytes
-  debtToken_not: Bytes
-  debtToken_gt: Bytes
-  debtToken_lt: Bytes
-  debtToken_gte: Bytes
-  debtToken_lte: Bytes
-  debtToken_in: [Bytes!]
-  debtToken_not_in: [Bytes!]
-  debtToken_contains: Bytes
-  debtToken_not_contains: Bytes
+  collateralToken: String
+  collateralToken_not: String
+  collateralToken_gt: String
+  collateralToken_lt: String
+  collateralToken_gte: String
+  collateralToken_lte: String
+  collateralToken_in: [String!]
+  collateralToken_not_in: [String!]
+  collateralToken_contains: String
+  collateralToken_contains_nocase: String
+  collateralToken_not_contains: String
+  collateralToken_not_contains_nocase: String
+  collateralToken_starts_with: String
+  collateralToken_starts_with_nocase: String
+  collateralToken_not_starts_with: String
+  collateralToken_not_starts_with_nocase: String
+  collateralToken_ends_with: String
+  collateralToken_ends_with_nocase: String
+  collateralToken_not_ends_with: String
+  collateralToken_not_ends_with_nocase: String
+  debtToken: String
+  debtToken_not: String
+  debtToken_gt: String
+  debtToken_lt: String
+  debtToken_gte: String
+  debtToken_lte: String
+  debtToken_in: [String!]
+  debtToken_not_in: [String!]
+  debtToken_contains: String
+  debtToken_contains_nocase: String
+  debtToken_not_contains: String
+  debtToken_not_contains_nocase: String
+  debtToken_starts_with: String
+  debtToken_starts_with_nocase: String
+  debtToken_not_starts_with: String
+  debtToken_not_starts_with_nocase: String
+  debtToken_ends_with: String
+  debtToken_ends_with_nocase: String
+  debtToken_not_ends_with: String
+  debtToken_not_ends_with_nocase: String
   collateralSymbol: String
   collateralSymbol_not: String
   collateralSymbol_gt: String
