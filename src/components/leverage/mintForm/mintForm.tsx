@@ -25,6 +25,7 @@ import { SubmitHandler } from "react-hook-form";
 import { TMintFormFields, TVaults } from "@/lib/types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { getLogoAsset } from "@/lib/utils";
+import { z } from "zod";
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { form } = useMintFormProvider();
   const formData = form.watch();
@@ -55,6 +56,9 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     debtToken: formData.long,
     collateralToken: formData.versus,
     type: "mint",
+    leverageTier: z.coerce.number().safeParse(formData.leverageTier).success
+      ? parseInt(formData.leverageTier)
+      : -1,
     amount: formData.deposit
       ? parseUnits(formData?.deposit.toString(), 18)
       : undefined,

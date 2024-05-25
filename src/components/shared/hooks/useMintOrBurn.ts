@@ -6,12 +6,14 @@ interface Props {
   collateralToken: string;
   debtToken: string;
   amount: bigint | undefined;
+  leverageTier: number;
   type: "mint" | "burn";
   assetType: "ape" | "tea";
 }
 export function useMintOrBurn({
   debtToken,
   collateralToken,
+  leverageTier,
   type,
   amount,
   assetType,
@@ -29,7 +31,7 @@ export function useMintOrBurn({
       {
         debtToken: debtToken as TAddressString,
         collateralToken: collateralToken as TAddressString,
-        leverageTier: -1,
+        leverageTier: leverageTier,
       },
       amount ?? 0n,
     ],
