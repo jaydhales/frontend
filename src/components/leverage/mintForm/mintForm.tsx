@@ -14,9 +14,9 @@ import { SubmitHandler } from "react-hook-form";
 import { TMintFormFields, TVaults } from "@/lib/types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { z } from "zod";
-import TopSelects from "./TopSelects";
 import DepositInputs from "./depositInputs";
 import Estimations from "./estimations";
+import TopSelects from "./topSelects";
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { form } = useMintFormProvider();
   const formData = form.watch();
