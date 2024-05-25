@@ -9,10 +9,9 @@ interface Props {
  * Narrows down dropdown items when other dropdowns are select.
  */
 export function useSelectMemo({ formData, vaultsQuery }: Props) {
-  if (vaultsQuery?.vaults.vaults === undefined)
-    return { versus: [], leverageTiers: [], long: [] };
-  console.log(vaultsQuery.vaults.vaults);
   const { versus, leverageTiers, long } = useMemo(() => {
+    if (vaultsQuery?.vaults.vaults === undefined)
+      return { versus: [], leverageTiers: [], long: [] };
     const matchingPools = vaultsQuery?.vaults.vaults.filter((p) => {
       if (formData.leverageTier) {
         if (p.leverageTier !== parseInt(formData.leverageTier)) {
