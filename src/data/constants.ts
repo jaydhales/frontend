@@ -8,5 +8,7 @@ export const LeverageTiers = {
   [LeverageTier.three]: 30000n,
   [LeverageTier.four]: 40000n,
 };
+export const GRAPHQL_URL =
+  "http://140.82.62.189:8000/subgraphs/name/sir-trade/index";
 export const ASSET_URL =
   "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/";

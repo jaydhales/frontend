@@ -3,10 +3,12 @@ import { Badge, type badgeVariants } from "../ui/badge";
 import Image from "next/image";
 import { type VariantProps } from "class-variance-authority";
 import { useMintFormProvider } from "../providers/mintFormProvider";
-import { mockPools } from "@/data/mockPools";
-import { type TPool } from "@/lib/types";
+// import { mockPools } from "@/data/mockPools";
+import { api } from "@/trpc/react";
+import { vaultsQuery } from "../../../.graphclient";
 
 export default function VaultTable() {
+  const { data, error } = api.vault.getVaults.useQuery();
   return (
     <table className="w-full">
       <caption className="pb-2  font-lora text-[1.95rem] font-bold">
@@ -14,7 +16,7 @@ export default function VaultTable() {
       </caption>
       <tbody className="space-y-2">
         <VaultTableRowHeaders />
-        {mockPools.map((pool, ind) => {
+        {data?.vaults.vaults.map((pool, ind) => {
           return (
             <VaultTableRow
               key={pool.vaultId.toString()}
@@ -49,16 +51,16 @@ function VaultTableRow({
 }: {
   badgeVariant: VariantProps<typeof badgeVariants>;
   number: string;
-  pool: TPool;
+  pool: vaultsQuery["vaults"][0];
 }) {
   const { form } = useMintFormProvider();
   return (
     <tr
       onClick={() => {
-        form.setValue("long", pool.debtToken + "," + pool.debtTokenSymbol);
+        form.setValue("long", pool.debtToken + "," + pool.debtSymbol);
         form.setValue(
           "versus",
-          pool.collateralToken + "," + pool.collateralTokenSymbol,
+          pool.collateralToken + "," + pool.collateralSymbol,
         );
         form.setValue("leverageTier", pool.leverageTier.toString());
       }}

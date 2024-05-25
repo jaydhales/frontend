@@ -1,0 +1,3 @@
+{
+  "ee8eda4a405bbdf14e06bb947ee66345656d29f6bd37eae34e7056f9aa808354": "#graphql\nquery vaults {\n  vaults {\n    debtToken\n    debtSymbol\n    collateralToken\n    collateralSymbol\n    vaultId\n    leverageTier\n  }\n}"
+}

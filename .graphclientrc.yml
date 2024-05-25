@@ -1,0 +1,8 @@
+# .graphclientrc.yml
+sources:
+  - name: sir-trade/index
+    handler:
+      graphql:
+        endpoint: http://140.82.62.189:8000/subgraphs/name/sir-trade/index
+documents:
+  - ./src/**/*.ts
