@@ -12,3 +12,12 @@ export function add(n: number, a: number) {
 export function getLogoAsset(address: `0x${string}`) {
   return `https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/${getAddress(address)}/logo.png`;
 }
+/**
+ * To compute the leverage ratio: l = 1+2^k where k is the leverageTier.
+ * @param LeverageTier - number
+ *
+ */
+export function getLeverageRatio(k: number) {
+  const result = 1 + 2 ** k;
+  return result;
+}
