@@ -1,7 +1,7 @@
 import Select from "@/components/shared/Select";
 import { TMintForm } from "@/lib/types";
 import { VaultFieldsFragment } from "../../../../.graphclient";
-import { getLogoAsset } from "@/lib/utils";
+import { getLeverageRatio, getLogoAsset } from "@/lib/utils";
 interface Props {
   form: TMintForm;
   long: VaultFieldsFragment[];
@@ -39,7 +39,7 @@ export default function TopSelects({
       <Select
         placeholder="Select Tier"
         items={leverageTiers.map((e) => ({
-          label: e.toString(),
+          label: getLeverageRatio(e).toString() + "x",
           value: e.toString(),
         }))}
         noSearch
