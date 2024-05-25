@@ -39,9 +39,6 @@ export default function DepositInputs({ form, tokenDepositSelects }: Props) {
           title="Deposit Token:"
         >
           {tokenDepositSelects.map((s) => {
-            console.log(
-              `https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/${getAddress(s.value.split(",")[0] ?? "0x")}/logo.png`,
-            );
             return (
               <SelectItem key={s.value} value={s.label} className=" ">
                 <div className="flex items-center gap-x-2">
