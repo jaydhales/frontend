@@ -44,8 +44,8 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
 
   const { data: mintData } = useMintOrBurn({
     assetType: "ape",
-    debtToken: formData.long,
-    collateralToken: formData.versus,
+    debtToken: formData.long.split(",")[0] ?? "",
+    collateralToken: formData.versus.split(",")[0] ?? "",
     type: "mint",
     leverageTier: z.coerce.number().safeParse(formData.leverageTier).success
       ? parseInt(formData.leverageTier)
@@ -54,7 +54,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       ? parseUnits(formData?.deposit.toString(), 18)
       : undefined,
   });
-
+  console.log({ mintData });
   const { writeContract } = useWriteContract();
   const onSubmit: SubmitHandler<TMintFormFields> = (data) => {
     if (

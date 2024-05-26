@@ -22,7 +22,7 @@ export function useMintOrBurn({
   if (assetType === "tea") {
     isApe = false;
   }
-  const { data } = useSimulateContract({
+  const { data, error } = useSimulateContract({
     abi: Assistant.abi,
     address: Assistant.address,
     functionName: type,
@@ -36,5 +36,6 @@ export function useMintOrBurn({
       amount ?? 0n,
     ],
   });
+  console.log({ error });
   return { data };
 }
