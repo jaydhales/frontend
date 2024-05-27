@@ -14,7 +14,7 @@ interface Props {
 }
 export default function DepositInputs({ form, tokenDepositSelects }: Props) {
   return (
-    <div className="flex justify-between rounded-md bg-card-foreground p-3">
+    <div className="flex justify-between rounded-md bg-primary p-3">
       <div>
         <FormField
           control={form.control}

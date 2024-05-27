@@ -17,7 +17,7 @@ export default function BurnForm() {
   });
   return (
     <Form {...form}>
-      <div className="flex w-full justify-between rounded-md bg-card-foreground p-2">
+      <div className="flex w-full justify-between rounded-md bg-primary p-2">
         <div>
           <FormField
             control={form.control}

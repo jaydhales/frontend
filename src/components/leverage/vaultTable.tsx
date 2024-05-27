@@ -22,7 +22,7 @@ export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
               pool={pool}
               number={ind.toString()}
               badgeVariant={{
-                variant: ind % 2 === 0 ? "secondary" : "tertiary",
+                variant: ind % 2 === 0 ? "yellow" : "default",
               }}
             />
           );
@@ -63,7 +63,7 @@ function VaultTableRow({
         );
         form.setValue("leverageTier", pool.leverageTier.toString());
       }}
-      className="grid cursor-pointer grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal hover:bg-card-foreground/50"
+      className="grid cursor-pointer grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
     >
       <th className="">{number}</th>
       <th className="col-span-3 flex">
