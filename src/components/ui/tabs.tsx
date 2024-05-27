@@ -22,7 +22,7 @@ const TabsTrigger = React.forwardRef<
     className={cn(
       "w-28 border-b-2 border-[#2e2e38] pb-2 font-semibold text-muted-foreground" +
         "focus:outline-none focus:ring-offset-4 focus:ring-offset-background focus-visible:outline-none focus-visible:ring-ring" +
-        "  data-[state=active]:border-primary-foreground data-[state=active]:text-white",
+        "  data-[state=active]:border-accent data-[state=active]:text-white",
       className,
     )}
     {...props}

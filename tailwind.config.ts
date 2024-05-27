@@ -66,6 +66,9 @@ const config = {
           700: "hsl(var(--brown-700), <alpha-value>)",
           800: "hsl(var(--brown-800), <alpha-value>)",
         },
+        ["light-blue"]: {
+          100: "hsl(var(--light-blue), <alpha-value>)",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

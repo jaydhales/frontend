@@ -1,38 +1,164 @@
 import React from "react";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { UseFormReturn, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { TMintForm } from "@/lib/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const BurnSchema = z.object({
   deposit: z.coerce.number(),
+  token: z.string(),
 });
 export default function BurnForm() {
   const form = useForm<z.infer<typeof BurnSchema>>({
     resolver: zodResolver(BurnSchema),
-    defaultValues: {
-      deposit: undefined,
-    },
   });
   return (
     <Form {...form}>
-      <div className="flex w-full justify-between rounded-md bg-primary p-2">
+      <div className="space-y-2">
+        <label htmlFor="a" className="">
+          Burn Amount
+        </label>
+        <Section bg="bg-primary" form={form} />
+        <div className="pt-2"></div>
         <div>
-          <FormField
-            control={form.control}
-            name="deposit"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder="0" textSize="xl" {...field}></Input>
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <span className="text-primary-foreground">40 50 max</span>
+          <label htmlFor="a" className="">
+            Into
+          </label>
         </div>
+
+        <SectionTwo bg="" form={form} />
+        <div className="pt-2"></div>
+        <div className="flex justify-center">
+          <h4 className="w-[400px] text-center text-[16px] italic text-gray">
+            With leveraging you risk losing up to 100% of your deposit, you can
+            not lose more than your deposit.
+          </h4>
+        </div>
+        <div className="pt-1"></div>
+        <Button variant="submit" className="w-full">
+          Burn TEA
+        </Button>
       </div>
     </Form>
+  );
+}
+
+function Section({
+  form,
+  bg,
+}: {
+  form: UseFormReturn<
+    {
+      deposit: number;
+      token: string;
+    },
+    any,
+    undefined
+  >;
+  bg: string;
+}) {
+  return (
+    <div className={`w-full  rounded-md ${bg} px-2 py-3`}>
+      <div className="flex justify-between">
+        <FormField
+          control={form.control}
+          name="deposit"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input id="a" placeholder="0" textSize="xl" {...field}></Input>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <div>
+          <div className="flex h-[45px] w-[140px] items-center gap-x-2 rounded-md bg-secondary px-2">
+            <div className="h-[28px] w-[28px] rounded-full bg-primary"></div>
+            <h3>TEA</h3>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-end justify-between pt-2">
+        <span className="text-sm font-medium text-light-blue-100">
+          Max 50% 25%
+        </span>
+        <span className="text-sm italic text-gray">Balance $232.23</span>
+      </div>
+    </div>
+  );
+}
+
+function SectionTwo({
+  form,
+  bg,
+}: {
+  form: UseFormReturn<
+    {
+      deposit: number;
+      token: string;
+    },
+    any,
+    undefined
+  >;
+  bg: string;
+}) {
+  return (
+    <div className={`w-full  rounded-md ${bg} `}>
+      <div className="flex items-end justify-between">
+        <div>
+          <h2 className="text-[28px]">22.44</h2>
+        </div>
+        <div>
+          <div className={"flex  gap-x-2 "}>
+            <div className="flex-grow">
+              <FormField
+                control={form.control}
+                name="token"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger
+                          className="h-[45px] w-[140px] "
+                          colorScheme="light"
+                        >
+                          <SelectValue placeholder={"Select token"} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="e"></SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-end justify-between pt-1">
+        <span className="text-sm font-medium text-gray">$22.44</span>
+        <span className="text-sm italic text-gray">Balance $232.23</span>
+      </div>
+    </div>
   );
 }
