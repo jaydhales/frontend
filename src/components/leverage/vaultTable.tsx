@@ -3,10 +3,11 @@ import { Badge, type badgeVariants } from "../ui/badge";
 import Image from "next/image";
 import { type VariantProps } from "class-variance-authority";
 import { useMintFormProvider } from "../providers/mintFormProvider";
-import { mockPools } from "@/data/mockPools";
-import { type TPool } from "@/lib/types";
+import { vaultsQuery } from "../../../.graphclient";
+import { TVaults } from "@/lib/types";
+import { getLogoAsset } from "@/lib/utils";
 
-export default function VaultTable() {
+export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
   return (
     <table className="w-full">
       <caption className="pb-2  font-lora text-[1.95rem] font-bold">
@@ -14,7 +15,7 @@ export default function VaultTable() {
       </caption>
       <tbody className="space-y-2">
         <VaultTableRowHeaders />
-        {mockPools.map((pool, ind) => {
+        {vaultQuery?.vaults.vaults.map((pool, ind) => {
           return (
             <VaultTableRow
               key={pool.vaultId.toString()}
@@ -49,16 +50,16 @@ function VaultTableRow({
 }: {
   badgeVariant: VariantProps<typeof badgeVariants>;
   number: string;
-  pool: TPool;
+  pool: vaultsQuery["vaults"][0];
 }) {
   const { form } = useMintFormProvider();
   return (
     <tr
       onClick={() => {
-        form.setValue("long", pool.debtToken + "," + pool.debtTokenSymbol);
+        form.setValue("long", pool.debtToken + "," + pool.debtSymbol);
         form.setValue(
           "versus",
-          pool.collateralToken + "," + pool.collateralTokenSymbol,
+          pool.collateralToken + "," + pool.collateralSymbol,
         );
         form.setValue("leverageTier", pool.leverageTier.toString());
       }}
@@ -68,18 +69,14 @@ function VaultTableRow({
       <th className="col-span-3 flex">
         <Image
           className="h-6 w-6 rounded-full "
-          src={
-            "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9/logo.png"
-          }
+          src={getLogoAsset(pool.collateralToken as `0x${string}`)}
           width={28}
           height={28}
           alt=""
         />
         <Image
           className="h-6 w-6 rounded-full "
-          src={
-            "https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/ethereum/assets/0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986/logo.png"
-          }
+          src={getLogoAsset(pool.debtToken as `0x${string}`)}
           width={28}
           height={28}
           alt=""

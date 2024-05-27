@@ -35,6 +35,7 @@ export default function MintFormProvider({
     resolver: zodResolver(MintSchema),
     mode: "onChange",
     defaultValues: {
+      deposit: 0,
       leverageTier: "",
       long: "",
       versus: "",

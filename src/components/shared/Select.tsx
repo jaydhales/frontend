@@ -16,7 +16,6 @@ import {
 
 import { Check, ChevronDown, X } from "lucide-react";
 import { Button } from "../ui/button";
-import { type UseFormReturn } from "react-hook-form";
 import {
   Command,
   CommandEmpty,
@@ -116,7 +115,7 @@ export default function Select({
                           <Image
                             height={100}
                             width={100}
-                            className="h-[28px] w-[28px]"
+                            className="h-[28px] w-[28px] rounded-full"
                             src={item.imageUrl}
                             alt={item.label}
                           />
@@ -154,7 +153,7 @@ function ImageLabel({ item }: { item?: TItem }) {
         <Image
           height={100}
           width={100}
-          className="h-[28px] w-[28px]"
+          className="h-[28px] w-[28px] rounded-full"
           src={item.imageUrl}
           alt={item.label}
         />

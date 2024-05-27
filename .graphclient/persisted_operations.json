@@ -1,0 +1,3 @@
+{
+  "9ee31b28323c888d91bdbd18446778cad65d964b2f0427cbafe4049dfd8f63b9": "#graphql\n\nfragment VaultFields on Vault {\n  debtToken\n  debtSymbol\n  collateralToken\n  collateralSymbol\n  vaultId\n  leverageTier\n}\n\nquery vaults {\n  vaults {\n    ...VaultFields\n  }\n}"
+}

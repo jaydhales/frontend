@@ -1,22 +1,20 @@
-import { LeverageTiers } from "@/data/constants";
-import { mockPools } from "@/data/mockPools";
-import { TMintFormFields, type LeverageTier } from "@/lib/types";
+import { TMintFormFields, TVaults } from "@/lib/types";
 import { useMemo } from "react";
 
 interface Props {
   formData: TMintFormFields;
+  vaultsQuery: TVaults;
 }
 /**
  * Narrows down dropdown items when other dropdowns are select.
  */
-export function useSelectMemo({ formData }: Props) {
+export function useSelectMemo({ formData, vaultsQuery }: Props) {
   const { versus, leverageTiers, long } = useMemo(() => {
-    const matchingPools = mockPools.filter((p) => {
+    if (vaultsQuery?.vaults.vaults === undefined)
+      return { versus: [], leverageTiers: [], long: [] };
+    const matchingPools = vaultsQuery?.vaults.vaults.filter((p) => {
       if (formData.leverageTier) {
-        if (
-          LeverageTiers[p.leverageTier] !==
-          LeverageTiers[parseInt(formData.leverageTier) as LeverageTier]
-        ) {
+        if (p.leverageTier !== parseInt(formData.leverageTier)) {
           return false;
         }
       }

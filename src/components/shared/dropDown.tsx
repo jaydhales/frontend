@@ -5,7 +5,6 @@ import {
   SelectContent,
 } from "@/components/ui/select";
 import { type ReactNode } from "react";
-import { type UseFormReturn } from "react-hook-form";
 import {
   FormField,
   FormItem,
@@ -13,6 +12,7 @@ import {
   FormControl,
   FormMessage,
 } from "../ui/form";
+import { TMintForm } from "@/lib/types";
 //retrive FormField props
 export default function Dropdown({
   form,
@@ -28,16 +28,7 @@ export default function Dropdown({
   clear?: boolean;
   placeholder?: string;
   name: "leverageTier" | "long" | "versus" | "depositToken";
-  form: UseFormReturn<
-    {
-      long: string;
-      versus: string;
-      leverageTier: string;
-      deposit: number;
-      depositToken: string;
-    },
-    undefined
-  >;
+  form: TMintForm;
   colorScheme?: "light" | "dark" | null;
   children: ReactNode;
   className?: string;
