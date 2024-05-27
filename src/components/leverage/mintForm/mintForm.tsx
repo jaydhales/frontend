@@ -113,6 +113,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
                 Connect Wallet
               </Button>
             )}
+
             <div className="w-[450px]">
               <p className="text-left text-sm text-red-400">
                 {/* Don't show form errors if users is not connected. */}
