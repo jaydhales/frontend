@@ -8,3 +8,4 @@ const viemClient = createPublicClient({
   transport: http(process.env.RPC_URL ?? "https://rpc.ankr.com/eth"),
 });
 export const readContract = viemClient.readContract;
+export const multicall = viemClient.multicall;

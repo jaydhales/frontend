@@ -4,7 +4,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +11,6 @@ import { UseFormReturn, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { TMintForm } from "@/lib/types";
 import {
   Select,
   SelectContent,
@@ -84,7 +82,13 @@ function Section({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input id="a" placeholder="0" textSize="xl" {...field}></Input>
+                <Input
+                  id="a"
+                  placeholder="0"
+                  textSize="xl"
+                  type="number"
+                  {...field}
+                ></Input>
               </FormControl>
             </FormItem>
           )}
