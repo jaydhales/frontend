@@ -9,8 +9,11 @@ const InputVariants = classVarianceAuthority.cva(
     "focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
-      background: { default: "bg-background", transparent: "bg-transparent" },
-      textSize: { md: "", xl: "text-[40px]" },
+      background: {
+        transparent: "bg-transparent border-muted-foreground p-1 border-2 ",
+        primary: "bg-card p-1",
+      },
+      textSize: { md: "", xl: "text-[28px]" },
     },
     defaultVariants: { background: "transparent" },
   },

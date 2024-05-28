@@ -29,6 +29,7 @@ export default function BurnForm() {
   const form = useForm<z.infer<typeof BurnSchema>>({
     resolver: zodResolver(BurnSchema),
   });
+
   return (
     <Form {...form}>
       <div className="space-y-2">
