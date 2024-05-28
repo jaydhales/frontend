@@ -22,7 +22,14 @@ export default function DepositInputs({ form, tokenDepositSelects }: Props) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="0" textSize="xl" {...field}></Input>
+                <Input
+                  type="number"
+                  min={0.00000000000001}
+                  background="primary"
+                  placeholder="0"
+                  textSize="xl"
+                  {...field}
+                ></Input>
               </FormControl>
             </FormItem>
           )}

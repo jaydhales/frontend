@@ -15,6 +15,7 @@ export default function BurnForm() {
       deposit: undefined,
     },
   });
+
   return (
     <Form {...form}>
       <div className="flex w-full justify-between rounded-md bg-card-foreground p-2">
