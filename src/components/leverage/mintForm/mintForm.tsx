@@ -28,9 +28,9 @@ import { useMintApe } from "@/components/shared/hooks/useMintApe";
 // Retrieve token decimals
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { form } = useMintFormProvider();
-
   const formData = form.watch();
 
+  console.log({ deposit: formData.deposit });
   const utils = api.useUtils();
   const { tokenDeposits } = useSetDepositToken({ formData, form });
 
@@ -64,26 +64,23 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     collateralToken = formData.versus.split(",")[0] ?? ""; //value formatted : address,symbol
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
+
   const { data: mintData } = useMintApe({
-    vaultId: parseInt(
-      vaultsQuery?.vaults.vaults.find((v) => {
-        if (
-          v.collateralToken === collateralToken &&
-          v.debtToken === debtToken &&
-          leverageTier === v.leverageTier
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      })?.vaultId ?? "-1",
-    ),
+    vaultId: vaultsQuery?.vaults.vaults.find((v) => {
+      if (
+        v.collateralToken === collateralToken &&
+        v.debtToken === debtToken &&
+        leverageTier === v.leverageTier
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    })?.vaultId,
     debtToken, //value formatted : address,symbol
     collateralToken, //value formatted : address,symbol
     leverageTier: leverageTier,
-    amount: formData.deposit
-      ? parseUnits(formData?.deposit.toString(), 18)
-      : undefined,
+    amount: formData.deposit ? parseUnits(formData?.deposit, 18) : undefined,
   });
 
   const approveWrite = useSimulateContract({
@@ -114,6 +111,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     tokenBalance: data?.tokenBalance?.result,
     tokenAllowance: data?.tokenAllowance?.result,
   });
+
   // ONLY SET ERROR IF ALL VALUES SET IN FORM
   useEffect(() => {
     if (

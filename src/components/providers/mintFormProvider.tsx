@@ -23,7 +23,7 @@ const MintSchema = z.object({
   versus: z.string(),
   leverageTier: z.string(),
   depositToken: z.string(),
-  deposit: z.coerce.number().optional(),
+  deposit: z.string().optional(),
 });
 
 export default function MintFormProvider({
@@ -35,7 +35,7 @@ export default function MintFormProvider({
     resolver: zodResolver(MintSchema),
     mode: "onChange",
     defaultValues: {
-      deposit: 0,
+      deposit: "",
       leverageTier: "",
       long: "",
       versus: "",
