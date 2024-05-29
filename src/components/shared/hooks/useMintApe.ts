@@ -8,6 +8,7 @@ interface Props {
   amount: bigint | undefined;
   leverageTier: number;
 }
+
 export function useMintApe({
   debtToken,
   collateralToken,
