@@ -1,6 +1,7 @@
+import { Assistant } from "@/contracts/assistant";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { getAddress } from "viem";
+import { encodePacked, getAddress, keccak256, toHex } from "viem";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -19,5 +20,15 @@ export function getLogoAsset(address: `0x${string}`) {
  */
 export function getLeverageRatio(k: number) {
   const result = 1 + 2 ** k;
+  return result;
+}
+const HASH_CREATION_CODE_APE = "0x";
+export function getVaultAddress({ vaultId }: { vaultId: bigint }) {
+  const packed = encodePacked(
+    ["bytes1", "address", "bytes32", "bytes32"],
+    ["0xff", Assistant.address, toHex(vaultId), HASH_CREATION_CODE_APE],
+  );
+
+  const result = keccak256(packed);
   return result;
 }
