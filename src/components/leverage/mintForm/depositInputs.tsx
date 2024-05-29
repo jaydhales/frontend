@@ -11,10 +11,15 @@ interface Props {
     value: string;
     label: string;
   }[];
+  balance?: string;
 }
-export default function DepositInputs({ form, tokenDepositSelects }: Props) {
+export default function DepositInputs({
+  form,
+  tokenDepositSelects,
+  balance,
+}: Props) {
   return (
-    <div className="flex justify-between rounded-md bg-card-foreground p-3">
+    <div className="flex justify-between rounded-md bg-primary p-3">
       <div>
         <FormField
           control={form.control}
@@ -47,7 +52,11 @@ export default function DepositInputs({ form, tokenDepositSelects }: Props) {
         >
           {tokenDepositSelects.map((s) => {
             return (
-              <SelectItem key={s.value} value={s.label} className=" ">
+              <SelectItem
+                key={s.value}
+                value={s.value.split(",")[0] ?? ""}
+                className=" "
+              >
                 <div className="flex items-center gap-x-2">
                   <Image
                     src={getLogoAsset(
@@ -65,7 +74,7 @@ export default function DepositInputs({ form, tokenDepositSelects }: Props) {
           })}
         </Dropdown>
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-          Balance: $232.32
+          Balance: {balance ?? "0"}
         </h2>
         <h2 className="text-right text-[#26DEC8]">25% 50% Max</h2>
       </div>

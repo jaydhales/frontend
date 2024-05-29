@@ -31,7 +31,7 @@ export default function BurnTable() {
             </tr>
           </div>
           <div className="flex justify-center pt-4">
-            <div className="flex w-[500px] justify-between">
+            <div className=" w-[500px] justify-between">
               <BurnForm />
             </div>
           </div>

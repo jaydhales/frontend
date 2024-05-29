@@ -36,7 +36,7 @@ export function Header() {
         </nav>
       </div>
       <div className="flex justify-end">
-        <Button onClick={open} variant={"accent"} className="rounded-full">
+        <Button onClick={open} variant={"brown"} className="rounded-full">
           {!address && "Connect Wallet"}
           {address &&
             address.slice(0, 5) +

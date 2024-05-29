@@ -1,51 +1,68 @@
 "use client";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { Card } from "../../ui/card";
 import { Form, FormLabel } from "../../ui/form";
 import { Button } from "@/components/ui/button";
 import { useMintFormProvider } from "@/components/providers/mintFormProvider";
 import { api } from "@/trpc/react";
-import { useAccount, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useSimulateContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
 import useSetDepositToken from "./hooks/useSetDepositToken";
 import { useMintOrBurn } from "@/components/shared/hooks/useMintOrBurn";
-import { parseUnits } from "viem";
+import { erc20Abi, formatUnits, parseUnits } from "viem";
 import { SubmitHandler } from "react-hook-form";
-import { TMintFormFields, TVaults } from "@/lib/types";
+import { TAddressString, TMintFormFields, TVaults } from "@/lib/types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { z } from "zod";
 import DepositInputs from "./depositInputs";
 import Estimations from "./estimations";
 import TopSelects from "./topSelects";
+import { Assistant } from "@/contracts/assistant";
+import { useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
+// TODO
+// Retrieve token decimals
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { form } = useMintFormProvider();
   const formData = form.watch();
 
+  const utils = api.useUtils();
   const { tokenDeposits } = useSetDepositToken({ formData, form });
 
   const { versus, leverageTiers, long } = useSelectMemo({
     formData,
     vaultsQuery,
   });
-  const values = Object.values(tokenDeposits);
-  const tokenDepositSelects = values.filter((e) => e?.value !== undefined) as {
-    value: string;
-    label: string;
-  }[];
+
+  const tokenDepositSelects = useMemo(() => {
+    const values = Object.values(tokenDeposits);
+    return values.filter((e) => e?.value !== undefined) as {
+      value: string;
+      label: string;
+    }[];
+  }, [tokenDeposits]);
 
   const { address } = useAccount();
 
   const { openConnectModal } = useConnectModal();
 
-  const userBalance = api.user.getBalance.useQuery(
-    { userAddress: address },
-    { enabled: Boolean(address) && Boolean(false) },
+  const { data } = api.user.getBalance.useQuery(
+    {
+      userAddress: address,
+      tokenAddress: formData.depositToken,
+      spender: Assistant.address,
+    },
+    { enabled: Boolean(address) && Boolean(formData.depositToken) },
   );
 
   const { data: mintData } = useMintOrBurn({
     assetType: "ape",
-    debtToken: formData.long.split(",")[0] ?? "",
-    collateralToken: formData.versus.split(",")[0] ?? "",
+    debtToken: formData.long.split(",")[0] ?? "", //value formatted : address,symbol
+    collateralToken: formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
     type: "mint",
     leverageTier: z.coerce.number().safeParse(formData.leverageTier).success
       ? parseInt(formData.leverageTier)
@@ -54,19 +71,62 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       ? parseUnits(formData?.deposit.toString(), 18)
       : undefined,
   });
-  console.log({ mintData });
-  const { writeContract } = useWriteContract();
-  const onSubmit: SubmitHandler<TMintFormFields> = (data) => {
-    if (
-      userBalance?.data?.tokenBalance ??
-      0n < parseUnits((data.deposit ?? 0).toString(), 18)
-    ) {
-      form.setError("root", { message: "Insufficient token balance." });
-      return;
+  const approveWrite = useSimulateContract({
+    address: formData.depositToken as TAddressString,
+    abi: erc20Abi,
+    functionName: "approve",
+    args: [
+      Assistant.address,
+      parseUnits(formData?.deposit?.toString() ?? "0", 18),
+    ],
+  });
+  const { writeContract, data: hash } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash });
+  useEffect(() => {
+    if (isConfirmed) {
+      utils.user.getBalance.invalidate();
     }
+  }, [isConfirming, isConfirmed]);
 
-    if (mintData) {
-      writeContract(mintData.request);
+  const { isValid } = useCheckSubmitValid({
+    deposit: formData.deposit,
+    depositToken: formData.depositToken,
+    mintRequest: mintData?.request,
+    approveWriteRequest: approveWrite.data?.request,
+    tokenBalance: data?.tokenBalance?.result,
+    tokenAllowance: data?.tokenAllowance?.result,
+  });
+  /**
+   * SUBMIT
+   */
+  const onSubmit: SubmitHandler<TMintFormFields> = (formData) => {
+    // if (
+    //   data?.tokenBalance?.result ??
+    //   0n < parseUnits((formData.deposit ?? 0).toString(), 18)
+    // ) {
+    //   form.setError("root", { message: "Insufficient token balance." });
+    //   return;
+    // }
+    console.clear();
+    if (
+      parseUnits(formData?.deposit?.toString() ?? "0", 18) >
+      (data?.tokenAllowance?.result ?? 0n)
+    ) {
+      if (approveWrite.data?.request) {
+        const tx = writeContract(approveWrite.data?.request);
+
+        utils.user.invalidate();
+      } else {
+        form.setError("root", {
+          message: "Error occured attempting to approve tokens.",
+        });
+        return;
+      }
+    } else {
+      if (mintData) {
+        writeContract(mintData.request);
+      }
     }
   };
 
@@ -84,6 +144,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
             <FormLabel htmlFor="deposit">Deposit:</FormLabel>
             <div className="pt-1"></div>
             <DepositInputs
+              balance={formatUnits(data?.tokenBalance?.result ?? 0n, 18)}
               form={form}
               tokenDepositSelects={tokenDepositSelects}
             />
@@ -95,9 +156,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
             <p className="w-[450px]  pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
             {address && (
               <Button
-                disabled={
-                  !form.formState.isValid || !Boolean(mintData?.request)
-                }
+                disabled={!form.formState.isValid || !isValid}
                 variant={"submit"}
                 type="submit"
               >
@@ -113,6 +172,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
                 Connect Wallet
               </Button>
             )}
+
             <div className="w-[450px]">
               <p className="text-left text-sm text-red-400">
                 {/* Don't show form errors if users is not connected. */}

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { readContract } from "@/lib/viemClient";
+import { multicall } from "@/lib/viemClient";
 import { erc20Abi } from "viem";
 import { type TAddressString } from "@/lib/types";
 
@@ -11,20 +11,36 @@ export const userRouter = createTRPCRouter({
       z.object({
         userAddress: z.string().startsWith("0x").optional(),
         tokenAddress: z.string().startsWith("0x").optional(),
+        spender: z.string().startsWith("0x").optional(),
       }),
     )
     .query(async ({ input }) => {
-      if (!input.tokenAddress || !input.userAddress) {
+      if (!input.tokenAddress || !input.userAddress || !input.spender) {
         return {};
       }
-      const bal = await readContract({
-        address: input.tokenAddress as TAddressString,
-        abi: erc20Abi,
-        functionName: "balanceOf",
-        args: [input.userAddress as TAddressString],
+      console.log(input.tokenAddress, input.userAddress);
+      const [balance, allowance] = await multicall({
+        contracts: [
+          {
+            address: input.tokenAddress as TAddressString,
+            abi: erc20Abi,
+            functionName: "balanceOf",
+            args: [input.userAddress as TAddressString],
+          },
+          {
+            address: input.tokenAddress as TAddressString,
+            abi: erc20Abi,
+            functionName: "allowance",
+            args: [
+              input.userAddress as TAddressString,
+              input.spender as TAddressString,
+            ],
+          },
+        ],
       });
       return {
-        tokenBalance: bal,
+        tokenBalance: balance,
+        tokenAllowance: allowance,
       };
     }),
 });

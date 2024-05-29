@@ -11,13 +11,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary/60 hover:bg-primary text-primary-foreground",
+        default: "bg-accent/60 hover:bg-accent text-accent-foreground",
         accent: "bg-accent hover:bg-accent/60 text-[#FBDED0] py-2 px-4",
-        card: "bg-card-foreground  text-white",
+        brown: "bg-brown-700 text-brown-100 hover:bg-brown-800 py-2 px-4",
+        card: "bg-primary  text-white",
         outline:
-          "bg-transparent text-muted-foreground border rounded-md px-4 py-2 text-[14px] font-semibold hover:bg-card-foreground",
+          "bg-transparent text-muted-foreground border rounded-md px-4 py-2 text-[14px] font-semibold hover:bg-primary",
         submit:
-          "w-[450px] rounded-md bg-primary-foreground py-2 text-xl font-semibold hover:bg-primary-foreground/75",
+          "w-[450px] rounded-md bg-accent py-2 text-xl font-semibold hover:bg-accent-100",
       },
     },
     defaultVariants: {

@@ -12,7 +12,7 @@ import { RPC_URL } from "@/data/constants";
 const main = {
   ...mainnet,
   rpcUrls: { default: { http: [RPC_URL] } },
-  id: 4321,
+  id: 1,
 };
 
 // const config = getDefaultConfig({

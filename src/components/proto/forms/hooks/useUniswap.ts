@@ -8,18 +8,30 @@ interface Props {
   userAddress: TAddressString;
 }
 export function useUniswap({ token, userAddress }: Props) {
-  const { data, error, isLoading } = useSimulateContract({
+  const { data, error, isLoading, isError } = useSimulateContract({
     address: UniswapV2Router.address,
     abi: UniswapV2Router.abi,
     functionName: "swapETHForExactTokens",
     args: [
-      parseUnits("1000", 18),
-      [WETH_ADDRESS, token],
+      parseUnits("1", 1),
+      [WETH_ADDRESS],
       userAddress,
       BigInt(Math.floor(Date.now() / 1000) + 60 * 10000000),
     ],
     value: parseUnits("1", 18),
   });
-  console.log({ data, error, token, userAddress, isLoading });
+  console.log({
+    address: UniswapV2Router.address,
+    abi: UniswapV2Router.abi,
+    functionName: "swapETHForExactTokens",
+    args: [
+      parseUnits("1", 1),
+      [WETH_ADDRESS],
+      userAddress,
+      BigInt(Math.floor(Date.now() / 1000) + 60 * 10000000),
+    ],
+    value: parseUnits("1", 18),
+  });
+  console.log({ data, isError, token, userAddress, isLoading });
   return { data, error };
 }

@@ -51,6 +51,23 @@ const config = {
         accent: {
           DEFAULT: "hsl(var(--accent), <alpha-value>)",
           foreground: "hsl(var(--accent-foreground), <alpha-value>)",
+          100: "hsl(var(--accent-100), <alpha-value>)",
+        },
+        yellow: {
+          DEFAULT: "hsl(var(--yellow-100), <alpha-value>)",
+          200: "hsl(var(--yellow-200), <alpha-value>)",
+        },
+        orange: {
+          DEFAULT: "hsl(var(--orange-100), <alpha-value>)",
+          200: "hsl(var(--orange-200), <alpha-value>)",
+        },
+        brown: {
+          100: "hsl(var(--brown-100), <alpha-value>)",
+          700: "hsl(var(--brown-700), <alpha-value>)",
+          800: "hsl(var(--brown-800), <alpha-value>)",
+        },
+        ["light-blue"]: {
+          100: "hsl(var(--light-blue), <alpha-value>)",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
