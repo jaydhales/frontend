@@ -24,16 +24,21 @@ export function getLeverageRatio(k: number) {
   const result = 1 + 2 ** k;
   return result;
 }
-export function getVaultAddress({ vaultId }: { vaultId: number | undefined }) {
+export function getVaultAddress({
+  vaultId,
+  vaultAddress,
+}: {
+  vaultId: number | undefined;
+  vaultAddress: TAddressString;
+}) {
   if (vaultId === undefined) {
     return "0xff" as TAddressString;
   }
   const packed = encodePacked(
-    ["bytes1", "address", "uint32", "bytes32"],
-    ["0xff", Assistant.address, vaultId, keccak256(APE_HASH)],
+    ["bytes1", "bytes20", "bytes32", "bytes32"],
+    ["0xff", vaultAddress, toHex(vaultId, { size: 32 }), APE_HASH],
   );
-
   const result = keccak256(packed).slice(0, 42) as TAddressString;
-  console.log({ result });
+
   return result;
 }
