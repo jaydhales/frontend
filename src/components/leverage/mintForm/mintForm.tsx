@@ -60,12 +60,27 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     { enabled: Boolean(address) && Boolean(formData.depositToken) },
   );
 
+  const debtToken = formData.long.split(",")[0] ?? "", //value formatted : address,symbol
+    collateralToken = formData.versus.split(",")[0] ?? ""; //value formatted : address,symbol
+  const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
+  const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   const { data: mintData } = useMintApe({
-    debtToken: formData.long.split(",")[0] ?? "", //value formatted : address,symbol
-    collateralToken: formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
-    leverageTier: z.coerce.number().safeParse(formData.leverageTier).success
-      ? parseInt(formData.leverageTier)
-      : -1,
+    vaultId: parseInt(
+      vaultsQuery?.vaults.vaults.find((v) => {
+        if (
+          v.collateralToken === collateralToken &&
+          v.debtToken === debtToken &&
+          leverageTier === v.leverageTier
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      })?.vaultId ?? "-1",
+    ),
+    debtToken, //value formatted : address,symbol
+    collateralToken, //value formatted : address,symbol
+    leverageTier: leverageTier,
     amount: formData.deposit
       ? parseUnits(formData?.deposit.toString(), 18)
       : undefined,
