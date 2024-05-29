@@ -1,6 +1,9 @@
 import { TMintFormFields, TMintForm } from "@/lib/types";
 import { useEffect, useState } from "react";
-
+/**
+ * useSetDepositToken
+ * Set DepositToken input values using selected long and versus values.
+ */
 export default function useSetDepositToken({
   formData,
   form,

@@ -114,7 +114,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       (data?.tokenAllowance?.result ?? 0n)
     ) {
       if (approveWrite.data?.request) {
-        const tx = writeContract(approveWrite.data?.request);
+        writeContract(approveWrite.data?.request);
 
         utils.user.invalidate();
       } else {
