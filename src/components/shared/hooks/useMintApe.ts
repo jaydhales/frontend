@@ -2,11 +2,14 @@
 import { useSimulateContract } from "wagmi";
 import { Assistant } from "@/contracts/assistant";
 import { TAddressString } from "@/lib/types";
+import { getVaultAddress } from "@/lib/utils";
+import { parseUnits } from "viem";
 interface Props {
   collateralToken: string;
   debtToken: string;
   amount: bigint | undefined;
   leverageTier: number;
+  vaultId: number;
 }
 
 export function useMintApe({
@@ -14,16 +17,16 @@ export function useMintApe({
   collateralToken,
   leverageTier,
   amount,
+  vaultId,
 }: Props) {
-  const vaultAddress = "0x";
-  const vaultId = 1n;
+  const vaultAddress = getVaultAddress({ vaultId });
   const { data, error } = useSimulateContract({
     abi: Assistant.abi,
     address: Assistant.address,
     functionName: "mint",
     args: [
       vaultAddress,
-      vaultId,
+      parseUnits(vaultId.toString(), 0),
       {
         debtToken: debtToken as TAddressString,
         collateralToken: collateralToken as TAddressString,
