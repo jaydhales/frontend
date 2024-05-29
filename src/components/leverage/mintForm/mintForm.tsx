@@ -1,11 +1,16 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Card } from "../../ui/card";
 import { Form, FormLabel } from "../../ui/form";
 import { Button } from "@/components/ui/button";
 import { useMintFormProvider } from "@/components/providers/mintFormProvider";
 import { api } from "@/trpc/react";
-import { useAccount, useSimulateContract, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useSimulateContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
 import useSetDepositToken from "./hooks/useSetDepositToken";
 import { useMintOrBurn } from "@/components/shared/hooks/useMintOrBurn";
@@ -18,12 +23,14 @@ import DepositInputs from "./depositInputs";
 import Estimations from "./estimations";
 import TopSelects from "./topSelects";
 import { Assistant } from "@/contracts/assistant";
+import { useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 // TODO
 // Retrieve token decimals
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { form } = useMintFormProvider();
   const formData = form.watch();
 
+  const utils = api.useUtils();
   const { tokenDeposits } = useSetDepositToken({ formData, form });
 
   const { versus, leverageTiers, long } = useSelectMemo({
@@ -42,11 +49,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { address } = useAccount();
 
   const { openConnectModal } = useConnectModal();
-  console.log({
-    userAddress: address,
-    tokenAddress: formData.depositToken,
-    spender: Assistant.address,
-  });
+
   const { data } = api.user.getBalance.useQuery(
     {
       userAddress: address,
@@ -58,8 +61,8 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
 
   const { data: mintData } = useMintOrBurn({
     assetType: "ape",
-    debtToken: formData.long.split(",")[0] ?? "",
-    collateralToken: formData.versus.split(",")[0] ?? "",
+    debtToken: formData.long.split(",")[0] ?? "", //value formatted : address,symbol
+    collateralToken: formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
     type: "mint",
     leverageTier: z.coerce.number().safeParse(formData.leverageTier).success
       ? parseInt(formData.leverageTier)
@@ -77,54 +80,56 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       parseUnits(formData?.deposit?.toString() ?? "0", 18),
     ],
   });
-  const { writeContract } = useWriteContract();
+  const { writeContract, data: hash } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash });
+  useEffect(() => {
+    if (isConfirmed) {
+      utils.user.getBalance.invalidate();
+    }
+  }, [isConfirming, isConfirmed]);
+
+  const { isValid } = useCheckSubmitValid({
+    deposit: formData.deposit,
+    depositToken: formData.depositToken,
+    mintRequest: mintData?.request,
+    approveWriteRequest: approveWrite.data?.request,
+    tokenBalance: data?.tokenBalance?.result,
+    tokenAllowance: data?.tokenAllowance?.result,
+  });
   /**
    * SUBMIT
    */
   const onSubmit: SubmitHandler<TMintFormFields> = (formData) => {
+    // if (
+    //   data?.tokenBalance?.result ??
+    //   0n < parseUnits((formData.deposit ?? 0).toString(), 18)
+    // ) {
+    //   form.setError("root", { message: "Insufficient token balance." });
+    //   return;
+    // }
+    console.clear();
     if (
-      data?.tokenBalance?.result ??
-      0n < parseUnits((formData.deposit ?? 0).toString(), 18)
-    ) {
-      form.setError("root", { message: "Insufficient token balance." });
-      return;
-    }
-
-    if (
-      parseUnits(formData?.deposit?.toString() ?? "0", 18) <
+      parseUnits(formData?.deposit?.toString() ?? "0", 18) >
       (data?.tokenAllowance?.result ?? 0n)
     ) {
-      if (approveWrite.data?.request) writeContract(approveWrite.data?.request);
-      else {
+      if (approveWrite.data?.request) {
+        const tx = writeContract(approveWrite.data?.request);
+
+        utils.user.invalidate();
+      } else {
         form.setError("root", {
           message: "Error occured attempting to approve tokens.",
         });
         return;
       }
-    }
-
-    if (mintData) {
-      writeContract(mintData.request);
+    } else {
+      if (mintData) {
+        writeContract(mintData.request);
+      }
     }
   };
-  const isValid = useMemo(() => {
-    if (
-      data?.tokenBalance?.result ??
-      0n < parseUnits((formData.deposit ?? 0).toString(), 18)
-    ) {
-      return false;
-    }
-    if (
-      parseUnits(formData?.deposit?.toString() ?? "0", 18) <
-      (data?.tokenAllowance?.result ?? 0n)
-    ) {
-      if (approveWrite.data?.request) return true;
-      else return false;
-    } else {
-      if (mintData?.request) return true;
-      else return false;
-    }
-  }, [formData.deposit?.toString()]);
+
   return (
     <Card>
       <Form {...form}>
