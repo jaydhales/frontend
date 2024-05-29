@@ -123,6 +123,8 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       formData.versus
     ) {
       form.setError("root", { message: errorMessage });
+    } else if (form.formState.errors.root) {
+      form.setError("root", { message: "" });
     }
   }, [
     errorMessage,
@@ -180,7 +182,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
                 variant={"submit"}
                 type="submit"
               >
-                Mint
+                {submitType === ESubmitType.mint ? "Mint" : "Approve"}
               </Button>
             )}
             {!address && (
@@ -194,7 +196,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
             )}
 
             <div className="w-[450px]">
-              <p className="text-left text-sm text-red-400">
+              <p className="text-left text-sm text-red-400 h-[20px]">
                 {/* Don't show form errors if users is not connected. */}
                 {address && <>{form.formState.errors.root?.message}</>}
               </p>
