@@ -83,6 +83,8 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { writeContract, data: hash } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
+
+  // Invalidate if approve or mint tx is successful.
   useEffect(() => {
     if (isConfirmed) {
       utils.user.getBalance.invalidate();
