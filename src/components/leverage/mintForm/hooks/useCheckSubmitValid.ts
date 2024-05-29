@@ -8,7 +8,17 @@ interface Props {
   tokenAllowance: bigint | undefined;
   tokenBalance: bigint | undefined;
 }
-
+export enum ESubmitType {
+  "mint",
+  "approve",
+}
+/**
+ * Checks if user can submit form.
+ * @returns
+ * isValid -
+ * errorMessage -
+ * submitType - 'approve' | 'mint'
+ */
 export const useCheckSubmitValid = ({
   deposit,
   depositToken,
@@ -17,16 +27,31 @@ export const useCheckSubmitValid = ({
   tokenAllowance,
   tokenBalance,
 }: Props) => {
-  const isValid = useMemo(() => {
-    if ((tokenBalance ?? 0n) < parseUnits((deposit ?? 0).toString(), 18)) {
-      return false;
-    }
+  const { isValid, errorMessage, submitType } = useMemo(() => {
+    // CHECK ALLOWANCE FIRST
     if (parseUnits(deposit?.toString() ?? "0", 18) > (tokenAllowance ?? 0n)) {
-      if (approveWriteRequest) return true;
-      else return false;
+      if (approveWriteRequest)
+        return {
+          isValid: true,
+          errorMessage: null,
+          submitType: ESubmitType.approve,
+        };
+      else
+        return { isValid: false, errorMessage: "allowance", submitType: null };
+    }
+
+    if ((tokenBalance ?? 0n) < parseUnits((deposit ?? 0).toString(), 18)) {
+      if (mintRequest)
+        return {
+          isValid: true,
+          errorMessage: null,
+          submitType: ESubmitType.mint,
+        };
+      else {
+        return { isValid: false, errorMessage: "mint", submitType: null };
+      }
     } else {
-      if (mintRequest) return true;
-      else return false;
+      return { isValid: false, errorMessage: "mint", submitType: null };
     }
   }, [
     deposit,
@@ -36,5 +61,5 @@ export const useCheckSubmitValid = ({
     tokenAllowance,
     tokenBalance,
   ]);
-  return { isValid };
+  return { isValid, errorMessage, submitType };
 };

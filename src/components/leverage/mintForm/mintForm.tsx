@@ -22,7 +22,7 @@ import DepositInputs from "./depositInputs";
 import Estimations from "./estimations";
 import TopSelects from "./topSelects";
 import { Assistant } from "@/contracts/assistant";
-import { useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
+import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useMintApe } from "@/components/shared/hooks/useMintApe";
 // TODO
 // Retrieve token decimals
@@ -106,7 +106,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     }
   }, [isConfirming, isConfirmed]);
 
-  const { isValid } = useCheckSubmitValid({
+  const { isValid, errorMessage, submitType } = useCheckSubmitValid({
     deposit: formData.deposit,
     depositToken: formData.depositToken,
     mintRequest: mintData?.request,
@@ -114,34 +114,40 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     tokenBalance: data?.tokenBalance?.result,
     tokenAllowance: data?.tokenAllowance?.result,
   });
+  // ONLY SET ERROR IF ALL VALUES SET IN FORM
+  useEffect(() => {
+    if (
+      errorMessage &&
+      formData.deposit &&
+      formData.depositToken &&
+      formData.leverageTier &&
+      formData.long &&
+      formData.versus
+    ) {
+      form.setError("root", { message: errorMessage });
+    }
+  }, [
+    errorMessage,
+    formData.deposit,
+    formData.depositToken,
+    formData.leverageTier,
+    formData.long,
+    formData.versus,
+  ]);
   /**
    * SUBMIT
    */
-  const onSubmit: SubmitHandler<TMintFormFields> = (formData) => {
-    // CHECK ALLOWANCE
-    if (
-      parseUnits(formData?.deposit?.toString() ?? "0", 18) >
-      (data?.tokenAllowance?.result ?? 0n)
-    ) {
-      if (approveWrite.data?.request) {
-        writeContract(approveWrite.data?.request);
-        return;
-      } else {
-        form.setError("root", {
-          message: "Error occured attempting to approve tokens.",
-        });
-        return;
-      }
-    }
-    // CHECK BALANCE
-    if (
-      (data?.tokenBalance?.result ?? 0n) <
-      parseUnits((formData.deposit ?? 0).toString(), 18)
-    ) {
-      form.setError("root", { message: "Insufficient token balance." });
+  const onSubmit: SubmitHandler<TMintFormFields> = () => {
+    if (submitType === null) {
       return;
-    } else {
-      if (mintData) writeContract(mintData?.request);
+    }
+    // CHECK ALLOWANCE
+    if (submitType === ESubmitType.mint && mintData?.request) {
+      writeContract?.(mintData?.request);
+      return;
+    }
+    if (submitType === ESubmitType.approve && approveWrite.data?.request) {
+      writeContract(approveWrite.data?.request);
       return;
     }
   };
