@@ -110,6 +110,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     ) {
       if (approveWrite.data?.request) {
         writeContract(approveWrite.data?.request);
+        return;
       } else {
         form.setError("root", {
           message: "Error occured attempting to approve tokens.",
@@ -126,6 +127,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       return;
     } else {
       if (mintData) writeContract(mintData?.request);
+      return;
     }
   };
 
