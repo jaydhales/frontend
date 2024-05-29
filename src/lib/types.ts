@@ -40,5 +40,5 @@ export interface TMintFormFields {
   versus: string;
   leverageTier: string;
   depositToken: string;
-  deposit?: number;
+  deposit?: string;
 }
