@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { parseUnits } from "viem";
 interface Props {
-  deposit: number | undefined;
+  deposit: string | undefined;
   depositToken: string;
   mintRequest: any;
   approveWriteRequest: any;
@@ -29,7 +29,7 @@ export const useCheckSubmitValid = ({
 }: Props) => {
   const { isValid, errorMessage, submitType } = useMemo(() => {
     // CHECK ALLOWANCE FIRST
-    if (parseUnits(deposit?.toString() ?? "0", 18) > (tokenAllowance ?? 0n)) {
+    if (parseUnits(deposit ?? "0", 18) > (tokenAllowance ?? 0n)) {
       if (approveWriteRequest)
         return {
           isValid: true,
@@ -40,7 +40,7 @@ export const useCheckSubmitValid = ({
         return { isValid: false, errorMessage: "allowance", submitType: null };
     }
 
-    if ((tokenBalance ?? 0n) < parseUnits((deposit ?? 0).toString(), 18)) {
+    if ((tokenBalance ?? 0n) < parseUnits(deposit ?? "0", 18)) {
       if (mintRequest)
         return {
           isValid: true,
