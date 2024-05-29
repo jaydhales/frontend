@@ -103,32 +103,29 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
    * SUBMIT
    */
   const onSubmit: SubmitHandler<TMintFormFields> = (formData) => {
-    // if (
-    //   data?.tokenBalance?.result ??
-    //   0n < parseUnits((formData.deposit ?? 0).toString(), 18)
-    // ) {
-    //   form.setError("root", { message: "Insufficient token balance." });
-    //   return;
-    // }
-    console.clear();
+    // CHECK ALLOWANCE
     if (
       parseUnits(formData?.deposit?.toString() ?? "0", 18) >
       (data?.tokenAllowance?.result ?? 0n)
     ) {
       if (approveWrite.data?.request) {
         writeContract(approveWrite.data?.request);
-
-        utils.user.invalidate();
       } else {
         form.setError("root", {
           message: "Error occured attempting to approve tokens.",
         });
         return;
       }
+    }
+    // CHECK BALANCE
+    if (
+      (data?.tokenBalance?.result ?? 0n) <
+      parseUnits((formData.deposit ?? 0).toString(), 18)
+    ) {
+      form.setError("root", { message: "Insufficient token balance." });
+      return;
     } else {
-      if (mintData) {
-        writeContract(mintData.request);
-      }
+      if (mintData) writeContract(mintData?.request);
     }
   };
 
