@@ -15,9 +15,10 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-      if (!input.tokenAddress || !input.userAddress) {
+      if (!input.tokenAddress || !input.userAddress || !input.spender) {
         return {};
       }
+      console.log(input.tokenAddress, input.userAddress);
       const [balance, allowance] = await multicall({
         contracts: [
           {
