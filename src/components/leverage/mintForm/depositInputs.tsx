@@ -29,7 +29,7 @@ export default function DepositInputs({
               <FormControl>
                 <Input
                   type="number"
-                  min={0.00000000000001}
+                  min={-1}
                   background="primary"
                   placeholder="0"
                   textSize="xl"
