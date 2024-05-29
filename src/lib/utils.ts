@@ -3,6 +3,7 @@ import { APE_HASH } from "@/data/constants";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { encodePacked, getAddress, keccak256, toHex } from "viem";
+import { TAddressString } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -23,12 +24,16 @@ export function getLeverageRatio(k: number) {
   const result = 1 + 2 ** k;
   return result;
 }
-export function getVaultAddress({ vaultId }: { vaultId: number }) {
+export function getVaultAddress({ vaultId }: { vaultId: number | undefined }) {
+  if (vaultId === undefined) {
+    return "0xff" as TAddressString;
+  }
   const packed = encodePacked(
-    ["bytes1", "address", "bytes32", "bytes32"],
-    ["0xff", Assistant.address, toHex(vaultId), APE_HASH],
+    ["bytes1", "address", "uint32", "bytes32"],
+    ["0xff", Assistant.address, vaultId, keccak256(APE_HASH)],
   );
 
-  const result = keccak256(packed);
+  const result = keccak256(packed).slice(0, 42) as TAddressString;
+  console.log({ result });
   return result;
 }
