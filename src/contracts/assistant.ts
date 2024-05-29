@@ -25,55 +25,14 @@ export const Assistant = {
     {
       inputs: [
         {
-          internalType: "bool",
-          name: "isAPE",
-          type: "bool",
-        },
-        {
-          components: [
-            {
-              internalType: "address",
-              name: "debtToken",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "collateralToken",
-              type: "address",
-            },
-            {
-              internalType: "int8",
-              name: "leverageTier",
-              type: "int8",
-            },
-          ],
-          internalType: "struct VaultStructs.VaultParameters",
-          name: "vaultParams",
-          type: "tuple",
+          internalType: "address",
+          name: "ape",
+          type: "address",
         },
         {
           internalType: "uint256",
-          name: "amountTokens",
+          name: "vaultId",
           type: "uint256",
-        },
-      ],
-      name: "burn",
-      outputs: [
-        {
-          internalType: "uint144",
-          name: "amountCollateral",
-          type: "uint144",
-        },
-      ],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "bool",
-          name: "isAPE",
-          type: "bool",
         },
         {
           components: [
@@ -127,9 +86,14 @@ export const Assistant = {
     {
       inputs: [
         {
-          internalType: "bool",
-          name: "isAPE",
-          type: "bool",
+          internalType: "address",
+          name: "ape",
+          type: "address",
+        },
+        {
+          internalType: "uint256",
+          name: "vaultId",
+          type: "uint256",
         },
         {
           components: [
@@ -168,6 +132,166 @@ export const Assistant = {
         },
       ],
       stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "",
+          type: "address",
+        },
+        {
+          internalType: "address",
+          name: "",
+          type: "address",
+        },
+        {
+          internalType: "uint256[]",
+          name: "",
+          type: "uint256[]",
+        },
+        {
+          internalType: "uint256[]",
+          name: "",
+          type: "uint256[]",
+        },
+        {
+          internalType: "bytes",
+          name: "",
+          type: "bytes",
+        },
+      ],
+      name: "onERC1155BatchReceived",
+      outputs: [
+        {
+          internalType: "bytes4",
+          name: "",
+          type: "bytes4",
+        },
+      ],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "",
+          type: "address",
+        },
+        {
+          internalType: "address",
+          name: "",
+          type: "address",
+        },
+        {
+          internalType: "uint256",
+          name: "",
+          type: "uint256",
+        },
+        {
+          internalType: "uint256",
+          name: "",
+          type: "uint256",
+        },
+        {
+          internalType: "bytes",
+          name: "",
+          type: "bytes",
+        },
+      ],
+      name: "onERC1155Received",
+      outputs: [
+        {
+          internalType: "bytes4",
+          name: "",
+          type: "bytes4",
+        },
+      ],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [
+        {
+          components: [
+            {
+              internalType: "address",
+              name: "debtToken",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "collateralToken",
+              type: "address",
+            },
+            {
+              internalType: "int8",
+              name: "leverageTier",
+              type: "int8",
+            },
+          ],
+          internalType: "struct VaultStructs.VaultParameters",
+          name: "vaultParams",
+          type: "tuple",
+        },
+      ],
+      name: "priceOfAPE",
+      outputs: [
+        {
+          internalType: "uint256",
+          name: "num",
+          type: "uint256",
+        },
+        {
+          internalType: "uint256",
+          name: "den",
+          type: "uint256",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
+      inputs: [
+        {
+          components: [
+            {
+              internalType: "address",
+              name: "debtToken",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "collateralToken",
+              type: "address",
+            },
+            {
+              internalType: "int8",
+              name: "leverageTier",
+              type: "int8",
+            },
+          ],
+          internalType: "struct VaultStructs.VaultParameters",
+          name: "vaultParams",
+          type: "tuple",
+        },
+      ],
+      name: "priceOfTEA",
+      outputs: [
+        {
+          internalType: "uint256",
+          name: "num",
+          type: "uint256",
+        },
+        {
+          internalType: "uint256",
+          name: "den",
+          type: "uint256",
+        },
+      ],
+      stateMutability: "view",
       type: "function",
     },
     {
@@ -265,9 +389,14 @@ export const Assistant = {
     {
       inputs: [
         {
-          internalType: "bool",
-          name: "isAPE",
-          type: "bool",
+          internalType: "address",
+          name: "ape",
+          type: "address",
+        },
+        {
+          internalType: "uint256",
+          name: "vaultId",
+          type: "uint256",
         },
         {
           components: [
