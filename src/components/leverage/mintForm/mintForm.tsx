@@ -13,7 +13,6 @@ import {
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
 import useSetDepositToken from "./hooks/useSetDepositToken";
-import { useMintOrBurn } from "@/components/shared/hooks/useMintOrBurn";
 import { erc20Abi, formatUnits, parseUnits } from "viem";
 import { SubmitHandler } from "react-hook-form";
 import { TAddressString, TMintFormFields, TVaults } from "@/lib/types";
@@ -24,10 +23,12 @@ import Estimations from "./estimations";
 import TopSelects from "./topSelects";
 import { Assistant } from "@/contracts/assistant";
 import { useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
+import { useMintApe } from "@/components/shared/hooks/useMintApe";
 // TODO
 // Retrieve token decimals
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { form } = useMintFormProvider();
+
   const formData = form.watch();
 
   const utils = api.useUtils();
@@ -59,11 +60,9 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     { enabled: Boolean(address) && Boolean(formData.depositToken) },
   );
 
-  const { data: mintData } = useMintOrBurn({
-    assetType: "ape",
+  const { data: mintData } = useMintApe({
     debtToken: formData.long.split(",")[0] ?? "", //value formatted : address,symbol
     collateralToken: formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
-    type: "mint",
     leverageTier: z.coerce.number().safeParse(formData.leverageTier).success
       ? parseInt(formData.leverageTier)
       : -1,
@@ -71,6 +70,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       ? parseUnits(formData?.deposit.toString(), 18)
       : undefined,
   });
+
   const approveWrite = useSimulateContract({
     address: formData.depositToken as TAddressString,
     abi: erc20Abi,
