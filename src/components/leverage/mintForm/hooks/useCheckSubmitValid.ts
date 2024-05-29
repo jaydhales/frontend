@@ -28,6 +28,21 @@ export const useCheckSubmitValid = ({
   tokenBalance,
 }: Props) => {
   const { isValid, errorMessage, submitType } = useMemo(() => {
+    if (parseUnits(deposit ?? "0", 18) < 0n) {
+      return {
+        isValid: false,
+        errorMessage: "Enter amount greater than 0.",
+        submitType: ESubmitType.mint,
+      };
+    }
+
+    if ((tokenBalance ?? 0n) < parseUnits(deposit ?? "0", 18)) {
+      return {
+        isValid: false,
+        errorMessage: "Insufficient Balance.",
+        submitType: ESubmitType.mint,
+      };
+    }
     // CHECK ALLOWANCE FIRST
     if (parseUnits(deposit ?? "0", 18) > (tokenAllowance ?? 0n)) {
       if (approveWriteRequest)
@@ -37,21 +52,25 @@ export const useCheckSubmitValid = ({
           submitType: ESubmitType.approve,
         };
       else
-        return { isValid: false, errorMessage: "allowance", submitType: null };
+        return {
+          isValid: false,
+          errorMessage: "Error occured.",
+          submitType: ESubmitType.approve,
+        };
     }
 
-    if ((tokenBalance ?? 0n) < parseUnits(deposit ?? "0", 18)) {
-      if (mintRequest)
-        return {
-          isValid: true,
-          errorMessage: null,
-          submitType: ESubmitType.mint,
-        };
-      else {
-        return { isValid: false, errorMessage: "mint", submitType: null };
-      }
-    } else {
-      return { isValid: false, errorMessage: "mint", submitType: null };
+    if (mintRequest)
+      return {
+        isValid: true,
+        errorMessage: null,
+        submitType: ESubmitType.mint,
+      };
+    else {
+      return {
+        isValid: false,
+        errorMessage: "Unexpected mint error.",
+        submitType: ESubmitType.mint,
+      };
     }
   }, [
     deposit,
