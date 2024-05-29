@@ -3,11 +3,11 @@
 website:
 twitter:
 
-# DEPLOY LOCALLY
+## DEPLOY LOCALLY
 
 `pnpm i`
 `pnpm run dev`
 
-# GENERATE GRAPHQL TYPES
+## GENERATE GRAPHQL TYPES
 
 `npm exec graphclient build`
