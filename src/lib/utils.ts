@@ -23,7 +23,7 @@ export function getLeverageRatio(k: number) {
   const result = 1 + 2 ** k;
   return result;
 }
-export function getVaultAddress({
+export function getApeAddress({
   vaultId,
   vaultAddress,
   apeHash,

@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { add, getLeverageRatio, getVaultAddress } from "./utils";
+import { add, getLeverageRatio, getApeAddress } from "./utils";
 
 test("Test utils add function.", () => {
   expect(add(1, 2)).toBe(3);
@@ -9,9 +9,9 @@ test("Test calculate leverage tier ratio.", () => {
   expect(getLeverageRatio(-1)).toBe(1.5);
 });
 
-test("Test if getVaultAddress gets proper contract address.", () => {
+test("Test if getApeAddress gets proper contract address.", () => {
   expect(
-    getVaultAddress({
+    getApeAddress({
       vaultId: 0,
       vaultAddress: "0x01c93598EeC9131C05a2450Cd033cbd8F82da31e",
       apeHash:
