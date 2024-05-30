@@ -2,9 +2,10 @@
 import { useSimulateContract } from "wagmi";
 import { Assistant } from "@/contracts/assistant";
 import { TAddressString } from "@/lib/types";
-import { getVaultAddress } from "@/lib/utils";
 import { parseUnits } from "viem";
 import { z } from "zod";
+import { getApeAddress } from "@/lib/utils";
+import { APE_HASH, VAULT_ADDRESS } from "@/data/constants";
 interface Props {
   collateralToken: string;
   debtToken: string;
@@ -21,10 +22,13 @@ export function useMintApe({
   vaultId,
 }: Props) {
   const safeVaultId = z.coerce.number().safeParse(vaultId);
-  const vaultAddress = getVaultAddress({
+  const vaultAddress = getApeAddress({
+    apeHash: APE_HASH,
+    vaultAddress: VAULT_ADDRESS,
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
-  const { data, error } = useSimulateContract({
+
+  const { data } = useSimulateContract({
     abi: Assistant.abi,
     address: Assistant.address,
     functionName: "mint",

@@ -30,7 +30,6 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { form } = useMintFormProvider();
   const formData = form.watch();
 
-  console.log({ deposit: formData.deposit });
   const utils = api.useUtils();
   const { tokenDeposits } = useSetDepositToken({ formData, form });
 
@@ -196,7 +195,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
             )}
 
             <div className="w-[450px]">
-              <p className="text-left text-sm text-red-400 h-[20px]">
+              <p className="h-[20px] text-left text-sm text-red-400">
                 {/* Don't show form errors if users is not connected. */}
                 {address && <>{form.formState.errors.root?.message}</>}
               </p>
