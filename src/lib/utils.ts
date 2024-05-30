@@ -1,4 +1,3 @@
-import { Assistant } from "@/contracts/assistant";
 import { APE_HASH } from "@/data/constants";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -27,18 +26,20 @@ export function getLeverageRatio(k: number) {
 export function getVaultAddress({
   vaultId,
   vaultAddress,
+  apeHash,
 }: {
   vaultId: number | undefined;
   vaultAddress: TAddressString;
+  apeHash: TAddressString;
 }) {
   if (vaultId === undefined) {
     return "0xff" as TAddressString;
   }
   const packed = encodePacked(
     ["bytes1", "bytes20", "bytes32", "bytes32"],
-    ["0xff", vaultAddress, toHex(vaultId, { size: 32 }), APE_HASH],
+    ["0xff", vaultAddress, toHex(vaultId, { size: 32 }), apeHash],
   );
-  const result = keccak256(packed).slice(0, 42) as TAddressString;
-
+  const raw = keccak256(packed);
+  const result = ("0x" + raw.slice(-40)) as TAddressString;
   return result;
 }

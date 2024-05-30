@@ -9,11 +9,13 @@ test("Test calculate leverage tier ratio.", () => {
   expect(getLeverageRatio(-1)).toBe(1.5);
 });
 
-test("Test if vaultId gets proper contract address.", () => {
+test("Test if getVaultAddress gets proper contract address.", () => {
   expect(
     getVaultAddress({
-      vaultId: 1,
-      vaultAddress: "0x41219a0a9C0b86ED81933c788a6B63Dfef8f17eE",
+      vaultId: 0,
+      vaultAddress: "0x01c93598EeC9131C05a2450Cd033cbd8F82da31e",
+      apeHash:
+        "0xcf39e7ac6f3c12d813a3307776916d753675afc06b9b863f743ed27a77d1c064",
     }),
-  ).toBe("0x6F65c6A2177AF9776C0d0104cf9171E4F9F7CA94");
+  ).toBe("0x02e9F4bB019f5513CFaF87dAe7F6b11b29007953".toLowerCase()); // FOR SOME REASON VITE DOESN"T WORK WITH getAddress
 });
