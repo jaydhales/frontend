@@ -12,10 +12,10 @@ test("Test calculate leverage tier ratio.", () => {
 test("Test if getApeAddress gets proper contract address.", () => {
   expect(
     getApeAddress({
-      vaultId: 0,
-      vaultAddress: "0x01c93598EeC9131C05a2450Cd033cbd8F82da31e",
+      vaultId: 1,
+      vaultAddress: "0xa51807d5a12E7e78148c66dC4851CD33EEd1FDfD",
       apeHash:
-        "0xcf39e7ac6f3c12d813a3307776916d753675afc06b9b863f743ed27a77d1c064",
+        "0xa46131919dce26b89fa279578c126634abe8d3a1a5924b214543dfa2e12b3b86",
     }),
-  ).toBe("0x02e9F4bB019f5513CFaF87dAe7F6b11b29007953".toLowerCase()); // FOR SOME REASON VITE DOESN"T WORK WITH getAddress
+  ).toBe("0x067Dd26fecdf6659879D0a1a4C4DFa735413339D".toLowerCase()); // FOR SOME REASON VITE DOESN"T WORK WITH getAddress
 });

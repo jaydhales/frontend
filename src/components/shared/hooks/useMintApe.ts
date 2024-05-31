@@ -22,18 +22,19 @@ export function useMintApe({
   vaultId,
 }: Props) {
   const safeVaultId = z.coerce.number().safeParse(vaultId);
-  const vaultAddress = getApeAddress({
+
+  const apeAddress = getApeAddress({
     apeHash: APE_HASH,
     vaultAddress: VAULT_ADDRESS,
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
 
-  const { data } = useSimulateContract({
+  const { data, error } = useSimulateContract({
     abi: Assistant.abi,
     address: Assistant.address,
     functionName: "mint",
     args: [
-      vaultAddress,
+      apeAddress,
       parseUnits(vaultId?.toString() ?? "0", 0),
       {
         debtToken: debtToken as TAddressString,
@@ -43,6 +44,7 @@ export function useMintApe({
       amount ?? 0n,
     ],
   });
+  console.log({ data, error });
 
   return { data };
 }

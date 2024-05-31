@@ -110,7 +110,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     tokenBalance: data?.tokenBalance?.result,
     tokenAllowance: data?.tokenAllowance?.result,
   });
-
+  console.log({ allowance: data?.tokenAllowance });
   // ONLY SET ERROR IF ALL VALUES SET IN FORM
   useEffect(() => {
     if (
@@ -140,6 +140,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     if (submitType === null) {
       return;
     }
+
     // CHECK ALLOWANCE
     if (submitType === ESubmitType.mint && mintData?.request) {
       writeContract?.(mintData?.request);
