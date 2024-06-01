@@ -15,58 +15,29 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useMintOrBurn } from "./hooks/useMintOrBurn";
+import { useWethDeposit } from "./hooks/useWethDeposit";
 import { useWriteContract } from "wagmi";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { parseUnits } from "viem";
 
 const FormSchema = z.object({
-  collateralToken: z
-    .string()
-    .min(42, {
-      message: "Address length too short.",
-    })
-    .startsWith("0x", { message: "Token starts with 0x." }),
-  debtToken: z
-    .string()
-    .min(10, {
-      message: "Address length too short.",
-    })
-    .startsWith("0x", { message: "Token starts with 0x." }),
   amount: z.coerce
     .number()
     .positive({ message: "Positive numbers only." })
     .finite({ message: "Must be a number." }),
-  type: z.union([z.literal("mint"), z.literal("burn")]),
-  assetType: z.union([z.literal("ape"), z.literal("tea")]),
 });
 
 export function MintOrBurnForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      collateralToken: "",
-      debtToken: "",
       amount: 0,
-      type: "mint",
-      assetType: "ape",
     },
     mode: "onBlur",
   });
-  const { collateralToken, debtToken, type, amount, assetType } =
-    form.getValues();
-  const { data } = useMintOrBurn({
-    collateralToken,
-    debtToken,
+  const { amount } = form.getValues();
+  const { data } = useWethDeposit({
     amount: parseUnits(amount.toString(), 18),
-    type,
-    assetType,
   });
   const { writeContract } = useWriteContract();
   function onSubmit() {
@@ -79,36 +50,7 @@ export function MintOrBurnForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className=" w-full space-y-6"
       >
-        <div className="grid grid-cols-2 gap-2">
-          <FormField
-            control={form.control}
-            name="collateralToken"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>CollateralToken</FormLabel>
-                <FormControl>
-                  <Input placeholder="0x..." {...field} />
-                </FormControl>
-                <FormDescription>Collateral token address.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="debtToken"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Debt</FormLabel>
-                <FormControl>
-                  <Input placeholder="0x..." {...field} />
-                </FormControl>
-                <FormDescription>Debt token address.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
+        <div className="grid grid-cols-2 gap-2 ">
           <FormField
             control={form.control}
             name="amount"
@@ -119,61 +61,6 @@ export function MintOrBurnForm() {
                   <Input placeholder="0" type="number" {...field} />
                 </FormControl>
                 <FormDescription>Amount</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem className=" ">
-                <FormLabel>Action</FormLabel>
-
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select action type." />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="mint">Mint</SelectItem>
-                    <SelectItem value="burn">Burn</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <FormDescription>Action type.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="assetType"
-            render={({ field }) => (
-              <FormItem className=" ">
-                <FormLabel>Asset</FormLabel>
-
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select asset type." />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="tea">Tea</SelectItem>
-                    <SelectItem value="ape">Ape</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <FormDescription>Asset type.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
