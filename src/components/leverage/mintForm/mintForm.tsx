@@ -110,8 +110,14 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     tokenBalance: data?.tokenBalance?.result,
     tokenAllowance: data?.tokenAllowance?.result,
   });
-  console.log({ allowance: data?.tokenAllowance });
+  const { data: quoteData } = api.vault.quoteMint.useQuery({
+    amount: formData.deposit,
+    collateralToken: formData.versus.split(",")[0],
+    debtToken: formData.long.split(",")[0],
+    leverageTier: parseInt(formData.leverageTier),
+  });
   // ONLY SET ERROR IF ALL VALUES SET IN FORM
+
   useEffect(() => {
     if (
       errorMessage &&
@@ -171,7 +177,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
               tokenDepositSelects={tokenDepositSelects}
             />
           </div>
-          <Estimations />
+          <Estimations ape={quoteData?.toString() ?? "0"} />
           <div className="flex flex-col items-center justify-center gap-y-2">
             {/* TODO */}
             {/* Dont set size w-[450px] on all elements. */}

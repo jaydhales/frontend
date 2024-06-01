@@ -28,7 +28,7 @@ export const useCheckSubmitValid = ({
   tokenBalance,
 }: Props) => {
   const { isValid, errorMessage, submitType } = useMemo(() => {
-    if (parseUnits(deposit ?? "0", 18) < 0n) {
+    if (parseUnits(deposit ?? "0", 18) <= 0n) {
       return {
         isValid: false,
         errorMessage: "Enter amount greater than 0.",
