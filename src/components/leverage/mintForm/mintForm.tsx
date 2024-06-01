@@ -110,12 +110,21 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     tokenBalance: data?.tokenBalance?.result,
     tokenAllowance: data?.tokenAllowance?.result,
   });
-  const { data: quoteData } = api.vault.quoteMint.useQuery({
-    amount: formData.deposit,
-    collateralToken: formData.versus.split(",")[0],
-    debtToken: formData.long.split(",")[0],
-    leverageTier: parseInt(formData.leverageTier),
-  });
+  const allSelected = Boolean(
+    formData.deposit &&
+      formData.long !== "" &&
+      formData.versus !== "" &&
+      formData.leverageTier !== "",
+  );
+  const { data: quoteData } = api.vault.quoteMint.useQuery(
+    {
+      amount: formData.deposit,
+      collateralToken: formData.versus.split(",")[0],
+      debtToken: formData.long.split(",")[0],
+      leverageTier: parseInt(formData.leverageTier),
+    },
+    { enabled: allSelected },
+  );
   // ONLY SET ERROR IF ALL VALUES SET IN FORM
 
   useEffect(() => {
