@@ -24,6 +24,10 @@ import TopSelects from "./topSelects";
 import { Assistant } from "@/contracts/assistant";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useMintApe } from "@/components/shared/hooks/useMintApe";
+import ProgressAlert from "./progressAlert";
+
+import { useQuoteMint } from "./hooks/useQuoteMint";
+import useSetRootError from "./hooks/useSetRootError";
 // TODO
 // Retrieve token decimals
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
@@ -58,26 +62,13 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     },
     { enabled: Boolean(address) && Boolean(formData.depositToken) },
   );
-
-  const debtToken = formData.long.split(",")[0] ?? "", //value formatted : address,symbol
-    collateralToken = formData.versus.split(",")[0] ?? ""; //value formatted : address,symbol
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
-
+  /** ##MINT APE## */
   const { data: mintData } = useMintApe({
-    vaultId: vaultsQuery?.vaults.vaults.find((v) => {
-      if (
-        v.collateralToken === collateralToken &&
-        v.debtToken === debtToken &&
-        leverageTier === v.leverageTier
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    })?.vaultId,
-    debtToken, //value formatted : address,symbol
-    collateralToken, //value formatted : address,symbol
+    vaultId: findVault(vaultsQuery, formData),
+    debtToken: formDataInput(formData.long), //value formatted : address,symbol
+    collateralToken: formDataInput(formData.versus), //value formatted : address,symbol
     leverageTier: leverageTier,
     amount: formData.deposit ? parseUnits(formData?.deposit, 18) : undefined,
   });
@@ -91,10 +82,9 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       parseUnits(formData?.deposit?.toString() ?? "0", 18),
     ],
   });
-  const { writeContract, data: hash } = useWriteContract();
+  const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
-
   // Invalidate if approve or mint tx is successful.
   useEffect(() => {
     if (isConfirmed) {
@@ -111,45 +101,15 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     tokenAllowance: data?.tokenAllowance?.result,
   });
 
-  const allSelected = Boolean(
-    formData.deposit &&
-      formData.long !== "" &&
-      formData.versus !== "" &&
-      formData.leverageTier !== "",
-  );
-  const { data: quoteData } = api.vault.quoteMint.useQuery(
-    {
-      amount: formData.deposit,
-      collateralToken: formData.versus.split(",")[0],
-      debtToken: formData.long.split(",")[0],
-      leverageTier: parseInt(formData.leverageTier),
-    },
-    { enabled: allSelected },
-  );
-  // ONLY SET ERROR IF ALL VALUES SET IN FORM
-
-  useEffect(() => {
-    if (
-      errorMessage &&
-      formData.deposit &&
-      formData.depositToken &&
-      formData.leverageTier &&
-      formData.long &&
-      formData.versus
-    ) {
-      form.setError("root", { message: errorMessage });
-    } else if (form.formState.errors.root) {
-      form.setError("root", { message: "" });
-    }
-  }, [
+  const { quoteData } = useQuoteMint({ formData });
+  useSetRootError({
+    formData,
+    setError: form.setError,
     errorMessage,
-    formData.deposit,
-    formData.depositToken,
-    formData.leverageTier,
-    formData.long,
-    formData.versus,
-  ]);
+    rootErrorMessage: form.formState.errors.root?.message,
+  });
   /**
+   *
    * SUBMIT
    */
   const onSubmit: SubmitHandler<TMintFormFields> = () => {
@@ -170,6 +130,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
 
   return (
     <Card>
+      <ProgressAlert open={isConfirming || isPending} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <TopSelects
@@ -223,5 +184,24 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     </Card>
   );
 }
-
+function formDataInput(s: string) {
+  return s.split(",")[0] ?? "";
+}
 // <SelectItem value="mint">Mint</SelectItem>
+function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
+  const debtToken = formData.long.split(",")[0] ?? "", //value formatted : address,symbol
+    collateralToken = formData.versus.split(",")[0] ?? ""; //value formatted : address,symbol
+  const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
+  const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
+  return vaultQuery?.vaults.vaults.find((v) => {
+    if (
+      v.collateralToken === collateralToken &&
+      v.debtToken === debtToken &&
+      leverageTier === v.leverageTier
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  })?.vaultId;
+}
