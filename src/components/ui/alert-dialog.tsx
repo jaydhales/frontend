@@ -1,9 +1,8 @@
+import { cn } from "@/lib/utils";
 import * as Dialog from "@radix-ui/react-dialog";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import React from "react";
-import { GrClose } from "react-icons/gr";
-import { cn } from "~/utils";
 
 const alertDialogContentVariants = cva(
   `fixed h-screen z-20  top-0  duration-500 bg-white`,
@@ -118,7 +117,7 @@ const AlertDialogContent = React.forwardRef<
           <Dialog.Close
             className={cn(alertDialogCloseVariants({ align, closeColor }))}
           >
-            <GrClose size={18} />
+            X
           </Dialog.Close>
           {children}
         </Dialog.Content>
