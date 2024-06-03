@@ -28,11 +28,15 @@ export default function DepositInputs({
             <FormItem>
               <FormControl>
                 <Input
-                  type="number"
-                  min={-1}
+                  type="text"
+                  inputMode="decimal"
+                  autoComplete="off"
+                  pattern="^[0-9]*[.,]?[0-9]*$"
                   background="primary"
                   placeholder="0"
+                  minLength={1}
                   textSize="xl"
+                  step="any"
                   {...field}
                 ></Input>
               </FormControl>
