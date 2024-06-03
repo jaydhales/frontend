@@ -114,11 +114,6 @@ const AlertDialogContent = React.forwardRef<
             className,
           )}
         >
-          <Dialog.Close
-            className={cn(alertDialogCloseVariants({ align, closeColor }))}
-          >
-            X
-          </Dialog.Close>
           {children}
         </Dialog.Content>
       </Dialog.Portal>

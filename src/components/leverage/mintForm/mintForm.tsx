@@ -130,7 +130,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
 
   return (
     <Card>
-      <ProgressAlert open={isConfirming || isPending} />
+      <ProgressAlert isTxPending={isConfirming} waitForSign={isPending} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <TopSelects
