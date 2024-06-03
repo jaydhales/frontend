@@ -110,6 +110,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     tokenBalance: data?.tokenBalance?.result,
     tokenAllowance: data?.tokenAllowance?.result,
   });
+
   const allSelected = Boolean(
     formData.deposit &&
       formData.long !== "" &&
