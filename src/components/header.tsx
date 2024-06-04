@@ -21,10 +21,10 @@ export function Header() {
   };
   return (
     <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
-      <div className="flex items-center gap-x-2">
+      <Link href={"/"} className="flex items-center gap-x-2">
         <Image src={logo} alt="Sir-Trading Logo" className="h-[60px] w-auto" />
         <h1 className="font-lora text-[24px] font-bold">SIR. Trading</h1>
-      </div>
+      </Link>
       <div className="col-span-3 flex justify-center">
         <nav>
           <ul className="flex gap-x-[16px] bg-[#0A0A0F] px-[12px] py-[12px] font-semibold text-muted-foreground">
