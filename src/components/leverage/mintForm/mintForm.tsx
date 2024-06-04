@@ -15,7 +15,6 @@ import { useSelectMemo } from "./hooks/useSelectMemo";
 import useSetDepositToken from "./hooks/useSetDepositToken";
 import {
   SimulateContractReturnType,
-  SimulateContractReturnType,
   erc20Abi,
   formatUnits,
   parseUnits,
