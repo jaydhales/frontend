@@ -81,44 +81,32 @@ const AlertDialogOverlay = React.forwardRef<
     {children}
   </Dialog.Overlay>
 ));
-// AlertDialogOverlay.displayName = Dialog.Overlay.displayName;
+AlertDialogOverlay.displayName = Dialog.Overlay.displayName;
 
 const AlertDialogContent = React.forwardRef<
   React.ElementRef<typeof Dialog.Content>,
   alertDialogContentProps
->(
-  (
-    {
-      children,
-      align,
-      animate,
-      background,
-      className,
-      containerSize,
-
-    },
-    ref,
-  ) => {
-    return (
-      <Dialog.Portal>
-        <AlertDialogOverlay ref={ref} />
-        <Dialog.Content
-          className={cn(
-            alertDialogContentVariants({
-              align,
-              animate,
-              background,
-              containerSize,
-            }),
-            className,
-          )}
-        >
-          {children}
-        </Dialog.Content>
-      </Dialog.Portal>
-    );
-  },
-);
+>(({ children, align, animate, background, className, containerSize }, ref) => {
+  return (
+    <Dialog.Portal>
+      <AlertDialogOverlay ref={ref} />
+      <Dialog.Content
+        className={cn(
+          alertDialogContentVariants({
+            align,
+            animate,
+            background,
+            containerSize,
+          }),
+          className,
+        )}
+      >
+        {children}
+      </Dialog.Content>
+    </Dialog.Portal>
+  );
+});
+AlertDialogContent.displayName = Dialog.Content.displayName;
 const AlertDialogTrigger = React.forwardRef<
   React.ElementRef<typeof Dialog.Trigger>,
   React.ComponentPropsWithoutRef<typeof Dialog.Trigger>
@@ -127,12 +115,14 @@ const AlertDialogTrigger = React.forwardRef<
     {children}
   </Dialog.Trigger>
 ));
+AlertDialogTrigger.displayName = Dialog.Trigger.displayName;
 
 const AlertDialogPortal: React.FC<
   React.ComponentPropsWithoutRef<typeof Dialog.Portal>
 > = ({ children, ...props }) => (
   <Dialog.Portal {...props}>{children}</Dialog.Portal>
 );
+AlertDialogPortal.displayName = Dialog.Portal.displayName;
 
 export {
   AlertDialog,
