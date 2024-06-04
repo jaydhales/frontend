@@ -1,8 +1,7 @@
-import { APE_HASH } from "@/data/constants";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { encodePacked, getAddress, keccak256, toHex } from "viem";
-import { TAddressString } from "./types";
+import type { TAddressString } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

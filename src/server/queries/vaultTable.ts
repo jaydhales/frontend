@@ -1,4 +1,4 @@
-import { vaultsQuery } from "@/../.graphclient";
+import type { vaultsQuery } from "@/../.graphclient";
 import { graphqlClient } from "@/lib/graphqlClient";
 import { gql } from "graphql-request";
 const vaults = gql`
