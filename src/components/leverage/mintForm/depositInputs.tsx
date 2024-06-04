@@ -38,6 +38,11 @@ export default function DepositInputs({
                   textSize="xl"
                   step="any"
                   {...field}
+                  onChange={(e) => {
+                    const pattern = /^[0-9]*[.,]?[0-9]*$/;
+                    if (pattern.test(e.target.value))
+                      return field.onChange(e.target.value);
+                  }}
                 ></Input>
               </FormControl>
             </FormItem>

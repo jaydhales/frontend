@@ -69,13 +69,18 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   );
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
+  const safeDeposit = useMemo(() => {
+    return z.coerce.number().safeParse(formData.deposit);
+  }, [formData.deposit]);
   /** ##MINT APE## */
   const { data: mintData } = useMintApe({
     vaultId: findVault(vaultsQuery, formData),
     debtToken: formDataInput(formData.long), //value formatted : address,symbol
     collateralToken: formDataInput(formData.versus), //value formatted : address,symbol
     leverageTier: leverageTier,
-    amount: formData.deposit ? parseUnits(formData?.deposit, 18) : undefined,
+    amount: safeDeposit.success
+      ? parseUnits(safeDeposit.data.toString() ?? "0", 18)
+      : undefined,
   });
 
   const approveWrite = useSimulateContract({
@@ -84,7 +89,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     functionName: "approve",
     args: [
       Assistant.address,
-      parseUnits(formData?.deposit?.toString() ?? "0", 18),
+      parseUnits(safeDeposit.success ? safeDeposit.data.toString() : "", 18),
     ],
   });
   const { writeContract, data: hash, isPending } = useWriteContract();
@@ -98,7 +103,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   }, [isConfirming, isConfirmed]);
 
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
-    deposit: formData.deposit,
+    deposit: safeDeposit.success ? safeDeposit.data.toString() : "0",
     depositToken: formData.depositToken,
     mintRequest: mintData?.request as
       | SimulateContractReturnType["request"]
