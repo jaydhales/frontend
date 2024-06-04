@@ -93,7 +93,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   // Invalidate if approve or mint tx is successful.
   useEffect(() => {
     if (isConfirmed) {
-      utils.user.getBalance.invalidate();
+      utils.user.getBalance.invalidate().catch((e) => console.log(e));
     }
   }, [isConfirming, isConfirmed]);
 
