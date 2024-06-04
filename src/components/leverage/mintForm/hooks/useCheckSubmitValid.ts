@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { parseUnits } from "viem";
+import { SimulateContractReturnType, parseUnits } from "viem";
 interface Props {
   deposit: string | undefined;
   depositToken: string;
-  mintRequest: any;
-  approveWriteRequest: any;
+  mintRequest: SimulateContractReturnType["request"] | undefined;
+  approveWriteRequest: SimulateContractReturnType["request"] | undefined;
   tokenAllowance: bigint | undefined;
   tokenBalance: bigint | undefined;
 }

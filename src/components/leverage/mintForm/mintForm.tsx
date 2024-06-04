@@ -13,7 +13,13 @@ import {
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
 import useSetDepositToken from "./hooks/useSetDepositToken";
-import { erc20Abi, formatUnits, parseUnits } from "viem";
+import {
+  SimulateContractReturnType,
+  SimulateContractReturnType,
+  erc20Abi,
+  formatUnits,
+  parseUnits,
+} from "viem";
 import { SubmitHandler } from "react-hook-form";
 import { TAddressString, TMintFormFields, TVaults } from "@/lib/types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -95,8 +101,12 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
     deposit: formData.deposit,
     depositToken: formData.depositToken,
-    mintRequest: mintData?.request,
-    approveWriteRequest: approveWrite.data?.request,
+    mintRequest: mintData?.request as
+      | SimulateContractReturnType["request"]
+      | undefined,
+    approveWriteRequest: approveWrite.data?.request as
+      | SimulateContractReturnType["request"]
+      | undefined,
     tokenBalance: data?.tokenBalance?.result,
     tokenAllowance: data?.tokenAllowance?.result,
   });
