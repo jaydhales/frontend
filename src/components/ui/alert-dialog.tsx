@@ -96,7 +96,6 @@ const AlertDialogContent = React.forwardRef<
       className,
       containerSize,
 
-      closeColor,
     },
     ref,
   ) => {

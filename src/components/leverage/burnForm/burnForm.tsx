@@ -68,7 +68,6 @@ function Section({
       deposit: number;
       token: string;
     },
-    any,
     undefined
   >;
   bg: string;
@@ -120,7 +119,6 @@ function SectionTwo({
       deposit: number;
       token: string;
     },
-    any,
     undefined
   >;
   bg: string;
