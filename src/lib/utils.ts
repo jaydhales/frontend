@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { encodePacked, getAddress, keccak256, toHex } from "viem";
+import { encodePacked, formatUnits, getAddress, keccak256, toHex } from "viem";
 import type { TAddressString } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
@@ -43,4 +43,8 @@ export function getApeAddress({
   const raw = keccak256(packed);
   const result = ("0x" + raw.slice(-40)) as TAddressString;
   return result;
+}
+
+export function formatBigInt(b: bigint | undefined, fixed: number) {
+  return parseFloat(parseFloat(formatUnits(b ?? 0n, 18)).toFixed(fixed));
 }
