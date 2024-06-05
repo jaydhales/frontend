@@ -22,6 +22,7 @@ export function getLeverageRatio(k: number) {
   const result = 1 + 2 ** k;
   return result;
 }
+
 export function getApeAddress({
   vaultId,
   vaultAddress,
@@ -34,6 +35,7 @@ export function getApeAddress({
   if (vaultId === undefined) {
     return "0xff" as TAddressString;
   }
+  console.log({ vaultId, vaultAddress, apeHash });
   const packed = encodePacked(
     ["bytes1", "bytes20", "bytes32", "bytes32"],
     ["0xff", vaultAddress, toHex(vaultId, { size: 32 }), apeHash],

@@ -5,7 +5,8 @@ import { TAddressString } from "@/lib/types";
 import { parseUnits } from "viem";
 import { z } from "zod";
 import { getApeAddress } from "@/lib/utils";
-import { APE_HASH, VAULT_ADDRESS } from "@/data/constants";
+import { APE_HASH } from "@/data/constants";
+import { VaultContract } from "@/contracts/vault";
 interface Props {
   collateralToken: string;
   debtToken: string;
@@ -25,7 +26,7 @@ export function useMintApe({
 
   const apeAddress = getApeAddress({
     apeHash: APE_HASH,
-    vaultAddress: VAULT_ADDRESS,
+    vaultAddress: VaultContract.address,
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
 
