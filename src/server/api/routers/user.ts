@@ -1,9 +1,10 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { multicall } from "@/lib/viemClient";
+import { multicall, readContract } from "@/lib/viemClient";
 import { erc20Abi } from "viem";
 import { type TAddressString } from "@/lib/types";
+import { UserPositionsContract } from "@/contracts/user-positions";
 
 export const userRouter = createTRPCRouter({
   getBalance: publicProcedure
@@ -42,6 +43,42 @@ export const userRouter = createTRPCRouter({
         tokenBalance: balance,
         tokenAllowance: allowance,
       };
+    }),
+  getApeBalance: publicProcedure
+    .input(
+      z.object({
+        address: z.string().startsWith("0x").length(42).optional(),
+        user: z.string().startsWith("0x").length(42).optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      if (!input.address || !input.user) {
+        throw Error("Null pointer");
+      }
+      const result = await readContract({
+        abi: erc20Abi,
+        address: input.address as TAddressString,
+        functionName: "balanceOf",
+        args: [input.user as TAddressString],
+      });
+      console.log({ result });
+      return result;
+    }),
+  getPositions: publicProcedure
+    .input(
+      z.object({ address: z.string().startsWith("0x").length(42).optional() }),
+    )
+    .query(async ({ input }) => {
+      if (!input.address) {
+        return;
+      }
+      const read = await readContract({
+        ...UserPositionsContract,
+        functionName: "getPositions",
+        args: [input.address as TAddressString],
+      });
+      console.log({ read });
+      return read;
     }),
 });
 // create: publicProcedure

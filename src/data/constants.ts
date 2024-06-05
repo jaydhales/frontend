@@ -14,4 +14,4 @@ export const GRAPHQL_URL =
 export const ASSET_URL =
   "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/";
 export const APE_HASH =
-  "0x82ee8606784c97e84ab3154b4190fd00637df718824832a99849ad9f8373c132";
+  "0x47506ce687e7393e061a27c5920877ca8b32056ab3feb8b417367524455546de";

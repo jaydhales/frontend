@@ -1,5 +1,5 @@
 export const Assistant = {
-  address: "0x03F7F064E6ceD8e154e3FdAAF92DcCC4e818E97B" as `0x${string}`,
+  address: "0xf975A646FCa589Be9fc4E0C28ea426A75645fB1f" as `0x${string}`,
   abi: [
     {
       inputs: [

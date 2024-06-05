@@ -5,9 +5,19 @@ import { burnRows } from "./mockBurnRows";
 import { type TBurnRow } from "@/lib/types";
 import { X } from "lucide-react";
 import BurnForm from "../burnForm/burnForm";
+import { api } from "@/trpc/react";
+import { useAccount } from "wagmi";
+import { formatUnits } from "viem";
 export default function BurnTable() {
   const [selectedRow, setSelectedRow] = useState<string | undefined>();
   const selectedRowParams = burnRows.find((r) => r.tokenId === selectedRow);
+  const { address } = useAccount();
+  const { data } = api.user.getPositions.useQuery(
+    { address },
+    {
+      enabled: Boolean(address),
+    },
+  );
   return (
     <div className="relative">
       {selectedRow && (
@@ -41,11 +51,11 @@ export default function BurnTable() {
         <table className="flex flex-col gap-y-4">
           <caption className="hidden">Burn Tokens</caption>
           <BurnTableHeaders />
-          {burnRows.map((r) => (
+          {data?.map((r) => (
             <BurnTableRow
               setSelectedRow={setSelectedRow}
-              key={r.tokenId}
-              {...r}
+              tokenId={r}
+              key={r}
             ></BurnTableRow>
           ))}
         </table>
@@ -69,19 +79,28 @@ function BurnTableHeaders() {
 function BurnTableRow({
   tokenId,
   setSelectedRow,
-}: TBurnRow & {
+}: {
+  tokenId: string;
   setSelectedRow: React.Dispatch<React.SetStateAction<string | undefined>>;
 }) {
+  const { address } = useAccount();
+  const { data } = api.user.getApeBalance.useQuery({
+    address: tokenId,
+    user: address,
+  });
+  console.log(data, "DATA");
   return (
     <tr className="grid grid-cols-6 text-left text-gray text-white">
-      <th>{tokenId}</th>
+      <th>{tokenId.slice(0, 5) + "..." + tokenId.slice(-4)}</th>
       <th>200</th>
       <th>0x</th>
       <th>0x1</th>
       <th>1.4x</th>
       <th>
         <div className="flex justify-between">
-          <span>201</span>
+          <span>
+            {parseFloat(parseFloat(formatUnits(data ?? 0n, 18)).toFixed(4))}
+          </span>
           <Button
             onClick={() => setSelectedRow(tokenId)}
             type="button"

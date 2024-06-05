@@ -1,7 +1,7 @@
 import { TAddressString } from "@/lib/types";
 
 export const VaultContract = {
-  address: "0x1E2e9190Cea3A97b5Aa85d9757117F499D31C47d" as TAddressString,
+  address: "0x2ca60d89144D4cdf85dA87af4FE12aBF9265F28C" as TAddressString,
   abi: [
     {
       inputs: [
