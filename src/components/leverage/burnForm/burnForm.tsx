@@ -33,6 +33,7 @@ export default function BurnForm({
     resolver: zodResolver(BurnSchema),
   });
   const formData = form.watch();
+
   const { data } = api.vault.getApeParams.useQuery(
     { address: address ?? "" },
     { enabled: Boolean(address) },
@@ -43,6 +44,7 @@ export default function BurnForm({
     apeAddress: address ?? "0x",
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
+  console.log(burnData);
   const onSubmit = () => {
     if (burnData?.request) {
       writeContract(burnData.request);
