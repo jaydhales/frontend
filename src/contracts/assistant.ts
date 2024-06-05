@@ -1,4 +1,4 @@
-export const Assistant = {
+export const AssistantContract = {
   address: "0xf975A646FCa589Be9fc4E0C28ea426A75645fB1f" as `0x${string}`,
   abi: [
     {

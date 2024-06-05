@@ -26,7 +26,7 @@ import { z } from "zod";
 import DepositInputs from "./depositInputs";
 import Estimations from "./estimations";
 import TopSelects from "./topSelects";
-import { Assistant } from "@/contracts/assistant";
+import { AssistantContract } from "@/contracts/assistant";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useMintApe } from "@/components/shared/hooks/useMintApe";
 import ProgressAlert from "./progressAlert";
@@ -88,7 +88,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     abi: erc20Abi,
     functionName: "approve",
     args: [
-      Assistant.address,
+      AssistantContract.address,
       parseUnits(safeDeposit.success ? safeDeposit.data.toString() : "", 18),
     ],
   });

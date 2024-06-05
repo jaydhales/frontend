@@ -1,6 +1,7 @@
-import { Assistant } from "@/contracts/assistant";
+import { ApeContract } from "@/contracts/ape";
+import { AssistantContract } from "@/contracts/assistant";
 import { TAddressString } from "@/lib/types";
-import { readContract } from "@/lib/viemClient";
+import { multicall, readContract } from "@/lib/viemClient";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { executeVaultsQuery } from "@/server/queries/vaultTable";
 import { parseUnits } from "viem";
@@ -16,6 +17,34 @@ export const vaultRouter = createTRPCRouter({
       return;
     }
   }),
+  getApeParams: publicProcedure
+    .input(z.object({ address: z.string().startsWith("0x") }))
+    .query(async ({ input }) => {
+      const result = await multicall({
+        contracts: [
+          {
+            ...ApeContract,
+            address: input.address as TAddressString,
+            functionName: "leverageTier",
+          },
+          {
+            ...ApeContract,
+            address: input.address as TAddressString,
+            functionName: "debtToken",
+          },
+          {
+            ...ApeContract,
+            address: input.address as TAddressString,
+            functionName: "collateralToken",
+          },
+        ],
+      });
+      return {
+        leverageTier: result[0].result,
+        debtToken: result[1].result,
+        collateralToken: result[2].result,
+      };
+    }),
   quoteMint: publicProcedure
     .input(
       z.object({
@@ -37,8 +66,8 @@ export const vaultRouter = createTRPCRouter({
       console.log(input);
       try {
         const quote = await readContract({
-          abi: Assistant.abi,
-          address: Assistant.address,
+          abi: AssistantContract.abi,
+          address: AssistantContract.address,
           functionName: "quoteMint",
           args: [
             true,
