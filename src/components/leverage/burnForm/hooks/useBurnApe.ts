@@ -16,7 +16,8 @@ export function useBurnApe({
       }
     | undefined;
 }) {
-  const { data: burnData } = useSimulateContract({
+  console.log({ data, amount, apeAddress });
+  const { data: burnData, error } = useSimulateContract({
     ...AssistantContract,
     functionName: "burnAndSwap",
     args: [
@@ -32,5 +33,6 @@ export function useBurnApe({
       2,
     ],
   });
+  console.log({ burnError: error, burnData });
   return { data: burnData };
 }
