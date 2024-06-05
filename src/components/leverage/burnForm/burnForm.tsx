@@ -18,16 +18,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { api } from "@/trpc/react";
+import { TAddressString } from "@/lib/types";
+import { useWriteContract } from "wagmi";
+import { useBurnApe } from "./hooks/useBurnApe";
 
 const BurnSchema = z.object({
   deposit: z.coerce.number(),
   token: z.string(),
 });
-export default function BurnForm() {
+export default function BurnForm({
+  address,
+}: {
+  address: undefined | TAddressString;
+}) {
   const form = useForm<z.infer<typeof BurnSchema>>({
     resolver: zodResolver(BurnSchema),
   });
-
+  const { data } = api.vault.getApeParams.useQuery(
+    { address: address ?? "" },
+    { enabled: Boolean(address) },
+  );
+  const { writeContract } = useWriteContract();
+  const { data: burnData } = useBurnApe({
+    data,
+    apeAddress: address ?? "0x",
+    amount: 0n,
+  });
+  const onSubmit = () => {
+    if (burnData?.request) {
+      writeContract(burnData.request);
+    }
+  };
   return (
     <Form {...form}>
       <div className="space-y-2">
@@ -42,7 +64,7 @@ export default function BurnForm() {
           </label>
         </div>
 
-        <SectionTwo bg="" form={form} />
+        <SectionTwo data={data} bg="" form={form} />
         <div className="pt-2"></div>
         <div className="flex justify-center">
           <h4 className="w-[400px] text-center text-[16px] italic text-gray">
@@ -113,6 +135,7 @@ function Section({
 function SectionTwo({
   form,
   bg,
+  data,
 }: {
   form: UseFormReturn<
     {
@@ -122,6 +145,13 @@ function SectionTwo({
     undefined
   >;
   bg: string;
+  data:
+    | {
+        leverageTier: number | undefined;
+        debtToken: `0x${string}` | undefined;
+        collateralToken: `0x${string}` | undefined;
+      }
+    | undefined;
 }) {
   return (
     <div className={`w-full  rounded-md ${bg} `}>
@@ -147,7 +177,14 @@ function SectionTwo({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="e"></SelectItem>
+                        {data?.collateralToken && (
+                          <SelectItem value={data.collateralToken}>
+                            Collateral
+                          </SelectItem>
+                        )}
+                        {data?.debtToken && (
+                          <SelectItem value={data.debtToken}>Debt</SelectItem>
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />

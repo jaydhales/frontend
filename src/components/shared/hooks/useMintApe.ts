@@ -1,6 +1,6 @@
 "use client";
 import { useSimulateContract } from "wagmi";
-import { Assistant } from "@/contracts/assistant";
+import { AssistantContract } from "@/contracts/assistant";
 import { TAddressString } from "@/lib/types";
 import { parseUnits } from "viem";
 import { z } from "zod";
@@ -31,8 +31,8 @@ export function useMintApe({
   });
 
   const { data, error } = useSimulateContract({
-    abi: Assistant.abi,
-    address: Assistant.address,
+    abi: AssistantContract.abi,
+    address: AssistantContract.address,
     functionName: "mint",
     args: [
       apeAddress,

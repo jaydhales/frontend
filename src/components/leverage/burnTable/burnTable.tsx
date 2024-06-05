@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "../../ui/button";
 import { burnRows } from "./mockBurnRows";
-import { type TBurnRow } from "@/lib/types";
+import { TAddressString, type TBurnRow } from "@/lib/types";
 import { X } from "lucide-react";
 import BurnForm from "../burnForm/burnForm";
 import { api } from "@/trpc/react";
@@ -32,7 +32,7 @@ export default function BurnTable() {
             </button>
             <BurnTableHeaders />
             <tr className="grid grid-cols-6 text-left text-gray text-white">
-              <th>{selectedRow}</th>
+              <th>{selectedRow.slice(0, 4) + "..." + selectedRow.slice(-4)}</th>
               <th>{selectedRowParams?.amount}</th>
               <th>0x</th>
               <th>0x1</th>
@@ -42,7 +42,7 @@ export default function BurnTable() {
           </div>
           <div className="flex justify-center pt-4">
             <div className=" w-[500px] justify-between">
-              <BurnForm />
+              <BurnForm address={selectedRow as TAddressString} />
             </div>
           </div>
         </div>
