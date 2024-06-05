@@ -63,7 +63,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     {
       userAddress: address,
       tokenAddress: formData.depositToken,
-      spender: Assistant.address,
+      spender: AssistantContract.address,
     },
     { enabled: Boolean(address) && Boolean(formData.depositToken) },
   );
