@@ -1,40 +1,38 @@
 import React from "react";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { api } from "@/trpc/react";
 import { TAddressString } from "@/lib/types";
 import { useWriteContract } from "wagmi";
 import { useBurnApe } from "./hooks/useBurnApe";
+import { parseUnits } from "viem";
+import { formatBigInt } from "@/lib/utils";
 
 const BurnSchema = z.object({
-  deposit: z.coerce.number(),
+  deposit: z.string().optional(),
   token: z.string(),
 });
+export type TBurnForm = UseFormReturn<
+  { token: string; deposit?: string | undefined },
+  any,
+  undefined
+>;
 export default function BurnForm({
   address,
+  balance,
 }: {
   address: undefined | TAddressString;
+  balance: bigint | undefined;
 }) {
   const form = useForm<z.infer<typeof BurnSchema>>({
     resolver: zodResolver(BurnSchema),
   });
+  const formData = form.watch();
   const { data } = api.vault.getApeParams.useQuery(
     { address: address ?? "" },
     { enabled: Boolean(address) },
@@ -43,7 +41,7 @@ export default function BurnForm({
   const { data: burnData } = useBurnApe({
     data,
     apeAddress: address ?? "0x",
-    amount: 0n,
+    amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
   const onSubmit = () => {
     if (burnData?.request) {
@@ -52,31 +50,37 @@ export default function BurnForm({
   };
   return (
     <Form {...form}>
-      <div className="space-y-2">
-        <label htmlFor="a" className="">
-          Burn Amount
-        </label>
-        <Section bg="bg-primary" form={form} />
-        <div className="pt-2"></div>
-        <div>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="space-y-2">
           <label htmlFor="a" className="">
-            Into
+            Burn Amount
           </label>
-        </div>
+          <Section balance={balance} bg="bg-primary" form={form} />
+          <div className="pt-2"></div>
+          <div>
+            <label htmlFor="a" className="">
+              Into
+            </label>
+          </div>
 
-        <SectionTwo data={data} bg="" form={form} />
-        <div className="pt-2"></div>
-        <div className="flex justify-center">
-          <h4 className="w-[400px] text-center text-[16px] italic text-gray">
-            With leveraging you risk losing up to 100% of your deposit, you can
-            not lose more than your deposit.
-          </h4>
+          <SectionTwo data={data} bg="" form={form} />
+          <div className="pt-2"></div>
+          <div className="flex justify-center">
+            <h4 className="w-[400px] text-center text-[16px] italic text-gray">
+              With leveraging you risk losing up to 100% of your deposit, you
+              can not lose more than your deposit.
+            </h4>
+          </div>
+          <div className="pt-1"></div>
+          <Button
+            disabled={!Boolean(burnData?.request)}
+            variant="submit"
+            className="w-full"
+          >
+            Burn TEA
+          </Button>
         </div>
-        <div className="pt-1"></div>
-        <Button variant="submit" className="w-full">
-          Burn TEA
-        </Button>
-      </div>
+      </form>
     </Form>
   );
 }
@@ -84,15 +88,11 @@ export default function BurnForm({
 function Section({
   form,
   bg,
+  balance,
 }: {
-  form: UseFormReturn<
-    {
-      deposit: number;
-      token: string;
-    },
-    undefined
-  >;
+  form: TBurnForm;
   bg: string;
+  balance: bigint | undefined;
 }) {
   return (
     <div className={`w-full  rounded-md ${bg} px-2 py-3`}>
@@ -126,7 +126,9 @@ function Section({
         <span className="text-sm font-medium text-light-blue-100">
           Max 50% 25%
         </span>
-        <span className="text-sm italic text-gray">Balance $232.23</span>
+        <span className="text-sm italic text-gray">
+          Balance {formatBigInt(balance, 4)}
+        </span>
       </div>
     </div>
   );
@@ -137,13 +139,7 @@ function SectionTwo({
   bg,
   data,
 }: {
-  form: UseFormReturn<
-    {
-      deposit: number;
-      token: string;
-    },
-    undefined
-  >;
+  form: TBurnForm;
   bg: string;
   data:
     | {
@@ -161,7 +157,8 @@ function SectionTwo({
         </div>
         <div>
           <div className={"flex  gap-x-2 "}>
-            <div className="flex-grow">
+            {/* KEEP FOR FUTURE */}
+            {/* <div className="flex-grow">
               <FormField
                 control={form.control}
                 name="token"
@@ -191,13 +188,13 @@ function SectionTwo({
                   </FormItem>
                 )}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
       <div className="flex items-end justify-between pt-1">
         <span className="text-sm font-medium text-gray">$22.44</span>
-        <span className="text-sm italic text-gray">Balance $232.23</span>
+        {/* <span className="text-sm italic text-gray">Balance $232.23</span> */}
       </div>
     </div>
   );

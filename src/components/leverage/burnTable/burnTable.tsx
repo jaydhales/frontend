@@ -1,16 +1,17 @@
 "use client";
-import React, { useState } from "react";
-import { Button } from "../../ui/button";
+import React, { useMemo, useState } from "react";
 import { burnRows } from "./mockBurnRows";
-import { TAddressString, type TBurnRow } from "@/lib/types";
-import { X } from "lucide-react";
-import BurnForm from "../burnForm/burnForm";
+import { TAddressString } from "@/lib/types";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
-import { formatUnits } from "viem";
+import BurnTableHeaders from "./burnTableHeader";
+import BurnTableRow from "./burnTableRow";
+import SelectedRow from "./selected-row";
 export default function BurnTable() {
   const [selectedRow, setSelectedRow] = useState<string | undefined>();
-  const selectedRowParams = burnRows.find((r) => r.tokenId === selectedRow);
+  const selectedRowParams = useMemo(() => {
+    return burnRows.find((r) => r.tokenId === selectedRow);
+  }, [selectedRow]);
   const { address } = useAccount();
   const { data } = api.user.getPositions.useQuery(
     { address },
@@ -18,34 +19,17 @@ export default function BurnTable() {
       enabled: Boolean(address),
     },
   );
+
   return (
     <div className="relative">
       {selectedRow && (
-        <div>
-          <div className="flex flex-col gap-y-4 border-b-2 pb-8">
-            <button
-              type="button"
-              onClick={() => setSelectedRow(undefined)}
-              className="absolute -right-4 -top-12 cursor-pointer text-white/80 transition-transform hover:scale-105 hover:text-white"
-            >
-              <X />
-            </button>
-            <BurnTableHeaders />
-            <tr className="grid grid-cols-6 text-left text-gray text-white">
-              <th>{selectedRow.slice(0, 4) + "..." + selectedRow.slice(-4)}</th>
-              <th>{selectedRowParams?.amount}</th>
-              <th>0x</th>
-              <th>0x1</th>
-              <th>1.4x</th>
-              <th>201</th>
-            </tr>
-          </div>
-          <div className="flex justify-center pt-4">
-            <div className=" w-[500px] justify-between">
-              <BurnForm address={selectedRow as TAddressString} />
-            </div>
-          </div>
-        </div>
+        <SelectedRow
+          apeAddress={selectedRow as TAddressString}
+          params={selectedRowParams}
+          close={() => {
+            setSelectedRow(undefined);
+          }}
+        />
       )}
       {!selectedRow && (
         <table className="flex flex-col gap-y-4">
@@ -61,55 +45,5 @@ export default function BurnTable() {
         </table>
       )}
     </div>
-  );
-}
-
-function BurnTableHeaders() {
-  return (
-    <tr className="grid grid-cols-6 text-left text-gray">
-      <th>Token:</th>
-      <th>Amount:</th>
-      <th>Long:</th>
-      <th>Versus:</th>
-      <th>Leverage ratio:</th>
-      <th>Balance:</th>
-    </tr>
-  );
-}
-function BurnTableRow({
-  tokenId,
-  setSelectedRow,
-}: {
-  tokenId: string;
-  setSelectedRow: React.Dispatch<React.SetStateAction<string | undefined>>;
-}) {
-  const { address } = useAccount();
-  const { data } = api.user.getApeBalance.useQuery({
-    address: tokenId,
-    user: address,
-  });
-  console.log(data, "DATA");
-  return (
-    <tr className="grid grid-cols-6 text-left text-gray text-white">
-      <th>{tokenId.slice(0, 5) + "..." + tokenId.slice(-4)}</th>
-      <th>200</th>
-      <th>0x</th>
-      <th>0x1</th>
-      <th>1.4x</th>
-      <th>
-        <div className="flex justify-between">
-          <span>
-            {parseFloat(parseFloat(formatUnits(data ?? 0n, 18)).toFixed(4))}
-          </span>
-          <Button
-            onClick={() => setSelectedRow(tokenId)}
-            type="button"
-            variant="outline"
-          >
-            Burn
-          </Button>
-        </div>
-      </th>
-    </tr>
   );
 }
