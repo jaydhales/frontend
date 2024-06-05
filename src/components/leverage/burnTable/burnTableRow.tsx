@@ -16,14 +16,14 @@ export default function BurnTableRow({
     user: address,
   });
   return (
-    <tr className="grid grid-cols-6 text-left text-gray text-white">
+    <tr className="grid grid-cols-6 items-center text-left text-gray text-white">
       <th>{tokenId.slice(0, 5) + "..." + tokenId.slice(-4)}</th>
       <th>200</th>
       <th>0x</th>
       <th>0x1</th>
       <th>1.4x</th>
       <th>
-        <div className="flex justify-between">
+        <div className="flex items-center justify-between">
           <span>
             {parseFloat(parseFloat(formatUnits(data ?? 0n, 18)).toFixed(4))}
           </span>
