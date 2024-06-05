@@ -20,6 +20,7 @@ export const vaultRouter = createTRPCRouter({
   getApeParams: publicProcedure
     .input(z.object({ address: z.string().startsWith("0x") }))
     .query(async ({ input }) => {
+      console.log(input.address);
       const result = await multicall({
         contracts: [
           {
@@ -39,6 +40,7 @@ export const vaultRouter = createTRPCRouter({
           },
         ],
       });
+      console.log({ result });
       return {
         leverageTier: result[0].result,
         debtToken: result[1].result,
