@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Container } from "../ui/container";
 import { Card } from "../ui/card";
 import MintForm from "./mintForm/mintForm";
-import VaultTable from "./vaultTable";
+import VaultTable from "./vaultTable/vaultTable";
 import BurnTable from "./burnTable/burnTable";
 import MintFormProvider from "../providers/mintFormProvider";
 import type { TVaults } from "@/lib/types";
