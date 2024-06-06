@@ -159,7 +159,10 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
               tokenDepositSelects={tokenDepositSelects}
             />
           </div>
-          <Estimations ape={formatBigInt(quoteData, 4).toString()} />
+          <Estimations
+            disabled={!Boolean(quoteData)}
+            ape={formatBigInt(quoteData, 4).toString()}
+          />
           <div className="flex flex-col items-center justify-center gap-y-2">
             {/* TODO */}
             {/* Dont set size w-[450px] on all elements. */}
