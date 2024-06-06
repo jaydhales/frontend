@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAccount, useWriteContract } from "wagmi";
 import { useUniswap } from "./hooks/useUniswap";
-import { TAddressString } from "@/lib/types";
+import type { TAddressString } from "@/lib/types";
 import { useEffect } from "react";
 
 const FormSchema = z.object({

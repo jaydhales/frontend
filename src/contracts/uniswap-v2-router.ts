@@ -1,4 +1,4 @@
-import { TAddressString } from "@/lib/types";
+import type { TAddressString } from "@/lib/types";
 
 export const UniswapV2Router = {
   address: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D" as TAddressString,

@@ -3,8 +3,8 @@ import { Badge, type badgeVariants } from "../ui/badge";
 import Image from "next/image";
 import { type VariantProps } from "class-variance-authority";
 import { useMintFormProvider } from "../providers/mintFormProvider";
-import { vaultsQuery } from "../../../.graphclient";
-import { TVaults } from "@/lib/types";
+import type { vaultsQuery } from "../../../.graphclient";
+import type { TVaults } from "@/lib/types";
 import { getLogoAsset } from "@/lib/utils";
 
 export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {

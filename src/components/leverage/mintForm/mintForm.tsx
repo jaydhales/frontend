@@ -13,14 +13,15 @@ import {
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
 import useSetDepositToken from "./hooks/useSetDepositToken";
+import type {
+  SimulateContractReturnType} from "viem";
 import {
-  SimulateContractReturnType,
   erc20Abi,
   formatUnits,
   parseUnits,
 } from "viem";
-import { SubmitHandler } from "react-hook-form";
-import { TAddressString, TMintFormFields, TVaults } from "@/lib/types";
+import type { SubmitHandler } from "react-hook-form";
+import type { TAddressString, TMintFormFields, TVaults } from "@/lib/types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { z } from "zod";
 import DepositInputs from "./depositInputs";

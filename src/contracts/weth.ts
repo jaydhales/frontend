@@ -1,4 +1,4 @@
-import { TAddressString } from "@/lib/types";
+import type { TAddressString } from "@/lib/types";
 
 export const WethContract = {
   address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2" as TAddressString,

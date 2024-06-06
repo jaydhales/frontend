@@ -1,4 +1,4 @@
-import { TAddressString } from "@/lib/types";
+import type { TAddressString } from "@/lib/types";
 
 export const UserPositionsContract = {
   address: "0xf4fa0d1C10c47cDe9F65D56c3eC977CbEb13449A" as TAddressString,

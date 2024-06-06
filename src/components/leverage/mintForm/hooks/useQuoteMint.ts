@@ -1,5 +1,5 @@
 import { useDebounce } from "@/components/shared/hooks/useDebounce";
-import { TMintFormFields } from "@/lib/types";
+import type { TMintFormFields } from "@/lib/types";
 import { api } from "@/trpc/react";
 
 export function useQuoteMint({ formData }: { formData: TMintFormFields }) {

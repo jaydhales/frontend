@@ -1,7 +1,7 @@
 "use client";
 import { useSimulateContract } from "wagmi";
 import { AssistantContract } from "@/contracts/assistant";
-import { TAddressString } from "@/lib/types";
+import type { TAddressString } from "@/lib/types";
 import { parseUnits } from "viem";
 import { z } from "zod";
 import { getApeAddress } from "@/lib/utils";

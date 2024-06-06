@@ -7,7 +7,7 @@ import MintForm from "./mintForm/mintForm";
 import VaultTable from "./vaultTable";
 import BurnTable from "./burnTable/burnTable";
 import MintFormProvider from "../providers/mintFormProvider";
-import { TVaults } from "@/lib/types";
+import type { TVaults } from "@/lib/types";
 
 export default function LeverageTabs({
   vaultsQuery,

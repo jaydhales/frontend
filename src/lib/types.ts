@@ -1,5 +1,5 @@
-import { UseFormReturn } from "react-hook-form";
-import { VaultFieldsFragment } from "../../.graphclient";
+import type { UseFormReturn } from "react-hook-form";
+import type { VaultFieldsFragment } from "../../.graphclient";
 
 export type TAddressString = `0x${string}`;
 // vaultParams.debtToken, vaultParams.collateralToken, vaultParams.leverageTier, vaultId

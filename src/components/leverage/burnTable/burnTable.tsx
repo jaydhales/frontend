@@ -1,7 +1,7 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import { burnRows } from "./mockBurnRows";
-import { TAddressString } from "@/lib/types";
+import type { TAddressString } from "@/lib/types";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import BurnTableHeaders from "./burnTableHeader";

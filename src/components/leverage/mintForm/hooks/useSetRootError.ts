@@ -1,6 +1,6 @@
-import { TMintFormFields } from "@/lib/types";
+import type { TMintFormFields } from "@/lib/types";
 import { useEffect } from "react";
-import { UseFormSetError } from "react-hook-form";
+import type { UseFormSetError } from "react-hook-form";
 
 export default function useSetRootError({
   formData,

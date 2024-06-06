@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import BurnTableHeaders from "./burnTableHeader";
 import BurnForm from "../burnForm/burnForm";
-import { TAddressString, TBurnRow } from "@/lib/types";
+import type { TAddressString, TBurnRow } from "@/lib/types";
 import { useAccount } from "wagmi";
 import { api } from "@/trpc/react";
 import { formatBigInt } from "@/lib/utils";

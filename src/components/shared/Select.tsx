@@ -23,7 +23,7 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
-import { TMintForm } from "@/lib/types";
+import type { TMintForm } from "@/lib/types";
 // TODO
 // rm default placeholders
 type TItem = { value: string; label: string; imageUrl?: string };

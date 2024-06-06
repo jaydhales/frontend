@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { SimulateContractReturnType, parseUnits } from "viem";
+import type { SimulateContractReturnType} from "viem";
+import { parseUnits } from "viem";
 interface Props {
   deposit: string | undefined;
   depositToken: string;

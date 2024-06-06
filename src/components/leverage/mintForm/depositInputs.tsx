@@ -3,7 +3,7 @@ import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { SelectItem } from "@/components/ui/select";
-import { TMintForm } from "@/lib/types";
+import type { TMintForm } from "@/lib/types";
 import { getLogoAsset } from "@/lib/utils";
 interface Props {
   form: TMintForm;

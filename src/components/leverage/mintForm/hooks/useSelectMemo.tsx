@@ -1,4 +1,4 @@
-import { TMintFormFields, TVaults } from "@/lib/types";
+import type { TMintFormFields, TVaults } from "@/lib/types";
 import { useMemo } from "react";
 
 interface Props {

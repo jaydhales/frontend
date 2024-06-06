@@ -1,6 +1,6 @@
 import Select from "@/components/shared/Select";
-import { TMintForm } from "@/lib/types";
-import { VaultFieldsFragment } from "../../../../.graphclient";
+import type { TMintForm } from "@/lib/types";
+import type { VaultFieldsFragment } from "../../../../.graphclient";
 import { getLeverageRatio, getLogoAsset } from "@/lib/utils";
 interface Props {
   form: TMintForm;

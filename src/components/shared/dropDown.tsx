@@ -12,7 +12,7 @@ import {
   FormControl,
   FormMessage,
 } from "../ui/form";
-import { TMintForm } from "@/lib/types";
+import type { TMintForm } from "@/lib/types";
 //retrive FormField props
 export default function Dropdown({
   form,

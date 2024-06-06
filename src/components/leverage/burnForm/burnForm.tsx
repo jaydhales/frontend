@@ -1,13 +1,14 @@
 import React from "react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UseFormReturn, useForm } from "react-hook-form";
+import type { UseFormReturn} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { api } from "@/trpc/react";
-import { TAddressString } from "@/lib/types";
+import type { TAddressString } from "@/lib/types";
 import { useWriteContract } from "wagmi";
 import { useBurnApe } from "./hooks/useBurnApe";
 import { parseUnits } from "viem";

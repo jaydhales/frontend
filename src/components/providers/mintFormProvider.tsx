@@ -1,4 +1,4 @@
-import { TMintForm } from "@/lib/types";
+import type { TMintForm } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { createContext, useContext } from "react";
 import { useForm } from "react-hook-form";
