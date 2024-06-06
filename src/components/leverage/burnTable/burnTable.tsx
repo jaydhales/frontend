@@ -1,12 +1,15 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import { burnRows } from "./mockBurnRows";
-import type { TAddressString } from "@/lib/types";
+
+import { X } from "lucide-react";
+import BurnForm from "../burnForm/burnForm";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import BurnTableHeaders from "./burnTableHeader";
 import BurnTableRow from "./burnTableRow";
 import SelectedRow from "./selected-row";
+import { TAddressString } from "@/lib/types";
 export default function BurnTable() {
   const [selectedRow, setSelectedRow] = useState<string | undefined>();
   const selectedRowParams = useMemo(() => {
