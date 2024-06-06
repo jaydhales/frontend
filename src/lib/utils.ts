@@ -21,7 +21,7 @@ export async function getAssetInfo(address: TAddressString | undefined) {
   if (!address) {
     throw Error("No address provided.");
   }
-  const result = await fetch(
+  const result: unknown = await fetch(
     `https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/${getAddress(address)}/info.json`,
   ).then((r) => r.json());
   return assetSchema.safeParse(result);

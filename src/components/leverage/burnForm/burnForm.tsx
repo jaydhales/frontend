@@ -20,7 +20,6 @@ const BurnSchema = z.object({
 });
 export type TBurnForm = UseFormReturn<
   { token: string; deposit?: string | undefined },
-  any,
   undefined
 >;
 export default function BurnForm({
@@ -98,7 +97,7 @@ function Section({
   balance: bigint | undefined;
 }) {
   return (
-    <div className={`w-full  rounded-md ${bg} px-2 py-3`}>
+    <div className={`w-full rounded-md ${bg} px-2 py-3`}>
       <div className="flex justify-between">
         <FormField
           control={form.control}
@@ -167,7 +166,7 @@ function SectionTwo({
           <div className={"flex  gap-x-2 "}>
             <div className="flex h-[45px] w-[140px] items-center gap-x-2 rounded-md bg-primary px-2">
               <Image
-                src={getLogoAsset(data?.collateralToken as `0x${string}`)}
+                src={getLogoAsset(data?.collateralToken)}
                 alt="collateral"
                 width={28}
                 height={28}
