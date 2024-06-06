@@ -29,6 +29,7 @@ import ProgressAlert from "./progressAlert";
 
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
+import { formatBigInt } from "@/lib/utils";
 // TODO
 // Retrieve token decimals
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
@@ -158,7 +159,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
               tokenDepositSelects={tokenDepositSelects}
             />
           </div>
-          <Estimations ape={quoteData?.toString() ?? "0"} />
+          <Estimations ape={formatBigInt(quoteData, 4)} />
           <div className="flex flex-col items-center justify-center gap-y-2">
             {/* TODO */}
             {/* Dont set size w-[450px] on all elements. */}

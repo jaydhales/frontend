@@ -2,8 +2,6 @@
 import React, { useMemo, useState } from "react";
 import { burnRows } from "./mockBurnRows";
 
-import { X } from "lucide-react";
-import BurnForm from "../burnForm/burnForm";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import BurnTableHeaders from "./burnTableHeader";
