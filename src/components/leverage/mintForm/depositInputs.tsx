@@ -83,7 +83,7 @@ export default function DepositInputs({
           })}
         </Dropdown>
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-          Balance: {balance ?? "0"}
+          Balance: {parseFloat(parseFloat(balance ?? "0").toFixed(6))}
         </h2>
         <h2 className="text-right text-[#26DEC8]">25% 50% Max</h2>
       </div>
