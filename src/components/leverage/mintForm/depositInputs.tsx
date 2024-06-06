@@ -112,7 +112,10 @@ export default function DepositInputs({
           </span>{" "}
           <span
             onClick={() =>
-              form.setValue("deposit", parseFloat(balance ?? "0").toString())
+              form.setValue(
+                "deposit",
+                roundDown(parseFloat(balance ?? "0"), 4).toString(),
+              )
             }
             role="button"
             aria-label="Max Balance"
@@ -123,4 +126,10 @@ export default function DepositInputs({
       </div>
     </div>
   );
+}
+
+function roundDown(float: number, decimals: number) {
+  let factor = Math.pow(10, decimals);
+  let roundedDown = Math.floor(float * factor) / factor;
+  return roundedDown;
 }
