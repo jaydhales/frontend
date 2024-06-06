@@ -1,4 +1,4 @@
-import { LeverageTier, TPool } from "@/lib/types";
+import { LeverageTier, type TPool } from "@/lib/types";
 
 export const mockPools: TPool[] = [
   {
