@@ -1,9 +1,9 @@
 import { useSimulateContract } from "wagmi";
-import { AssistantContract } from "@/contracts/assistant";
 import type { TAddressString } from "@/lib/types";
+import { VaultContract } from "@/contracts/vault";
 export function useBurnApe({
   data,
-  apeAddress,
+
   amount,
 }: {
   apeAddress: TAddressString;
@@ -16,21 +16,17 @@ export function useBurnApe({
       }
     | undefined;
 }) {
-  console.log({ data, amount, apeAddress });
   const { data: burnData, error } = useSimulateContract({
-    ...AssistantContract,
-    functionName: "burnAndSwap",
+    ...VaultContract,
+    functionName: "burn",
     args: [
-      apeAddress,
-      0n,
+      true,
       {
         debtToken: data?.debtToken ?? "0x",
-        collateralToken: data?.collateralToken ?? "0x",
         leverageTier: data?.leverageTier ?? -1,
+        collateralToken: data?.collateralToken ?? "0x",
       },
       amount,
-      10000n,
-      2,
     ],
   });
   console.log({ burnError: error, burnData });

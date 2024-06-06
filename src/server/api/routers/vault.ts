@@ -83,6 +83,7 @@ export const vaultRouter = createTRPCRouter({
         });
         return quote;
       } catch (e) {
+        console.log(e);
         // console.log(e);
         return;
       }

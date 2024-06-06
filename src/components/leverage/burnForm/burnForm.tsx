@@ -17,10 +17,9 @@ import { useQuery } from "@tanstack/react-query";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
-  token: z.string(),
 });
 export type TBurnForm = UseFormReturn<
-  { token: string; deposit?: string | undefined },
+  { deposit?: string | undefined },
   undefined
 >;
 export default function BurnForm({
@@ -47,6 +46,7 @@ export default function BurnForm({
   });
   console.log(burnData);
   const onSubmit = () => {
+    console.log("RAN ??");
     if (burnData?.request) {
       writeContract(burnData.request);
     }
@@ -79,6 +79,7 @@ export default function BurnForm({
             disabled={!Boolean(burnData?.request)}
             variant="submit"
             className="w-full"
+            type="submit"
           >
             Burn TEA
           </Button>
