@@ -4,7 +4,6 @@ import BurnForm from "../burnForm/burnForm";
 import { TAddressString, TBurnRow } from "@/lib/types";
 import { useAccount } from "wagmi";
 import { api } from "@/trpc/react";
-import { formatUnits } from "viem";
 import { formatBigInt } from "@/lib/utils";
 
 export default function SelectedRow({
@@ -37,7 +36,7 @@ export default function SelectedRow({
           <X />
         </button>
         <BurnTableHeaders />
-        <tr className="grid grid-cols-6 text-left text-gray text-white">
+        <tr className="grid h-[41px] grid-cols-6 items-center text-left text-gray text-white">
           <th>{apeAddress.slice(0, 4) + "..." + apeAddress.slice(-4)}</th>
           <th>{params?.amount}</th>
           <th>0x</th>

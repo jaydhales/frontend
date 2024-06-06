@@ -166,13 +166,9 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
           <div className="flex flex-col items-center justify-center gap-y-2">
             {/* TODO */}
             {/* Dont set size w-[450px] on all elements. */}
-            <p className="w-[450px]  pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
+            <p className="w-[450px] pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
             {address && (
-              <Button
-                disabled={!form.formState.isValid || !isValid}
-                variant={"submit"}
-                type="submit"
-              >
+              <Button disabled={!isValid} variant={"submit"} type="submit">
                 {submitType === ESubmitType.mint ? "Mint" : "Approve"}
               </Button>
             )}

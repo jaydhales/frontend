@@ -5,13 +5,14 @@ import { UseFormReturn, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+import Image from "next/image";
 import { api } from "@/trpc/react";
 import { TAddressString } from "@/lib/types";
 import { useWriteContract } from "wagmi";
 import { useBurnApe } from "./hooks/useBurnApe";
 import { parseUnits } from "viem";
-import { formatBigInt } from "@/lib/utils";
+import { formatBigInt, getAssetInfo, getLogoAsset } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -151,6 +152,11 @@ function SectionTwo({
       }
     | undefined;
 }) {
+  const { data: assetData } = useQuery({
+    queryFn: () => getAssetInfo(data?.collateralToken),
+    queryKey: [data?.collateralToken],
+  });
+
   return (
     <div className={`w-full  rounded-md ${bg} `}>
       <div className="flex items-end justify-between">
@@ -159,6 +165,16 @@ function SectionTwo({
         </div>
         <div>
           <div className={"flex  gap-x-2 "}>
+            <div className="flex h-[45px] w-[140px] items-center gap-x-2 rounded-md bg-primary px-2">
+              <Image
+                src={getLogoAsset(data?.collateralToken as `0x${string}`)}
+                alt="collateral"
+                width={28}
+                height={28}
+              />
+              <h3>{assetData?.success ? assetData?.data?.symbol : "?"}</h3>
+            </div>
+
             {/* KEEP FOR FUTURE */}
             {/* <div className="flex-grow">
               <FormField
