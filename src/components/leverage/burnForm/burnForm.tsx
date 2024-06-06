@@ -46,7 +46,7 @@ export default function BurnForm({
     apeAddress: address ?? "0x",
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
-  const {} = useCheckValidityBurn();
+  const { isValid, error } = useCheckValidityBurn(formData, balance);
   const onSubmit = () => {
     console.log("RAN ??");
     if (burnData?.request) {
@@ -78,13 +78,16 @@ export default function BurnForm({
           </div>
           <div className="pt-1"></div>
           <Button
-            disabled={!Boolean(burnData?.request)}
+            disabled={!isValid}
             variant="submit"
             className="w-full"
             type="submit"
           >
             Burn TEA
           </Button>
+          <div className="h-5 text-sm text-red-400">
+            {error && <p>{error}</p>}
+          </div>
         </div>
       </form>
     </Form>
