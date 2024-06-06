@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { UseFormReturn} from "react-hook-form";
+import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
@@ -66,7 +66,7 @@ export default function BurnForm({
             </label>
           </div>
 
-          <SectionTwo data={data} bg="" form={form} />
+          <SectionTwo data={data} bg="" />
           <div className="pt-2"></div>
           <div className="flex justify-center">
             <h4 className="w-[400px] text-center text-[16px] italic text-gray">
@@ -138,11 +138,9 @@ function Section({
 }
 
 function SectionTwo({
-  form,
   bg,
   data,
 }: {
-  form: TBurnForm;
   bg: string;
   data:
     | {

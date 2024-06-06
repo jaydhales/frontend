@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { SimulateContractReturnType} from "viem";
+import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
 interface Props {
   deposit: string | undefined;
@@ -13,6 +13,7 @@ export enum ESubmitType {
   "mint",
   "approve",
 }
+
 /**
  * Checks if user can submit form.
  * @returns
@@ -22,7 +23,6 @@ export enum ESubmitType {
  */
 export const useCheckSubmitValid = ({
   deposit,
-  depositToken,
   mintRequest,
   approveWriteRequest,
   tokenAllowance,
@@ -73,13 +73,6 @@ export const useCheckSubmitValid = ({
         submitType: ESubmitType.mint,
       };
     }
-  }, [
-    deposit,
-    depositToken,
-    mintRequest,
-    approveWriteRequest,
-    tokenAllowance,
-    tokenBalance,
-  ]);
+  }, [deposit, mintRequest, approveWriteRequest, tokenAllowance, tokenBalance]);
   return { isValid, errorMessage, submitType };
 };
