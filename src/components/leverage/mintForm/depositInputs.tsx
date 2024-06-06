@@ -90,7 +90,7 @@ export default function DepositInputs({
             onClick={() =>
               form.setValue(
                 "deposit",
-                (parseFloat(balance ?? "0") / 4).toString(),
+                roundDown(parseFloat(balance ?? "0") / 4, 4).toString(),
               )
             }
             aria-label="25% Balance"
@@ -102,7 +102,7 @@ export default function DepositInputs({
             onClick={() =>
               form.setValue(
                 "deposit",
-                (parseFloat(balance ?? "0") / 2).toString(),
+                roundDown(parseFloat(balance ?? "0") / 2, 4).toString(),
               )
             }
             aria-label="50% Balance"

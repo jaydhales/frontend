@@ -14,6 +14,7 @@ import { useBurnApe } from "./hooks/useBurnApe";
 import { parseUnits } from "viem";
 import { formatBigInt, getAssetInfo, getLogoAsset } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -22,6 +23,7 @@ export type TBurnForm = UseFormReturn<
   { deposit?: string | undefined },
   undefined
 >;
+export type TBurnFields = { deposit?: string | undefined };
 export default function BurnForm({
   address,
   balance,
@@ -44,7 +46,7 @@ export default function BurnForm({
     apeAddress: address ?? "0x",
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
-  console.log(burnData);
+  const {} = useCheckValidityBurn();
   const onSubmit = () => {
     console.log("RAN ??");
     if (burnData?.request) {
