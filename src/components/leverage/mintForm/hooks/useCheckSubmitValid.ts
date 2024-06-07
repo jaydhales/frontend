@@ -9,6 +9,7 @@ interface Props {
   tokenAllowance: bigint | undefined;
   tokenBalance: bigint | undefined;
   mintFetching: boolean;
+  approveFetching: boolean;
 }
 export enum ESubmitType {
   "mint",
@@ -28,6 +29,7 @@ export const useCheckSubmitValid = ({
   approveWriteRequest,
   tokenAllowance,
   mintFetching,
+  approveFetching,
   tokenBalance,
 }: Props) => {
   const { isValid, errorMessage, submitType } = useMemo(() => {
@@ -54,12 +56,21 @@ export const useCheckSubmitValid = ({
           errorMessage: null,
           submitType: ESubmitType.approve,
         };
-      else
-        return {
-          isValid: false,
-          errorMessage: "Error occured.",
-          submitType: ESubmitType.approve,
-        };
+      else {
+        if (approveFetching) {
+          return {
+            isValid: false,
+            errorMessage: "",
+            submitType: ESubmitType.approve,
+          };
+        } else {
+          return {
+            isValid: false,
+            errorMessage: "An Approve Error Occured.",
+            submitType: ESubmitType.approve,
+          };
+        }
+      }
     }
 
     if (mintRequest)

@@ -112,6 +112,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     tokenBalance: data?.tokenBalance?.result,
     tokenAllowance: data?.tokenAllowance?.result,
     mintFetching,
+    approveFetching: approveWrite.isFetching,
   });
 
   const { quoteData } = useQuoteMint({ formData });
