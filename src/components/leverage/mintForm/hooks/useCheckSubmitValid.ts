@@ -8,6 +8,7 @@ interface Props {
   approveWriteRequest: SimulateContractReturnType["request"] | undefined;
   tokenAllowance: bigint | undefined;
   tokenBalance: bigint | undefined;
+  mintFetching: boolean;
 }
 export enum ESubmitType {
   "mint",
@@ -26,6 +27,7 @@ export const useCheckSubmitValid = ({
   mintRequest,
   approveWriteRequest,
   tokenAllowance,
+  mintFetching,
   tokenBalance,
 }: Props) => {
   const { isValid, errorMessage, submitType } = useMemo(() => {
@@ -67,11 +69,19 @@ export const useCheckSubmitValid = ({
         submitType: ESubmitType.mint,
       };
     else {
-      return {
-        isValid: false,
-        errorMessage: "Unexpected mint error.",
-        submitType: ESubmitType.mint,
-      };
+      if (mintFetching) {
+        return {
+          isValid: false,
+          errorMessage: "",
+          submitType: ESubmitType.mint,
+        };
+      } else {
+        return {
+          isValid: false,
+          errorMessage: "Unexpected mint error.",
+          submitType: ESubmitType.mint,
+        };
+      }
     }
   }, [deposit, mintRequest, approveWriteRequest, tokenAllowance, tokenBalance]);
   return { isValid, errorMessage, submitType };

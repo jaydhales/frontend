@@ -7,10 +7,12 @@ import { z } from "zod";
 import { getApeAddress } from "@/lib/utils";
 import { APE_HASH } from "@/data/constants";
 import { VaultContract } from "@/contracts/vault";
+import { useEffect } from "react";
 interface Props {
   collateralToken: string;
   debtToken: string;
   amount: bigint | undefined;
+  tokenAllowance: bigint | undefined;
   leverageTier: number;
   vaultId: string | undefined;
 }
@@ -21,6 +23,7 @@ export function useMintApe({
   leverageTier,
   amount,
   vaultId,
+  tokenAllowance,
 }: Props) {
   const safeVaultId = z.coerce.number().safeParse(vaultId);
 
@@ -30,7 +33,7 @@ export function useMintApe({
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
 
-  const { data, error } = useSimulateContract({
+  const { data, error, refetch, isFetching } = useSimulateContract({
     abi: AssistantContract.abi,
     address: AssistantContract.address,
     functionName: "mint",
@@ -45,7 +48,10 @@ export function useMintApe({
       amount ?? 0n,
     ],
   });
-  console.log({ data, error });
+  useEffect(() => {
+    refetch().catch((e) => console.log(e));
+  }, [refetch, tokenAllowance]);
+  console.log({ data, error, isFetching });
 
-  return { data };
+  return { data, isFetching };
 }

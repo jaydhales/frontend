@@ -70,7 +70,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     return z.coerce.number().safeParse(formData.deposit);
   }, [formData.deposit]);
   /** ##MINT APE## */
-  const { data: mintData } = useMintApe({
+  const { data: mintData, isFetching: mintFetching } = useMintApe({
     vaultId: findVault(vaultsQuery, formData),
     debtToken: formDataInput(formData.long), //value formatted : address,symbol
     collateralToken: formDataInput(formData.versus), //value formatted : address,symbol
@@ -78,6 +78,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     amount: safeDeposit.success
       ? parseUnits(safeDeposit.data.toString() ?? "0", 18)
       : undefined,
+    tokenAllowance: data?.tokenAllowance?.result,
   });
 
   const approveWrite = useSimulateContract({
@@ -110,6 +111,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       | undefined,
     tokenBalance: data?.tokenBalance?.result,
     tokenAllowance: data?.tokenAllowance?.result,
+    mintFetching,
   });
 
   const { quoteData } = useQuoteMint({ formData });
