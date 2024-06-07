@@ -41,14 +41,13 @@ export default function BurnForm({
     { enabled: Boolean(address) },
   );
   const { writeContract } = useWriteContract();
-  const { data: burnData } = useBurnApe({
+  const { data: burnData, isFetching } = useBurnApe({
     data,
     apeAddress: address ?? "0x",
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
   const { isValid, error } = useCheckValidityBurn(formData, balance);
   const onSubmit = () => {
-    console.log("RAN ??");
     if (burnData?.request) {
       writeContract(burnData.request);
     }
@@ -78,7 +77,7 @@ export default function BurnForm({
           </div>
           <div className="pt-1"></div>
           <Button
-            disabled={!isValid}
+            disabled={!isValid || isFetching}
             variant="submit"
             className="w-full"
             type="submit"
@@ -86,7 +85,7 @@ export default function BurnForm({
             Burn TEA
           </Button>
           <div className="h-5 text-sm text-red-400">
-            {error && <p>{error}</p>}
+            {error && !isFetching && <p>{error}</p>}
           </div>
         </div>
       </form>

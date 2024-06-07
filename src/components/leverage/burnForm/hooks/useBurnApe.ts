@@ -16,7 +16,11 @@ export function useBurnApe({
       }
     | undefined;
 }) {
-  const { data: burnData, error } = useSimulateContract({
+  const {
+    data: burnData,
+    error,
+    isFetching,
+  } = useSimulateContract({
     ...VaultContract,
     functionName: "burn",
     args: [
@@ -30,5 +34,5 @@ export function useBurnApe({
     ],
   });
   console.log({ burnError: error, burnData });
-  return { data: burnData };
+  return { data: burnData, isFetching };
 }

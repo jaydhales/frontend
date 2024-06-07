@@ -85,7 +85,7 @@ export default function DepositInputs({
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
           Balance: {parseFloat(parseFloat(balance ?? "0").toFixed(6))}
         </h2>
-        <h2 className="pt-1 text-right text-sm text-[#26DEC8]">
+        <h2 className="flex justify-end gap-x-3 pt-1 text-right text-sm text-[#26DEC8]">
           <span
             onClick={() =>
               form.setValue(
