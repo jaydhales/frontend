@@ -47,6 +47,42 @@ export const vaultRouter = createTRPCRouter({
         collateralToken: result[2].result,
       };
     }),
+
+  quoteBurn: publicProcedure
+    .input(
+      z.object({
+        debtToken: z.string().startsWith("0x").optional(),
+        collateralToken: z.string().startsWith("0x").optional(),
+        leverageTier: z.number().optional(),
+        amount: z.string().optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      if (
+        !input.collateralToken ||
+        !input.debtToken ||
+        input.leverageTier === undefined ||
+        input.amount === undefined
+      ) {
+        throw Error("Undefined Param.");
+      }
+
+      const result = await readContract({
+        ...AssistantContract,
+        functionName: "quoteBurn",
+        args: [
+          true,
+          {
+            debtToken: input.debtToken as TAddressString,
+            collateralToken: input.collateralToken as TAddressString,
+            leverageTier: input.leverageTier,
+          },
+          parseUnits(input.amount, 18),
+        ],
+      });
+
+      return result;
+    }),
   quoteMint: publicProcedure
     .input(
       z.object({
