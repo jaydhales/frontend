@@ -6,15 +6,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { api } from "@/trpc/react";
 import type { TAddressString } from "@/lib/types";
 import { useWriteContract } from "wagmi";
 import { useBurnApe } from "./hooks/useBurnApe";
-import { parseUnits } from "viem";
-import { formatBigInt, getAssetInfo, getLogoAsset } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
+import { formatUnits, parseUnits } from "viem";
+import { formatBigInt } from "@/lib/utils";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
+import { SectionTwo } from "./sectionTwo";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -40,6 +39,13 @@ export default function BurnForm({
     { address: address ?? "" },
     { enabled: Boolean(address) },
   );
+
+  const { data: quoteBurn } = api.vault.quoteBurn.useQuery({
+    amount: formData.deposit,
+    debtToken: data?.debtToken,
+    leverageTier: data?.leverageTier,
+    collateralToken: data?.collateralToken,
+  });
   const { writeContract } = useWriteContract();
   const { data: burnData } = useBurnApe({
     data,
@@ -67,7 +73,7 @@ export default function BurnForm({
             </label>
           </div>
 
-          <SectionTwo data={data} bg="" />
+          <SectionTwo data={data} amount={quoteBurn} bg="" />
           <div className="pt-2"></div>
           <div className="flex justify-center">
             <h4 className="w-[400px] text-center text-[16px] italic text-gray">
@@ -149,85 +155,6 @@ function Section({
         <span className="text-sm italic text-gray">
           Balance {formatBigInt(balance, 4)}
         </span>
-      </div>
-    </div>
-  );
-}
-
-function SectionTwo({
-  bg,
-  data,
-}: {
-  bg: string;
-  data:
-    | {
-        leverageTier: number | undefined;
-        debtToken: `0x${string}` | undefined;
-        collateralToken: `0x${string}` | undefined;
-      }
-    | undefined;
-}) {
-  const { data: assetData } = useQuery({
-    queryFn: () => getAssetInfo(data?.collateralToken),
-    queryKey: [data?.collateralToken],
-  });
-
-  return (
-    <div className={`w-full  rounded-md ${bg} `}>
-      <div className="flex items-end justify-between">
-        <div>
-          <h2 className="text-[28px]">22.44</h2>
-        </div>
-        <div>
-          <div className={"flex  gap-x-2 "}>
-            <div className="flex h-[45px] w-[140px] items-center gap-x-2 rounded-md bg-primary px-2">
-              <Image
-                src={getLogoAsset(data?.collateralToken)}
-                alt="collateral"
-                width={28}
-                height={28}
-              />
-              <h3>{assetData?.success ? assetData?.data?.symbol : "?"}</h3>
-            </div>
-
-            {/* KEEP FOR FUTURE */}
-            {/* <div className="flex-grow">
-              <FormField
-                control={form.control}
-                name="token"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger
-                          className="h-[45px] w-[140px] "
-                          colorScheme="light"
-                        >
-                          <SelectValue placeholder={"Select token"} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {data?.collateralToken && (
-                          <SelectItem value={data.collateralToken}>
-                            Collateral
-                          </SelectItem>
-                        )}
-                        {data?.debtToken && (
-                          <SelectItem value={data.debtToken}>Debt</SelectItem>
-                        )}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div> */}
-          </div>
-        </div>
-      </div>
-      <div className="flex items-end justify-between pt-1">
-        <span className="text-sm font-medium text-gray">$22.44</span>
-        {/* <span className="text-sm italic text-gray">Balance $232.23</span> */}
       </div>
     </div>
   );
