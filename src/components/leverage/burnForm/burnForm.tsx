@@ -41,7 +41,7 @@ export default function BurnForm({
     { enabled: Boolean(address) },
   );
   const { writeContract } = useWriteContract();
-  const { data: burnData, isFetching } = useBurnApe({
+  const { data: burnData } = useBurnApe({
     data,
     apeAddress: address ?? "0x",
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
@@ -77,7 +77,11 @@ export default function BurnForm({
           </div>
           <div className="pt-1"></div>
           <Button
-            disabled={!isValid || !Boolean(burnData?.request)}
+            disabled={
+              !isValid ||
+              !Boolean(burnData?.request) ||
+              !Boolean(formData.deposit)
+            }
             variant="submit"
             className="w-full"
             type="submit"
@@ -115,7 +119,7 @@ function Section({
                   id="a"
                   placeholder="0"
                   textSize="xl"
-                  type="number"
+                  type="string"
                   {...field}
                 ></Input>
               </FormControl>
