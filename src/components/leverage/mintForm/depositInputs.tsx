@@ -129,7 +129,7 @@ export default function DepositInputs({
 }
 
 function roundDown(float: number, decimals: number) {
-  let factor = Math.pow(10, decimals);
-  let roundedDown = Math.floor(float * factor) / factor;
+  const factor = Math.pow(10, decimals);
+  const roundedDown = Math.floor(float * factor) / factor;
   return roundedDown;
 }
