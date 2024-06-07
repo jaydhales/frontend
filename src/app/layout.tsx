@@ -28,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const cookie = headers().get("cookie");
-  const headerList = headers();
-  const country = headerList.get("x-country");
+  // const headerList = headers();
+  // const country = headerList.get("x-country");
   return (
     <html lang="en">
       <body className={`bg-background ${lora.variable} ${inter.className} `}>
