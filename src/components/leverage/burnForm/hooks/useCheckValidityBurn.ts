@@ -9,5 +9,5 @@ export function useCheckValidityBurn(
     return { isValid: false, error: "Insufficent balance." };
   }
 
-  return { isValid: false, error: null };
+  return { isValid: true, error: null };
 }
