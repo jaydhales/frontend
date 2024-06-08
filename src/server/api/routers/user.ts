@@ -5,6 +5,7 @@ import { multicall, readContract } from "@/lib/viemClient";
 import { erc20Abi } from "viem";
 import { type TAddressString } from "@/lib/types";
 import { UserPositionsContract } from "@/contracts/user-positions";
+import { executeGetUserVaultsQuery } from "@/server/queries/vaults";
 
 export const userRouter = createTRPCRouter({
   getBalance: publicProcedure
@@ -74,13 +75,14 @@ export const userRouter = createTRPCRouter({
       if (!input.address) {
         return;
       }
-      const read = await readContract({
-        ...UserPositionsContract,
-        functionName: "getPositions",
-        args: [input.address as TAddressString],
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const result = await executeGetUserVaultsQuery({
+        user: input.address as TAddressString,
       });
-      console.log({ read });
-      return read;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+      console.log({ result: result.userPositions });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return result;
     }),
 });
 // create: publicProcedure

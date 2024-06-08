@@ -3,7 +3,7 @@ import { AssistantContract } from "@/contracts/assistant";
 import type { TAddressString } from "@/lib/types";
 import { multicall, readContract } from "@/lib/viemClient";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { executeVaultsQuery } from "@/server/queries/vaultTable";
+import { executeVaultsQuery } from "@/server/queries/vaults";
 import { parseUnits } from "viem";
 import { z } from "zod";
 export const vaultRouter = createTRPCRouter({

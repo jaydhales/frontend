@@ -69,6 +69,8 @@ export type OrderDirection =
 export type Query = {
   vault?: Maybe<Vault>;
   vaults: Array<Vault>;
+  userPosition?: Maybe<UserPosition>;
+  userPositions: Array<UserPosition>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -92,6 +94,24 @@ export type QueryvaultsArgs = {
 };
 
 
+export type QueryuserPositionArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryuserPositionsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<UserPosition_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<UserPosition_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type Query_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
@@ -99,6 +119,8 @@ export type Query_metaArgs = {
 export type Subscription = {
   vault?: Maybe<Vault>;
   vaults: Array<Vault>;
+  userPosition?: Maybe<UserPosition>;
+  userPositions: Array<UserPosition>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -122,9 +144,105 @@ export type SubscriptionvaultsArgs = {
 };
 
 
+export type SubscriptionuserPositionArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionuserPositionsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<UserPosition_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<UserPosition_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type Subscription_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
+
+export type UserPosition = {
+  id: Scalars['String']['output'];
+  balance: Scalars['BigInt']['output'];
+  APE: Scalars['String']['output'];
+  User: Scalars['Bytes']['output'];
+};
+
+export type UserPosition_filter = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_gt?: InputMaybe<Scalars['String']['input']>;
+  id_lt?: InputMaybe<Scalars['String']['input']>;
+  id_gte?: InputMaybe<Scalars['String']['input']>;
+  id_lte?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  balance?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_not?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  balance_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  APE?: InputMaybe<Scalars['String']['input']>;
+  APE_not?: InputMaybe<Scalars['String']['input']>;
+  APE_gt?: InputMaybe<Scalars['String']['input']>;
+  APE_lt?: InputMaybe<Scalars['String']['input']>;
+  APE_gte?: InputMaybe<Scalars['String']['input']>;
+  APE_lte?: InputMaybe<Scalars['String']['input']>;
+  APE_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  APE_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  APE_contains?: InputMaybe<Scalars['String']['input']>;
+  APE_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  APE_not_contains?: InputMaybe<Scalars['String']['input']>;
+  APE_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  APE_starts_with?: InputMaybe<Scalars['String']['input']>;
+  APE_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  APE_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  APE_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  APE_ends_with?: InputMaybe<Scalars['String']['input']>;
+  APE_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  APE_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  APE_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  User?: InputMaybe<Scalars['Bytes']['input']>;
+  User_not?: InputMaybe<Scalars['Bytes']['input']>;
+  User_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  User_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  User_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  User_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  User_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  User_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  User_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  User_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<UserPosition_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<UserPosition_filter>>>;
+};
+
+export type UserPosition_orderBy =
+  | 'id'
+  | 'balance'
+  | 'APE'
+  | 'User';
 
 export type Vault = {
   id: Scalars['String']['output'];
@@ -415,6 +533,9 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
   Timestamp: ResolverTypeWrapper<Scalars['Timestamp']['output']>;
+  UserPosition: ResolverTypeWrapper<UserPosition>;
+  UserPosition_filter: UserPosition_filter;
+  UserPosition_orderBy: UserPosition_orderBy;
   Vault: ResolverTypeWrapper<Vault>;
   Vault_filter: Vault_filter;
   Vault_orderBy: Vault_orderBy;
@@ -439,6 +560,8 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars['String']['output'];
   Subscription: {};
   Timestamp: Scalars['Timestamp']['output'];
+  UserPosition: UserPosition;
+  UserPosition_filter: UserPosition_filter;
   Vault: Vault;
   Vault_filter: Vault_filter;
   _Block_: _Block_;
@@ -480,18 +603,30 @@ export interface Int8ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type QueryResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   vault?: Resolver<Maybe<ResolversTypes['Vault']>, ParentType, ContextType, RequireFields<QueryvaultArgs, 'id' | 'subgraphError'>>;
   vaults?: Resolver<Array<ResolversTypes['Vault']>, ParentType, ContextType, RequireFields<QueryvaultsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  userPosition?: Resolver<Maybe<ResolversTypes['UserPosition']>, ParentType, ContextType, RequireFields<QueryuserPositionArgs, 'id' | 'subgraphError'>>;
+  userPositions?: Resolver<Array<ResolversTypes['UserPosition']>, ParentType, ContextType, RequireFields<QueryuserPositionsArgs, 'skip' | 'first' | 'subgraphError'>>;
   _meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Query_metaArgs>>;
 }>;
 
 export type SubscriptionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   vault?: SubscriptionResolver<Maybe<ResolversTypes['Vault']>, "vault", ParentType, ContextType, RequireFields<SubscriptionvaultArgs, 'id' | 'subgraphError'>>;
   vaults?: SubscriptionResolver<Array<ResolversTypes['Vault']>, "vaults", ParentType, ContextType, RequireFields<SubscriptionvaultsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  userPosition?: SubscriptionResolver<Maybe<ResolversTypes['UserPosition']>, "userPosition", ParentType, ContextType, RequireFields<SubscriptionuserPositionArgs, 'id' | 'subgraphError'>>;
+  userPositions?: SubscriptionResolver<Array<ResolversTypes['UserPosition']>, "userPositions", ParentType, ContextType, RequireFields<SubscriptionuserPositionsArgs, 'skip' | 'first' | 'subgraphError'>>;
   _meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "_meta", ParentType, ContextType, Partial<Subscription_metaArgs>>;
 }>;
 
 export interface TimestampScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Timestamp'], any> {
   name: 'Timestamp';
 }
+
+export type UserPositionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['UserPosition'] = ResolversParentTypes['UserPosition']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  balance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  APE?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  User?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export type VaultResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Vault'] = ResolversParentTypes['Vault']> = ResolversObject<{
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -527,6 +662,7 @@ export type Resolvers<ContextType = MeshContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Timestamp?: GraphQLScalarType;
+  UserPosition?: UserPositionResolvers<ContextType>;
   Vault?: VaultResolvers<ContextType>;
   _Block_?: _Block_Resolvers<ContextType>;
   _Meta_?: _Meta_Resolvers<ContextType>;
@@ -602,7 +738,8 @@ const merger = new(BareMerger as any)({
         store: rootStore.child('bareMerger')
       })
 const documentHashMap = {
-        "9ee31b28323c888d91bdbd18446778cad65d964b2f0427cbafe4049dfd8f63b9": VaultsDocument
+        "1d8a69d94fc9be3f64ca8d5db204cf4fb05a5979e759e26bfe1740803f7287aa": GetUserVaultsDocument,
+"9ee31b28323c888d91bdbd18446778cad65d964b2f0427cbafe4049dfd8f63b9": VaultsDocument
       }
 additionalEnvelopPlugins.push(usePersistedOperations({
         getPersistedOperation(key) {
@@ -624,6 +761,13 @@ additionalEnvelopPlugins.push(usePersistedOperations({
     get documents() {
       return [
       {
+        document: GetUserVaultsDocument,
+        get rawSDL() {
+          return printWithCache(GetUserVaultsDocument);
+        },
+        location: 'GetUserVaultsDocument.graphql',
+        sha256Hash: '1d8a69d94fc9be3f64ca8d5db204cf4fb05a5979e759e26bfe1740803f7287aa'
+      },{
         document: VaultsDocument,
         get rawSDL() {
           return printWithCache(VaultsDocument);
@@ -691,6 +835,13 @@ export type vaultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type vaultsQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier'>> };
 
+export type getUserVaultsQueryVariables = Exact<{
+  user?: InputMaybe<Scalars['Bytes']['input']>;
+}>;
+
+
+export type getUserVaultsQuery = { userPositions: Array<Pick<UserPosition, 'User' | 'balance' | 'APE'>> };
+
 export const VaultFieldsFragmentDoc = gql`
     fragment VaultFields on Vault {
   debtToken
@@ -708,6 +859,16 @@ export const vaultsDocument = gql`
   }
 }
     ${VaultFieldsFragmentDoc}` as unknown as DocumentNode<vaultsQuery, vaultsQueryVariables>;
+export const getUserVaultsDocument = gql`
+    query getUserVaults($user: Bytes) {
+  userPositions(where: {User: $user}) {
+    User
+    balance
+    APE
+  }
+}
+    ` as unknown as DocumentNode<getUserVaultsQuery, getUserVaultsQueryVariables>;
+
 
 
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
@@ -715,6 +876,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
     vaults(variables?: vaultsQueryVariables, options?: C): Promise<vaultsQuery> {
       return requester<vaultsQuery, vaultsQueryVariables>(vaultsDocument, variables, options) as Promise<vaultsQuery>;
+    },
+    getUserVaults(variables?: getUserVaultsQueryVariables, options?: C): Promise<getUserVaultsQuery> {
+      return requester<getUserVaultsQuery, getUserVaultsQueryVariables>(getUserVaultsDocument, variables, options) as Promise<getUserVaultsQuery>;
     }
   };
 }

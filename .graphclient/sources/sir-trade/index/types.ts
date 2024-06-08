@@ -47,6 +47,8 @@ export type OrderDirection =
 export type Query = {
   vault?: Maybe<Vault>;
   vaults: Array<Vault>;
+  userPosition?: Maybe<UserPosition>;
+  userPositions: Array<UserPosition>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -70,6 +72,24 @@ export type QueryvaultsArgs = {
 };
 
 
+export type QueryuserPositionArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryuserPositionsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<UserPosition_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<UserPosition_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type Query_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
@@ -77,6 +97,8 @@ export type Query_metaArgs = {
 export type Subscription = {
   vault?: Maybe<Vault>;
   vaults: Array<Vault>;
+  userPosition?: Maybe<UserPosition>;
+  userPositions: Array<UserPosition>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -100,9 +122,105 @@ export type SubscriptionvaultsArgs = {
 };
 
 
+export type SubscriptionuserPositionArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionuserPositionsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<UserPosition_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<UserPosition_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type Subscription_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
+
+export type UserPosition = {
+  id: Scalars['String']['output'];
+  balance: Scalars['BigInt']['output'];
+  APE: Scalars['String']['output'];
+  User: Scalars['Bytes']['output'];
+};
+
+export type UserPosition_filter = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_gt?: InputMaybe<Scalars['String']['input']>;
+  id_lt?: InputMaybe<Scalars['String']['input']>;
+  id_gte?: InputMaybe<Scalars['String']['input']>;
+  id_lte?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  balance?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_not?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  balance_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  balance_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  APE?: InputMaybe<Scalars['String']['input']>;
+  APE_not?: InputMaybe<Scalars['String']['input']>;
+  APE_gt?: InputMaybe<Scalars['String']['input']>;
+  APE_lt?: InputMaybe<Scalars['String']['input']>;
+  APE_gte?: InputMaybe<Scalars['String']['input']>;
+  APE_lte?: InputMaybe<Scalars['String']['input']>;
+  APE_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  APE_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  APE_contains?: InputMaybe<Scalars['String']['input']>;
+  APE_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  APE_not_contains?: InputMaybe<Scalars['String']['input']>;
+  APE_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  APE_starts_with?: InputMaybe<Scalars['String']['input']>;
+  APE_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  APE_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  APE_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  APE_ends_with?: InputMaybe<Scalars['String']['input']>;
+  APE_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  APE_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  APE_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  User?: InputMaybe<Scalars['Bytes']['input']>;
+  User_not?: InputMaybe<Scalars['Bytes']['input']>;
+  User_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  User_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  User_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  User_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  User_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  User_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  User_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  User_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<UserPosition_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<UserPosition_filter>>>;
+};
+
+export type UserPosition_orderBy =
+  | 'id'
+  | 'balance'
+  | 'APE'
+  | 'User';
 
 export type Vault = {
   id: Scalars['String']['output'];
@@ -296,6 +414,10 @@ export type _SubgraphErrorPolicy_ =
   vault: InContextSdkMethod<Query['vault'], QueryvaultArgs, MeshContext>,
   /** null **/
   vaults: InContextSdkMethod<Query['vaults'], QueryvaultsArgs, MeshContext>,
+  /** null **/
+  userPosition: InContextSdkMethod<Query['userPosition'], QueryuserPositionArgs, MeshContext>,
+  /** null **/
+  userPositions: InContextSdkMethod<Query['userPositions'], QueryuserPositionsArgs, MeshContext>,
   /** Access to subgraph metadata **/
   _meta: InContextSdkMethod<Query['_meta'], Query_metaArgs, MeshContext>
   };
@@ -309,6 +431,10 @@ export type _SubgraphErrorPolicy_ =
   vault: InContextSdkMethod<Subscription['vault'], SubscriptionvaultArgs, MeshContext>,
   /** null **/
   vaults: InContextSdkMethod<Subscription['vaults'], SubscriptionvaultsArgs, MeshContext>,
+  /** null **/
+  userPosition: InContextSdkMethod<Subscription['userPosition'], SubscriptionuserPositionArgs, MeshContext>,
+  /** null **/
+  userPositions: InContextSdkMethod<Subscription['userPositions'], SubscriptionuserPositionsArgs, MeshContext>,
   /** Access to subgraph metadata **/
   _meta: InContextSdkMethod<Subscription['_meta'], Subscription_metaArgs, MeshContext>
   };
