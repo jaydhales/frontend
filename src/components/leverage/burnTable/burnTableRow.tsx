@@ -1,34 +1,43 @@
 import { Button } from "@/components/ui/button";
+import { getLeverageRatio } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { formatUnits } from "viem";
 import { useAccount } from "wagmi";
-
-export default function BurnTableRow({
-  tokenId,
-  setSelectedRow,
-}: {
-  tokenId: string;
+interface Props {
+  apeAddress: string;
+  colToken: string;
+  colSymbol: string;
+  debtToken: string;
+  debtSymbol: string;
+  leverageTier: string;
   setSelectedRow: React.Dispatch<React.SetStateAction<string | undefined>>;
-}) {
+}
+export default function BurnTableRow({
+  apeAddress,
+  setSelectedRow,
+  debtSymbol,
+  colSymbol,
+  leverageTier,
+}: Props) {
   const { address } = useAccount();
   const { data } = api.user.getApeBalance.useQuery({
-    address: tokenId,
+    address: apeAddress,
     user: address,
   });
   return (
     <tr className="grid grid-cols-6 items-center text-left text-gray text-white">
-      <th>{tokenId.slice(0, 5) + "..." + tokenId.slice(-4)}</th>
+      <th>{apeAddress.slice(0, 5) + "..." + apeAddress.slice(-4)}</th>
       <th>200</th>
-      <th>0x</th>
-      <th>0x1</th>
-      <th>1.4x</th>
+      <th>{debtSymbol}</th>
+      <th>{colSymbol}</th>
+      <th>{getLeverageRatio(parseInt(leverageTier))}x</th>
       <th>
         <div className="flex items-center justify-between">
           <span>
             {parseFloat(parseFloat(formatUnits(data ?? 0n, 18)).toFixed(4))}
           </span>
           <Button
-            onClick={() => setSelectedRow(tokenId)}
+            onClick={() => setSelectedRow(apeAddress)}
             type="button"
             variant="outline"
           >

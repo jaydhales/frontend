@@ -4,7 +4,6 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { multicall, readContract } from "@/lib/viemClient";
 import { erc20Abi } from "viem";
 import { type TAddressString } from "@/lib/types";
-import { UserPositionsContract } from "@/contracts/user-positions";
 import { executeGetUserVaultsQuery } from "@/server/queries/vaults";
 
 export const userRouter = createTRPCRouter({
@@ -75,16 +74,27 @@ export const userRouter = createTRPCRouter({
       if (!input.address) {
         return;
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const result = await executeGetUserVaultsQuery({
+      const result = (await executeGetUserVaultsQuery({
         user: input.address as TAddressString,
-      });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+      })) as UserQuery;
       console.log({ result: result.userPositions });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return result;
     }),
 });
+//todo use ZOD
+type UserQuery = {
+  userPositions: {
+    User: string;
+    leverageTier: string;
+    balance: bigint;
+    APE: string;
+    collateralToken: string;
+    debtToken: string;
+    collateralSymbol: string;
+    debtSymbol: string;
+  }[];
+};
+
 // create: publicProcedure
 //   .input(z.object({ name: z.string().min(1) }))
 //   .mutation(async ({ input }) => {

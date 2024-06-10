@@ -26,6 +26,11 @@ const userVaults = gql`
       User
       balance
       APE
+      debtToken
+      debtSymbol
+      collateralToken
+      collateralSymbol
+      leverageTier
     }
   }
 `;

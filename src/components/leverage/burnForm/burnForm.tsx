@@ -10,7 +10,7 @@ import { api } from "@/trpc/react";
 import type { TAddressString } from "@/lib/types";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useBurnApe } from "./hooks/useBurnApe";
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
 import { formatBigInt } from "@/lib/utils";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { SectionTwo } from "./sectionTwo";
@@ -105,7 +105,7 @@ export default function BurnForm({
           <SectionTwo data={data} amount={quoteBurn} bg="" />
           <div className="pt-2"></div>
           <div className="flex justify-center">
-            <h4 className="w-[400px] text-center text-[16px] italic text-gray">
+            <h4 className="w-[400px] text-center text-sm italic text-gray">
               With leveraging you risk losing up to 100% of your deposit, you
               can not lose more than your deposit.
             </h4>

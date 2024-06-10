@@ -37,10 +37,15 @@ export default function BurnTable() {
         <table className="flex flex-col gap-y-4">
           <caption className="hidden">Burn Tokens</caption>
           <BurnTableHeaders />
-          {(data as userQuery)?.userPositions.map((r) => (
+          {data?.userPositions.map((r) => (
             <BurnTableRow
               setSelectedRow={setSelectedRow}
-              tokenId={r.APE}
+              apeAddress={r.APE}
+              colSymbol={r.collateralSymbol}
+              leverageTier={r.leverageTier}
+              debtSymbol={r.debtSymbol}
+              debtToken={r.debtToken}
+              colToken={r.collateralToken}
               key={r.APE}
             ></BurnTableRow>
           ))}
@@ -49,6 +54,3 @@ export default function BurnTable() {
     </div>
   );
 }
-type userQuery = {
-  userPositions: { User: string; balance: bigint; APE: string }[];
-};

@@ -1,4 +1,4 @@
 {
   "9ee31b28323c888d91bdbd18446778cad65d964b2f0427cbafe4049dfd8f63b9": "#graphql\n\nfragment VaultFields on Vault {\n  debtToken\n  debtSymbol\n  collateralToken\n  collateralSymbol\n  vaultId\n  leverageTier\n}\n\nquery vaults {\n  vaults {\n    ...VaultFields\n  }\n}",
-  "1d8a69d94fc9be3f64ca8d5db204cf4fb05a5979e759e26bfe1740803f7287aa": "query getUserVaults($user: Bytes) {\n  userPositions(where: { User: $user }) {\n    User\n    balance\n    APE\n  }\n}"
+  "90affd7e7ceed92ba0a1b8d6e98e48319e79cfe08eff45aea8b18329f553269f": "query getUserVaults($user: Bytes) {\n  userPositions(where: { User: $user }) {\n    User\n    balance\n    APE\n    debtToken\n    debtSymbol\n    collateralToken\n    collateralSymbol\n    leverageTier\n  }\n}"
 }

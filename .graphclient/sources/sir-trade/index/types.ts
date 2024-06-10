@@ -149,6 +149,11 @@ export type UserPosition = {
   balance: Scalars['BigInt']['output'];
   APE: Scalars['String']['output'];
   User: Scalars['Bytes']['output'];
+  collateralSymbol: Scalars['String']['output'];
+  debtSymbol: Scalars['String']['output'];
+  collateralToken: Scalars['String']['output'];
+  debtToken: Scalars['String']['output'];
+  leverageTier: Scalars['String']['output'];
 };
 
 export type UserPosition_filter = {
@@ -210,6 +215,106 @@ export type UserPosition_filter = {
   User_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   User_contains?: InputMaybe<Scalars['Bytes']['input']>;
   User_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  collateralSymbol?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_not?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_gt?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_lt?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_gte?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_lte?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  collateralSymbol_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  collateralSymbol_contains?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_not_contains?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_starts_with?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_ends_with?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  collateralSymbol_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_not?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_gt?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_lt?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_gte?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_lte?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  debtSymbol_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  debtSymbol_contains?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_not_contains?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_starts_with?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_ends_with?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  debtSymbol_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralToken?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_not?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_gt?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_lt?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_gte?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_lte?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  collateralToken_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  collateralToken_contains?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_not_contains?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_starts_with?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_ends_with?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  collateralToken_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtToken?: InputMaybe<Scalars['String']['input']>;
+  debtToken_not?: InputMaybe<Scalars['String']['input']>;
+  debtToken_gt?: InputMaybe<Scalars['String']['input']>;
+  debtToken_lt?: InputMaybe<Scalars['String']['input']>;
+  debtToken_gte?: InputMaybe<Scalars['String']['input']>;
+  debtToken_lte?: InputMaybe<Scalars['String']['input']>;
+  debtToken_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  debtToken_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  debtToken_contains?: InputMaybe<Scalars['String']['input']>;
+  debtToken_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtToken_not_contains?: InputMaybe<Scalars['String']['input']>;
+  debtToken_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtToken_starts_with?: InputMaybe<Scalars['String']['input']>;
+  debtToken_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtToken_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  debtToken_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtToken_ends_with?: InputMaybe<Scalars['String']['input']>;
+  debtToken_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  debtToken_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  debtToken_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  leverageTier?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_not?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_gt?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_lt?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_gte?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_lte?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  leverageTier_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  leverageTier_contains?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_not_contains?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_starts_with?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_ends_with?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  leverageTier_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<UserPosition_filter>>>;
@@ -220,7 +325,12 @@ export type UserPosition_orderBy =
   | 'id'
   | 'balance'
   | 'APE'
-  | 'User';
+  | 'User'
+  | 'collateralSymbol'
+  | 'debtSymbol'
+  | 'collateralToken'
+  | 'debtToken'
+  | 'leverageTier';
 
 export type Vault = {
   id: Scalars['String']['output'];

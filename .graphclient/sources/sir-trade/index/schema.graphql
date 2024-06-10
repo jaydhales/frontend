@@ -174,6 +174,11 @@ type UserPosition {
   balance: BigInt!
   APE: String!
   User: Bytes!
+  collateralSymbol: String!
+  debtSymbol: String!
+  collateralToken: String!
+  debtToken: String!
+  leverageTier: String!
 }
 
 input UserPosition_filter {
@@ -235,6 +240,106 @@ input UserPosition_filter {
   User_not_in: [Bytes!]
   User_contains: Bytes
   User_not_contains: Bytes
+  collateralSymbol: String
+  collateralSymbol_not: String
+  collateralSymbol_gt: String
+  collateralSymbol_lt: String
+  collateralSymbol_gte: String
+  collateralSymbol_lte: String
+  collateralSymbol_in: [String!]
+  collateralSymbol_not_in: [String!]
+  collateralSymbol_contains: String
+  collateralSymbol_contains_nocase: String
+  collateralSymbol_not_contains: String
+  collateralSymbol_not_contains_nocase: String
+  collateralSymbol_starts_with: String
+  collateralSymbol_starts_with_nocase: String
+  collateralSymbol_not_starts_with: String
+  collateralSymbol_not_starts_with_nocase: String
+  collateralSymbol_ends_with: String
+  collateralSymbol_ends_with_nocase: String
+  collateralSymbol_not_ends_with: String
+  collateralSymbol_not_ends_with_nocase: String
+  debtSymbol: String
+  debtSymbol_not: String
+  debtSymbol_gt: String
+  debtSymbol_lt: String
+  debtSymbol_gte: String
+  debtSymbol_lte: String
+  debtSymbol_in: [String!]
+  debtSymbol_not_in: [String!]
+  debtSymbol_contains: String
+  debtSymbol_contains_nocase: String
+  debtSymbol_not_contains: String
+  debtSymbol_not_contains_nocase: String
+  debtSymbol_starts_with: String
+  debtSymbol_starts_with_nocase: String
+  debtSymbol_not_starts_with: String
+  debtSymbol_not_starts_with_nocase: String
+  debtSymbol_ends_with: String
+  debtSymbol_ends_with_nocase: String
+  debtSymbol_not_ends_with: String
+  debtSymbol_not_ends_with_nocase: String
+  collateralToken: String
+  collateralToken_not: String
+  collateralToken_gt: String
+  collateralToken_lt: String
+  collateralToken_gte: String
+  collateralToken_lte: String
+  collateralToken_in: [String!]
+  collateralToken_not_in: [String!]
+  collateralToken_contains: String
+  collateralToken_contains_nocase: String
+  collateralToken_not_contains: String
+  collateralToken_not_contains_nocase: String
+  collateralToken_starts_with: String
+  collateralToken_starts_with_nocase: String
+  collateralToken_not_starts_with: String
+  collateralToken_not_starts_with_nocase: String
+  collateralToken_ends_with: String
+  collateralToken_ends_with_nocase: String
+  collateralToken_not_ends_with: String
+  collateralToken_not_ends_with_nocase: String
+  debtToken: String
+  debtToken_not: String
+  debtToken_gt: String
+  debtToken_lt: String
+  debtToken_gte: String
+  debtToken_lte: String
+  debtToken_in: [String!]
+  debtToken_not_in: [String!]
+  debtToken_contains: String
+  debtToken_contains_nocase: String
+  debtToken_not_contains: String
+  debtToken_not_contains_nocase: String
+  debtToken_starts_with: String
+  debtToken_starts_with_nocase: String
+  debtToken_not_starts_with: String
+  debtToken_not_starts_with_nocase: String
+  debtToken_ends_with: String
+  debtToken_ends_with_nocase: String
+  debtToken_not_ends_with: String
+  debtToken_not_ends_with_nocase: String
+  leverageTier: String
+  leverageTier_not: String
+  leverageTier_gt: String
+  leverageTier_lt: String
+  leverageTier_gte: String
+  leverageTier_lte: String
+  leverageTier_in: [String!]
+  leverageTier_not_in: [String!]
+  leverageTier_contains: String
+  leverageTier_contains_nocase: String
+  leverageTier_not_contains: String
+  leverageTier_not_contains_nocase: String
+  leverageTier_starts_with: String
+  leverageTier_starts_with_nocase: String
+  leverageTier_not_starts_with: String
+  leverageTier_not_starts_with_nocase: String
+  leverageTier_ends_with: String
+  leverageTier_ends_with_nocase: String
+  leverageTier_not_ends_with: String
+  leverageTier_not_ends_with_nocase: String
   """Filter for the block changed event."""
   _change_block: BlockChangedFilter
   and: [UserPosition_filter]
@@ -246,6 +351,11 @@ enum UserPosition_orderBy {
   balance
   APE
   User
+  collateralSymbol
+  debtSymbol
+  collateralToken
+  debtToken
+  leverageTier
 }
 
 type Vault {
