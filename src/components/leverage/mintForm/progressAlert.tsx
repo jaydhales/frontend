@@ -46,7 +46,7 @@ export default function ProgressAlert({
         className=" overflow-hidden bg-transparent"
       >
         <div
-          className={`space-y-3 rounded-md border-4 border-transparent transition-all duration-500 ${data.success ? "border-accent" : ""} bg-secondary p-8 text-white`}
+          className={`space-y-3 rounded-md border-4  transition-all duration-700 ${data.success ? "border-accent" : "border-accent/0"} bg-secondary p-8 text-white`}
         >
           <h2 className="pb-1 text-center font-lora text-xl">{data.message}</h2>
           <h3 className="text-gray">Lorem ipsum</h3>
