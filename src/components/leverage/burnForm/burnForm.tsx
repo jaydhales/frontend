@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UseFormReturn } from "react-hook-form";
@@ -8,12 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import type { TAddressString } from "@/lib/types";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useBurnApe } from "./hooks/useBurnApe";
 import { formatUnits, parseUnits } from "viem";
 import { formatBigInt } from "@/lib/utils";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { SectionTwo } from "./sectionTwo";
+import ProgressAlert from "../mintForm/progressAlert";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -40,13 +41,35 @@ export default function BurnForm({
     { enabled: Boolean(address) },
   );
 
-  const { data: quoteBurn } = api.vault.quoteBurn.useQuery({
-    amount: formData.deposit,
-    debtToken: data?.debtToken,
-    leverageTier: data?.leverageTier,
-    collateralToken: data?.collateralToken,
+  const { data: quoteBurn } = api.vault.quoteBurn.useQuery(
+    {
+      amount: formData.deposit,
+      debtToken: data?.debtToken,
+      leverageTier: data?.leverageTier,
+      collateralToken: data?.collateralToken,
+    },
+    {
+      enabled: Boolean(formData.deposit),
+    },
+  );
+
+  const { writeContract, data: writeData, isPending } = useWriteContract();
+  const {
+    data: receiptData,
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+  } = useWaitForTransactionReceipt({
+    hash: writeData,
   });
-  const { writeContract } = useWriteContract();
+
+  const utils = api.useUtils();
+  useEffect(() => {
+    if (receiptData) {
+      utils.user.getApeBalance.invalidate().catch((e) => {
+        console.log(e);
+      });
+    }
+  }, [receiptData, utils.user.getApeBalance]);
   const { data: burnData } = useBurnApe({
     data,
     apeAddress: address ?? "0x",
@@ -60,6 +83,7 @@ export default function BurnForm({
   };
   return (
     <Form {...form}>
+      <ProgressAlert isTxPending={isConfirming} waitForSign={isPending} />
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <label htmlFor="a" className="">
