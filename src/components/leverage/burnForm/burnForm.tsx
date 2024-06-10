@@ -58,6 +58,7 @@ export default function BurnForm({
     data: receiptData,
     isLoading: isConfirming,
     isSuccess: isConfirmed,
+    isError: isErrorConfirming,
   } = useWaitForTransactionReceipt({
     hash: writeData,
   });
@@ -83,7 +84,11 @@ export default function BurnForm({
   };
   return (
     <Form {...form}>
-      <ProgressAlert isTxPending={isConfirming} waitForSign={isPending} />
+      <ProgressAlert
+        isTxSuccess={isConfirmed}
+        isTxPending={isConfirming}
+        waitForSign={isPending}
+      />
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <label htmlFor="a" className="">
