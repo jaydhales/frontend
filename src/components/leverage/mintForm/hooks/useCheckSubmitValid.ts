@@ -94,6 +94,14 @@ export const useCheckSubmitValid = ({
         };
       }
     }
-  }, [deposit, mintRequest, approveWriteRequest, tokenAllowance, tokenBalance]);
+  }, [
+    deposit,
+    tokenBalance,
+    tokenAllowance,
+    mintRequest,
+    approveWriteRequest,
+    approveFetching,
+    mintFetching,
+  ]);
   return { isValid, errorMessage, submitType };
 };
