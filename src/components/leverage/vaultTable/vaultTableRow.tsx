@@ -16,9 +16,9 @@ export function VaultTableRow({
   return (
     <tr
       onClick={() => {
-        form.setValue("long", pool.debtToken + "," + pool.debtSymbol);
+        form.setValue("versus", pool.debtToken + "," + pool.debtSymbol);
         form.setValue(
-          "versus",
+          "long",
           pool.collateralToken + "," + pool.collateralSymbol,
         );
         form.setValue("leverageTier", pool.leverageTier.toString());
