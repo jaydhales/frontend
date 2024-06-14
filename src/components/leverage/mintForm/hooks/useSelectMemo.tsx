@@ -18,32 +18,37 @@ export function useSelectMemo({ formData, vaultsQuery }: Props) {
           return false;
         }
       }
-      if (formData.versus) {
-        if (formData.versus.split(",")[0] !== p.collateralToken) {
+      if (formData.long) {
+        if (formData.long.split(",")[0] !== p.collateralToken) {
           return false;
         }
       }
-      if (formData.long) {
-        if (formData.long.split(",")[0] !== p.debtToken) {
+      if (formData.versus) {
+        if (formData.versus.split(",")[0] !== p.debtToken) {
           return false;
         }
       }
       return true;
     });
 
-    const versus = [
+    const long = [
       ...new Map(
         matchingPools.map((item) => [item.collateralToken, item]),
       ).values(),
     ];
-    const long = [
+    const versus = [
       ...new Map(matchingPools.map((item) => [item.debtToken, item])).values(),
     ];
     const leverageTiers = [
       ...new Set(matchingPools.map((p) => p.leverageTier)),
     ];
     return { leverageTiers, long, versus };
-  }, [formData]);
+  }, [
+    formData.leverageTier,
+    formData.long,
+    formData.versus,
+    vaultsQuery?.vaults.vaults,
+  ]);
   return { versus, leverageTiers, long };
 }
 
