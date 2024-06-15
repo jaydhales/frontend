@@ -25,9 +25,8 @@ export default function BurnTableRow({
     user: address,
   });
   return (
-    <tr className="grid grid-cols-6 items-center text-left text-gray text-white">
+    <tr className="grid grid-cols-5 items-center text-left text-gray text-white">
       <th>{apeAddress.slice(0, 5) + "..." + apeAddress.slice(-4)}</th>
-      <th>200</th>
       <th>{debtSymbol}</th>
       <th>{colSymbol}</th>
       <th>{getLeverageRatio(parseInt(leverageTier))}x</th>

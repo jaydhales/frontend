@@ -1,6 +1,6 @@
 import { useMintFormProvider } from "@/components/providers/mintFormProvider";
 import { Badge, type badgeVariants } from "@/components/ui/badge";
-import { getLeverageRatio, getLogoAsset } from "@/lib/utils";
+import { calculateVaultFee, getLeverageRatio, getLogoAsset } from "@/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 import type { vaultsQuery } from "../../../../.graphclient";
 import Image from "next/image";
@@ -13,6 +13,8 @@ export function VaultTableRow({
   pool: vaultsQuery["vaults"][0];
 }) {
   const { form } = useMintFormProvider();
+  const fee = calculateVaultFee(pool.leverageTier) * 100;
+
   return (
     <tr
       onClick={() => {
@@ -46,7 +48,7 @@ export function VaultTableRow({
           {pool.collateralSymbol}/{pool.debtSymbol}
         </span>
       </th>
-      <th>1.5%</th>
+      <th>{fee}%</th>
       <th>
         <Badge
           {...badgeVariant}

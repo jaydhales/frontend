@@ -61,3 +61,9 @@ export function getApeAddress({
 export function formatBigInt(b: bigint | undefined, fixed: number) {
   return parseFloat(parseFloat(formatUnits(b ?? 0n, 18)).toFixed(fixed));
 }
+
+export function calculateVaultFee(k: number) {
+  console.log(k);
+  const s = k * k;
+  return s / (1 + s);
+}
