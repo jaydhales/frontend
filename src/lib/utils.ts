@@ -68,9 +68,8 @@ export function formatBigInt(b: bigint | undefined, fixed: number) {
   const parsed = Math.floor(parseFloat(formatUnits(b ?? 0n, 18)) * 10 ** fixed) / 10 ** fixed
   return parseFloat(parsed.toFixed(fixed));
 }
-
+const BASE_FEE = 0.5
 export function calculateVaultFee(k: number) {
   console.log(k);
-  const s = k * k;
-  return s / (1 + s);
+  return k ** 2 * BASE_FEE / ((1 + k ** 2) * BASE_FEE);
 }
