@@ -58,8 +58,10 @@ export function getApeAddress({
   return result;
 }
 
+
 export function formatBigInt(b: bigint | undefined, fixed: number) {
-  return parseFloat(parseFloat(formatUnits(b ?? 0n, 18)).toFixed(fixed));
+  const parsed = Math.floor(parseFloat(formatUnits(b ?? 0n, 18)) * 10 ** fixed) / 10 ** fixed
+  return parseFloat(parsed.toFixed(fixed));
 }
 
 export function calculateVaultFee(k: number) {
