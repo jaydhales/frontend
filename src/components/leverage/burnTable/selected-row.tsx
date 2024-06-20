@@ -38,8 +38,7 @@ export default function SelectedRow({
         <BurnTableHeaders />
         <tr className="grid h-[41px] grid-cols-5 items-center text-left text-gray text-white">
           <th>{apeAddress.slice(0, 4) + "..." + apeAddress.slice(-4)}</th>
-          <th>{params?.amount}</th>
-          <th>0x</th>
+          <th>0x1</th>
           <th>0x1</th>
           <th>1.4x</th>
           <th>{formatBigInt(data, 4)}</th>

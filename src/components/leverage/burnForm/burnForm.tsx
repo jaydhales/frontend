@@ -10,11 +10,12 @@ import { api } from "@/trpc/react";
 import type { TAddressString } from "@/lib/types";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useBurnApe } from "./hooks/useBurnApe";
-import { parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 import { formatBigInt } from "@/lib/utils";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { SectionTwo } from "./sectionTwo";
 import ProgressAlert from "../mintForm/progressAlert";
+import { BalancePercent } from "@/components/shared/balancePercent";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -178,9 +179,13 @@ function Section({
         </div>
       </div>
       <div className="flex items-end justify-between pt-2">
-        <span className="text-sm font-medium text-light-blue-100">
-          Max 50% 25%
-        </span>
+        <BalancePercent
+          balance={formatUnits(balance ?? 0n, 18)}
+          setValue={(s: string) => {
+            form.setValue("deposit", s);
+          }}
+        />
+
         <span className="text-sm italic text-gray">
           Balance {formatBigInt(balance, 4)}
         </span>

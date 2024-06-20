@@ -58,6 +58,11 @@ export function getApeAddress({
   return result;
 }
 
+export function roundDown(float: number, decimals: number) {
+  const factor = Math.pow(10, decimals);
+  const roundedDown = Math.floor(float * factor) / factor;
+  return roundedDown;
+}
 
 export function formatBigInt(b: bigint | undefined, fixed: number) {
   const parsed = Math.floor(parseFloat(formatUnits(b ?? 0n, 18)) * 10 ** fixed) / 10 ** fixed
