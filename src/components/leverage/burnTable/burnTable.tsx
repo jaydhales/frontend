@@ -11,9 +11,7 @@ import SelectedRow from "./selected-row";
 import type { TAddressString } from "@/lib/types";
 export default function BurnTable() {
   const [selectedRow, setSelectedRow] = useState<string | undefined>();
-  const selectedRowParams = useMemo(() => {
-    return burnRows.find((r) => r.tokenId === selectedRow);
-  }, [selectedRow]);
+
   const { address } = useAccount();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { data } = api.user.getPositions.useQuery(
@@ -22,6 +20,11 @@ export default function BurnTable() {
       enabled: Boolean(address),
     },
   );
+  const selectedRowParams = useMemo(() => {
+    return data?.userPositions.find((r) => r.APE === selectedRow);
+  }, [data?.userPositions, selectedRow]);
+  console.log(burnRows);
+  console.log({ selectedRowParams });
   return (
     <div className="relative">
       {selectedRow && (

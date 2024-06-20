@@ -69,6 +69,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const safeDeposit = useMemo(() => {
     return z.coerce.number().safeParse(formData.deposit);
   }, [formData.deposit]);
+
   /** ##MINT APE## */
   const { data: mintData, isFetching: mintFetching } = useMintApe({
     vaultId: findVault(vaultsQuery, formData),
