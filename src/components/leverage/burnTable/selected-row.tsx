@@ -36,7 +36,7 @@ export default function SelectedRow({
           <X />
         </button>
         <BurnTableHeaders />
-        <tr className="grid h-[41px] grid-cols-6 items-center text-left text-gray text-white">
+        <tr className="grid h-[41px] grid-cols-5 items-center text-left text-gray text-white">
           <th>{apeAddress.slice(0, 4) + "..." + apeAddress.slice(-4)}</th>
           <th>{params?.amount}</th>
           <th>0x</th>
