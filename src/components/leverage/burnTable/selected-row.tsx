@@ -2,9 +2,10 @@ import { X } from "lucide-react";
 import BurnTableHeaders from "./burnTableHeader";
 import BurnForm from "../burnForm/burnForm";
 import type { TAddressString, TBurnRow } from "@/lib/types";
+
 import { useAccount } from "wagmi";
 import { api } from "@/trpc/react";
-import { formatBigInt } from "@/lib/utils";
+import { formatBigInt,getLeverageRatio } from "@/lib/utils";
 
 export default function SelectedRow({
   params,
@@ -36,12 +37,11 @@ export default function SelectedRow({
           <X />
         </button>
         <BurnTableHeaders />
-        <tr className="grid h-[41px] grid-cols-6 items-center text-left text-gray text-white">
-          <th>{apeAddress.slice(0, 4) + "..." + apeAddress.slice(-4)}</th>
-          <th>{params?.amount}</th>
-          <th>0x</th>
-          <th>0x1</th>
-          <th>1.4x</th>
+        <tr className="grid h-[41px] grid-cols-5 items-center text-left text-gray text-white">
+          <th>{params?.APE.slice(0, 4)}</th>
+          <th>{params?.debtSymbol}</th>
+          <th>{params?.collateralSymbol}</th>
+          <th>{getLeverageRatio(parseInt(params?.leverageTier ?? '0'))}x</th>
           <th>{formatBigInt(data, 4)}</th>
         </tr>
       </div>

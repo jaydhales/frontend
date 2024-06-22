@@ -17,8 +17,8 @@ export default function TopSelects({
   return (
     <div className=" grid grid-cols-3 gap-x-4">
       <Select
-        name="long"
-        title="Go long:"
+        name="versus"
+        title="Versus:"
         form={form}
         items={long.map((e) => ({
           label: e.debtSymbol,
@@ -27,8 +27,8 @@ export default function TopSelects({
         }))}
       />
       <Select
-        name="versus"
-        title="Versus:"
+        name="long"
+        title="Go long:"
         form={form}
         items={versus.map((e) => ({
           label: e.collateralSymbol,

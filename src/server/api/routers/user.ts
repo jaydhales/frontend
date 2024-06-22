@@ -16,11 +16,11 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-      console.log({ input });
+
       if (!input.tokenAddress || !input.userAddress || !input.spender) {
         return {};
       }
-      console.log(input.tokenAddress, input.userAddress, "HELLOOOOOOOOOOOO");
+
       const [balance, allowance] = await multicall({
         contracts: [
           {
@@ -40,7 +40,7 @@ export const userRouter = createTRPCRouter({
           },
         ],
       });
-      console.log({ balance, allowance });
+
       return {
         tokenBalance: balance,
         tokenAllowance: allowance,
@@ -63,7 +63,7 @@ export const userRouter = createTRPCRouter({
         functionName: "balanceOf",
         args: [input.user as TAddressString],
       });
-      console.log({ result });
+
       return result;
     }),
   getPositions: publicProcedure
@@ -77,7 +77,7 @@ export const userRouter = createTRPCRouter({
       const result = (await executeGetUserVaultsQuery({
         user: input.address as TAddressString,
       })) as UserQuery;
-      console.log({ result: result.userPositions });
+
       return result;
     }),
 });

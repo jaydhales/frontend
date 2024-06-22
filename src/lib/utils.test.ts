@@ -1,5 +1,10 @@
 import { expect, test } from "vitest";
-import { add, getLeverageRatio, getApeAddress } from "./utils";
+import {
+  add,
+  getLeverageRatio,
+  getApeAddress,
+  calculateVaultFee,
+} from "./utils";
 
 test("Test utils add function.", () => {
   expect(add(1, 2)).toBe(3);
@@ -9,6 +14,9 @@ test("Test calculate leverage tier ratio.", () => {
   expect(getLeverageRatio(-1)).toBe(1.5);
 });
 
+test("Test calculate leverage tier ratio.", () => {
+  expect(calculateVaultFee(0.5, 1.5)).toBe(0.2);
+});
 test("Test if getApeAddress gets proper contract address.", () => {
   expect(
     getApeAddress({

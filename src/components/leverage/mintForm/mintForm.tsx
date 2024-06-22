@@ -14,7 +14,7 @@ import {
 import { useSelectMemo } from "./hooks/useSelectMemo";
 import useSetDepositToken from "./hooks/useSetDepositToken";
 import type { SimulateContractReturnType } from "viem";
-import { erc20Abi, formatUnits, parseUnits } from "viem";
+import { erc20Abi, formatUnits, maxInt256, parseUnits } from "viem";
 import type { SubmitHandler } from "react-hook-form";
 import type { TAddressString, TMintFormFields, TVaults } from "@/lib/types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -64,16 +64,18 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     },
     { enabled: Boolean(address) && Boolean(formData.depositToken) },
   );
+
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   const safeDeposit = useMemo(() => {
     return z.coerce.number().safeParse(formData.deposit);
   }, [formData.deposit]);
+
   /** ##MINT APE## */
   const { data: mintData, isFetching: mintFetching } = useMintApe({
     vaultId: findVault(vaultsQuery, formData),
-    debtToken: formDataInput(formData.long), //value formatted : address,symbol
-    collateralToken: formDataInput(formData.versus), //value formatted : address,symbol
+    debtToken: formDataInput(formData.versus), //value formatted : address,symbol
+    collateralToken: formDataInput(formData.long), //value formatted : address,symbol
     leverageTier: leverageTier,
     amount: safeDeposit.success
       ? parseUnits(safeDeposit.data.toString() ?? "0", 18)
@@ -85,11 +87,9 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     address: formData.depositToken as TAddressString,
     abi: erc20Abi,
     functionName: "approve",
-    args: [
-      AssistantContract.address,
-      parseUnits(safeDeposit.success ? safeDeposit.data.toString() : "", 18),
-    ],
+    args: [AssistantContract.address, parseUnits(formatUnits(maxInt256, 18), 0)],
   });
+
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
@@ -206,8 +206,8 @@ function formDataInput(s: string) {
 }
 // <SelectItem value="mint">Mint</SelectItem>
 function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
-  const debtToken = formData.long.split(",")[0] ?? "", //value formatted : address,symbol
-    collateralToken = formData.versus.split(",")[0] ?? ""; //value formatted : address,symbol
+  const debtToken = formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
+    collateralToken = formData.long.split(",")[0] ?? ""; //value formatted : address,symbol
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   return vaultQuery?.vaults.vaults.find((v) => {

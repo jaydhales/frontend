@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { SelectItem } from "@/components/ui/select";
 import type { TMintForm } from "@/lib/types";
 import { getLogoAsset } from "@/lib/utils";
+import { BalancePercent } from "@/components/shared/balancePercent";
 interface Props {
   form: TMintForm;
   tokenDepositSelects: {
@@ -85,51 +86,13 @@ export default function DepositInputs({
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
           Balance: {parseFloat(parseFloat(balance ?? "0").toFixed(6))}
         </h2>
-        <h2 className="flex justify-end gap-x-3 pt-1 text-right text-sm text-[#26DEC8]">
-          <span
-            onClick={() =>
-              form.setValue(
-                "deposit",
-                roundDown(parseFloat(balance ?? "0") / 4, 4).toString(),
-              )
-            }
-            aria-label="25% Balance"
-            role="button"
-          >
-            25%
-          </span>{" "}
-          <span
-            onClick={() =>
-              form.setValue(
-                "deposit",
-                roundDown(parseFloat(balance ?? "0") / 2, 4).toString(),
-              )
-            }
-            aria-label="50% Balance"
-            role="button"
-          >
-            50%
-          </span>{" "}
-          <span
-            onClick={() =>
-              form.setValue(
-                "deposit",
-                roundDown(parseFloat(balance ?? "0"), 4).toString(),
-              )
-            }
-            role="button"
-            aria-label="Max Balance"
-          >
-            Max
-          </span>
-        </h2>
+        <BalancePercent
+          balance={balance}
+          setValue={(s: string) => {
+            form.setValue("deposit", s);
+          }}
+        />
       </div>
     </div>
   );
-}
-
-function roundDown(float: number, decimals: number) {
-  const factor = Math.pow(10, decimals);
-  const roundedDown = Math.floor(float * factor) / factor;
-  return roundedDown;
 }

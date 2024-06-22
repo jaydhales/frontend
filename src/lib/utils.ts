@@ -58,6 +58,18 @@ export function getApeAddress({
   return result;
 }
 
+export function roundDown(float: number, decimals: number) {
+  const factor = Math.pow(10, decimals);
+  const roundedDown = Math.floor(float * factor) / factor;
+  return roundedDown;
+}
+
 export function formatBigInt(b: bigint | undefined, fixed: number) {
-  return parseFloat(parseFloat(formatUnits(b ?? 0n, 18)).toFixed(fixed));
+  const parsed = Math.floor(parseFloat(formatUnits(b ?? 0n, 18)) * 10 ** fixed) / 10 ** fixed
+  return parseFloat(parsed.toFixed(fixed));
+}
+const BASE_FEE = 0.5
+export function calculateVaultFee(k: number) {
+  console.log(k);
+  return k ** 2 * BASE_FEE / ((1 + k ** 2) * BASE_FEE);
 }

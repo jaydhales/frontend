@@ -15,8 +15,8 @@ export type TPool = {
 };
 export type TVaults =
   | {
-      vaults: { vaults: VaultFieldsFragment[] };
-    }
+    vaults: { vaults: VaultFieldsFragment[] };
+  }
   | undefined;
 export enum LeverageTier {
   "one",
@@ -25,14 +25,17 @@ export enum LeverageTier {
   "four",
 }
 
-export type TBurnRow = {
-  tokenId: string;
-  amount: string;
-  tokenLong: string;
-  tokenVersus: string;
-  leverageRatio: LeverageTier;
-  balance: string;
-};
+export type TBurnRow =
+  {
+    User: string;
+    leverageTier: string;
+    balance: bigint;
+    APE: string;
+    collateralToken: string;
+    debtToken: string;
+    collateralSymbol: string;
+    debtSymbol: string;
+  } | undefined
 
 export type TMintForm = UseFormReturn<TMintFormFields, undefined>;
 export interface TMintFormFields {

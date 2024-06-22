@@ -1,6 +1,6 @@
 import { useMintFormProvider } from "@/components/providers/mintFormProvider";
 import { Badge, type badgeVariants } from "@/components/ui/badge";
-import { getLeverageRatio, getLogoAsset } from "@/lib/utils";
+import { calculateVaultFee, getLeverageRatio, getLogoAsset } from "@/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 import type { vaultsQuery } from "../../../../.graphclient";
 import Image from "next/image";
@@ -12,16 +12,25 @@ export function VaultTableRow({
   number: string;
   pool: vaultsQuery["vaults"][0];
 }) {
-  const { form } = useMintFormProvider();
+  const { setVaultInputs } = useMintFormProvider();
+  const fee = calculateVaultFee(pool.leverageTier) * 100;
+
   return (
     <tr
       onClick={() => {
-        form.setValue("long", pool.debtToken + "," + pool.debtSymbol);
-        form.setValue(
-          "versus",
-          pool.collateralToken + "," + pool.collateralSymbol,
-        );
-        form.setValue("leverageTier", pool.leverageTier.toString());
+        setVaultInputs({
+          debtSymbol: pool.debtSymbol,
+          debtToken: pool.debtToken,
+          collateralSymbol: pool.collateralSymbol,
+          collateralToken: pool.collateralToken,
+          leverageTier: pool.leverageTier,
+        });
+        // form.setValue("versus", pool.debtToken + "," + pool.debtSymbol);
+        // form.setValue(
+        //   "long",
+        //   pool.collateralToken + "," + pool.collateralSymbol,
+        // );
+        // form.setValue("leverageTier", pool.leverageTier.toString());
       }}
       className="grid cursor-pointer grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
     >
@@ -46,7 +55,7 @@ export function VaultTableRow({
           {pool.collateralSymbol}/{pool.debtSymbol}
         </span>
       </th>
-      <th>1.5%</th>
+      <th>{fee}%</th>
       <th>
         <Badge
           {...badgeVariant}
