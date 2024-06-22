@@ -7,10 +7,10 @@ import { executeVaultsQuery } from "@/server/queries/vaults";
 import { parseUnits } from "viem";
 import { z } from "zod";
 export const vaultRouter = createTRPCRouter({
-  getVaults: publicProcedure.query(async ({}) => {
+  getVaults: publicProcedure.query(async ({ }) => {
     try {
       const vaults = await executeVaultsQuery();
-      console.log({ vaults });
+
       return { vaults };
     } catch (e) {
       console.log(e, "ERROR");
@@ -20,7 +20,7 @@ export const vaultRouter = createTRPCRouter({
   getApeParams: publicProcedure
     .input(z.object({ address: z.string().startsWith("0x") }))
     .query(async ({ input }) => {
-      console.log(input.address);
+
       const result = await multicall({
         contracts: [
           {
@@ -40,7 +40,7 @@ export const vaultRouter = createTRPCRouter({
           },
         ],
       });
-      console.log({ result });
+
       return {
         leverageTier: result[0].result,
         debtToken: result[1].result,
@@ -101,7 +101,7 @@ export const vaultRouter = createTRPCRouter({
       ) {
         return;
       }
-      console.log(input);
+
       try {
         const quote = await readContract({
           abi: AssistantContract.abi,
@@ -119,7 +119,7 @@ export const vaultRouter = createTRPCRouter({
         });
         return quote;
       } catch (e) {
-        console.log(e);
+
         // console.log(e);
         return;
       }

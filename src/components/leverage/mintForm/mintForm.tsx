@@ -64,6 +64,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     },
     { enabled: Boolean(address) && Boolean(formData.depositToken) },
   );
+
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   const safeDeposit = useMemo(() => {
@@ -73,8 +74,8 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   /** ##MINT APE## */
   const { data: mintData, isFetching: mintFetching } = useMintApe({
     vaultId: findVault(vaultsQuery, formData),
-    debtToken: formDataInput(formData.long), //value formatted : address,symbol
-    collateralToken: formDataInput(formData.versus), //value formatted : address,symbol
+    debtToken: formDataInput(formData.versus), //value formatted : address,symbol
+    collateralToken: formDataInput(formData.long), //value formatted : address,symbol
     leverageTier: leverageTier,
     amount: safeDeposit.success
       ? parseUnits(safeDeposit.data.toString() ?? "0", 18)
@@ -86,7 +87,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     address: formData.depositToken as TAddressString,
     abi: erc20Abi,
     functionName: "approve",
-    args: [AssistantContract.address, maxInt256],
+    args: [AssistantContract.address, parseUnits(formatUnits(maxInt256, 18), 0)],
   });
 
   const { writeContract, data: hash, isPending } = useWriteContract();
@@ -150,51 +151,51 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <TopSelects
-          form={form}
-          versus={versus}
-          leverageTiers={leverageTiers}
-          long={long}
-        />
-        <div>
-          <FormLabel htmlFor="deposit">Deposit:</FormLabel>
-          <div className="pt-1"></div>
-          <DepositInputs
-            balance={formatUnits(data?.tokenBalance?.result ?? 0n, 18)}
+          <TopSelects
             form={form}
-            tokenDepositSelects={tokenDepositSelects}
+            versus={versus}
+            leverageTiers={leverageTiers}
+            long={long}
           />
-        </div>
-        <Estimations
-          disabled={!Boolean(quoteData)}
-          ape={formatBigInt(quoteData, 4).toString()}
-        />
-        <div className="flex flex-col items-center justify-center gap-y-2">
-          {/* TODO */}
-          {/* Dont set size w-[450px] on all elements. */}
-          <p className="w-[450px] pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
-          {address && (
-            <Button disabled={!isValid} variant={"submit"} type="submit">
-              {submitType === ESubmitType.mint ? "Mint" : "Approve"}
-            </Button>
-          )}
-          {!address && (
-            <Button
-              onClick={() => openConnectModal?.()}
-              variant="submit"
-              type="button"
-            >
-              Connect Wallet
-            </Button>
-          )}
-
-          <div className="w-[450px]">
-            <p className="h-[20px] text-left text-sm text-red-400">
-              {/* Don't show form errors if users is not connected. */}
-              {address && <>{form.formState.errors.root?.message}</>}
-            </p>
+          <div>
+            <FormLabel htmlFor="deposit">Deposit:</FormLabel>
+            <div className="pt-1"></div>
+            <DepositInputs
+              balance={formatUnits(data?.tokenBalance?.result ?? 0n, 18)}
+              form={form}
+              tokenDepositSelects={tokenDepositSelects}
+            />
           </div>
-        </div>
+          <Estimations
+            disabled={!Boolean(quoteData)}
+            ape={formatBigInt(quoteData, 4).toString()}
+          />
+          <div className="flex flex-col items-center justify-center gap-y-2">
+            {/* TODO */}
+            {/* Dont set size w-[450px] on all elements. */}
+            <p className="w-[450px] pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
+            {address && (
+              <Button disabled={!isValid} variant={"submit"} type="submit">
+                {submitType === ESubmitType.mint ? "Mint" : "Approve"}
+              </Button>
+            )}
+            {!address && (
+              <Button
+                onClick={() => openConnectModal?.()}
+                variant="submit"
+                type="button"
+              >
+                Connect Wallet
+              </Button>
+            )}
+
+            <div className="w-[450px]">
+              <p className="h-[20px] text-left text-sm text-red-400">
+                {/* Don't show form errors if users is not connected. */}
+                {address && <>{form.formState.errors.root?.message}</>}
+              </p>
+            </div>
+          </div>
         </form>
       </Form>
     </Card>
@@ -205,8 +206,8 @@ function formDataInput(s: string) {
 }
 // <SelectItem value="mint">Mint</SelectItem>
 function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
-  const debtToken = formData.long.split(",")[0] ?? "", //value formatted : address,symbol
-    collateralToken = formData.versus.split(",")[0] ?? ""; //value formatted : address,symbol
+  const debtToken = formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
+    collateralToken = formData.long.split(",")[0] ?? ""; //value formatted : address,symbol
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   return vaultQuery?.vaults.vaults.find((v) => {

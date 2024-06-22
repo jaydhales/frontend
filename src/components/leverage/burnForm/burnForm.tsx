@@ -59,7 +59,7 @@ export default function BurnForm({
     data: receiptData,
     isLoading: isConfirming,
     isSuccess: isConfirmed,
-    isError: isErrorConfirming,
+    // isError: isErrorConfirming,
   } = useWaitForTransactionReceipt({
     hash: writeData,
   });
@@ -67,9 +67,7 @@ export default function BurnForm({
   const utils = api.useUtils();
   useEffect(() => {
     if (receiptData) {
-      utils.user.getApeBalance.invalidate().catch((e) => {
-        console.log(e);
-      });
+      utils.user.getApeBalance.invalidate().catch((e) => {});
     }
   }, [receiptData, utils.user.getApeBalance]);
   const { data: burnData } = useBurnApe({
