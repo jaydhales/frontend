@@ -96,10 +96,10 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     useWaitForTransactionReceipt({ hash });
   // Invalidate if approve or mint tx is successful.
   useEffect(() => {
-    if (isConfirmed && !isEth) {
+    if (isConfirmed && !useEth) {
       utils.user.getBalance.invalidate().catch((e) => console.log(e));
     }
-    if (isConfirmed && isEth) {
+    if (isConfirmed && useEth) {
       utils.user.getEthBalance.invalidate().catch((e) => console.log(e));
     }
   }, [
@@ -107,6 +107,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     isConfirmed,
     utils.user.getBalance,
     utils.user.getEthBalance,
+    useEth,
   ]);
 
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
