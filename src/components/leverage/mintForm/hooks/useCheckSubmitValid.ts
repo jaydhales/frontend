@@ -10,6 +10,7 @@ interface Props {
   tokenBalance: bigint | undefined;
   mintFetching: boolean;
   approveFetching: boolean;
+  useEth: boolean
 }
 export enum ESubmitType {
   "mint",
@@ -31,8 +32,16 @@ export const useCheckSubmitValid = ({
   mintFetching,
   approveFetching,
   tokenBalance,
+  useEth
 }: Props) => {
   const { isValid, errorMessage, submitType } = useMemo(() => {
+    if (useEth) {
+      return {
+        isValid: false,
+        errorMessage: "Enter amount greater than 0.",
+        submitType: ESubmitType.mint,
+      };
+    }
     if (parseUnits(deposit ?? "0", 18) <= 0n) {
       return {
         isValid: false,
@@ -94,14 +103,7 @@ export const useCheckSubmitValid = ({
         };
       }
     }
-  }, [
-    deposit,
-    tokenBalance,
-    tokenAllowance,
-    mintRequest,
-    approveWriteRequest,
-    approveFetching,
-    mintFetching,
-  ]);
+
+  }, [useEth, deposit, tokenBalance, tokenAllowance, mintRequest, approveWriteRequest, approveFetching, mintFetching]);
   return { isValid, errorMessage, submitType };
 };

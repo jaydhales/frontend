@@ -34,7 +34,7 @@ import { formatBigInt } from "@/lib/utils";
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
-  const [depositEth, setDepositEth] = useState(false);
+  const [useEth, setUseEth] = useState(false);
 
   const utils = api.useUtils();
   // const { tokenDeposits } = useSetDepositToken({ formData, form });
@@ -51,7 +51,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { data } = api.user.getBalance.useQuery(
     {
       userAddress: address,
-      tokenAddress: formDataInput(formData.long),
+      tokenAddress: formatDataInput(formData.long),
       spender: AssistantContract.address,
     },
     { enabled: Boolean(address) && Boolean(formData.long) },
@@ -64,19 +64,24 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   }, [formData.deposit]);
 
   /** ##MINT APE## */
-  const { data: mintData, isFetching: mintFetching } = useMintApe({
+  const {
+    Mint,
+    MintWithEth,
+    isFetching: mintFetching,
+  } = useMintApe({
     vaultId: findVault(vaultsQuery, formData),
-    debtToken: formDataInput(formData.versus), //value formatted : address,symbol
-    collateralToken: formDataInput(formData.long), //value formatted : address,symbol
+    debtToken: formatDataInput(formData.versus), //value formatted : address,symbol
+    collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
     leverageTier: leverageTier,
     amount: safeDeposit.success
       ? parseUnits(safeDeposit.data.toString() ?? "0", 18)
       : undefined,
     tokenAllowance: data?.tokenAllowance?.result,
+    useEth,
   });
 
   const approveWrite = useSimulateContract({
-    address: formData.depositToken as TAddressString,
+    address: formatDataInput(formData.long) as TAddressString,
     abi: erc20Abi,
     functionName: "approve",
     args: [
@@ -94,11 +99,12 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       utils.user.getBalance.invalidate().catch((e) => console.log(e));
     }
   }, [isConfirming, isConfirmed, utils.user.getBalance]);
-
+  console.log({useEth})
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
+    useEth,
     deposit: safeDeposit.success ? safeDeposit.data.toString() : "0",
     depositToken: formData.depositToken,
-    mintRequest: mintData?.request as
+    mintRequest: Mint?.request as
       | SimulateContractReturnType["request"]
       | undefined,
     approveWriteRequest: approveWrite.data?.request as
@@ -125,10 +131,13 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     if (submitType === null) {
       return;
     }
-
+    if (useEth && MintWithEth?.request) {
+      writeContract(MintWithEth?.request);
+      return;
+    }
     // CHECK ALLOWANCE
-    if (submitType === ESubmitType.mint && mintData?.request) {
-      writeContract?.(mintData?.request);
+    if (submitType === ESubmitType.mint && Mint?.request) {
+      writeContract?.(Mint?.request);
       return;
     }
     if (submitType === ESubmitType.approve && approveWrite.data?.request) {
@@ -156,6 +165,10 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
             <FormLabel htmlFor="deposit">Deposit:</FormLabel>
             <div className="pt-1"></div>
             <DepositInputs
+              useEth={useEth}
+              setUseEth={(b: boolean) => {
+                setUseEth(b);
+              }}
               balance={formatUnits(data?.tokenBalance?.result ?? 0n, 18)}
               form={form}
               depositAsset={formData.long}
@@ -196,7 +209,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     </Card>
   );
 }
-function formDataInput(s: string) {
+function formatDataInput(s: string) {
   return s.split(",")[0] ?? "";
 }
 // <SelectItem value="mint">Mint</SelectItem>
