@@ -18,7 +18,6 @@ export default function useSetRootError({
     if (
       errorMessage &&
       formData.deposit &&
-      formData.depositToken &&
       formData.leverageTier &&
       formData.long &&
       formData.versus
@@ -27,12 +26,5 @@ export default function useSetRootError({
     } else if (rootErrorMessage) {
       setError("root", { message: "" });
     }
-  }, [
-    errorMessage,
-    formData.deposit,
-    formData.depositToken,
-    formData.leverageTier,
-    formData.long,
-    formData.versus,
-  ]);
+  }, [errorMessage, formData.deposit, formData.depositToken, formData.leverageTier, formData.long, formData.versus, rootErrorMessage, setError]);
 }
