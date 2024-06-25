@@ -67,7 +67,18 @@ export function formatBigInt(b: bigint | undefined, fixed: number) {
   const parsed = Math.floor(parseFloat(formatUnits(b ?? 0n, 18)) * 10 ** fixed) / 10 ** fixed
   return parseFloat(parsed.toFixed(fixed));
 }
+
 const BASE_FEE = 0.5
+/**
+ * 
+ * @param k - Leverage Tier should be values -4 to 2   
+ * @returns number 
+ */
 export function calculateVaultFee(k: number) {
-  return k ** 2 * BASE_FEE / ((1 + k ** 2) * BASE_FEE);
+  const l = getLeverageRatio(k)
+  console.log(l)
+  console.log((1 + (l - 1) * BASE_FEE))
+  console.log(1 / (1 + (l - 1) * BASE_FEE))
+  const a = (1 / (1 + (l - 1) * BASE_FEE))
+  return ((1 * 10) - (a * 10)) / 10
 }

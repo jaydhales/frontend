@@ -15,7 +15,7 @@ test("Test calculate leverage tier ratio.", () => {
 });
 
 test("Test calculate leverage tier ratio.", () => {
-  expect(calculateVaultFee(0.5, 1.5)).toBe(0.2);
+  expect(calculateVaultFee(-1)).toBe(0.2);
 });
 test("Test if getApeAddress gets proper contract address.", () => {
   expect(
