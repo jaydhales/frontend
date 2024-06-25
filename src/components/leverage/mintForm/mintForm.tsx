@@ -1,9 +1,8 @@
 "use client";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Card } from "../../ui/card";
 import { Form, FormLabel } from "../../ui/form";
 import { Button } from "@/components/ui/button";
-import { useMintFormProvider } from "@/components/providers/mintFormProvider";
 import { api } from "@/trpc/react";
 import {
   useAccount,
@@ -12,7 +11,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
-import useSetDepositToken from "./hooks/useSetDepositToken";
+
 import type { SimulateContractReturnType } from "viem";
 import { erc20Abi, formatUnits, maxInt256, parseUnits } from "viem";
 import { useFormContext, type SubmitHandler } from "react-hook-form";
@@ -35,22 +34,15 @@ import { formatBigInt } from "@/lib/utils";
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
+  const [depositEth, setDepositEth] = useState(false);
 
   const utils = api.useUtils();
-  const { tokenDeposits } = useSetDepositToken({ formData, form });
+  // const { tokenDeposits } = useSetDepositToken({ formData, form });
 
   const { versus, leverageTiers, long } = useSelectMemo({
     formData,
     vaultsQuery,
   });
-
-  const tokenDepositSelects = useMemo(() => {
-    const values = Object.values(tokenDeposits);
-    return values.filter((e) => e?.value !== undefined) as {
-      value: string;
-      label: string;
-    }[];
-  }, [tokenDeposits]);
 
   const { address } = useAccount();
 
@@ -59,10 +51,10 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const { data } = api.user.getBalance.useQuery(
     {
       userAddress: address,
-      tokenAddress: formData.depositToken,
+      tokenAddress: formDataInput(formData.long),
       spender: AssistantContract.address,
     },
-    { enabled: Boolean(address) && Boolean(formData.depositToken) },
+    { enabled: Boolean(address) && Boolean(formData.long) },
   );
 
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
@@ -166,7 +158,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
             <DepositInputs
               balance={formatUnits(data?.tokenBalance?.result ?? 0n, 18)}
               form={form}
-              tokenDepositSelects={tokenDepositSelects}
+              depositAsset={formData.long}
             />
           </div>
           <Estimations

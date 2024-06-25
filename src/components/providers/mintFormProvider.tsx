@@ -1,3 +1,4 @@
+'use client'
 import type { TMintForm } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { createContext, useContext } from "react";
@@ -50,6 +51,5 @@ export default function MintFormProvider({
       depositToken: "",
     },
   });
-  console.log(form.getValues())
   return <FormProvider {...form}>{children}</FormProvider>;
 }
