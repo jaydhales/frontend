@@ -15,7 +15,7 @@ import { useSelectMemo } from "./hooks/useSelectMemo";
 import useSetDepositToken from "./hooks/useSetDepositToken";
 import type { SimulateContractReturnType } from "viem";
 import { erc20Abi, formatUnits, maxInt256, parseUnits } from "viem";
-import type { SubmitHandler } from "react-hook-form";
+import { useFormContext, type SubmitHandler } from "react-hook-form";
 import type { TAddressString, TMintFormFields, TVaults } from "@/lib/types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { z } from "zod";
@@ -33,7 +33,7 @@ import { formatBigInt } from "@/lib/utils";
 // TODO
 // Retrieve token decimals
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
-  const { form } = useMintFormProvider();
+  const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
 
   const utils = api.useUtils();
@@ -87,7 +87,10 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     address: formData.depositToken as TAddressString,
     abi: erc20Abi,
     functionName: "approve",
-    args: [AssistantContract.address, parseUnits(formatUnits(maxInt256, 18), 0)],
+    args: [
+      AssistantContract.address,
+      parseUnits(formatUnits(maxInt256, 18), 0),
+    ],
   });
 
   const { writeContract, data: hash, isPending } = useWriteContract();

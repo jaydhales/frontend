@@ -1,9 +1,10 @@
-import { useMintFormProvider } from "@/components/providers/mintFormProvider";
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import { calculateVaultFee, getLeverageRatio, getLogoAsset } from "@/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 import type { vaultsQuery } from "../../../../.graphclient";
 import Image from "next/image";
+import { useFormContext } from "react-hook-form";
+import type { TMintFormFields } from "@/lib/types";
 export function VaultTableRow({
   badgeVariant,
   pool,
@@ -12,25 +13,17 @@ export function VaultTableRow({
   number: string;
   pool: vaultsQuery["vaults"][0];
 }) {
-  const { setVaultInputs } = useMintFormProvider();
+  const form = useFormContext<TMintFormFields>();
   const fee = calculateVaultFee(pool.leverageTier) * 100;
-
   return (
     <tr
       onClick={() => {
-        setVaultInputs({
-          debtSymbol: pool.debtSymbol,
-          debtToken: pool.debtToken,
-          collateralSymbol: pool.collateralSymbol,
-          collateralToken: pool.collateralToken,
-          leverageTier: pool.leverageTier,
-        });
-        // form.setValue("versus", pool.debtToken + "," + pool.debtSymbol);
-        // form.setValue(
-        //   "long",
-        //   pool.collateralToken + "," + pool.collateralSymbol,
-        // );
-        // form.setValue("leverageTier", pool.leverageTier.toString());
+        form.setValue("versus", pool.debtToken + "," + pool.debtSymbol);
+        form.setValue(
+          "long",
+          pool.collateralToken + "," + pool.collateralSymbol,
+        );
+        form.setValue("leverageTier", pool.leverageTier.toString());
       }}
       className="grid cursor-pointer grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
     >

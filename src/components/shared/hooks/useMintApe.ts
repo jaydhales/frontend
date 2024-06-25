@@ -26,28 +26,12 @@ export function useMintApe({
   tokenAllowance,
 }: Props) {
   const safeVaultId = z.coerce.number().safeParse(vaultId);
-  console.log(vaultId, "RAW VAULT ID")
   const apeAddress = getApeAddress({
     apeHash: APE_HASH,
     vaultAddress: VaultContract.address,
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
-  console.log({
-    address: AssistantContract.address,
-    functionName: "mint",
-    args: [
-      apeAddress,
-      parseUnits(vaultId?.toString() ?? "0", 0),
-      {
-        debtToken: debtToken as TAddressString,
-        collateralToken: collateralToken as TAddressString,
-        leverageTier,
-      },
-      amount ?? 0n,
-    ],
-  })
-  console.log(apeAddress)
-  const { data, error, refetch, isFetching } = useSimulateContract({
+  const { data, refetch, isFetching } = useSimulateContract({
     abi: AssistantContract.abi,
     address: AssistantContract.address,
     functionName: "mint",
@@ -62,7 +46,6 @@ export function useMintApe({
       amount ?? 0n,
     ],
   });
-  console.log({ error }, "Mint Error")
   useEffect(() => {
     refetch().catch((e) => console.log(e));
   }, [refetch, tokenAllowance]);

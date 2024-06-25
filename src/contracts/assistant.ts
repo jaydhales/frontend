@@ -1,477 +1,576 @@
+import type { TAddressString } from "@/lib/types"
+
 export const AssistantContract = {
-  address: "0xE55cc27460B55c8aC7E73043F38b537758C9E51e" as `0x${string}`,
-  abi: [
+  address: '0x701dC26AcaD119E892695bb6A06956e2165C2052' as TAddressString, abi: [
     {
-      inputs: [
+      "type": "constructor",
+      "inputs": [
         {
-          internalType: "address",
-          name: "swapRouter_",
-          type: "address",
+          "name": "swapRouter_",
+          "type": "address",
+          "internalType": "address"
         },
         {
-          internalType: "address",
-          name: "vault_",
-          type: "address",
+          "name": "vault_",
+          "type": "address",
+          "internalType": "address"
         },
+        {
+          "name": "hashCreationCodeAPE",
+          "type": "bytes32",
+          "internalType": "bytes32"
+        }
       ],
-      stateMutability: "nonpayable",
-      type: "constructor",
+      "stateMutability": "nonpayable"
     },
     {
-      inputs: [],
-      name: "VaultDoesNotExist",
-      type: "error",
+      "type": "function",
+      "name": "HASH_CREATION_CODE_APE",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32",
+          "internalType": "bytes32"
+        }
+      ],
+      "stateMutability": "view"
     },
     {
-      inputs: [
+      "type": "function",
+      "name": "SWAP_ROUTER",
+      "inputs": [],
+      "outputs": [
         {
-          internalType: "address",
-          name: "ape",
-          type: "address",
-        },
-        {
-          internalType: "uint256",
-          name: "vaultId",
-          type: "uint256",
-        },
-        {
-          components: [
-            {
-              internalType: "address",
-              name: "debtToken",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "collateralToken",
-              type: "address",
-            },
-            {
-              internalType: "int8",
-              name: "leverageTier",
-              type: "int8",
-            },
-          ],
-          internalType: "struct VaultStructs.VaultParameters",
-          name: "vaultParams",
-          type: "tuple",
-        },
-        {
-          internalType: "uint256",
-          name: "amountTokens",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256",
-          name: "minDebtToken",
-          type: "uint256",
-        },
-        {
-          internalType: "uint24",
-          name: "uniswapFeeTier",
-          type: "uint24",
-        },
+          "name": "",
+          "type": "address",
+          "internalType": "contract ISwapRouter"
+        }
       ],
-      name: "burnAndSwap",
-      outputs: [
-        {
-          internalType: "uint256",
-          name: "amountDebtToken",
-          type: "uint256",
-        },
-      ],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "view"
     },
     {
-      inputs: [
+      "type": "function",
+      "name": "VAULT",
+      "inputs": [],
+      "outputs": [
         {
-          internalType: "address",
-          name: "ape",
-          type: "address",
-        },
-        {
-          internalType: "uint256",
-          name: "vaultId",
-          type: "uint256",
-        },
-        {
-          components: [
-            {
-              internalType: "address",
-              name: "debtToken",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "collateralToken",
-              type: "address",
-            },
-            {
-              internalType: "int8",
-              name: "leverageTier",
-              type: "int8",
-            },
-          ],
-          internalType: "struct VaultStructs.VaultParameters",
-          name: "vaultParams",
-          type: "tuple",
-        },
-        {
-          internalType: "uint144",
-          name: "amountCollateral",
-          type: "uint144",
-        },
+          "name": "",
+          "type": "address",
+          "internalType": "contract Vault"
+        }
       ],
-      name: "mint",
-      outputs: [
-        {
-          internalType: "uint256",
-          name: "amountTokens",
-          type: "uint256",
-        },
-      ],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "view"
     },
     {
-      inputs: [
+      "type": "function",
+      "name": "burnAndSwap",
+      "inputs": [
         {
-          internalType: "address",
-          name: "",
-          type: "address",
+          "name": "ape",
+          "type": "address",
+          "internalType": "address"
         },
         {
-          internalType: "address",
-          name: "",
-          type: "address",
+          "name": "vaultId",
+          "type": "uint256",
+          "internalType": "uint256"
         },
         {
-          internalType: "uint256[]",
-          name: "",
-          type: "uint256[]",
+          "name": "vaultParams",
+          "type": "tuple",
+          "internalType": "struct VaultStructs.VaultParameters",
+          "components": [
+            {
+              "name": "debtToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "collateralToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "leverageTier",
+              "type": "int8",
+              "internalType": "int8"
+            }
+          ]
         },
         {
-          internalType: "uint256[]",
-          name: "",
-          type: "uint256[]",
+          "name": "amountTokens",
+          "type": "uint256",
+          "internalType": "uint256"
         },
         {
-          internalType: "bytes",
-          name: "",
-          type: "bytes",
+          "name": "minDebtToken",
+          "type": "uint256",
+          "internalType": "uint256"
         },
+        {
+          "name": "uniswapFeeTier",
+          "type": "uint24",
+          "internalType": "uint24"
+        }
       ],
-      name: "onERC1155BatchReceived",
-      outputs: [
+      "outputs": [
         {
-          internalType: "bytes4",
-          name: "",
-          type: "bytes4",
-        },
+          "name": "amountDebtToken",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
       ],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "nonpayable"
     },
     {
-      inputs: [
+      "type": "function",
+      "name": "getAddressAPE",
+      "inputs": [
         {
-          internalType: "address",
-          name: "",
-          type: "address",
+          "name": "deployer",
+          "type": "address",
+          "internalType": "address"
         },
         {
-          internalType: "address",
-          name: "",
-          type: "address",
-        },
-        {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
-        {
-          internalType: "bytes",
-          name: "",
-          type: "bytes",
-        },
+          "name": "vaultId",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
       ],
-      name: "onERC1155Received",
-      outputs: [
+      "outputs": [
         {
-          internalType: "bytes4",
-          name: "",
-          type: "bytes4",
-        },
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
       ],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "view"
     },
     {
-      inputs: [
+      "type": "function",
+      "name": "mint",
+      "inputs": [
         {
-          components: [
-            {
-              internalType: "address",
-              name: "debtToken",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "collateralToken",
-              type: "address",
-            },
-            {
-              internalType: "int8",
-              name: "leverageTier",
-              type: "int8",
-            },
-          ],
-          internalType: "struct VaultStructs.VaultParameters",
-          name: "vaultParams",
-          type: "tuple",
+          "name": "ape",
+          "type": "address",
+          "internalType": "address"
         },
+        {
+          "name": "vaultId",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "vaultParams",
+          "type": "tuple",
+          "internalType": "struct VaultStructs.VaultParameters",
+          "components": [
+            {
+              "name": "debtToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "collateralToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "leverageTier",
+              "type": "int8",
+              "internalType": "int8"
+            }
+          ]
+        },
+        {
+          "name": "amountCollateral",
+          "type": "uint144",
+          "internalType": "uint144"
+        }
       ],
-      name: "priceOfAPE",
-      outputs: [
+      "outputs": [
         {
-          internalType: "uint256",
-          name: "num",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256",
-          name: "den",
-          type: "uint256",
-        },
+          "name": "amountTokens",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "stateMutability": "nonpayable"
     },
     {
-      inputs: [
+      "type": "function",
+      "name": "mintWithETH",
+      "inputs": [
         {
-          components: [
-            {
-              internalType: "address",
-              name: "debtToken",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "collateralToken",
-              type: "address",
-            },
-            {
-              internalType: "int8",
-              name: "leverageTier",
-              type: "int8",
-            },
-          ],
-          internalType: "struct VaultStructs.VaultParameters",
-          name: "vaultParams",
-          type: "tuple",
+          "name": "ape",
+          "type": "address",
+          "internalType": "address"
         },
+        {
+          "name": "vaultId",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "vaultParams",
+          "type": "tuple",
+          "internalType": "struct VaultStructs.VaultParameters",
+          "components": [
+            {
+              "name": "debtToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "collateralToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "leverageTier",
+              "type": "int8",
+              "internalType": "int8"
+            }
+          ]
+        }
       ],
-      name: "priceOfTEA",
-      outputs: [
+      "outputs": [
         {
-          internalType: "uint256",
-          name: "num",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256",
-          name: "den",
-          type: "uint256",
-        },
+          "name": "amountTokens",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "stateMutability": "payable"
     },
     {
-      inputs: [
+      "type": "function",
+      "name": "onERC1155BatchReceived",
+      "inputs": [
         {
-          internalType: "bool",
-          name: "isAPE",
-          type: "bool",
+          "name": "",
+          "type": "address",
+          "internalType": "address"
         },
         {
-          components: [
-            {
-              internalType: "address",
-              name: "debtToken",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "collateralToken",
-              type: "address",
-            },
-            {
-              internalType: "int8",
-              name: "leverageTier",
-              type: "int8",
-            },
-          ],
-          internalType: "struct VaultStructs.VaultParameters",
-          name: "vaultParams",
-          type: "tuple",
+          "name": "",
+          "type": "address",
+          "internalType": "address"
         },
         {
-          internalType: "uint256",
-          name: "amountTokens",
-          type: "uint256",
+          "name": "",
+          "type": "uint256[]",
+          "internalType": "uint256[]"
         },
+        {
+          "name": "",
+          "type": "uint256[]",
+          "internalType": "uint256[]"
+        },
+        {
+          "name": "",
+          "type": "bytes",
+          "internalType": "bytes"
+        }
       ],
-      name: "quoteBurn",
-      outputs: [
+      "outputs": [
         {
-          internalType: "uint144",
-          name: "amountCollateral",
-          type: "uint144",
-        },
+          "name": "",
+          "type": "bytes4",
+          "internalType": "bytes4"
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "stateMutability": "nonpayable"
     },
     {
-      inputs: [
+      "type": "function",
+      "name": "onERC1155Received",
+      "inputs": [
         {
-          internalType: "bool",
-          name: "isAPE",
-          type: "bool",
+          "name": "",
+          "type": "address",
+          "internalType": "address"
         },
         {
-          components: [
-            {
-              internalType: "address",
-              name: "debtToken",
-              type: "address",
-            },
-            {
-              internalType: "address",
-              name: "collateralToken",
-              type: "address",
-            },
-            {
-              internalType: "int8",
-              name: "leverageTier",
-              type: "int8",
-            },
-          ],
-          internalType: "struct VaultStructs.VaultParameters",
-          name: "vaultParams",
-          type: "tuple",
+          "name": "",
+          "type": "address",
+          "internalType": "address"
         },
         {
-          internalType: "uint144",
-          name: "amountCollateral",
-          type: "uint144",
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
         },
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "",
+          "type": "bytes",
+          "internalType": "bytes"
+        }
       ],
-      name: "quoteMint",
-      outputs: [
+      "outputs": [
         {
-          internalType: "uint256",
-          name: "amountTokens",
-          type: "uint256",
-        },
+          "name": "",
+          "type": "bytes4",
+          "internalType": "bytes4"
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "stateMutability": "nonpayable"
     },
     {
-      inputs: [
+      "type": "function",
+      "name": "priceOfAPE",
+      "inputs": [
         {
-          internalType: "address",
-          name: "ape",
-          type: "address",
-        },
-        {
-          internalType: "uint256",
-          name: "vaultId",
-          type: "uint256",
-        },
-        {
-          components: [
+          "name": "vaultParams",
+          "type": "tuple",
+          "internalType": "struct VaultStructs.VaultParameters",
+          "components": [
             {
-              internalType: "address",
-              name: "debtToken",
-              type: "address",
+              "name": "debtToken",
+              "type": "address",
+              "internalType": "address"
             },
             {
-              internalType: "address",
-              name: "collateralToken",
-              type: "address",
+              "name": "collateralToken",
+              "type": "address",
+              "internalType": "address"
             },
             {
-              internalType: "int8",
-              name: "leverageTier",
-              type: "int8",
-            },
-          ],
-          internalType: "struct VaultStructs.VaultParameters",
-          name: "vaultParams",
-          type: "tuple",
-        },
-        {
-          internalType: "uint256",
-          name: "amountDebtToken",
-          type: "uint256",
-        },
-        {
-          internalType: "uint256",
-          name: "minCollateral",
-          type: "uint256",
-        },
-        {
-          internalType: "uint24",
-          name: "uniswapFeeTier",
-          type: "uint24",
-        },
+              "name": "leverageTier",
+              "type": "int8",
+              "internalType": "int8"
+            }
+          ]
+        }
       ],
-      name: "swapAndMint",
-      outputs: [
+      "outputs": [
         {
-          internalType: "uint256",
-          name: "amountTokens",
-          type: "uint256",
+          "name": "num",
+          "type": "uint256",
+          "internalType": "uint256"
         },
+        {
+          "name": "den",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
       ],
-      stateMutability: "nonpayable",
-      type: "function",
+      "stateMutability": "view"
     },
     {
-      inputs: [],
-      name: "swapRouter",
-      outputs: [
+      "type": "function",
+      "name": "priceOfTEA",
+      "inputs": [
         {
-          internalType: "contract ISwapRouter",
-          name: "",
-          type: "address",
-        },
+          "name": "vaultParams",
+          "type": "tuple",
+          "internalType": "struct VaultStructs.VaultParameters",
+          "components": [
+            {
+              "name": "debtToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "collateralToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "leverageTier",
+              "type": "int8",
+              "internalType": "int8"
+            }
+          ]
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "outputs": [
+        {
+          "name": "num",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "den",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
     },
     {
-      inputs: [],
-      name: "vault",
-      outputs: [
+      "type": "function",
+      "name": "quoteBurn",
+      "inputs": [
         {
-          internalType: "contract Vault",
-          name: "",
-          type: "address",
+          "name": "isAPE",
+          "type": "bool",
+          "internalType": "bool"
         },
+        {
+          "name": "vaultParams",
+          "type": "tuple",
+          "internalType": "struct VaultStructs.VaultParameters",
+          "components": [
+            {
+              "name": "debtToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "collateralToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "leverageTier",
+              "type": "int8",
+              "internalType": "int8"
+            }
+          ]
+        },
+        {
+          "name": "amountTokens",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
       ],
-      stateMutability: "view",
-      type: "function",
+      "outputs": [
+        {
+          "name": "amountCollateral",
+          "type": "uint144",
+          "internalType": "uint144"
+        }
+      ],
+      "stateMutability": "view"
     },
-  ] as const,
-};
+    {
+      "type": "function",
+      "name": "quoteMint",
+      "inputs": [
+        {
+          "name": "isAPE",
+          "type": "bool",
+          "internalType": "bool"
+        },
+        {
+          "name": "vaultParams",
+          "type": "tuple",
+          "internalType": "struct VaultStructs.VaultParameters",
+          "components": [
+            {
+              "name": "debtToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "collateralToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "leverageTier",
+              "type": "int8",
+              "internalType": "int8"
+            }
+          ]
+        },
+        {
+          "name": "amountCollateral",
+          "type": "uint144",
+          "internalType": "uint144"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "amountTokens",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "swapAndMint",
+      "inputs": [
+        {
+          "name": "ape",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "vaultId",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "vaultParams",
+          "type": "tuple",
+          "internalType": "struct VaultStructs.VaultParameters",
+          "components": [
+            {
+              "name": "debtToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "collateralToken",
+              "type": "address",
+              "internalType": "address"
+            },
+            {
+              "name": "leverageTier",
+              "type": "int8",
+              "internalType": "int8"
+            }
+          ]
+        },
+        {
+          "name": "amountDebtToken",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "minCollateral",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "uniswapFeeTier",
+          "type": "uint24",
+          "internalType": "uint24"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "amountTokens",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "error",
+      "name": "CollateralIsNotWETH",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "NoETHSent",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "VaultDoesNotExist",
+      "inputs": []
+    }
+  ] as const
+}

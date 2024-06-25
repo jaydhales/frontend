@@ -1,11 +1,10 @@
-import Dropdown from "@/components/shared/dropDown";
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { SelectItem } from "@/components/ui/select";
 import type { TMintForm } from "@/lib/types";
-import { getLogoAsset } from "@/lib/utils";
 import { BalancePercent } from "@/components/shared/balancePercent";
+
+import Select from "@/components/shared/Select";
+import { getLogoAsset } from "@/lib/utils";
 interface Props {
   form: TMintForm;
   tokenDepositSelects: {
@@ -52,7 +51,19 @@ export default function DepositInputs({
         <h2 className="pt-1 text-sm text-[#B6B6C9]">$22.55</h2>
       </div>
       <div>
-        <Dropdown
+        <Select
+          form={form}
+          items={tokenDepositSelects.map((e) => ({
+            label: e.label,
+            value: e.value.split(",")[0] ?? "",
+            imageUrl: getLogoAsset(
+              (e.value.split(",")[0] as `0x${string}`) ?? "0x",
+            ),
+          }))}
+          title={""}
+          name={"depositToken"}
+        ></Select>
+        {/* <Dropdown
           name="depositToken"
           colorScheme={"dark"}
           form={form}
@@ -82,7 +93,7 @@ export default function DepositInputs({
               </SelectItem>
             );
           })}
-        </Dropdown>
+        </Dropdown> */}
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
           Balance: {parseFloat(parseFloat(balance ?? "0").toFixed(6))}
         </h2>
