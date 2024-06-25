@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { multicall, readContract } from "@/lib/viemClient";
+import { getBalance, multicall, readContract } from "@/lib/viemClient";
 import { erc20Abi } from "viem";
 import { type TAddressString } from "@/lib/types";
 import { executeGetUserVaultsQuery } from "@/server/queries/vaults";
@@ -16,11 +16,10 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-
+      console.log(input, "INPUT")
       if (!input.tokenAddress || !input.userAddress || !input.spender) {
         return {};
       }
-
       const [balance, allowance] = await multicall({
         contracts: [
           {
@@ -46,6 +45,13 @@ export const userRouter = createTRPCRouter({
         tokenAllowance: allowance,
       };
     }),
+  getEthBalance: publicProcedure.input(z.object({ userAddress: z.string().startsWith('0x').length(42).optional() })).query(async ({ input }) => {
+    if (!input?.userAddress) {
+      throw new Error("No user address provided.")
+    }
+    const bal = await getBalance({ address: input.userAddress as TAddressString })
+    return bal
+  }),
   getApeBalance: publicProcedure
     .input(
       z.object({

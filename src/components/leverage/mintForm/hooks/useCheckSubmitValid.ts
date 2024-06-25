@@ -5,11 +5,14 @@ interface Props {
   deposit: string | undefined;
   depositToken: string;
   mintRequest: SimulateContractReturnType["request"] | undefined;
+  mintWithETHRequest: SimulateContractReturnType["request"] | undefined;
   approveWriteRequest: SimulateContractReturnType["request"] | undefined;
   tokenAllowance: bigint | undefined;
   tokenBalance: bigint | undefined;
+  ethBalance: bigint | undefined;
   mintFetching: boolean;
   approveFetching: boolean;
+  useEth: boolean
 }
 export enum ESubmitType {
   "mint",
@@ -30,7 +33,10 @@ export const useCheckSubmitValid = ({
   tokenAllowance,
   mintFetching,
   approveFetching,
+  mintWithETHRequest,
   tokenBalance,
+  ethBalance,
+  useEth
 }: Props) => {
   const { isValid, errorMessage, submitType } = useMemo(() => {
     if (parseUnits(deposit ?? "0", 18) <= 0n) {
@@ -40,7 +46,28 @@ export const useCheckSubmitValid = ({
         submitType: ESubmitType.mint,
       };
     }
+    if (useEth) {
+      if ((ethBalance ?? 0n) < parseUnits(deposit ?? "0", 18)) {
+        return {
+          isValid: false,
+          errorMessage: "Insufficient Balance.",
+          submitType: ESubmitType.mint,
+        };
+      }
 
+      if (mintWithETHRequest) {
+        return {
+          isValid: true,
+          errorMessage: "",
+          submitType: ESubmitType.mint,
+        };
+      }
+      return {
+        isValid: false,
+        errorMessage: "",
+        submitType: ESubmitType.mint,
+      };
+    }
     if ((tokenBalance ?? 0n) < parseUnits(deposit ?? "0", 18)) {
       return {
         isValid: false,
@@ -94,14 +121,7 @@ export const useCheckSubmitValid = ({
         };
       }
     }
-  }, [
-    deposit,
-    tokenBalance,
-    tokenAllowance,
-    mintRequest,
-    approveWriteRequest,
-    approveFetching,
-    mintFetching,
-  ]);
+
+  }, [deposit, useEth, tokenBalance, tokenAllowance, mintRequest, ethBalance, mintWithETHRequest, approveWriteRequest, approveFetching, mintFetching]);
   return { isValid, errorMessage, submitType };
 };

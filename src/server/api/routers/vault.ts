@@ -8,14 +8,8 @@ import { parseUnits } from "viem";
 import { z } from "zod";
 export const vaultRouter = createTRPCRouter({
   getVaults: publicProcedure.query(async ({ }) => {
-    try {
-      const vaults = await executeVaultsQuery();
-
-      return { vaults };
-    } catch (e) {
-      console.log(e, "ERROR");
-      return;
-    }
+    const vaults = await executeVaultsQuery();
+    return { vaults };
   }),
   getApeParams: publicProcedure
     .input(z.object({ address: z.string().startsWith("0x") }))
@@ -117,6 +111,7 @@ export const vaultRouter = createTRPCRouter({
             parseUnits(input.amount, 18),
           ],
         });
+        if (!quote) throw new Error("Quote mint failed.")
         return quote;
       } catch (e) {
 
