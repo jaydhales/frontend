@@ -67,7 +67,8 @@ export default function BurnForm({
   const utils = api.useUtils();
   useEffect(() => {
     if (receiptData) {
-      utils.user.getApeBalance.invalidate().catch((e) => {});
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      utils.user.getApeBalance.invalidate().catch((e) => {console.log(e)});
     }
   }, [receiptData, utils.user.getApeBalance]);
   const { data: burnData } = useBurnApe({
