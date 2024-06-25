@@ -48,7 +48,6 @@ export function getApeAddress({
   if (vaultId === undefined) {
     return "0xff" as TAddressString;
   }
-  console.log({ vaultId, vaultAddress, apeHash });
   const packed = encodePacked(
     ["bytes1", "bytes20", "bytes32", "bytes32"],
     ["0xff", vaultAddress, toHex(vaultId, { size: 32 }), apeHash],
@@ -70,6 +69,5 @@ export function formatBigInt(b: bigint | undefined, fixed: number) {
 }
 const BASE_FEE = 0.5
 export function calculateVaultFee(k: number) {
-  console.log(k);
   return k ** 2 * BASE_FEE / ((1 + k ** 2) * BASE_FEE);
 }
