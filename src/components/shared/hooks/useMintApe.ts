@@ -39,20 +39,18 @@ export function useMintApe({
     collateralToken: collateralToken as TAddressString,
     leverageTier
   }
-  const { data: Mint, refetch, isFetching } = useSimulateContract({
+  const { data: Mint, refetch, isFetching, error: mintError } = useSimulateContract({
     abi: AssistantContract.abi,
     address: AssistantContract.address,
-    functionName: useEth ? 'mintWithETH' : 'mint',
+    functionName: 'mint',
     args: [
       apeAddress,
       parseUnits(vaultId?.toString() ?? "0", 0),
-      {
-        ...vault
-      },
+      { ...vault },
       amount ?? 0n,
     ],
   });
-  const { data: MintWithEth, } = useSimulateContract({
+  const { data: MintWithEth, error: mintWithETHError } = useSimulateContract({
     ...AssistantContract,
     functionName: 'mintWithETH',
     args: [apeAddress, parseUnits(vaultId?.toString() ?? '0', 0), { ...vault }],
@@ -62,6 +60,6 @@ export function useMintApe({
   useEffect(() => {
     refetch().catch((e) => console.log(e));
   }, [refetch, tokenAllowance]);
-
+  console.log({ Mint, MintWithEth, isFetching, mintWithETHError, mintError })
   return { Mint, MintWithEth, isFetching, };
 }
