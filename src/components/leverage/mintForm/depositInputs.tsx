@@ -52,36 +52,36 @@ export default function DepositInputs({
             </FormItem>
           )}
         />
-        <h2 className="pt-1 text-sm text-[#B6B6C9]">$22.55</h2>
+
+        <div className="">
+          {depositAsset?.split(",")[0] === WETH_ADDRESS && (
+            <div className="flex items-center gap-x-2 pt-1">
+              <h3 className="text-[12px]">Use ETH</h3>
+              <Switch
+                checked={useEth}
+                onCheckedChange={() => {
+                  setUseEth(!useEth);
+                }}
+                aria-readonly
+              />
+            </div>
+          )}
+        </div>
+        {/* <h2 className="pt-1 text-sm text-[#B6B6C9]">$22.55</h2> */}
       </div>
 
-      <div>
+      <div className="flex flex-col items-end">
         <h2 className="pb-2 text-sm">Deposit Asset:</h2>
         <div
-          className={`flex items-center gap-x-2 rounded-md bg-secondary p-2 ${!depositAsset ? "opacity-70" : ""}`}
+          className={`flex w-[104px] items-center justify-center gap-x-2 rounded-md bg-secondary py-1 ${!depositAsset ? "opacity-70" : ""}`}
         >
           {!depositAsset && <div className="h-[25px] w-[25px]"></div>}
           <AssetInfo depositAsset={depositAsset} useEth={useEth} />
         </div>
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-          Balance: {parseFloat(parseFloat(balance ?? "0").toFixed(6))}
+          Balance: {parseFloat(parseFloat(balance ?? "0").toFixed(4))}
         </h2>
-        <div className="flex justify-end">
-          <div className="">
-            {depositAsset?.split(",")[0] === WETH_ADDRESS && (
-              <div className="flex items-center gap-x-2 pt-1">
-                <h3 className="text-[12px]">Use ETH</h3>
-                <Switch
-                  checked={useEth}
-                  onCheckedChange={() => {
-                    setUseEth(!useEth);
-                  }}
-                  aria-readonly
-                />
-              </div>
-            )}
-          </div>
-        </div>
+        <div className="flex justify-end"></div>
         <BalancePercent
           balance={balance}
           setValue={(s: string) => {
@@ -98,7 +98,7 @@ function AssetInfo({
   depositAsset,
 }: {
   useEth: boolean;
-  depositAsset: string;
+  depositAsset: string | undefined;
 }) {
   if (useEth) {
     return (
