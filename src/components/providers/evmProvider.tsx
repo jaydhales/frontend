@@ -10,7 +10,7 @@ import { mainnet } from "wagmi/chains";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 const main = {
     ...mainnet,
-    rpcUrls: { default: { http: ["http://140.82.62.189:8545/"] } },
+    rpcUrls: { default: { http: ["/api/rpc"] } },
     id: 1,
 };
 
