@@ -13,8 +13,8 @@ export function useQuoteMint({ formData }: { formData: TMintFormFields }) {
   const { data: quoteData } = api.vault.quoteMint.useQuery(
     {
       amount: depositDebounce,
-      collateralToken: formData.versus.split(",")[0],
-      debtToken: formData.long.split(",")[0],
+      collateralToken: formData.long.split(",")[0],
+      debtToken: formData.versus.split(",")[0],
       leverageTier: parseInt(formData.leverageTier),
     },
     { enabled: allSelected },
