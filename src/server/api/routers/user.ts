@@ -16,7 +16,7 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-      console.log(input, "INPUT")
+      console.log(input, "INPUT");
       if (!input.tokenAddress || !input.userAddress || !input.spender) {
         return {};
       }
@@ -45,13 +45,21 @@ export const userRouter = createTRPCRouter({
         tokenAllowance: allowance,
       };
     }),
-  getEthBalance: publicProcedure.input(z.object({ userAddress: z.string().startsWith('0x').length(42).optional() })).query(async ({ input }) => {
-    if (!input?.userAddress) {
-      throw new Error("No user address provided.")
-    }
-    const bal = await getBalance({ address: input.userAddress as TAddressString })
-    return bal
-  }),
+  getEthBalance: publicProcedure
+    .input(
+      z.object({
+        userAddress: z.string().startsWith("0x").length(42).optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      if (!input?.userAddress) {
+        throw new Error("No user address provided.");
+      }
+      const bal = await getBalance({
+        address: input.userAddress as TAddressString,
+      });
+      return bal;
+    }),
   getApeBalance: publicProcedure
     .input(
       z.object({
@@ -72,11 +80,13 @@ export const userRouter = createTRPCRouter({
 
       return result;
     }),
+
   getPositions: publicProcedure
     .input(
       z.object({ address: z.string().startsWith("0x").length(42).optional() }),
     )
     .query(async ({ input }) => {
+      console.log({ input });
       if (!input.address) {
         return;
       }
