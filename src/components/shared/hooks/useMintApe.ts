@@ -15,7 +15,6 @@ interface Props {
   tokenAllowance: bigint | undefined;
   leverageTier: number;
   vaultId: string | undefined;
-  useEth: boolean
 }
 
 export function useMintApe({
@@ -25,24 +24,28 @@ export function useMintApe({
   amount,
   vaultId,
   tokenAllowance,
-  useEth
 }: Props) {
   const safeVaultId = z.coerce.number().safeParse(vaultId);
+  console.log({ safeVaultId });
   const apeAddress = getApeAddress({
     apeHash: APE_HASH,
     vaultAddress: VaultContract.address,
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
-  const vault =
-  {
+  const vault = {
     debtToken: debtToken as TAddressString,
     collateralToken: collateralToken as TAddressString,
-    leverageTier
-  }
-  const { data: Mint, refetch, isFetching, error: mintError } = useSimulateContract({
+    leverageTier,
+  };
+  const {
+    data: Mint,
+    refetch,
+    isFetching,
+    error: mintError,
+  } = useSimulateContract({
     abi: AssistantContract.abi,
     address: AssistantContract.address,
-    functionName: 'mint',
+    functionName: "mint",
     args: [
       apeAddress,
       parseUnits(vaultId?.toString() ?? "0", 0),
@@ -52,14 +55,14 @@ export function useMintApe({
   });
   const { data: MintWithEth, error: mintWithETHError } = useSimulateContract({
     ...AssistantContract,
-    functionName: 'mintWithETH',
-    args: [apeAddress, parseUnits(vaultId?.toString() ?? '0', 0), { ...vault }],
-    value: amount ?? 0n
-  })
+    functionName: "mintWithETH",
+    args: [apeAddress, parseUnits(vaultId?.toString() ?? "0", 0), { ...vault }],
+    value: amount ?? 0n,
+  });
 
   useEffect(() => {
     refetch().catch((e) => console.log(e));
   }, [refetch, tokenAllowance]);
-  console.log({ Mint, MintWithEth, isFetching, mintWithETHError, mintError })
-  return { Mint, MintWithEth, isFetching, };
+  console.log({ Mint, MintWithEth, isFetching, mintWithETHError, mintError });
+  return { Mint, MintWithEth, isFetching };
 }

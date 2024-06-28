@@ -81,7 +81,6 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       ? parseUnits(safeDeposit.data.toString() ?? "0", 18)
       : undefined,
     tokenAllowance: userBalance?.tokenAllowance?.result,
-    useEth,
   });
 
   const approveWrite = useSimulateContract({
@@ -194,11 +193,12 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
               depositAsset={formData.long}
             />
           </div>
+
           <Estimations
             disabled={!Boolean(quoteData)}
             ape={formatBigInt(quoteData, 4).toString()}
           />
-          <div className="flex flex-col items-center justify-center gap-y-2">
+          <div className=" flex-col flex items-center justify-center gap-y-2">
             {/* TODO */}
             {/* Dont set size w-[450px] on all elements. */}
             <p className="w-[450px] pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
@@ -238,6 +238,8 @@ function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
     collateralToken = formData.long.split(",")[0] ?? ""; //value formatted : address,symbol
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
+  console.log({ vaultQuery, debtToken, collateralToken });
+
   return vaultQuery?.vaults.vaults.find((v) => {
     if (
       v.collateralToken === collateralToken &&
