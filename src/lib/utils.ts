@@ -78,9 +78,6 @@ const BASE_FEE = 0.5;
  */
 export function calculateVaultFee(k: number) {
   const l = getLeverageRatio(k);
-  console.log(l);
-  console.log(1 + (l - 1) * BASE_FEE);
-  console.log(1 / (1 + (l - 1) * BASE_FEE));
   const a = 1 / (1 + (l - 1) * BASE_FEE);
   return (1 * 10 - a * 10) / 10;
 }
