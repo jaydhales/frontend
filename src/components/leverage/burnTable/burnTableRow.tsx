@@ -20,10 +20,20 @@ export default function BurnTableRow({
   leverageTier,
 }: Props) {
   const { address } = useAccount();
-  const { data } = api.user.getApeBalance.useQuery({
-    address: apeAddress,
-    user: address,
-  });
+
+  const { data } = api.user.getApeBalance.useQuery(
+    {
+      address: apeAddress,
+      user: address,
+    },
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60,
+      // enabled: false,
+    },
+  );
+
   return (
     <tr className="grid grid-cols-5 items-center text-left text-gray text-white">
       <th>{apeAddress.slice(0, 5) + "..." + apeAddress.slice(-4)}</th>
