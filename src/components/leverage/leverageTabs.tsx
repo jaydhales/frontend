@@ -9,6 +9,7 @@ import BurnTable from "./burnTable/burnTable";
 import MintFormProvider from "../providers/mintFormProvider";
 import type { TVaults } from "@/lib/types";
 import BurnTableProvider from "../providers/burnTableProvider";
+import Pagination from "../shared/pagination";
 
 export default function LeverageTabs({
   vaultsQuery,
@@ -31,7 +32,10 @@ export default function LeverageTabs({
               <MintFormProvider>
                 <MintForm vaultsQuery={vaultsQuery} />
                 <Card>
-                  <VaultTable vaultQuery={vaultsQuery} />
+                  <div className="flex h-full flex-col justify-between">
+                    <VaultTable vaultQuery={vaultsQuery} />
+                    <Pagination />
+                  </div>
                 </Card>
               </MintFormProvider>
             </div>
