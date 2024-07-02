@@ -7,6 +7,8 @@ import VaultTable from "./vaultTable/vaultTable";
 import BurnTable from "./burnTable/burnTable";
 import MintFormProvider from "../providers/mintFormProvider";
 import type { TVaults } from "@/lib/types";
+import BurnTableProvider from "../providers/burnTableProvider";
+import Pagination from "../shared/pagination";
 
 export default function MintTabs({
   vaultsQuery,
@@ -18,35 +20,39 @@ export default function MintTabs({
   isApe: boolean;
 }) {
   return (
-    <Tabs defaultValue="mint">
-      <div className="flex justify-center">
-        <TabsList defaultValue={"mint"}>
-          <TabsTrigger value={"mint"}>Mint</TabsTrigger>
-          <TabsTrigger value={"burn"}>Burn</TabsTrigger>
-        </TabsList>
-      </div>
-      <br />
-      <TabsContent value="mint">
-        <Container>
-          <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
-            <MintFormProvider>
-              {form}
-              <Card>
-                <VaultTable vaultQuery={vaultsQuery} />
-              </Card>
-            </MintFormProvider>
-          </div>
-        </Container>
-      </TabsContent>
-
-      {/*  */}
-      <TabsContent value="burn">
-        <Container>
-          <Card>
-            <BurnTable isApe={isApe} />
-          </Card>
-        </Container>
-      </TabsContent>
-    </Tabs>
+    <BurnTableProvider>
+      <Tabs defaultValue="mint">
+        <div className="flex justify-center">
+          <TabsList defaultValue={"mint"}>
+            <TabsTrigger value={"mint"}>Mint</TabsTrigger>
+            <TabsTrigger value={"burn"}>Burn</TabsTrigger>
+          </TabsList>
+        </div>
+        <br />
+        <TabsContent value="mint">
+          <Container>
+            <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
+              <MintFormProvider>
+                <MintForm vaultsQuery={vaultsQuery} />
+                <Card>
+                  <div className="flex h-full flex-col justify-between">
+                    <VaultTable vaultQuery={vaultsQuery} />
+                    <Pagination />
+                  </div>
+                </Card>
+              </MintFormProvider>
+            </div>
+          </Container>
+        </TabsContent>
+        {/*  */}
+        <TabsContent value="burn">
+          <Container>
+            <Card>
+              <BurnTable />
+            </Card>
+          </Container>
+        </TabsContent>
+      </Tabs>
+    </BurnTableProvider>
   );
 }
