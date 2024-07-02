@@ -21,11 +21,13 @@ import { Section } from "./section";
 const BurnSchema = z.object({
   deposit: z.string().optional(),
 });
+
 export type TBurnForm = UseFormReturn<
   { deposit?: string | undefined },
   undefined
 >;
 export type TBurnFields = { deposit?: string | undefined };
+
 export default function BurnForm({
   address,
   balance,
@@ -76,6 +78,7 @@ export default function BurnForm({
       });
     }
   }, [receiptData, utils.user.getApeBalance]);
+
   const { data: burnData } = useBurnApe({
     data,
     apeAddress: address ?? "0x",
