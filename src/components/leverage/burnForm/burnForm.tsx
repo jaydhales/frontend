@@ -28,9 +28,11 @@ export type TBurnFields = { deposit?: string | undefined };
 export default function BurnForm({
   address,
   balance,
+  collateralSymbol,
 }: {
   address: undefined | TAddressString;
   balance: bigint | undefined;
+  collateralSymbol: string;
 }) {
   const form = useForm<z.infer<typeof BurnSchema>>({
     resolver: zodResolver(BurnSchema),
@@ -68,7 +70,9 @@ export default function BurnForm({
   useEffect(() => {
     if (receiptData) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      utils.user.getApeBalance.invalidate().catch((e) => {console.log(e)});
+      utils.user.getApeBalance.invalidate().catch((e) => {
+        console.log(e);
+      });
     }
   }, [receiptData, utils.user.getApeBalance]);
   const { data: burnData } = useBurnApe({
@@ -102,7 +106,12 @@ export default function BurnForm({
             </label>
           </div>
 
-          <SectionTwo data={data} amount={quoteBurn} bg="" />
+          <SectionTwo
+            data={data}
+            amount={quoteBurn}
+            collateralSymbol={collateralSymbol}
+            bg=""
+          />
           <div className="pt-2"></div>
           <div className="flex justify-center">
             <h4 className="w-[400px] text-center text-sm italic text-gray">
