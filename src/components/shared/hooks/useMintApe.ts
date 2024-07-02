@@ -18,8 +18,8 @@ interface Props {
 }
 
 export function useMintApe({
-  debtToken,
   collateralToken,
+  debtToken,
   leverageTier,
   amount,
   vaultId,
@@ -31,6 +31,7 @@ export function useMintApe({
     vaultAddress: VaultContract.address,
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
+  console.log(apeAddress);
   const vault = {
     debtToken: debtToken as TAddressString,
     collateralToken: collateralToken as TAddressString,

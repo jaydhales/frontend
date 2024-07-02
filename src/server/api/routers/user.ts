@@ -3,7 +3,8 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { getBalance, multicall, readContract } from "@/lib/viemClient";
 import { erc20Abi } from "viem";
-import { UserQuery, type TAddressString } from "@/lib/types";
+import type { UserQuery } from "@/lib/types";
+import { type TAddressString } from "@/lib/types";
 import { executeGetUserVaultsQuery } from "@/server/queries/vaults";
 
 export const userRouter = createTRPCRouter({
@@ -20,6 +21,7 @@ export const userRouter = createTRPCRouter({
       if (!input.tokenAddress || !input.userAddress || !input.spender) {
         return {};
       }
+
       const [balance, allowance] = await multicall({
         contracts: [
           {
