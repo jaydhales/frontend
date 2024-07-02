@@ -1,11 +1,11 @@
 import { X } from "lucide-react";
 import BurnTableHeaders from "./burnTableHeader";
-import BurnForm from "../burnForm/burnForm";
 import type { TAddressString, TBurnRow } from "@/lib/types";
 
 import { useAccount } from "wagmi";
 import { api } from "@/trpc/react";
 import { formatBigInt, getLeverageRatio } from "@/lib/utils";
+import BurnForm from "../burnForm/burnForm";
 
 export default function SelectedRow({
   params,
