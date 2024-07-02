@@ -8,6 +8,7 @@ import VaultTable from "./vaultTable/vaultTable";
 import BurnTable from "./burnTable/burnTable";
 import MintFormProvider from "../providers/mintFormProvider";
 import type { TVaults } from "@/lib/types";
+import BurnTableProvider from "../providers/burnTableProvider";
 
 export default function LeverageTabs({
   vaultsQuery,
@@ -15,34 +16,36 @@ export default function LeverageTabs({
   vaultsQuery: TVaults;
 }) {
   return (
-    <Tabs defaultValue="mint">
-      <div className="flex justify-center">
-        <TabsList defaultValue={"mint"}>
-          <TabsTrigger value={"mint"}>Mint</TabsTrigger>
-          <TabsTrigger value={"burn"}>Burn</TabsTrigger>
-        </TabsList>
-      </div>
-      <br />
-      <TabsContent value="mint">
-        <Container>
-          <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
-            <MintFormProvider>
-              <MintForm vaultsQuery={vaultsQuery} />
-              <Card>
-                <VaultTable vaultQuery={vaultsQuery} />
-              </Card>
-            </MintFormProvider>
-          </div>
-        </Container>
-      </TabsContent>
-      {/*  */}
-      <TabsContent value="burn">
-        <Container>
-          <Card>
-            <BurnTable />
-          </Card>
-        </Container>
-      </TabsContent>
-    </Tabs>
+    <BurnTableProvider>
+      <Tabs defaultValue="mint">
+        <div className="flex justify-center">
+          <TabsList defaultValue={"mint"}>
+            <TabsTrigger value={"mint"}>Mint</TabsTrigger>
+            <TabsTrigger value={"burn"}>Burn</TabsTrigger>
+          </TabsList>
+        </div>
+        <br />
+        <TabsContent value="mint">
+          <Container>
+            <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
+              <MintFormProvider>
+                <MintForm vaultsQuery={vaultsQuery} />
+                <Card>
+                  <VaultTable vaultQuery={vaultsQuery} />
+                </Card>
+              </MintFormProvider>
+            </div>
+          </Container>
+        </TabsContent>
+        {/*  */}
+        <TabsContent value="burn">
+          <Container>
+            <Card>
+              <BurnTable />
+            </Card>
+          </Container>
+        </TabsContent>
+      </Tabs>
+    </BurnTableProvider>
   );
 }

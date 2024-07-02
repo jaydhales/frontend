@@ -1,10 +1,10 @@
-import { formatBigInt, getAssetInfo, getLogoAsset } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
+import { formatBigInt, getLogoAsset } from "@/lib/utils";
 import Image from "next/image";
 export function SectionTwo({
   bg,
   data,
   amount,
+  collateralSymbol,
 }: {
   bg: string;
   amount: bigint | undefined;
@@ -15,12 +15,8 @@ export function SectionTwo({
         collateralToken: `0x${string}` | undefined;
       }
     | undefined;
+  collateralSymbol: string | undefined;
 }) {
-  const { data: assetData } = useQuery({
-    queryFn: () => getAssetInfo(data?.collateralToken),
-    queryKey: [data?.collateralToken],
-  });
-
   return (
     <div className={`w-full  rounded-md ${bg} `}>
       <div className="flex items-end justify-between">
@@ -36,11 +32,24 @@ export function SectionTwo({
                 width={28}
                 height={28}
               />
-              <h3>{assetData?.success ? assetData?.data?.symbol : "?"}</h3>
+              <h3>{collateralSymbol}</h3>
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-end justify-between pt-1">
+        <span className="text-sm font-medium text-gray">$22.44</span>
+        {/* <span className="text-sm italic text-gray">Balance $232.23</span> */}
+      </div>
+    </div>
+  );
+}
 
-            {/* KEEP FOR FUTURE */}
-            {/* <div className="flex-grow">
+{
+  /* KEEP FOR FUTURE */
+}
+{
+  /* <div className="flex-grow">
               <FormField
                 control={form.control}
                 name="token"
@@ -70,14 +79,5 @@ export function SectionTwo({
                   </FormItem>
                 )}
               />
-            </div> */}
-          </div>
-        </div>
-      </div>
-      <div className="flex items-end justify-between pt-1">
-        <span className="text-sm font-medium text-gray">$22.44</span>
-        {/* <span className="text-sm italic text-gray">Balance $232.23</span> */}
-      </div>
-    </div>
-  );
+            </div> */
 }

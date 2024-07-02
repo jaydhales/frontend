@@ -1,31 +1,8 @@
-'use client'
-import type { TMintForm } from "@/lib/types";
+"use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { createContext, useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-type Tinputs = {
-  collateralToken: string;
-  debtToken: string;
-  debtSymbol: string;
-  collateralSymbol: string;
-  leverageTier: number;
-};
-interface state {
-  form: TMintForm;
-  setVaultInputs: (inputs: Tinputs) => void;
-}
-
-const MintFormProviderContext = createContext<state | undefined>(undefined);
-export function useMintFormProvider() {
-  const context = useContext(MintFormProviderContext);
-  if (context === undefined) {
-    throw new Error(
-      "useMintFormProvider must be used within a MintFormProvider",
-    );
-  }
-  return context;
-}
+import MintFormProviderApi from "./mintFormProviderApi";
 
 const MintSchema = z.object({
   long: z.string(),
@@ -51,5 +28,11 @@ export default function MintFormProvider({
       depositToken: "",
     },
   });
-  return <FormProvider {...form}>{children}</FormProvider>;
+  return (
+    <FormProvider {...form}>
+      <MintFormProviderApi setValue={form.setValue}>
+        {children}
+      </MintFormProviderApi>
+    </FormProvider>
+  );
 }

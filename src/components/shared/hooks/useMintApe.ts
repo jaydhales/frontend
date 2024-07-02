@@ -18,20 +18,20 @@ interface Props {
 }
 
 export function useMintApe({
-  debtToken,
   collateralToken,
+  debtToken,
   leverageTier,
   amount,
   vaultId,
   tokenAllowance,
 }: Props) {
   const safeVaultId = z.coerce.number().safeParse(vaultId);
-  console.log({ safeVaultId });
   const apeAddress = getApeAddress({
     apeHash: APE_HASH,
     vaultAddress: VaultContract.address,
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
+  console.log(apeAddress);
   const vault = {
     debtToken: debtToken as TAddressString,
     collateralToken: collateralToken as TAddressString,
@@ -41,7 +41,6 @@ export function useMintApe({
     data: Mint,
     refetch,
     isFetching,
-    error: mintError,
   } = useSimulateContract({
     abi: AssistantContract.abi,
     address: AssistantContract.address,
@@ -53,7 +52,7 @@ export function useMintApe({
       amount ?? 0n,
     ],
   });
-  const { data: MintWithEth, error: mintWithETHError } = useSimulateContract({
+  const { data: MintWithEth } = useSimulateContract({
     ...AssistantContract,
     functionName: "mintWithETH",
     args: [apeAddress, parseUnits(vaultId?.toString() ?? "0", 0), { ...vault }],
@@ -63,6 +62,5 @@ export function useMintApe({
   useEffect(() => {
     refetch().catch((e) => console.log(e));
   }, [refetch, tokenAllowance]);
-  console.log({ Mint, MintWithEth, isFetching, mintWithETHError, mintError });
   return { Mint, MintWithEth, isFetching };
 }

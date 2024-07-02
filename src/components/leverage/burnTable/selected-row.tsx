@@ -1,11 +1,11 @@
 import { X } from "lucide-react";
 import BurnTableHeaders from "./burnTableHeader";
-import BurnForm from "../burnForm/burnForm";
 import type { TAddressString, TBurnRow } from "@/lib/types";
 
 import { useAccount } from "wagmi";
 import { api } from "@/trpc/react";
-import { formatBigInt,getLeverageRatio } from "@/lib/utils";
+import { formatBigInt, getLeverageRatio } from "@/lib/utils";
+import BurnForm from "../burnForm/burnForm";
 
 export default function SelectedRow({
   params,
@@ -41,13 +41,17 @@ export default function SelectedRow({
           <th>{params?.APE.slice(0, 4)}</th>
           <th>{params?.debtSymbol}</th>
           <th>{params?.collateralSymbol}</th>
-          <th>{getLeverageRatio(parseInt(params?.leverageTier ?? '0'))}x</th>
+          <th>{getLeverageRatio(parseInt(params?.leverageTier ?? "0"))}x</th>
           <th>{formatBigInt(data, 4)}</th>
         </tr>
       </div>
       <div className="flex justify-center pt-4">
         <div className=" w-[500px] justify-between">
-          <BurnForm balance={data} address={apeAddress} />
+          <BurnForm
+            balance={data}
+            address={apeAddress}
+            collateralSymbol={params?.collateralSymbol}
+          />
         </div>
       </div>
     </div>

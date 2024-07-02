@@ -35,7 +35,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
   const [useEth, setUseEth] = useState(false);
-
+  console.log("Rerender mint form");
   const utils = api.useUtils();
 
   const { versus, leverageTiers, long } = useSelectMemo({
@@ -238,7 +238,6 @@ function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
     collateralToken = formData.long.split(",")[0] ?? ""; //value formatted : address,symbol
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
-  console.log({ vaultQuery, debtToken, collateralToken });
 
   return vaultQuery?.vaults.vaults.find((v) => {
     if (
