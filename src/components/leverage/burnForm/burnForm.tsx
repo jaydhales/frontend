@@ -32,7 +32,7 @@ export default function BurnForm({
 }: {
   address: undefined | TAddressString;
   balance: bigint | undefined;
-  collateralSymbol: string;
+  collateralSymbol: string | undefined;
 }) {
   const form = useForm<z.infer<typeof BurnSchema>>({
     resolver: zodResolver(BurnSchema),
