@@ -1,21 +1,18 @@
 import React, { useEffect } from "react";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UseFormReturn } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import type { TAddressString } from "@/lib/types";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useBurnApe } from "./hooks/useBurnApe";
-import { formatUnits, parseUnits } from "viem";
-import { formatBigInt } from "@/lib/utils";
+import { parseUnits } from "viem";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { SectionTwo } from "./sectionTwo";
 import ProgressAlert from "../mintForm/progressAlert";
-import { BalancePercent } from "@/components/shared/balancePercent";
 import { Section } from "./section";
 
 const BurnSchema = z.object({
