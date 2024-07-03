@@ -37,7 +37,9 @@ export default function MintTabs({
                 <Card>
                   <div className="flex h-full flex-col justify-between">
                     <VaultTable vaultQuery={vaultsQuery} />
-                    <Pagination />
+                    <Pagination
+                      max={vaultsQuery?.vaults.vaults.length ?? 0 / 10}
+                    />
                   </div>
                 </Card>
               </MintFormProvider>
