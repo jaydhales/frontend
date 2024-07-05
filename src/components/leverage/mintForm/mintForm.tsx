@@ -1,8 +1,5 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { Card } from "../../ui/card";
-import { Form, FormLabel } from "../../ui/form";
-import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import {
   useAccount,
@@ -10,17 +7,13 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
-
 import { useSelectMemo } from "./hooks/useSelectMemo";
-
 import type { SimulateContractReturnType } from "viem";
 import { erc20Abi, formatUnits, maxInt256, parseUnits } from "viem";
-import { useFormContext, type SubmitHandler } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import type { TAddressString, TMintFormFields, TVaults } from "@/lib/types";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { z } from "zod";
-import DepositInputs from "./depositInputs";
-import Estimations from "./estimations";
+import DepositInputs from "./deposit-inputs";
 import TopSelects from "./topSelects";
 import { AssistantContract } from "@/contracts/assistant";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
@@ -29,7 +22,7 @@ import ProgressAlert from "./progressAlert";
 
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
-import { formatBigInt } from "@/lib/utils";
+import DepositForm from "@/components/shared/deposit-form";
 
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const form = useFormContext<TMintFormFields>();
@@ -44,8 +37,6 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   });
 
   const { address } = useAccount();
-
-  const { openConnectModal } = useConnectModal();
 
   const { data: userBalance } = api.user.getBalance.useQuery(
     {
@@ -142,7 +133,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   /**
    * SUBMIT
    */
-  const onSubmit: SubmitHandler<TMintFormFields> = () => {
+  const onSubmit = () => {
     if (submitType === null) {
       return;
     }
@@ -162,71 +153,42 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   };
 
   return (
-    <Card>
+    <>
       <ProgressAlert
         isTxSuccess={isConfirmed}
         isTxPending={isConfirming}
         waitForSign={isPending}
       />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-4 ">
+      <DepositForm
+        quoteData={quoteData}
+        isValid={isValid}
+        topSelects={
           <TopSelects
             form={form}
             versus={versus}
             leverageTiers={leverageTiers}
             long={long}
           />
-          <div>
-            <FormLabel htmlFor="deposit">Deposit:</FormLabel>
-            <div className="pt-1"></div>
-            <DepositInputs
-              useEth={useEth}
-              setUseEth={(b: boolean) => {
-                setUseEth(b);
-              }}
-              balance={formatUnits(
-                (useEth ? userEthBalance : userBalance?.tokenBalance?.result) ??
-                  0n,
-                18,
-              )}
-              form={form}
-              depositAsset={formData.long}
-            />
-          </div>
-
-          <Estimations
-            disabled={!Boolean(quoteData)}
-            ape={formatBigInt(quoteData, 4).toString()}
+        }
+        depositInputs={
+          <DepositInputs
+            useEth={useEth}
+            setUseEth={(b: boolean) => {
+              setUseEth(b);
+            }}
+            balance={formatUnits(
+              (useEth ? userEthBalance : userBalance?.tokenBalance?.result) ??
+                0n,
+              18,
+            )}
+            form={form}
+            depositAsset={formData.long}
           />
-          <div className=" flex-col flex items-center justify-center gap-y-2">
-            {/* TODO */}
-            {/* Dont set size w-[450px] on all elements. */}
-            <p className="w-[450px] pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
-            {address && (
-              <Button disabled={!isValid} variant={"submit"} type="submit">
-                {submitType === ESubmitType.mint ? "Mint" : "Approve"}
-              </Button>
-            )}
-            {!address && (
-              <Button
-                onClick={() => openConnectModal?.()}
-                variant="submit"
-                type="button"
-              >
-                Connect Wallet
-              </Button>
-            )}
-
-            <div className="w-[450px]">
-              <p className="h-[20px] text-left text-sm text-red-400">
-                {/* Don't show form errors if users is not connected. */}
-                {address && <>{form.formState.errors.root?.message}</>}
-              </p>
-            </div>
-          </div>
-        </form>
-      </Form>
-    </Card>
+        }
+        submitType={submitType}
+        onSubmit={onSubmit}
+      />
+    </>
   );
 }
 function formatDataInput(s: string) {
