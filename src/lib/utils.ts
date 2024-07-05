@@ -37,6 +37,9 @@ export function getLeverageRatio(k: number) {
   return result;
 }
 
+export function formatDataInput(s: string) {
+  return s.split(",")[0] ?? "";
+}
 export function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
   const debtToken = formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
     collateralToken = formData.long.split(",")[0] ?? ""; //value formatted : address,symbol
