@@ -12,6 +12,7 @@ import BurnTableProvider from "../providers/burnTableProvider";
 
 export default function LeverageTabs({
   vaultsQuery,
+  form,
 }: {
   vaultsQuery: TVaults;
   form: React.ReactNode;
@@ -31,7 +32,7 @@ export default function LeverageTabs({
             <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
               <MintFormProvider>
                 {form}
-                <MintForm vaultsQuery={vaultsQuery} />
+                {/* <MintForm vaultsQuery={vaultsQuery} /> */}
                 <Card>
                   <VaultTable vaultQuery={vaultsQuery} />
                 </Card>
