@@ -23,6 +23,7 @@ import ProgressAlert from "./progressAlert";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
 import DepositForm from "@/components/shared/deposit-form";
+import { findVault } from "@/lib/utils";
 
 export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
   const form = useFormContext<TMintFormFields>();
@@ -195,21 +196,3 @@ function formatDataInput(s: string) {
   return s.split(",")[0] ?? "";
 }
 // <SelectItem value="mint">Mint</SelectItem>
-function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
-  const debtToken = formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
-    collateralToken = formData.long.split(",")[0] ?? ""; //value formatted : address,symbol
-  const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
-  const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
-
-  return vaultQuery?.vaults.vaults.find((v) => {
-    if (
-      v.collateralToken === collateralToken &&
-      v.debtToken === debtToken &&
-      leverageTier === v.leverageTier
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  })?.vaultId;
-}
