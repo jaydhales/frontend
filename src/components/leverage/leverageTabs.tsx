@@ -14,6 +14,7 @@ export default function LeverageTabs({
   vaultsQuery,
 }: {
   vaultsQuery: TVaults;
+  form: React.ReactNode;
 }) {
   return (
     <BurnTableProvider>
@@ -29,6 +30,7 @@ export default function LeverageTabs({
           <Container>
             <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
               <MintFormProvider>
+                {form}
                 <MintForm vaultsQuery={vaultsQuery} />
                 <Card>
                   <VaultTable vaultQuery={vaultsQuery} />
@@ -37,6 +39,7 @@ export default function LeverageTabs({
             </div>
           </Container>
         </TabsContent>
+
         {/*  */}
         <TabsContent value="burn">
           <Container>
