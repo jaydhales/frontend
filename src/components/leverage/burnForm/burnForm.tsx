@@ -11,12 +11,10 @@ import type { TAddressString } from "@/lib/types";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useBurnApe } from "./hooks/useBurnApe";
 import { formatUnits, parseUnits } from "viem";
-import { formatBigInt } from "@/lib/utils";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { SectionTwo } from "./sectionTwo";
-import ProgressAlert from "../mintForm/progressAlert";
-import { BalancePercent } from "@/components/shared/balancePercent";
 import { Section } from "./section";
+import ProgressAlert from "@/components/shared/mintForm/progressAlert";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
