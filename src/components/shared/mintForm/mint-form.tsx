@@ -3,33 +3,43 @@ import React, { useEffect, useMemo, useState } from "react";
 import { api } from "@/trpc/react";
 import {
   useAccount,
-  useSimulateContract,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
 import type { SimulateContractReturnType } from "viem";
-import { erc20Abi, formatUnits, maxInt256, parseUnits } from "viem";
+import { formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
-import type { TAddressString, TMintFormFields, TVaults } from "@/lib/types";
+import type { TMintFormFields, TVaults } from "@/lib/types";
 import { z } from "zod";
 import DepositInputs from "./deposit-inputs";
 import TopSelects from "./topSelects";
 import { AssistantContract } from "@/contracts/assistant";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
-import { useMintApe } from "@/components/shared/hooks/useMintApe";
 import ProgressAlert from "./progressAlert";
 
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
-import DepositForm from "@/components/shared/deposit-form";
-import { findVault } from "@/lib/utils";
-
-export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
+import { formatDataInput } from "@/lib/utils";
+import MintFormLayout from "./mint-form-layout";
+export default function MintForm({
+  vaultsQuery,
+  Mint,
+  MintWithEth,
+  approveFetching,
+  approveSimulate,
+  mintFetching,
+}: {
+  vaultsQuery: TVaults;
+  Mint: SimulateContractReturnType["request"] | undefined;
+  MintWithEth: SimulateContractReturnType["request"] | undefined;
+  mintFetching: boolean;
+  approveFetching: boolean;
+  approveSimulate: SimulateContractReturnType["request"] | undefined;
+}) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
   const [useEth, setUseEth] = useState(false);
-  console.log("Rerender mint form");
   const utils = api.useUtils();
 
   const { versus, leverageTiers, long } = useSelectMemo({
@@ -53,37 +63,9 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
 
-  const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
-  const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   const safeDeposit = useMemo(() => {
     return z.coerce.number().safeParse(formData.deposit);
   }, [formData.deposit]);
-
-  /** ##MINT APE## */
-  const {
-    Mint,
-    MintWithEth,
-    isFetching: mintFetching,
-  } = useMintApe({
-    vaultId: findVault(vaultsQuery, formData),
-    debtToken: formatDataInput(formData.versus), //value formatted : address,symbol
-    collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
-    leverageTier: leverageTier,
-    amount: safeDeposit.success
-      ? parseUnits(safeDeposit.data.toString() ?? "0", 18)
-      : undefined,
-    tokenAllowance: userBalance?.tokenAllowance?.result,
-  });
-
-  const approveWrite = useSimulateContract({
-    address: formatDataInput(formData.long) as TAddressString,
-    abi: erc20Abi,
-    functionName: "approve",
-    args: [
-      AssistantContract.address,
-      parseUnits(formatUnits(maxInt256, 18), 0),
-    ],
-  });
 
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -109,19 +91,13 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     useEth,
     deposit: safeDeposit.success ? safeDeposit.data.toString() : "0",
     depositToken: formData.depositToken,
-    mintRequest: Mint?.request as
-      | SimulateContractReturnType["request"]
-      | undefined,
-    mintWithETHRequest: MintWithEth?.request as
-      | SimulateContractReturnType["request"]
-      | undefined,
-    approveWriteRequest: approveWrite.data?.request as
-      | SimulateContractReturnType["request"]
-      | undefined,
+    mintRequest: Mint,
+    mintWithETHRequest: MintWithEth,
+    approveWriteRequest: approveSimulate,
     tokenBalance: userBalance?.tokenBalance?.result,
     tokenAllowance: userBalance?.tokenAllowance?.result,
     mintFetching,
-    approveFetching: approveWrite.isFetching,
+    approveFetching,
   });
 
   const { quoteData } = useQuoteMint({ formData });
@@ -138,17 +114,17 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     if (submitType === null) {
       return;
     }
-    if (useEth && MintWithEth?.request) {
-      writeContract(MintWithEth?.request);
+    if (useEth && MintWithEth) {
+      writeContract(MintWithEth);
       return;
     }
     // CHECK ALLOWANCE
-    if (submitType === ESubmitType.mint && Mint?.request) {
-      writeContract?.(Mint?.request);
+    if (submitType === ESubmitType.mint && Mint) {
+      writeContract?.(Mint);
       return;
     }
-    if (submitType === ESubmitType.approve && approveWrite.data?.request) {
-      writeContract(approveWrite.data?.request);
+    if (submitType === ESubmitType.approve && approveSimulate) {
+      writeContract(approveSimulate);
       return;
     }
   };
@@ -160,7 +136,7 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
         isTxPending={isConfirming}
         waitForSign={isPending}
       />
-      <DepositForm
+      <MintFormLayout
         quoteData={quoteData}
         isValid={isValid}
         topSelects={
@@ -191,8 +167,5 @@ export default function MintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
       />
     </>
   );
-}
-function formatDataInput(s: string) {
-  return s.split(",")[0] ?? "";
 }
 // <SelectItem value="mint">Mint</SelectItem>
