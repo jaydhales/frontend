@@ -1,54 +1,29 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
-import { api } from "@/trpc/react";
-import {
-  useAccount,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
-import { useSelectMemo } from "./hooks/useSelectMemo";
-import type { SimulateContractReturnType } from "viem";
-import { formatUnits } from "viem";
+import { findVault, formatDataInput } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
-import type { TMintFormFields, TVaults } from "@/lib/types";
-import { z } from "zod";
-import DepositInputs from "./deposit-inputs";
-import TopSelects from "./topSelects";
 import { AssistantContract } from "@/contracts/assistant";
-import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
-import ProgressAlert from "./progressAlert";
-
-import { useQuoteMint } from "./hooks/useQuoteMint";
-import useSetRootError from "./hooks/useSetRootError";
-import { formatDataInput } from "@/lib/utils";
-import MintFormLayout from "./mint-form-layout";
-export default function MintForm({
+import type { SimulateContractReturnType } from "viem";
+import { parseUnits } from "viem";
+import type { TMintFormFields, TVaults } from "@/lib/types";
+import { useMemo } from "react";
+import { z } from "zod";
+import { useAccount } from "wagmi";
+import { api } from "@/trpc/react";
+import { useMintApeOrTea } from "../hooks/useMintApeOrTea";
+import MintFormDisplay from "./mint-form-display";
+import { useApprove } from "./hooks/useApprove";
+type SimulateReq = SimulateContractReturnType["request"] | undefined;
+export function MintForm({
   vaultsQuery,
-  Mint,
-  MintWithEth,
-  approveFetching,
-  approveSimulate,
-  mintFetching,
+  isApe,
 }: {
   vaultsQuery: TVaults;
-  Mint: SimulateContractReturnType["request"] | undefined;
-  MintWithEth: SimulateContractReturnType["request"] | undefined;
-  mintFetching: boolean;
-  approveFetching: boolean;
-  approveSimulate: SimulateContractReturnType["request"] | undefined;
+  isApe: boolean;
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
-  const [useEth, setUseEth] = useState(false);
-  const utils = api.useUtils();
-
-  const { versus, leverageTiers, long } = useSelectMemo({
-    formData,
-    vaultsQuery,
-  });
-
+  /** ##MINT APE## */
   const { address } = useAccount();
-
   const { data: userBalance } = api.user.getBalance.useQuery(
     {
       userAddress: address,
@@ -58,114 +33,40 @@ export default function MintForm({
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
 
-  const { data: userEthBalance } = api.user.getEthBalance.useQuery(
-    { userAddress: address },
-    { enabled: Boolean(address) && Boolean(formData.long) },
-  );
-
+  const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
+  const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   const safeDeposit = useMemo(() => {
     return z.coerce.number().safeParse(formData.deposit);
   }, [formData.deposit]);
-
-  const { writeContract, data: hash, isPending } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({ hash });
-  // Invalidate if approve or mint tx is successful.
-  useEffect(() => {
-    if (isConfirmed && !useEth) {
-      utils.user.getBalance.invalidate().catch((e) => console.log(e));
-    }
-    if (isConfirmed && useEth) {
-      utils.user.getEthBalance.invalidate().catch((e) => console.log(e));
-    }
-  }, [
-    isConfirming,
-    isConfirmed,
-    utils.user.getBalance,
-    utils.user.getEthBalance,
-    useEth,
-  ]);
-
-  const { isValid, errorMessage, submitType } = useCheckSubmitValid({
-    ethBalance: userEthBalance,
-    useEth,
-    deposit: safeDeposit.success ? safeDeposit.data.toString() : "0",
-    depositToken: formData.depositToken,
-    mintRequest: Mint,
-    mintWithETHRequest: MintWithEth,
-    approveWriteRequest: approveSimulate,
-    tokenBalance: userBalance?.tokenBalance?.result,
+  const {
+    Mint,
+    MintWithEth,
+    isFetching: mintFetching,
+  } = useMintApeOrTea({
+    vaultId: findVault(vaultsQuery, formData),
+    isApe,
+    debtToken: formatDataInput(formData.versus), //value formatted : address,symbol
+    collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
+    leverageTier: leverageTier,
+    amount: safeDeposit.success
+      ? parseUnits(safeDeposit.data.toString() ?? "0", 18)
+      : undefined,
     tokenAllowance: userBalance?.tokenAllowance?.result,
-    mintFetching,
-    approveFetching,
   });
 
-  const { quoteData } = useQuoteMint({ formData });
-  useSetRootError({
-    formData,
-    setError: form.setError,
-    errorMessage,
-    rootErrorMessage: form.formState.errors.root?.message,
+  const { approveSimulate } = useApprove({
+    tokenAddr: formatDataInput(formData.long),
+    approveContract: AssistantContract.address,
   });
-  /**
-   * SUBMIT
-   */
-  const onSubmit = () => {
-    if (submitType === null) {
-      return;
-    }
-    if (useEth && MintWithEth) {
-      writeContract(MintWithEth);
-      return;
-    }
-    // CHECK ALLOWANCE
-    if (submitType === ESubmitType.mint && Mint) {
-      writeContract?.(Mint);
-      return;
-    }
-    if (submitType === ESubmitType.approve && approveSimulate) {
-      writeContract(approveSimulate);
-      return;
-    }
-  };
 
   return (
-    <>
-      <ProgressAlert
-        isTxSuccess={isConfirmed}
-        isTxPending={isConfirming}
-        waitForSign={isPending}
-      />
-      <MintFormLayout
-        quoteData={quoteData}
-        isValid={isValid}
-        topSelects={
-          <TopSelects
-            form={form}
-            versus={versus}
-            leverageTiers={leverageTiers}
-            long={long}
-          />
-        }
-        depositInputs={
-          <DepositInputs
-            useEth={useEth}
-            setUseEth={(b: boolean) => {
-              setUseEth(b);
-            }}
-            balance={formatUnits(
-              (useEth ? userEthBalance : userBalance?.tokenBalance?.result) ??
-                0n,
-              18,
-            )}
-            form={form}
-            depositAsset={formData.long}
-          />
-        }
-        submitType={submitType}
-        onSubmit={onSubmit}
-      />
-    </>
+    <MintFormDisplay
+      approveFetching={approveSimulate.isFetching}
+      approveSimulate={approveSimulate.data?.request as SimulateReq}
+      MintWithEth={MintWithEth as SimulateReq}
+      Mint={Mint?.request as SimulateReq}
+      vaultsQuery={vaultsQuery}
+      mintFetching={mintFetching}
+    />
   );
 }
-// <SelectItem value="mint">Mint</SelectItem>
