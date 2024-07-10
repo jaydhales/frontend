@@ -15,15 +15,17 @@ interface Props {
   tokenAllowance: bigint | undefined;
   leverageTier: number;
   vaultId: string | undefined;
+  isApe: boolean;
 }
 
-export function useMintApe({
+export function useMintApeOrTea({
   collateralToken,
   debtToken,
   leverageTier,
   amount,
   vaultId,
   tokenAllowance,
+  isApe,
 }: Props) {
   const safeVaultId = z.coerce.number().safeParse(vaultId);
   const apeAddress = getApeAddress({
@@ -46,7 +48,7 @@ export function useMintApe({
     address: AssistantContract.address,
     functionName: "mint",
     args: [
-      apeAddress,
+      isApe ? apeAddress : "0x",
       parseUnits(vaultId?.toString() ?? "0", 0),
       { ...vault },
       amount ?? 0n,
@@ -55,7 +57,11 @@ export function useMintApe({
   const { data: MintWithEth } = useSimulateContract({
     ...AssistantContract,
     functionName: "mintWithETH",
-    args: [apeAddress, parseUnits(vaultId?.toString() ?? "0", 0), { ...vault }],
+    args: [
+      isApe ? apeAddress : "0x",
+      parseUnits(vaultId?.toString() ?? "0", 0),
+      { ...vault },
+    ],
     value: amount ?? 0n,
   });
 
