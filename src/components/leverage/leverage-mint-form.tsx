@@ -1,7 +1,6 @@
 "use client";
 import { findVault, formatDataInput } from "@/lib/utils";
-import MintForm from "../shared/mintForm/mint-form";
-import { useMintApe } from "../shared/hooks/useMintApe";
+import MintForm from "../shared/mintForm/mint-form-display";
 import { useFormContext } from "react-hook-form";
 import { AssistantContract } from "@/contracts/assistant";
 import type { SimulateContractReturnType } from "viem";
@@ -12,8 +11,15 @@ import { z } from "zod";
 import { useAccount } from "wagmi";
 import { api } from "@/trpc/react";
 import { useApprove } from "../shared/mintForm/hooks/useApprove";
+import { useMintApeOrTea } from "../shared/hooks/useMintApeOrTea";
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
-export function LeverageMintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
+export function LeverageMintForm({
+  vaultsQuery,
+  isApe,
+}: {
+  vaultsQuery: TVaults;
+  isApe: boolean;
+}) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
   /** ##MINT APE## */
@@ -36,8 +42,9 @@ export function LeverageMintForm({ vaultsQuery }: { vaultsQuery: TVaults }) {
     Mint,
     MintWithEth,
     isFetching: mintFetching,
-  } = useMintApe({
+  } = useMintApeOrTea({
     vaultId: findVault(vaultsQuery, formData),
+    isApe,
     debtToken: formatDataInput(formData.versus), //value formatted : address,symbol
     collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
     leverageTier: leverageTier,
