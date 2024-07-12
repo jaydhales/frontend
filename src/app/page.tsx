@@ -9,6 +9,7 @@ export default async function Home() {
     <main className="flex flex-col items-center justify-center text-white">
       <LeveragePage>
         <LeverageTabs
+          isApe
           form={<MintForm isApe vaultsQuery={vaultQuery} />}
           vaultsQuery={vaultQuery}
         />
