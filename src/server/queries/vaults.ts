@@ -1,4 +1,4 @@
-import type { getUserVaultsQuery, vaultsQuery } from "@/../.graphclient";
+import type { vaultsQuery } from "@/../.graphclient";
 import { graphqlClient } from "@/lib/graphqlClient";
 import type { TAddressString } from "@/lib/types";
 import { gql } from "graphql-request";
@@ -21,12 +21,13 @@ const vaults = gql`
   }
 `;
 
-const userVaults = gql`
-  query getUserVaults($user: Bytes) {
-    userPositions(where: { User: $user }) {
-      User
+const userApePositionsQuery = gql`
+  query getUserApePositions($user: Bytes) {
+    userPositions(where: { user: $user }) {
+      user
       balance
       APE
+      vaultId
       debtToken
       debtSymbol
       collateralToken
@@ -36,20 +37,64 @@ const userVaults = gql`
   }
 `;
 
-export const executeGetUserVaultsQuery = async ({
+const userTeaPositionsQuery = gql`
+  query getUserTeaPositions($user: Bytes) {
+    userPositions(where: { user: $user }) {
+      user
+      vaultId
+      balance
+      debtToken
+      debtSymbol
+      collateralToken
+      collateralSymbol
+      leverageTier
+    }
+  }
+`;
+export const executeGetUserTeaPositions = async ({
   user,
 }: {
   user: TAddressString;
 }) => {
-  const result = await graphqlClient.request(userVaults, { user });
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const r = result as getUserVaultsQuery;
+  const result = await graphqlClient.request(userTeaPositionsQuery, { user });
+  return result as userTeaPositionsQuery;
+};
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return r;
+export const executeGetUserApePositions = async ({
+  user,
+}: {
+  user: TAddressString;
+}) => {
+  const result = await graphqlClient.request(userApePositionsQuery, { user });
+  return result as userApePositionsQuery;
 };
 
 export const executeVaultsQuery = async () => {
   const result = await graphqlClient.request(vaults);
   return result as vaultsQuery;
 };
+
+type userApePositionsQuery = {
+  id: string;
+  balance: bigint;
+  APE: TAddressString;
+  user: TAddressString;
+  collateralSymbol: string;
+  debtSymbol: string;
+  collateralToken: TAddressString;
+  debtToken: TAddressString;
+  leverageTier: string;
+  vaultId: string;
+}[];
+
+type userTeaPositionsQuery = {
+  id: string;
+  balance: bigint;
+  user: TAddressString;
+  collateralSymbol: string;
+  debtSymbol: string;
+  collateralToken: TAddressString;
+  debtToken: TAddressString;
+  leverageTier: string;
+  vaultId: string;
+}[];
