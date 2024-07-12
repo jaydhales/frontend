@@ -3,9 +3,11 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { getBalance, multicall, readContract } from "@/lib/viemClient";
 import { erc20Abi } from "viem";
-import type { UserQuery } from "@/lib/types";
 import { type TAddressString } from "@/lib/types";
-import { executeGetUserVaultsQuery } from "@/server/queries/vaults";
+import {
+  executeGetUserApePositions,
+  executeGetUserTeaPositions,
+} from "@/server/queries/vaults";
 
 export const userRouter = createTRPCRouter({
   getBalance: publicProcedure
@@ -82,6 +84,7 @@ export const userRouter = createTRPCRouter({
 
       return result;
     }),
+
   getApePositions: publicProcedure
     .input(
       z.object({ address: z.string().startsWith("0x").length(42).optional() }),
@@ -91,9 +94,9 @@ export const userRouter = createTRPCRouter({
       if (!input.address) {
         return;
       }
-      const result = (await executeGetUserVaultsQuery({
+      const result = await executeGetUserApePositions({
         user: input.address as TAddressString,
-      })) as UserQuery;
+      });
 
       return result;
     }),
@@ -107,9 +110,9 @@ export const userRouter = createTRPCRouter({
       if (!input.address) {
         return;
       }
-      const result = (await executeGetUserVaultsQuery({
+      const result = await executeGetUserTeaPositions({
         user: input.address as TAddressString,
-      })) as UserQuery;
+      });
 
       return result;
     }),
