@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 import React, { useMemo, useState } from "react";
-import { burnRows } from "./mockBurnRows";
 import BurnTableHeaders from "./burnTableHeader";
 import BurnTableRow from "./burnTableRow";
 import SelectedRow from "./selected-row";
@@ -15,8 +13,7 @@ export default function BurnTable() {
   const selectedRowParams = useMemo(() => {
     return data?.userPositions.find((r) => r.APE === selectedRow);
   }, [data?.userPositions, selectedRow]);
-  console.log(burnRows);
-  console.log({ selectedRowParams });
+
   return (
     <div className="relative">
       {selectedRow && (
