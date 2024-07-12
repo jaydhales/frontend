@@ -19,19 +19,25 @@ export function useBurnTableProvider() {
 
 export default function BurnTableProvider({
   children,
+  isApe,
 }: {
+  isApe: boolean;
   children: React.ReactNode;
 }) {
   const { address } = useAccount();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { data } = api.user.getPositions.useQuery(
+  const { data: apePositions } = api.user.getApePositions.useQuery(
     { address },
     {
-      enabled: Boolean(address),
+      enabled: Boolean(address) && isApe,
     },
   );
-  data?.userPositions;
+  const { data: teaPositions } = api.user.getTeaPositions.useQuery(
+    { address },
+    { enabled: Boolean(address) && !isApe },
+  );
 
+  const data = isApe ? apePositions : teaPositions;
   return (
     <BurnTableProviderContext.Provider value={{ data }}>
       {children}

@@ -12,12 +12,14 @@ import BurnTableProvider from "../providers/burnTableProvider";
 export default function LeverageTabs({
   vaultsQuery,
   form,
+  isApe,
 }: {
   vaultsQuery: TVaults;
   form: React.ReactNode;
+  isApe: boolean;
 }) {
   return (
-    <BurnTableProvider>
+    <BurnTableProvider isApe={isApe}>
       <Tabs defaultValue="mint">
         <div className="flex justify-center">
           <TabsList defaultValue={"mint"}>
