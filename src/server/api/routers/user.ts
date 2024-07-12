@@ -82,8 +82,23 @@ export const userRouter = createTRPCRouter({
 
       return result;
     }),
+  getApePositions: publicProcedure
+    .input(
+      z.object({ address: z.string().startsWith("0x").length(42).optional() }),
+    )
+    .query(async ({ input }) => {
+      console.log({ input });
+      if (!input.address) {
+        return;
+      }
+      const result = (await executeGetUserVaultsQuery({
+        user: input.address as TAddressString,
+      })) as UserQuery;
 
-  getPositions: publicProcedure
+      return result;
+    }),
+
+  getTeaPositions: publicProcedure
     .input(
       z.object({ address: z.string().startsWith("0x").length(42).optional() }),
     )
