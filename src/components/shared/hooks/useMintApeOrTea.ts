@@ -17,7 +17,7 @@ interface Props {
   vaultId: string | undefined;
   isApe: boolean;
 }
-
+const zeroAddress = "0x0000000000000000000000000000000000000000";
 export function useMintApeOrTea({
   collateralToken,
   debtToken,
@@ -48,23 +48,24 @@ export function useMintApeOrTea({
     address: AssistantContract.address,
     functionName: "mint",
     args: [
-      isApe ? apeAddress : "0x",
+      isApe ? apeAddress : zeroAddress,
       parseUnits(vaultId?.toString() ?? "0", 0),
       { ...vault },
       amount ?? 0n,
     ],
   });
-  const { data: MintWithEth } = useSimulateContract({
+  const { data: MintWithEth, error } = useSimulateContract({
     ...AssistantContract,
     functionName: "mintWithETH",
     args: [
-      isApe ? apeAddress : "0x",
+      isApe ? apeAddress : zeroAddress,
       parseUnits(vaultId?.toString() ?? "0", 0),
       { ...vault },
     ],
     value: amount ?? 0n,
   });
 
+  console.log(error);
   useEffect(() => {
     refetch().catch((e) => console.log(e));
   }, [refetch, tokenAllowance]);
