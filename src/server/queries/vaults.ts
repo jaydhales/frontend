@@ -39,7 +39,7 @@ const userApePositionsQuery = gql`
 
 const userTeaPositionsQuery = gql`
   query getUserTeaPositions($user: Bytes) {
-    userPositions(where: { user: $user }) {
+    userPositionsTeas(where: { user: $user }) {
       user
       vaultId
       balance
@@ -74,27 +74,31 @@ export const executeVaultsQuery = async () => {
   return result as vaultsQuery;
 };
 
-type userApePositionsQuery = {
-  id: string;
-  balance: bigint;
-  APE: TAddressString;
-  user: TAddressString;
-  collateralSymbol: string;
-  debtSymbol: string;
-  collateralToken: TAddressString;
-  debtToken: TAddressString;
-  leverageTier: string;
-  vaultId: string;
-}[];
+export type userApePositionsQuery = {
+  userPositions: {
+    id: string;
+    balance: bigint;
+    APE: TAddressString;
+    user: TAddressString;
+    collateralSymbol: string;
+    debtSymbol: string;
+    collateralToken: TAddressString;
+    debtToken: TAddressString;
+    leverageTier: string;
+    vaultId: string;
+  }[];
+};
 
-type userTeaPositionsQuery = {
-  id: string;
-  balance: bigint;
-  user: TAddressString;
-  collateralSymbol: string;
-  debtSymbol: string;
-  collateralToken: TAddressString;
-  debtToken: TAddressString;
-  leverageTier: string;
-  vaultId: string;
-}[];
+export type userTeaPositionsQuery = {
+  userPositionTeas: {
+    id: string;
+    balance: bigint;
+    user: TAddressString;
+    collateralSymbol: string;
+    debtSymbol: string;
+    collateralToken: TAddressString;
+    debtToken: TAddressString;
+    leverageTier: string;
+    vaultId: string;
+  }[];
+};
