@@ -2,12 +2,13 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { getBalance, multicall, readContract } from "@/lib/viemClient";
-import { erc20Abi } from "viem";
+import { erc20Abi, parseUnits } from "viem";
 import { type TAddressString } from "@/lib/types";
 import {
   executeGetUserApePositions,
   executeGetUserTeaPositions,
 } from "@/server/queries/vaults";
+import { VaultContract } from "@/contracts/vault";
 
 export const userRouter = createTRPCRouter({
   getBalance: publicProcedure
@@ -84,7 +85,21 @@ export const userRouter = createTRPCRouter({
 
       return result;
     }),
-
+  getTeaBalance: publicProcedure
+    .input(
+      z.object({
+        user: z.string().startsWith("0x").length(42).optional(),
+        vaultId: z.string(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const result = await readContract({
+        ...VaultContract,
+        functionName: "balanceOf",
+        args: [input.user as TAddressString, parseUnits(input.vaultId, 0)],
+      });
+      return result;
+    }),
   getApePositions: publicProcedure
     .input(
       z.object({ address: z.string().startsWith("0x").length(42).optional() }),
