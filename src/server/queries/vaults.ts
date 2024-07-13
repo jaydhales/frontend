@@ -39,7 +39,7 @@ const userApePositionsQuery = gql`
 
 const userTeaPositionsQuery = gql`
   query getUserTeaPositions($user: Bytes) {
-    userPositionsTeas(where: { user: $user }) {
+    userPositionTeas(where: { user: $user }) {
       user
       vaultId
       balance
@@ -57,6 +57,7 @@ export const executeGetUserTeaPositions = async ({
   user: TAddressString;
 }) => {
   const result = await graphqlClient.request(userTeaPositionsQuery, { user });
+  console.log(result, "RESULT");
   return result as userPositionsQueryTea;
 };
 
@@ -86,6 +87,6 @@ export type TUserPosition = {
 };
 export type TUserApePosition = TUserPosition & { APE: TAddressString };
 export type userPositionsQueryTea = {
-  userPositionsTeas: TUserPosition[];
+  userPositionTeas: TUserPosition[];
 };
 export type userPositionsQueryApe = { userPositions: TUserApePosition[] };

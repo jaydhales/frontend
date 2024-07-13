@@ -48,7 +48,7 @@ export default function BurnTableRow({
     <tr className="grid grid-cols-5 items-center text-left text-gray text-white">
       <th>{row.vaultId}</th>
       <th>{row.debtSymbol}</th>
-      <th>{row.collateralToken}</th>
+      <th>{row.collateralSymbol}</th>
       <th>{getLeverageRatio(parseInt(row.leverageTier))}x</th>
       <th>
         <div className="flex items-center justify-between">
@@ -63,7 +63,7 @@ export default function BurnTableRow({
           )}
 
           <Button
-            onClick={() => setSelectedRow(apeAddress)}
+            onClick={() => setSelectedRow(row.vaultId)}
             type="button"
             variant="outline"
           >

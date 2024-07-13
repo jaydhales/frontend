@@ -23,13 +23,13 @@ export default function BurnTable({ isApe }: { isApe: boolean }) {
     if (isApe) {
       return ape?.data?.userPositions.find((r) => r.vaultId === selectedRow);
     } else {
-      return tea.data?.userPositionsTeas.find((r) => r.vaultId === selectedRow);
+      return tea.data?.userPositionTeas.find((r) => r.vaultId === selectedRow);
     }
   }, [
     isApe,
     ape?.data?.userPositions,
     selectedRow,
-    tea.data?.userPositionsTeas,
+    tea.data?.userPositionTeas,
   ]);
 
   return (
@@ -72,7 +72,7 @@ export default function BurnTable({ isApe }: { isApe: boolean }) {
             </>
           ) : (
             <>
-              {tea.data?.userPositionsTeas.map((r) => {
+              {tea.data?.userPositionTeas.map((r) => {
                 return (
                   <BurnTableRow
                     row={{
