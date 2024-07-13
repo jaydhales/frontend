@@ -30,7 +30,6 @@ export default function BurnTableProvider({
       enabled: Boolean(address),
     },
   );
-  data?.userPositions;
 
   return (
     <BurnTableProviderContext.Provider value={{ data }}>
