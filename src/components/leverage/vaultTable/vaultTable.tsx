@@ -5,7 +5,11 @@ import { useSearchParams } from "next/navigation";
 
 export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
   const params = useSearchParams();
-  console.log({ params });
+  let pagination = parseInt(params.get("pagination" ?? "") ?? "1");
+  if (pagination < 1) {
+    pagination = 1;
+  }
+
   return (
     <table className="w-full">
       <caption className="pb-2  font-lora text-[1.95rem] font-bold">
@@ -13,18 +17,20 @@ export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
       </caption>
       <tbody className="space-y-2">
         <VaultTableRowHeaders />
-        {vaultQuery?.vaults.vaults.map((pool, ind) => {
-          return (
-            <VaultTableRow
-              key={pool.vaultId.toString()}
-              pool={pool}
-              number={ind.toString()}
-              badgeVariant={{
-                variant: ind % 2 === 0 ? "yellow" : "default",
-              }}
-            />
-          );
-        })}
+        {vaultQuery?.vaults.vaults
+          .slice(pagination * 10 - 10, pagination * 10)
+          .map((pool, ind) => {
+            return (
+              <VaultTableRow
+                key={pool.vaultId.toString()}
+                pool={pool}
+                number={ind.toString()}
+                badgeVariant={{
+                  variant: ind % 2 === 0 ? "yellow" : "default",
+                }}
+              />
+            );
+          })}
       </tbody>
     </table>
   );
