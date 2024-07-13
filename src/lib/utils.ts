@@ -1,8 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { encodePacked, formatUnits, getAddress, keccak256, toHex } from "viem";
-import type { TAddressString } from "./types";
+import type { TAddressString, TMintFormFields, TVaults } from "./types";
 import { assetSchema } from "./schemas";
+import { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -36,6 +37,27 @@ export function getLeverageRatio(k: number) {
   return result;
 }
 
+export function formatDataInput(s: string) {
+  return s.split(",")[0] ?? "";
+}
+export function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
+  const debtToken = formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
+    collateralToken = formData.long.split(",")[0] ?? ""; //value formatted : address,symbol
+  const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
+  const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
+
+  return vaultQuery?.vaults.vaults.find((v) => {
+    if (
+      v.collateralToken === collateralToken &&
+      v.debtToken === debtToken &&
+      leverageTier === v.leverageTier
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  })?.vaultId;
+}
 export function getApeAddress({
   vaultId,
   vaultAddress,

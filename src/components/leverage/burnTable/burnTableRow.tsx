@@ -1,52 +1,47 @@
 import { Button } from "@/components/ui/button";
+import type { TAddressString } from "@/lib/types";
 import { getLeverageRatio } from "@/lib/utils";
-import { api } from "@/trpc/react";
+import type { TUserPosition } from "@/server/queries/vaults";
 import { formatUnits } from "viem";
-import { useAccount } from "wagmi";
+import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
 interface Props {
-  apeAddress: string;
-  colToken: string;
-  colSymbol: string;
-  debtToken: string;
-  debtSymbol: string;
-  leverageTier: string;
+  row: TUserPosition;
+  isApe: boolean;
+  apeAddress?: TAddressString;
   setSelectedRow: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 export default function BurnTableRow({
-  apeAddress,
   setSelectedRow,
-  debtSymbol,
-  colSymbol,
-  leverageTier,
+  row,
+  isApe,
+  apeAddress,
 }: Props) {
-  const { address } = useAccount();
-
-  const { data } = api.user.getApeBalance.useQuery(
-    {
-      address: apeAddress,
-      user: address,
-    },
-    {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60,
-      // enabled: false,
-    },
-  );
+  const { apeBal, teaBal } = useTeaAndApeBals({
+    apeAddress,
+    vaultId: row.vaultId,
+    isApe,
+  });
 
   return (
     <tr className="grid grid-cols-5 items-center text-left text-gray text-white">
-      <th>{apeAddress.slice(0, 5) + "..." + apeAddress.slice(-4)}</th>
-      <th>{debtSymbol}</th>
-      <th>{colSymbol}</th>
-      <th>{getLeverageRatio(parseInt(leverageTier))}x</th>
+      <th>{row.vaultId}</th>
+      <th>{row.debtSymbol}</th>
+      <th>{row.collateralSymbol}</th>
+      <th>{getLeverageRatio(parseInt(row.leverageTier))}x</th>
       <th>
         <div className="flex items-center justify-between">
-          <span>
-            {parseFloat(parseFloat(formatUnits(data ?? 0n, 18)).toFixed(4))}
-          </span>
+          {isApe ? (
+            <span>
+              {parseFloat(parseFloat(formatUnits(apeBal ?? 0n, 18)).toFixed(4))}
+            </span>
+          ) : (
+            <span>
+              {parseFloat(parseFloat(formatUnits(teaBal ?? 0n, 18)).toFixed(4))}
+            </span>
+          )}
+
           <Button
-            onClick={() => setSelectedRow(apeAddress)}
+            onClick={() => setSelectedRow(row.vaultId)}
             type="button"
             variant="outline"
           >

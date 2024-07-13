@@ -1,22 +1,19 @@
-import React, { useEffect } from "react";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+"use client";
+import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UseFormReturn } from "react-hook-form";
-import { useForm } from "react-hook-form";
+import { Form, FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
-import type { TAddressString } from "@/lib/types";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useBurnApe } from "./hooks/useBurnApe";
-import { formatUnits, parseUnits } from "viem";
-import { formatBigInt } from "@/lib/utils";
+import { parseUnits } from "viem";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
-import { SectionTwo } from "./sectionTwo";
-import ProgressAlert from "../mintForm/progressAlert";
-import { BalancePercent } from "@/components/shared/balancePercent";
+import ProgressAlert from "@/components/shared/mintForm/progressAlert";
 import { Section } from "./section";
+import { Button } from "@/components/ui/button";
+import { SectionTwo } from "./sectionTwo";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import type { TUserPosition } from "@/server/queries/vaults";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -29,30 +26,23 @@ export type TBurnForm = UseFormReturn<
 export type TBurnFields = { deposit?: string | undefined };
 
 export default function BurnForm({
-  address,
   balance,
-  collateralSymbol,
+  row,
 }: {
-  address: undefined | TAddressString;
   balance: bigint | undefined;
-  collateralSymbol: string | undefined;
+  row: TUserPosition;
 }) {
   const form = useForm<z.infer<typeof BurnSchema>>({
     resolver: zodResolver(BurnSchema),
   });
   const formData = form.watch();
 
-  const { data } = api.vault.getApeParams.useQuery(
-    { address: address ?? "" },
-    { enabled: Boolean(address) },
-  );
-
   const { data: quoteBurn } = api.vault.quoteBurn.useQuery(
     {
       amount: formData.deposit,
-      debtToken: data?.debtToken,
-      leverageTier: data?.leverageTier,
-      collateralToken: data?.collateralToken,
+      debtToken: row.debtToken,
+      leverageTier: parseInt(row.leverageTier),
+      collateralToken: row.collateralToken,
     },
     {
       enabled: Boolean(formData.deposit),
@@ -80,10 +70,15 @@ export default function BurnForm({
   }, [receiptData, utils.user.getApeBalance]);
 
   const { data: burnData } = useBurnApe({
-    data,
-    apeAddress: address ?? "0x",
+    isApe: true,
+    data: {
+      collateralToken: row.collateralToken,
+      debtToken: row.debtToken,
+      leverageTier: parseFloat(row.leverageTier),
+    },
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
+
   const { isValid, error } = useCheckValidityBurn(formData, balance);
   const onSubmit = () => {
     if (burnData?.request) {
@@ -91,7 +86,7 @@ export default function BurnForm({
     }
   };
   return (
-    <Form {...form}>
+    <FormProvider {...form}>
       <ProgressAlert
         isTxSuccess={isConfirmed}
         isTxPending={isConfirming}
@@ -111,9 +106,13 @@ export default function BurnForm({
           </div>
 
           <SectionTwo
-            data={data}
+            data={{
+              leverageTier: parseFloat(row.leverageTier),
+              collateralToken: row.collateralToken,
+              debtToken: row.debtToken,
+            }}
             amount={quoteBurn}
-            collateralSymbol={collateralSymbol}
+            collateralSymbol={row.collateralSymbol}
             bg=""
           />
           <div className="pt-2"></div>
@@ -134,13 +133,13 @@ export default function BurnForm({
             className="w-full"
             type="submit"
           >
-            Burn TEA
+            Burn APE
           </Button>
           <div className="h-5 text-sm text-red-400">
             {error && <p>{error}</p>}
           </div>
         </div>
       </form>
-    </Form>
+    </FormProvider>
   );
 }

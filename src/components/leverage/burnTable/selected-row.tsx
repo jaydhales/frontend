@@ -1,26 +1,28 @@
 import { X } from "lucide-react";
 import BurnTableHeaders from "./burnTableHeader";
-import type { TAddressString, TBurnRow } from "@/lib/types";
-
-import { useAccount } from "wagmi";
-import { api } from "@/trpc/react";
+import type { TAddressString } from "@/lib/types";
 import { formatBigInt, getLeverageRatio } from "@/lib/utils";
 import BurnForm from "../burnForm/burnForm";
+import type { TUserPosition } from "@/server/queries/vaults";
+import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
 
 export default function SelectedRow({
   params,
   close,
   apeAddress,
+  isApe,
 }: {
-  params: TBurnRow | undefined;
-  apeAddress: TAddressString;
+  params: TUserPosition;
+  apeAddress?: TAddressString;
+  isApe: boolean;
   close: () => void;
 }) {
-  const { address } = useAccount();
-  const { data } = api.user.getApeBalance.useQuery({
-    address: apeAddress,
-    user: address,
+  const { apeBal, teaBal } = useTeaAndApeBals({
+    vaultId: params.vaultId,
+    apeAddress,
+    isApe,
   });
+  const data = isApe ? apeBal : teaBal;
   if (!params) {
     <div>
       <h1>Hello</h1>
@@ -38,7 +40,7 @@ export default function SelectedRow({
         </button>
         <BurnTableHeaders />
         <tr className="grid h-[41px] grid-cols-5 items-center text-left text-gray text-white">
-          <th>{params?.APE.slice(0, 4)}</th>
+          <th>{params?.vaultId}</th>
           <th>{params?.debtSymbol}</th>
           <th>{params?.collateralSymbol}</th>
           <th>{getLeverageRatio(parseInt(params?.leverageTier ?? "0"))}x</th>
@@ -47,11 +49,7 @@ export default function SelectedRow({
       </div>
       <div className="flex justify-center pt-4">
         <div className=" w-[500px] justify-between">
-          <BurnForm
-            balance={data}
-            address={apeAddress}
-            collateralSymbol={params?.collateralSymbol}
-          />
+          <BurnForm balance={data} row={params} />
         </div>
       </div>
     </div>

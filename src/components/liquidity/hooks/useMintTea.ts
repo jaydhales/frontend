@@ -17,7 +17,7 @@ interface Props {
   vaultId: string | undefined;
 }
 
-export function useMintApe({
+export function useMintTea({
   collateralToken,
   debtToken,
   leverageTier,
@@ -46,16 +46,17 @@ export function useMintApe({
     address: AssistantContract.address,
     functionName: "mint",
     args: [
-      apeAddress,
+      "0x",
       parseUnits(vaultId?.toString() ?? "0", 0),
       { ...vault },
       amount ?? 0n,
     ],
   });
+
   const { data: MintWithEth } = useSimulateContract({
     ...AssistantContract,
     functionName: "mintWithETH",
-    args: [apeAddress, parseUnits(vaultId?.toString() ?? "0", 0), { ...vault }],
+    args: ["0x", parseUnits(vaultId?.toString() ?? "0", 0), { ...vault }],
     value: amount ?? 0n,
   });
 

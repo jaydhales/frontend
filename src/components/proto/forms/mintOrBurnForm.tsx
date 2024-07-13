@@ -39,7 +39,8 @@ export function MintOrBurnForm() {
   const { data } = useWethDeposit({
     amount: parseUnits(amount.toString(), 18),
   });
-  const { writeContract } = useWriteContract();
+  const { writeContract, error } = useWriteContract();
+  console.log(error, "WRITE CONTRACT ERROR");
   function onSubmit() {
     writeContract(data!.request);
   }
