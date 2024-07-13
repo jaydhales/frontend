@@ -3,7 +3,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Container } from "@/components/ui/container";
 
-// import StakeForm from "./stakeForm/stakeForm";
+import StakeFormProvider from "@/components/providers/stakeFormProvider";
+import StakeForm from "./stakeForm/stakeForm";
 
 const StakeTabs = () => {
   return (
@@ -18,7 +19,9 @@ const StakeTabs = () => {
       <br />
       <TabsContent value="stake">
         <Container>
-          <div>Stake</div>
+          <StakeFormProvider>
+            <StakeForm></StakeForm>
+          </StakeFormProvider>
         </Container>
       </TabsContent>
       <TabsContent value="unstake">
