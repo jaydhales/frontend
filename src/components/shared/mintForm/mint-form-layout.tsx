@@ -34,7 +34,7 @@ export default function MintFormLayout({
   const { openConnectModal } = useConnectModal();
   return (
     <Card>
-      <Form {...form} onSubmit={onSubmit}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         {topSelects}
         <div>
           <FormLabel htmlFor="deposit">Deposit:</FormLabel>
@@ -73,7 +73,7 @@ export default function MintFormLayout({
             </p>
           </div>
         </div>
-      </Form>
+      </form>
     </Card>
   );
 }
