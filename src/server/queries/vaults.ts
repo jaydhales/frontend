@@ -25,9 +25,9 @@ const userApePositionsQuery = gql`
   query getUserApePositions($user: Bytes) {
     userPositions(where: { user: $user }) {
       user
-      balance
-      APE
       vaultId
+      APE
+      balance
       debtToken
       debtSymbol
       collateralToken
@@ -57,7 +57,7 @@ export const executeGetUserTeaPositions = async ({
   user: TAddressString;
 }) => {
   const result = await graphqlClient.request(userTeaPositionsQuery, { user });
-  return result as userTeaPositionsQuery;
+  return result as userPositionsQueryTea;
 };
 
 export const executeGetUserApePositions = async ({
@@ -66,39 +66,26 @@ export const executeGetUserApePositions = async ({
   user: TAddressString;
 }) => {
   const result = await graphqlClient.request(userApePositionsQuery, { user });
-  return result as userApePositionsQuery;
+  return result as userPositionsQueryApe;
 };
 
 export const executeVaultsQuery = async () => {
   const result = await graphqlClient.request(vaults);
   return result as vaultsQuery;
 };
-
-export type userApePositionsQuery = {
-  userPositions: {
-    id: string;
-    balance: bigint;
-    APE: TAddressString;
-    user: TAddressString;
-    collateralSymbol: string;
-    debtSymbol: string;
-    collateralToken: TAddressString;
-    debtToken: TAddressString;
-    leverageTier: string;
-    vaultId: string;
-  }[];
+export type TUserPosition = {
+  id: string;
+  balance: bigint;
+  user: TAddressString;
+  collateralSymbol: string;
+  debtSymbol: string;
+  collateralToken: TAddressString;
+  debtToken: TAddressString;
+  leverageTier: string;
+  vaultId: string;
 };
-
-export type userTeaPositionsQuery = {
-  userPositionTeas: {
-    id: string;
-    balance: bigint;
-    user: TAddressString;
-    collateralSymbol: string;
-    debtSymbol: string;
-    collateralToken: TAddressString;
-    debtToken: TAddressString;
-    leverageTier: string;
-    vaultId: string;
-  }[];
+export type TUserApePosition = TUserPosition & { APE: TAddressString };
+export type userPositionsQueryTea = {
+  userPositionsTeas: TUserPosition[];
 };
+export type userPositionsQueryApe = { userPositions: TUserApePosition[] };
