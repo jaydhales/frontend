@@ -38,6 +38,10 @@ export type TBurnRow =
     }
   | undefined;
 
+export type TStakeForm = UseFormReturn<TStakeFormFields, undefined>;
+export interface TStakeFormFields {
+  stake?: string;
+}
 export type TMintForm = UseFormReturn<TMintFormFields, undefined>;
 export interface TMintFormFields {
   long: string;
