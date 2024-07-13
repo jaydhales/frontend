@@ -1,26 +1,28 @@
 import { X } from "lucide-react";
 import BurnTableHeaders from "./burnTableHeader";
 import type { TAddressString } from "@/lib/types";
-import { useAccount } from "wagmi";
-import { api } from "@/trpc/react";
 import { formatBigInt, getLeverageRatio } from "@/lib/utils";
 import BurnForm from "../burnForm/burnForm";
 import type { TUserPosition } from "@/server/queries/vaults";
+import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
 
 export default function SelectedRow({
   params,
   close,
   apeAddress,
+  isApe,
 }: {
   params: TUserPosition;
-  apeAddress: TAddressString;
+  apeAddress?: TAddressString;
+  isApe: boolean;
   close: () => void;
 }) {
-  const { address } = useAccount();
-  const { data } = api.user.getApeBalance.useQuery({
-    address: apeAddress,
-    user: address,
+  const { apeBal, teaBal } = useTeaAndApeBals({
+    vaultId: params.vaultId,
+    apeAddress,
+    isApe,
   });
+  const data = isApe ? apeBal : teaBal;
   if (!params) {
     <div>
       <h1>Hello</h1>
