@@ -1,13 +1,12 @@
 import { useSimulateContract } from "wagmi";
-import type { TAddressString } from "@/lib/types";
 import { VaultContract } from "@/contracts/vault";
 export function useBurnApe({
   data,
-
+  isApe,
   amount,
 }: {
-  apeAddress: TAddressString;
   amount: bigint;
+  isApe: boolean;
   data:
     | {
         leverageTier: number | undefined;
@@ -16,15 +15,11 @@ export function useBurnApe({
       }
     | undefined;
 }) {
-  const {
-    data: burnData,
-    error,
-    isFetching,
-  } = useSimulateContract({
+  const { data: burnData, isFetching } = useSimulateContract({
     ...VaultContract,
     functionName: "burn",
     args: [
-      true,
+      isApe,
       {
         debtToken: data?.debtToken ?? "0x",
         leverageTier: data?.leverageTier ?? -1,
@@ -33,6 +28,6 @@ export function useBurnApe({
       amount,
     ],
   });
-  console.log({ burnError: error, burnData });
+
   return { data: burnData, isFetching };
 }

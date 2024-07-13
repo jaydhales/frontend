@@ -20,12 +20,21 @@ export default function BurnTable({ isApe }: { isApe: boolean }) {
   );
 
   const selectedRowParams = useMemo(() => {
-    return ape?.data?.userPositions.find((r) => r.APE === selectedRow);
-  }, [ape.data?.userPositions, selectedRow]);
+    if (isApe) {
+      return ape?.data?.userPositions.find((r) => r.vaultId === selectedRow);
+    } else {
+      return tea.data?.userPositionsTeas.find((r) => r.vaultId === selectedRow);
+    }
+  }, [
+    isApe,
+    ape?.data?.userPositions,
+    selectedRow,
+    tea.data?.userPositionsTeas,
+  ]);
 
   return (
     <div className="relative">
-      {selectedRow && (
+      {selectedRow && selectedRowParams && (
         <SelectedRow
           apeAddress={selectedRow as TAddressString}
           params={selectedRowParams}
@@ -34,6 +43,7 @@ export default function BurnTable({ isApe }: { isApe: boolean }) {
           }}
         />
       )}
+
       {!selectedRow && (
         <table className="flex flex-col gap-y-4">
           <caption className="hidden">Burn Tokens</caption>
@@ -43,30 +53,37 @@ export default function BurnTable({ isApe }: { isApe: boolean }) {
               {ape.data?.userPositions.map((r) => (
                 <BurnTableRow
                   setSelectedRow={setSelectedRow}
+                  key={r.vaultId}
+                  row={{
+                    id: r.vaultId,
+                    balance: r.balance,
+                    user: r.user,
+                    collateralSymbol: r.collateralSymbol,
+                    debtSymbol: r.debtSymbol,
+                    collateralToken: r.collateralToken,
+                    debtToken: r.debtToken,
+                    leverageTier: r.leverageTier,
+                    vaultId: r.vaultId,
+                  }}
+                  isApe={true}
                   apeAddress={r.APE}
-                  colSymbol={r.collateralSymbol}
-                  leverageTier={r.leverageTier}
-                  debtSymbol={r.debtSymbol}
-                  debtToken={r.debtToken}
-                  colToken={r.collateralToken}
-                  key={r.APE}
                 ></BurnTableRow>
               ))}
             </>
           ) : (
             <>
-              {tea.data?.userPositionTeas.map((r) => (
-                <BurnTableRow
-                  apeAddress={""}
-                  key={r.id}
-                  colToken={""}
-                  colSymbol={""}
-                  debtToken={""}
-                  debtSymbol={""}
-                  leverageTier={""}
-                  setSelectedRow={setSelectedRow}
-                />
-              ))}
+              {tea.data?.userPositionsTeas.map((r) => {
+                return (
+                  <BurnTableRow
+                    row={{
+                      ...r,
+                    }}
+                    key={r.id}
+                    isApe={false}
+                    setSelectedRow={setSelectedRow}
+                  />
+                );
+              })}
             </>
           )}
         </table>

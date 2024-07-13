@@ -57,16 +57,3 @@ export interface TMintFormFields {
   deposit?: string;
 }
 export type TMintFormFieldKeys = keyof TMintFormFields;
-
-export type UserQuery = {
-  userPositions: {
-    User: string;
-    leverageTier: string;
-    balance: bigint;
-    APE: string;
-    collateralToken: string;
-    debtToken: string;
-    collateralSymbol: string;
-    debtSymbol: string;
-  }[];
-};
