@@ -1,7 +1,8 @@
+"use client";
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UseFormReturn } from "react-hook-form";
-import { Form, useForm } from "react-hook-form";
+import { Form, FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
@@ -85,7 +86,7 @@ export default function BurnForm({
     }
   };
   return (
-    <Form {...form}>
+    <FormProvider {...form}>
       <ProgressAlert
         isTxSuccess={isConfirmed}
         isTxPending={isConfirming}
@@ -139,6 +140,6 @@ export default function BurnForm({
           </div>
         </div>
       </form>
-    </Form>
+    </FormProvider>
   );
 }
