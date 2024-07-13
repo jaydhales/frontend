@@ -1,11 +1,14 @@
 import React, { createContext, useContext } from "react";
-import type { UserQuery } from "@/lib/types";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
+import type {
+  userTeaPositionsQuery,
+  userApePositionsQuery,
+} from "@/server/queries/vaults";
 interface state {
-  data: UserQuery | undefined;
+  teaPositions: userTeaPositionsQuery | undefined;
+  apePositions: userApePositionsQuery | undefined;
 }
-
 const BurnTableProviderContext = createContext<state | undefined>(undefined);
 export function useBurnTableProvider() {
   const context = useContext(BurnTableProviderContext);
@@ -19,20 +22,22 @@ export function useBurnTableProvider() {
 
 export default function BurnTableProvider({
   children,
+  isApe,
 }: {
+  isApe: boolean;
   children: React.ReactNode;
 }) {
   const { address } = useAccount();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { data } = api.user.getPositions.useQuery(
+  const { data: apePositions } = api.user.getApePositions.useQuery(
     { address },
     {
-      enabled: Boolean(address),
+      enabled: Boolean(address) && isApe,
     },
   );
 
   return (
-    <BurnTableProviderContext.Provider value={{ data }}>
+    <BurnTableProviderContext.Provider value={{ teaPositions, apePositions }}>
       {children}
     </BurnTableProviderContext.Provider>
   );

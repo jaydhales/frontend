@@ -1,22 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 import React, { useMemo, useState } from "react";
-import { burnRows } from "./mockBurnRows";
 import BurnTableHeaders from "./burnTableHeader";
 import BurnTableRow from "./burnTableRow";
 import SelectedRow from "./selected-row";
 import type { TAddressString } from "@/lib/types";
 import { useBurnTableProvider } from "@/components/providers/burnTableProvider";
+import { api } from "@/trpc/react";
 export default function BurnTable() {
   const [selectedRow, setSelectedRow] = useState<string | undefined>();
 
-  const { data } = useBurnTableProvider();
-
+  const { address } = useAccount();
+  const data = api.user.getApePositions.useQuery({ address });
   const selectedRowParams = useMemo(() => {
     return data?.userPositions.find((r) => r.APE === selectedRow);
   }, [data?.userPositions, selectedRow]);
-  console.log(burnRows);
-  console.log({ selectedRowParams });
+
   return (
     <div className="relative">
       {selectedRow && (

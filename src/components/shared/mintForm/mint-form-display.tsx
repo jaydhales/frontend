@@ -17,11 +17,11 @@ import TopSelects from "./topSelects";
 import { AssistantContract } from "@/contracts/assistant";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import ProgressAlert from "./progressAlert";
-
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
 import { formatDataInput } from "@/lib/utils";
 import MintFormLayout from "./mint-form-layout";
+
 export default function MintFormDisplay({
   vaultsQuery,
   Mint,
@@ -67,7 +67,8 @@ export default function MintFormDisplay({
     return z.coerce.number().safeParse(formData.deposit);
   }, [formData.deposit]);
 
-  const { writeContract, data: hash, isPending } = useWriteContract();
+  const { writeContract, error, data: hash, isPending } = useWriteContract();
+  console.log(error, "WRITE ERROR");
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
   // Invalidate if approve or mint tx is successful.
