@@ -1,27 +1,24 @@
 import { Button } from "@/components/ui/button";
+import type { TAddressString } from "@/lib/types";
 import { getLeverageRatio } from "@/lib/utils";
+import type { TUserPosition } from "@/server/queries/vaults";
 import { api } from "@/trpc/react";
 import { formatUnits } from "viem";
 import { useAccount } from "wagmi";
 interface Props {
-  apeAddress: string;
-  colToken: string;
-  colSymbol: string;
-  debtToken: string;
-  debtSymbol: string;
-  leverageTier: string;
+  row: TUserPosition;
+  isApe: boolean;
+  apeAddress?: TAddressString;
   setSelectedRow: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 export default function BurnTableRow({
-  apeAddress,
   setSelectedRow,
-  debtSymbol,
-  colSymbol,
-  leverageTier,
+  row,
+  isApe,
+  apeAddress,
 }: Props) {
   const { address } = useAccount();
-
-  const { data } = api.user.getApeBalance.useQuery(
+  const { data: apeBal } = api.user.getApeBalance.useQuery(
     {
       address: apeAddress,
       user: address,
@@ -30,21 +27,41 @@ export default function BurnTableRow({
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60,
+      enabled: isApe,
       // enabled: false,
+    },
+  );
+  const { data: teaBal } = api.user.getTeaBalance.useQuery(
+    {
+      user: address,
+      vaultId: row.vaultId,
+    },
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60,
+      enabled: !isApe,
     },
   );
 
   return (
     <tr className="grid grid-cols-5 items-center text-left text-gray text-white">
-      <th>{apeAddress.slice(0, 5) + "..." + apeAddress.slice(-4)}</th>
-      <th>{debtSymbol}</th>
-      <th>{colSymbol}</th>
-      <th>{getLeverageRatio(parseInt(leverageTier))}x</th>
+      <th>{row.vaultId}</th>
+      <th>{row.debtSymbol}</th>
+      <th>{row.collateralToken}</th>
+      <th>{getLeverageRatio(parseInt(row.leverageTier))}x</th>
       <th>
         <div className="flex items-center justify-between">
-          <span>
-            {parseFloat(parseFloat(formatUnits(data ?? 0n, 18)).toFixed(4))}
-          </span>
+          {isApe ? (
+            <span>
+              {parseFloat(parseFloat(formatUnits(apeBal ?? 0n, 18)).toFixed(4))}
+            </span>
+          ) : (
+            <span>
+              {parseFloat(parseFloat(formatUnits(teaBal ?? 0n, 18)).toFixed(4))}
+            </span>
+          )}
+
           <Button
             onClick={() => setSelectedRow(apeAddress)}
             type="button"
