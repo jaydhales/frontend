@@ -5,6 +5,7 @@ import { useAccount } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import Image from "next/image";
+import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 
 const ClaimFees = ({ balance }: { balance: string | undefined }) => {
   const { address } = useAccount();
@@ -63,6 +64,7 @@ const ClaimFees = ({ balance }: { balance: string | undefined }) => {
             Connect Wallet
           </Button>
         )}
+        <GasFeeEstimation></GasFeeEstimation>
       </div>
     </Card>
   );

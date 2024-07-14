@@ -8,6 +8,7 @@ import { useFormContext } from "react-hook-form";
 import { useAccount } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
+import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 import StakeInput from "@/components/stake/stakeForm/stakeInput";
 import type { TStakeFormFields } from "@/lib/types";
 
@@ -46,6 +47,8 @@ const StakeForm = () => {
                 Connect Wallet
               </Button>
             )}
+            <GasFeeEstimation></GasFeeEstimation>
+
             <div className="w-[450px]">
               <p className="h-[20px] text-left text-sm text-red-400">
                 {address && <>{form.formState.errors.root?.message}</>}

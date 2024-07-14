@@ -11,6 +11,7 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import UnstakeInput from "./unstakeInput";
 import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
+import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 
 const UnstakeForm = () => {
   const form = useFormContext<TUnstakeFormFields>();
@@ -49,6 +50,8 @@ const UnstakeForm = () => {
                 Connect Wallet
               </Button>
             )}
+            <GasFeeEstimation></GasFeeEstimation>
+
             <div className="w-[450px]">
               <p className="h-[20px] text-left text-sm text-red-400">
                 {address && <>{form.formState.errors.root?.message}</>}

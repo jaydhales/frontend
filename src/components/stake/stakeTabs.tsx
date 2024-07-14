@@ -4,12 +4,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Container } from "@/components/ui/container";
 
 import StakeFormProvider from "@/components/providers/stakeFormProvider";
-import StakeForm from "./stakeForm/stakeForm";
+import StakeForm from "@/components/stake/stakeForm/stakeForm";
 
-import UnstakeForm from "./unstakeForm/unstakeForm";
-import UnstakeFormProvider from "../providers/unstakeFormProvider";
+import UnstakeForm from "@/components/stake/unstakeForm/unstakeForm";
+import UnstakeFormProvider from "@/components/providers/unstakeFormProvider";
 
-import ClaimFees from "./claimFees/claimFees";
+import ClaimFees from "@/components/stake/claimFees/claimFees";
 
 const StakeTabs = () => {
   return (
