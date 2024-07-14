@@ -9,6 +9,8 @@ import StakeForm from "./stakeForm/stakeForm";
 import UnstakeForm from "./unstakeForm/unstakeForm";
 import UnstakeFormProvider from "../providers/unstakeFormProvider";
 
+import ClaimFees from "./claimFees/claimFees";
+
 const StakeTabs = () => {
   return (
     <Tabs defaultValue="stake">
@@ -36,7 +38,7 @@ const StakeTabs = () => {
       </TabsContent>
       <TabsContent value="claimFees">
         <Container>
-          <div>Claim Fees</div>
+          <ClaimFees balance={"111.1"}></ClaimFees>
         </Container>
       </TabsContent>
     </Tabs>
