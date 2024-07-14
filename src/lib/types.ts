@@ -42,6 +42,12 @@ export type TStakeForm = UseFormReturn<TStakeFormFields, undefined>;
 export interface TStakeFormFields {
   stake?: string;
 }
+export type TUnstakeForm = UseFormReturn<TUnstakeFormFields, undefined>;
+export interface TUnstakeFormFields {
+  amount?: string;
+  claimFees?: boolean;
+}
+
 export type TMintForm = UseFormReturn<TMintFormFields, undefined>;
 export interface TMintFormFields {
   long: string;
