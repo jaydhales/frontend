@@ -6,6 +6,9 @@ import { Container } from "@/components/ui/container";
 import StakeFormProvider from "@/components/providers/stakeFormProvider";
 import StakeForm from "./stakeForm/stakeForm";
 
+import UnstakeForm from "./unstakeForm/unstakeForm";
+import UnstakeFormProvider from "../providers/unstakeFormProvider";
+
 const StakeTabs = () => {
   return (
     <Tabs defaultValue="stake">
@@ -26,7 +29,9 @@ const StakeTabs = () => {
       </TabsContent>
       <TabsContent value="unstake">
         <Container>
-          <div>Unstake</div>
+          <UnstakeFormProvider>
+            <UnstakeForm></UnstakeForm>
+          </UnstakeFormProvider>
         </Container>
       </TabsContent>
       <TabsContent value="claimFees">
