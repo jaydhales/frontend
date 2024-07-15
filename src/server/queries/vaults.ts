@@ -67,6 +67,7 @@ export const executeGetUserApePositions = async ({
   user: TAddressString;
 }) => {
   const result = await graphqlClient.request(userApePositionsQuery, { user });
+  console.log(result, "RESULT");
   return result as userPositionsQueryApe;
 };
 
