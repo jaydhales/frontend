@@ -49,7 +49,7 @@ export default function SelectedRow({
       </div>
       <div className="flex justify-center pt-4">
         <div className=" w-[500px] justify-between">
-          <BurnForm balance={data} row={params} />
+          <BurnForm isApe={isApe} balance={data} row={params} />
         </div>
       </div>
     </div>

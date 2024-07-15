@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UseFormReturn } from "react-hook-form";
-import { Form, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
@@ -28,8 +28,10 @@ export type TBurnFields = { deposit?: string | undefined };
 export default function BurnForm({
   balance,
   row,
+  isApe,
 }: {
   balance: bigint | undefined;
+  isApe: boolean;
   row: TUserPosition;
 }) {
   const form = useForm<z.infer<typeof BurnSchema>>({
@@ -39,7 +41,8 @@ export default function BurnForm({
 
   const { data: quoteBurn } = api.vault.quoteBurn.useQuery(
     {
-      amount: formData.deposit,
+      amount: formData.deposit ?? "0",
+      isApe,
       debtToken: row.debtToken,
       leverageTier: parseInt(row.leverageTier),
       collateralToken: row.collateralToken,
@@ -63,14 +66,20 @@ export default function BurnForm({
   useEffect(() => {
     if (receiptData) {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      utils.user.getApeBalance.invalidate().catch((e) => {
-        console.log(e);
-      });
+      if (isApe) {
+        utils.user.getApeBalance.invalidate().catch((e) => {
+          console.log(e);
+        });
+      } else {
+        utils.user.getTeaBalance.invalidate().catch((e) => {
+          console.log(e);
+        });
+      }
     }
-  }, [receiptData, utils.user.getApeBalance]);
+  }, [receiptData, utils.user.getApeBalance, isApe, utils.user.getTeaBalance]);
 
   const { data: burnData } = useBurnApe({
-    isApe: true,
+    isApe: isApe,
     data: {
       collateralToken: row.collateralToken,
       debtToken: row.debtToken,
@@ -80,6 +89,7 @@ export default function BurnForm({
   });
 
   const { isValid, error } = useCheckValidityBurn(formData, balance);
+
   const onSubmit = () => {
     if (burnData?.request) {
       writeContract(burnData.request);
@@ -133,7 +143,7 @@ export default function BurnForm({
             className="w-full"
             type="submit"
           >
-            Burn APE
+            Burn {isApe ? "APE" : "TEA"}
           </Button>
           <div className="h-5 text-sm text-red-400">
             {error && <p>{error}</p>}
