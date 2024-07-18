@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import sir_logo from "@/../public/images/sir-logo.svg";
 import { type ReactNode } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 export function Header() {
   const { openAccountModal } = useAccountModal();
   const { openConnectModal } = useConnectModal();
@@ -19,6 +20,8 @@ export function Header() {
     openConnectModal?.();
     return;
   };
+  const pathname = usePathname();
+  console.log({ pathname });
   return (
     <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
       <Link href={"/"} className="flex items-center gap-x-2">
@@ -28,7 +31,7 @@ export function Header() {
       <div className="col-span-3 flex justify-center">
         <nav>
           <ul className="flex gap-x-[16px] bg-[#0A0A0F] px-[12px] py-[12px] font-semibold text-muted-foreground">
-            <NavItem url={""}>Leverage</NavItem>
+            <NavItem url={"/"}>Leverage</NavItem>
             <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
             <NavItem url={""}>Stake</NavItem>
             <NavItem url={""}>My tokens</NavItem>
@@ -49,9 +52,16 @@ export function Header() {
 }
 
 function NavItem({ url, children }: { children: ReactNode; url: string }) {
+  const path = usePathname();
+  const active = url === path;
   return (
     <Link href={url}>
-      <li className="cursor-pointer hover:text-white">{children}</li>
+      <li
+        data-active={active ? "true" : "false"}
+        className="cursor-pointer data-[active=true]:text-white hover:text-white"
+      >
+        {children}
+      </li>
     </Link>
   );
 }

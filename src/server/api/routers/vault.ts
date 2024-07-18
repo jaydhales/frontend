@@ -44,27 +44,19 @@ export const vaultRouter = createTRPCRouter({
   quoteBurn: publicProcedure
     .input(
       z.object({
-        debtToken: z.string().startsWith("0x").optional(),
-        collateralToken: z.string().startsWith("0x").optional(),
-        leverageTier: z.number().optional(),
-        amount: z.string().optional(),
+        debtToken: z.string().startsWith("0x"),
+        collateralToken: z.string().startsWith("0x"),
+        leverageTier: z.number(),
+        amount: z.string(),
+        isApe: z.boolean(),
       }),
     )
     .query(async ({ input }) => {
-      if (
-        !input.collateralToken ||
-        !input.debtToken ||
-        input.leverageTier === undefined ||
-        input.amount === undefined
-      ) {
-        throw Error("Undefined Param.");
-      }
-
       const result = await readContract({
         ...AssistantContract,
         functionName: "quoteBurn",
         args: [
-          true,
+          input.isApe,
           {
             debtToken: input.debtToken as TAddressString,
             collateralToken: input.collateralToken as TAddressString,
