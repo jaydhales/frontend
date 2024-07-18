@@ -33,7 +33,7 @@ export function Header() {
           <ul className="flex gap-x-[16px] bg-[#0A0A0F] px-[12px] py-[12px] font-semibold text-muted-foreground">
             <NavItem url={"/"}>Leverage</NavItem>
             <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
-            <NavItem url={""}>Stake</NavItem>
+            <NavItem url={"/stake"}>Stake</NavItem>
             <NavItem url={""}>My tokens</NavItem>
           </ul>
         </nav>
