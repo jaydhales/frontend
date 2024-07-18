@@ -2,7 +2,6 @@ import LeveragePage from "@/components/leverage/leveragePage";
 import LeverageTabs from "@/components/leverage/leverageTabs";
 import { MintForm } from "@/components/shared/mintForm/mint-form";
 
-
 import { api } from "@/trpc/server";
 
 export default async function Home() {
@@ -15,7 +14,7 @@ export default async function Home() {
           form={<MintForm isApe vaultsQuery={vaultQuery} />}
           vaultsQuery={vaultQuery}
         />
-
+      </LeveragePage>
     </main>
   );
 }
