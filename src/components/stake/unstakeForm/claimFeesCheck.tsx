@@ -23,7 +23,6 @@ const ClaimFeesCheckbox = ({ form }: Props) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-x-4">
                 <Checkbox
-                  {...field}
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 ></Checkbox>
