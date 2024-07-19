@@ -1,5 +1,10 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
-import { calculateVaultFee, getLeverageRatio, getLogoAsset } from "@/lib/utils";
+import {
+  calculateVaultFee,
+  getLeverageRatio,
+  getLogoAsset,
+  roundDown,
+} from "@/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 import type { vaultsQuery } from "../../../../.graphclient";
 import Image from "next/image";
@@ -45,7 +50,7 @@ export function VaultTableRow({
           {pool.collateralSymbol}/{pool.debtSymbol}
         </span>
       </th>
-      <th>{fee}%</th>
+      <th>{roundDown(fee, 2)}%</th>
       <th>
         <Badge
           {...badgeVariant}

@@ -45,3 +45,6 @@ jobs:
 
       - name: Run tests
         run: pnpm run test
+
+      - name: Check Types
+        run: pnpm run ts-lint
