@@ -20,7 +20,7 @@ export default function TopSelects({
         name="versus"
         title="Versus:"
         form={form}
-        items={long.map((e) => ({
+        items={versus.map((e) => ({
           label: e.debtSymbol,
           value: e.debtToken + "," + e.debtSymbol,
           imageUrl: getLogoAsset(e.debtToken as `0x${string}`),
@@ -30,7 +30,7 @@ export default function TopSelects({
         name="long"
         title="Go long:"
         form={form}
-        items={versus.map((e) => ({
+        items={long.map((e) => ({
           label: e.collateralSymbol,
           value: e.collateralToken + "," + e.collateralSymbol,
           imageUrl: getLogoAsset(e.collateralToken as `0x${string}`),
