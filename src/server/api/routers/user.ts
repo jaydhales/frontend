@@ -9,6 +9,7 @@ import {
   executeGetUserTeaPositions,
 } from "@/server/queries/vaults";
 import { VaultContract } from "@/contracts/vault";
+import { SirContract } from "@/contracts/sir";
 
 export const userRouter = createTRPCRouter({
   getBalance: publicProcedure
@@ -17,7 +18,7 @@ export const userRouter = createTRPCRouter({
         userAddress: z.string().startsWith("0x").optional(),
         tokenAddress: z.string().startsWith("0x").optional(),
         spender: z.string().startsWith("0x").optional(),
-      }),
+      })
     )
     .query(async ({ input }) => {
       console.log(input, "INPUT");
@@ -54,7 +55,7 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         userAddress: z.string().startsWith("0x").length(42).optional(),
-      }),
+      })
     )
     .query(async ({ input }) => {
       if (!input?.userAddress) {
@@ -70,7 +71,7 @@ export const userRouter = createTRPCRouter({
       z.object({
         address: z.string().startsWith("0x").length(42).optional(),
         user: z.string().startsWith("0x").length(42).optional(),
-      }),
+      })
     )
     .query(async ({ input }) => {
       if (!input.address || !input.user) {
@@ -90,7 +91,7 @@ export const userRouter = createTRPCRouter({
       z.object({
         user: z.string().startsWith("0x").length(42).optional(),
         vaultId: z.string(),
-      }),
+      })
     )
     .query(async ({ input }) => {
       const result = await readContract({
@@ -100,9 +101,40 @@ export const userRouter = createTRPCRouter({
       });
       return result;
     }),
+  getSirBalance: publicProcedure
+    .input(
+      z.object({
+        user: z.string().startsWith("0x").length(42).optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const result = await readContract({
+        abi: SirContract.abi,
+        address: SirContract.address,
+        functionName: "balanceOf",
+        args: [input.user as TAddressString],
+      });
+      return result;
+    }),
+  getTotalSirBalance: publicProcedure
+    .input(
+      z.object({
+        user: z.string().startsWith("0x").length(42).optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const result = await readContract({
+        abi: SirContract.abi,
+        address: SirContract.address,
+        functionName: "totalBalanceOf",
+        args: [input.user as TAddressString],
+      });
+      return result;
+    }),
+
   getApePositions: publicProcedure
     .input(
-      z.object({ address: z.string().startsWith("0x").length(42).optional() }),
+      z.object({ address: z.string().startsWith("0x").length(42).optional() })
     )
     .query(async ({ input }) => {
       console.log({ input });
@@ -118,7 +150,7 @@ export const userRouter = createTRPCRouter({
 
   getTeaPositions: publicProcedure
     .input(
-      z.object({ address: z.string().startsWith("0x").length(42).optional() }),
+      z.object({ address: z.string().startsWith("0x").length(42).optional() })
     )
     .query(async ({ input }) => {
       console.log({ input });
