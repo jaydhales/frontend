@@ -101,37 +101,6 @@ export const userRouter = createTRPCRouter({
       });
       return result;
     }),
-  getSirBalance: publicProcedure
-    .input(
-      z.object({
-        user: z.string().startsWith("0x").length(42).optional(),
-      })
-    )
-    .query(async ({ input }) => {
-      const result = await readContract({
-        abi: SirContract.abi,
-        address: SirContract.address,
-        functionName: "balanceOf",
-        args: [input.user as TAddressString],
-      });
-      return result;
-    }),
-  getTotalSirBalance: publicProcedure
-    .input(
-      z.object({
-        user: z.string().startsWith("0x").length(42).optional(),
-      })
-    )
-    .query(async ({ input }) => {
-      const result = await readContract({
-        abi: SirContract.abi,
-        address: SirContract.address,
-        functionName: "totalBalanceOf",
-        args: [input.user as TAddressString],
-      });
-      return result;
-    }),
-
   getApePositions: publicProcedure
     .input(
       z.object({ address: z.string().startsWith("0x").length(42).optional() })
@@ -163,6 +132,54 @@ export const userRouter = createTRPCRouter({
 
       return result;
     }),
+  getUnstakedSirBalance: publicProcedure
+    .input(
+      z.object({
+        user: z.string().startsWith("0x").length(42).optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const result = await readContract({
+        abi: SirContract.abi,
+        address: SirContract.address,
+        functionName: "balanceOf",
+        args: [input.user as TAddressString],
+      });
+      return result;
+    }),
+  getTotalSirBalance: publicProcedure
+    .input(
+      z.object({
+        user: z.string().startsWith("0x").length(42).optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const result = await readContract({
+        abi: SirContract.abi,
+        address: SirContract.address,
+        functionName: "totalBalanceOf",
+        args: [input.user as TAddressString],
+      });
+      return result;
+    }),
+  getSirSupply: publicProcedure.query(async () => {
+    const result = await readContract({
+      abi: SirContract.abi,
+      address: SirContract.address,
+      functionName: "supply",
+      args: [],
+    });
+    return result;
+  }),
+  getSirTotalSupply: publicProcedure.query(async () => {
+    const result = await readContract({
+      abi: SirContract.abi,
+      address: SirContract.address,
+      functionName: "totalSupply",
+      args: [],
+    });
+    return result;
+  }),
 });
 //todo use ZOD
 
