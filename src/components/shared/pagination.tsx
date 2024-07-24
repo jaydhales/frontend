@@ -8,6 +8,10 @@ export default function Pagination({ max }: { max: page }) {
   console.log(max, "MAX");
   const searchParams = useSearchParams();
   const pagination = searchParams.get("vault-page");
+  let page = pagination ? parseInt(pagination) : 1;
+  if (!isFinite(page)) {
+    // check if pagination is a page
+    page = 1;
   }
   return (
     <div className="flex justify-end gap-x-3 items-center pt-4">
@@ -32,6 +36,7 @@ export default function Pagination({ max }: { max: page }) {
           <button
             role="link"
             aria-label="Scroll Vaults Right"
+            disabled={page >= max}
             className="rounded-full disabled:opacity-50 p-[5px] bg-primary"
           >
             <ChevronRight size={17} />
