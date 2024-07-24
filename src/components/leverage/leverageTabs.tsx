@@ -7,12 +7,11 @@ import VaultTable from "./vaultTable/vaultTable";
 import BurnTable from "./burnTable/burnTable";
 import MintFormProvider from "../providers/mintFormProvider";
 import type { TVaults } from "@/lib/types";
-import BurnTableProvider from "../providers/burnTableProvider";
 import Pagination from "../shared/pagination";
+import { MintForm } from "../shared/mintForm/mint-form";
 
 export default function MintTabs({
   vaultsQuery,
-  form,
   isApe,
 }: {
   vaultsQuery: TVaults;
@@ -20,41 +19,39 @@ export default function MintTabs({
   isApe: boolean;
 }) {
   return (
-    <BurnTableProvider>
-      <Tabs defaultValue="mint">
-        <div className="flex justify-center">
-          <TabsList defaultValue={"mint"}>
-            <TabsTrigger value={"mint"}>Mint</TabsTrigger>
-            <TabsTrigger value={"burn"}>Burn</TabsTrigger>
-          </TabsList>
-        </div>
-        <br />
-        <TabsContent value="mint">
-          <Container>
-            <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
-              <MintFormProvider>
-                <MintForm vaultsQuery={vaultsQuery} />
-                <Card>
-                  <div className="flex h-full flex-col justify-between">
-                    <VaultTable vaultQuery={vaultsQuery} />
-                    <Pagination
-                      max={vaultsQuery?.vaults.vaults.length ?? 0 / 10}
-                    />
-                  </div>
-                </Card>
-              </MintFormProvider>
-            </div>
-          </Container>
-        </TabsContent>
-        {/*  */}
-        <TabsContent value="burn">
-          <Container>
-            <Card>
-              <BurnTable />
-            </Card>
-          </Container>
-        </TabsContent>
-      </Tabs>
-    </BurnTableProvider>
+    <Tabs defaultValue="mint">
+      <div className="flex justify-center">
+        <TabsList defaultValue={"mint"}>
+          <TabsTrigger value={"mint"}>Mint</TabsTrigger>
+          <TabsTrigger value={"burn"}>Burn</TabsTrigger>
+        </TabsList>
+      </div>
+      <br />
+      <TabsContent value="mint">
+        <Container>
+          <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
+            <MintFormProvider>
+              <MintForm vaultsQuery={vaultsQuery} isApe={isApe} />
+              <Card>
+                <div className="flex h-full flex-col justify-between">
+                  <VaultTable vaultQuery={vaultsQuery} />
+                  <Pagination
+                    max={vaultsQuery?.vaults.vaults.length ?? 0 / 10}
+                  />
+                </div>
+              </Card>
+            </MintFormProvider>
+          </div>
+        </Container>
+      </TabsContent>
+      {/*  */}
+      <TabsContent value="burn">
+        <Container>
+          <Card>
+            <BurnTable isApe={isApe} />
+          </Card>
+        </Container>
+      </TabsContent>
+    </Tabs>
   );
 }
