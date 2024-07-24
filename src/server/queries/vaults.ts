@@ -14,7 +14,7 @@ const vaults = gql`
     leverageTier
   }
 
-  query vaults {
+  query VaultQuery {
     vaults {
       ...VaultFields
     }
@@ -73,8 +73,10 @@ export const executeGetUserApePositions = async ({
 
 export const executeVaultsQuery = async () => {
   const result = await graphqlClient.request(vaults);
+  console.log(result, "RESULT");
   return result as TVaults;
 };
+
 export type TUserPosition = {
   id: string;
   balance: bigint;

@@ -19,7 +19,7 @@ export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
       </caption>
       <tbody className="space-y-2">
         <VaultTableRowHeaders />
-        {vaultQuery?.vaults.vaults
+        {vaultQuery?.vaults
           .slice(pagination * 8 - 8, pagination * 8)
           .map((pool, ind) => {
             return (

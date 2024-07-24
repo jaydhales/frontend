@@ -36,9 +36,7 @@ export default function MintTabs({
                 <div className="flex h-full flex-col justify-between">
                   <VaultTable vaultQuery={vaultsQuery} />
                   <Pagination
-                    max={Math.ceil(
-                      (vaultsQuery?.vaults.vaults.length ?? 0) / 10,
-                    )}
+                    max={Math.ceil((vaultsQuery?.vaults.length ?? 0) / 10)}
                   />
                 </div>
               </Card>
