@@ -5,7 +5,13 @@ import { useSearchParams } from "next/navigation";
 
 export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
   const params = useSearchParams();
-  console.log({ params });
+  const vaultPage = params.get("vault-page");
+  let pagination = 1;
+  if (vaultPage) {
+    const x = parseInt(vaultPage);
+    if (isFinite(x)) pagination = x;
+  }
+  console.log(vaultQuery, "VAULT QUERY");
   return (
     <table className="w-full">
       <caption className="pb-2  font-lora text-[1.95rem] font-bold">
@@ -14,7 +20,7 @@ export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
       <tbody className="space-y-2">
         <VaultTableRowHeaders />
         {vaultQuery?.vaults.vaults
-          .slice(pagination * 10 - 10, pagination * 10)
+          .slice(pagination * 8 - 8, pagination * 8)
           .map((pool, ind) => {
             return (
               <VaultTableRow
