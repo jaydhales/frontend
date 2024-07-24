@@ -18,6 +18,7 @@ export default function MintTabs({
   form: React.ReactNode;
   isApe: boolean;
 }) {
+  console.log(vaultsQuery?.vaults.vaults.length / 10);
   return (
     <Tabs defaultValue="mint">
       <div className="flex justify-center">
@@ -36,7 +37,9 @@ export default function MintTabs({
                 <div className="flex h-full flex-col justify-between">
                   <VaultTable vaultQuery={vaultsQuery} />
                   <Pagination
-                    max={vaultsQuery?.vaults.vaults.length ?? 0 / 10}
+                    max={Math.ceil(
+                      (vaultsQuery?.vaults.vaults.length ?? 0) / 10,
+                    )}
                   />
                 </div>
               </Card>
