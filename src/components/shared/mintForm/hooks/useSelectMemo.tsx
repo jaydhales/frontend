@@ -10,9 +10,9 @@ interface Props {
  */
 export function useSelectMemo({ formData, vaultsQuery }: Props) {
   const { versus, leverageTiers, long } = useMemo(() => {
-    if (vaultsQuery?.vaults.vaults === undefined)
+    if (vaultsQuery?.vaults === undefined)
       return { versus: [], leverageTiers: [], long: [] };
-    const matchingPools = vaultsQuery?.vaults.vaults.filter((p) => {
+    const matchingPools = vaultsQuery?.vaults.filter((p) => {
       if (formData.leverageTier) {
         if (p.leverageTier !== parseInt(formData.leverageTier)) {
           return false;
@@ -47,7 +47,7 @@ export function useSelectMemo({ formData, vaultsQuery }: Props) {
     formData.leverageTier,
     formData.long,
     formData.versus,
-    vaultsQuery?.vaults.vaults,
+    vaultsQuery?.vaults,
   ]);
   return { versus, leverageTiers, long };
 }

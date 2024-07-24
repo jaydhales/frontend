@@ -46,7 +46,7 @@ export function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
 
-  return vaultQuery?.vaults.vaults.find((v) => {
+  return vaultQuery?.vaults.find((v) => {
     if (
       v.collateralToken === collateralToken &&
       v.debtToken === debtToken &&

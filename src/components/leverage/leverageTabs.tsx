@@ -7,10 +7,11 @@ import VaultTable from "./vaultTable/vaultTable";
 import BurnTable from "./burnTable/burnTable";
 import MintFormProvider from "../providers/mintFormProvider";
 import type { TVaults } from "@/lib/types";
+import Pagination from "../shared/pagination";
+import { MintForm } from "../shared/mintForm/mint-form";
 
 export default function MintTabs({
   vaultsQuery,
-  form,
   isApe,
 }: {
   vaultsQuery: TVaults;
@@ -30,15 +31,19 @@ export default function MintTabs({
         <Container>
           <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
             <MintFormProvider>
-              {form}
+              <MintForm vaultsQuery={vaultsQuery} isApe={isApe} />
               <Card>
-                <VaultTable vaultQuery={vaultsQuery} />
+                <div className="flex h-full flex-col justify-between">
+                  <VaultTable vaultQuery={vaultsQuery} />
+                  <Pagination
+                    max={Math.ceil((vaultsQuery?.vaults.length ?? 0) / 10)}
+                  />
+                </div>
               </Card>
             </MintFormProvider>
           </div>
         </Container>
       </TabsContent>
-
       {/*  */}
       <TabsContent value="burn">
         <Container>

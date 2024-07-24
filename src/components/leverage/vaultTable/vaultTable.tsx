@@ -1,8 +1,17 @@
 import React from "react";
 import type { TVaults } from "@/lib/types";
 import { VaultTableRow } from "./vaultTableRow";
+import { useSearchParams } from "next/navigation";
 
 export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
+  const params = useSearchParams();
+  const vaultPage = params.get("vault-page");
+  let pagination = 1;
+  if (vaultPage) {
+    const x = parseInt(vaultPage);
+    if (isFinite(x)) pagination = x;
+  }
+  console.log(vaultQuery, "VAULT QUERY");
   return (
     <table className="w-full">
       <caption className="pb-2  font-lora text-[1.95rem] font-bold">
@@ -10,18 +19,20 @@ export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
       </caption>
       <tbody className="space-y-2">
         <VaultTableRowHeaders />
-        {vaultQuery?.vaults.vaults.map((pool, ind) => {
-          return (
-            <VaultTableRow
-              key={pool.vaultId.toString()}
-              pool={pool}
-              number={ind.toString()}
-              badgeVariant={{
-                variant: ind % 2 === 0 ? "yellow" : "default",
-              }}
-            />
-          );
-        })}
+        {vaultQuery?.vaults
+          .slice(pagination * 8 - 8, pagination * 8)
+          .map((pool, ind) => {
+            return (
+              <VaultTableRow
+                key={pool.vaultId.toString()}
+                pool={pool}
+                number={ind.toString()}
+                badgeVariant={{
+                  variant: ind % 2 === 0 ? "yellow" : "default",
+                }}
+              />
+            );
+          })}
       </tbody>
     </table>
   );

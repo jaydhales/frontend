@@ -9,7 +9,24 @@ import { z } from "zod";
 export const vaultRouter = createTRPCRouter({
   getVaults: publicProcedure.query(async ({}) => {
     const vaults = await executeVaultsQuery();
-    return { vaults };
+    // FOR TESTING
+    // const vault: VaultFieldsFragment = {
+    //   vaultId: "1",
+    //   debtToken: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    //   collateralToken: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    //   leverageTier: 1,
+    //   debtSymbol: "test1",
+    //   collateralSymbol: "test2",
+    // };
+    // const vault2 = { ...vault, debtSymbol: "test3", collateralSymbol: "test4" };
+    // const vaults: TVaults = { vaults: { vaults: [vault] } };
+    // for (let i = 0; i < 11; i++) {
+    //   vaults.vaults.vaults.push(vault);
+    // }
+    // for (let i = 0; i < 11; i++) {
+    //   vaults.vaults.vaults.push(vault2);
+    // }
+    return vaults;
   }),
   getApeParams: publicProcedure
     .input(z.object({ address: z.string().startsWith("0x") }))
