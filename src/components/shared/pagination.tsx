@@ -1,7 +1,7 @@
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-export default function Pagination({ max }: { max: page }) {
+export default function Pagination({ max }: { max: number }) {
   if (max < 1) {
     max = 1;
   }
