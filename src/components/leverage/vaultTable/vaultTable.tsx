@@ -5,11 +5,7 @@ import { useSearchParams } from "next/navigation";
 
 export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
   const params = useSearchParams();
-  let pagination = parseInt(params.get("pagination" ?? "") ?? "1");
-  if (pagination < 1) {
-    pagination = 1;
-  }
-
+  console.log({ params });
   return (
     <table className="w-full">
       <caption className="pb-2  font-lora text-[1.95rem] font-bold">
