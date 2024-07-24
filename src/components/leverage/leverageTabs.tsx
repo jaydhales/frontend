@@ -18,7 +18,6 @@ export default function MintTabs({
   form: React.ReactNode;
   isApe: boolean;
 }) {
-  console.log(vaultsQuery?.vaults.vaults.length / 10);
   return (
     <Tabs defaultValue="mint">
       <div className="flex justify-center">
