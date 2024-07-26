@@ -1,7 +1,7 @@
 import type { TAddressString } from "@/lib/types";
 
 export const AssistantContract = {
-  address: "0x82Bd83ec6D4bCC8EaB6F6cF7565efE1e41D92Ce5" as TAddressString,
+  address: "0x9bE634797af98cB560DB23260b5f7C6e98AcCAcf" as TAddressString,
   abi: [
     {
       type: "constructor",
