@@ -20,7 +20,7 @@ export function useCreateVault({
       {
         debtToken: longToken as TAddressString,
         collateralToken: versusToken as TAddressString,
-        leverageTier: 1,
+        leverageTier: lt,
       },
     ],
   });
