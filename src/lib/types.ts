@@ -1,5 +1,7 @@
 import type { UseFormReturn } from "react-hook-form";
 import type { VaultFieldsFragment } from "../../.graphclient";
+import type { z } from "zod";
+import type { CreateVaultInputValues } from "./schemas";
 
 export type TAddressString = `0x${string}`;
 // vaultParams.debtToken, vaultParams.collateralToken, vaultParams.leverageTier, vaultId
@@ -37,6 +39,10 @@ export type TBurnRow =
       debtSymbol: string;
     }
   | undefined;
+
+export type TCreateVaultForm = UseFormReturn<TCreateVaultFields, undefined>;
+export type TCreateVaultFields = z.infer<typeof CreateVaultInputValues>;
+export type TCreateVaultKeys = keyof TCreateVaultFields;
 
 export type TStakeForm = UseFormReturn<TStakeFormFields, undefined>;
 export interface TStakeFormFields {

@@ -5,9 +5,9 @@ const linkSchema = z.object({
 });
 
 export const CreateVaultInputValues = z.object({
-  longToken: z.string(),
-  versusToken: z.string(),
-  leverageTier: z.string(),
+  longToken: z.string().startsWith("0x").length(42),
+  versusToken: z.string().startsWith("0x").length(42),
+  leverageTier: z.string().min(1),
 });
 
 export const assetSchema = z.object({
