@@ -12,9 +12,9 @@ const InputVariants = classVarianceAuthority.cva(
       background: {
         transparent:
           "bg-transparent placeholder:text-muted-foreground  p-1 rounded-none ",
-        primary: "bg-card p-1",
+        primary: "bg-primary p-1",
       },
-      textSize: { md: "", xl: "text-[28px]" },
+      textSize: { md: "text-[18px]", xl: "text-[28px]" },
     },
     defaultVariants: { background: "transparent" },
   },
