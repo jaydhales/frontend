@@ -37,6 +37,7 @@ export default function RootLayout({
           <EvmProvider cookie={cookie}>
             <div className="flex min-h-screen flex-col">
               <Header />
+
               {children}
               <Footer />
             </div>
