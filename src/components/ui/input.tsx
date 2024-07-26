@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import * as classVarianceAuthority from "class-variance-authority";
 
 const InputVariants = classVarianceAuthority.cva(
-  "flex h-10 w-40 rounded-md py-2 text-sm ring-offset-background " +
+  "flex  w-40 rounded-md py-2 px-2 text-sm ring-offset-background " +
     "file:border-0 file:bg-transparent file:text-sm file:font-medium " +
     "placeholder:text-muted-foreground  focus-visible:outline-none focus:ring-2 " +
     "focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
@@ -14,9 +14,10 @@ const InputVariants = classVarianceAuthority.cva(
           "bg-transparent placeholder:text-muted-foreground  p-1 rounded-none ",
         primary: "bg-primary p-1",
       },
-      textSize: { md: "text-[18px]", xl: "text-[28px]" },
+      textSize: { sm: "text-[14px]", md: "text-[18px]", xl: "text-[28px]" },
+      height: { sm: "h-6", md: "h-8", lg: "h-10" },
     },
-    defaultVariants: { background: "transparent" },
+    defaultVariants: { background: "transparent", height: "lg" },
   },
 );
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> &
