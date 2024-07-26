@@ -4,6 +4,12 @@ const linkSchema = z.object({
   url: z.string().url(),
 });
 
+export const CreateVaultInputValues = z.object({
+  longToken: z.string(),
+  versusToken: z.string(),
+  leverageTier: z.string(),
+});
+
 export const assetSchema = z.object({
   decimals: z.number().int().positive(),
   description: z.string(),
