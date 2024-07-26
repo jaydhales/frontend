@@ -2,12 +2,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { isValid, z } from "zod";
+import type { z } from "zod";
+import { isValid } from "zod";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useSimulateContract } from "wagmi";
-import { VaultContract } from "@/contracts/vault";
+import { CreateVaultInputValues } from "@/lib/schemas";
 export default function CreateVaultForm() {
   const form = useForm<z.infer<typeof CreateVaultInputValues>>({
     resolver: zodResolver(CreateVaultInputValues),
