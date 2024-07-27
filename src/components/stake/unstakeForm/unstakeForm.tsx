@@ -15,9 +15,10 @@ import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 
 interface Props {
   balance?: string;
+  dividends?: string;
 }
 
-const UnstakeForm = ({ balance }: Props) => {
+const UnstakeForm = ({ balance, dividends }: Props) => {
   const form = useFormContext<TUnstakeFormFields>();
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
@@ -32,7 +33,10 @@ const UnstakeForm = ({ balance }: Props) => {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormLabel htmlFor="stake">Amount:</FormLabel>
           <UnstakeInput form={form} balance={balance}></UnstakeInput>
-          <ClaimFeesCheckbox form={form}></ClaimFeesCheckbox>
+          <ClaimFeesCheckbox
+            form={form}
+            dividends={dividends}
+          ></ClaimFeesCheckbox>
 
           <div className=" flex-col flex items-center justify-center mt-[20px]">
             {address && (

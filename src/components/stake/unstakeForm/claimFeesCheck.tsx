@@ -10,9 +10,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 interface Props {
   form: TUnstakeForm;
+  dividends?: string;
 }
 
-const ClaimFeesCheckbox = ({ form }: Props) => {
+const ClaimFeesCheckbox = ({ form, dividends }: Props) => {
   return (
     <FormField
       control={form.control}
@@ -31,7 +32,7 @@ const ClaimFeesCheckbox = ({ form }: Props) => {
                 </FormLabel>
               </div>
               <div className="text-[#B6B6C9] text-sm">
-                Amount to claim: {`171.31`} ETH
+                Amount to claim: {dividends} ETH
               </div>
             </div>
           </FormControl>
