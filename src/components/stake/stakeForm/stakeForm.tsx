@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { Card } from "@/components/ui/card";
 import { Form, FormLabel } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
@@ -12,13 +14,28 @@ import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 import StakeInput from "@/components/stake/stakeForm/stakeInput";
 import type { TStakeFormFields } from "@/lib/types";
 
-const StakeForm = () => {
+import { z } from "zod";
+
+// import { useCheckStakeValid } from "@/components/stake/hooks/checkStakeValid";
+
+interface Props {
+  balance?: string;
+}
+
+const StakeForm = ({ balance }: Props) => {
   const form = useFormContext<TStakeFormFields>();
+  const formData = form.watch();
+
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
+  const safeStake = useMemo(() => {
+    return z.coerce.number().safeParse(formData.stake);
+  }, [formData.stake]);
+
   const onSubmit = () => {
     console.log("form submitted");
+    console.log(safeStake.data);
   };
 
   return (
@@ -26,7 +43,7 @@ const StakeForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormLabel htmlFor="stake">Stake:</FormLabel>
-          <StakeInput form={form} balance="68.86"></StakeInput>
+          <StakeInput form={form} balance={balance}></StakeInput>
           <div className=" flex-col flex items-center justify-center mt-[20px]">
             {address && (
               <Button
