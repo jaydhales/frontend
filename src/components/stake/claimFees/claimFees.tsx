@@ -7,7 +7,12 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 
-const ClaimFees = ({ balance }: { balance: string | undefined }) => {
+interface Props {
+  ethBalance?: string;
+  claimAmount?: string;
+}
+
+const ClaimFees = ({ ethBalance, claimAmount }: Props) => {
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
@@ -19,7 +24,7 @@ const ClaimFees = ({ balance }: { balance: string | undefined }) => {
       <div className="flex justify-between rounded-md bg-primary p-3">
         <div className="flex flex-col justify-between">
           <div className="h-10 w-40 rounded-md ring-offset-background bg-card text-[28px]">
-            68.86
+            {claimAmount}
           </div>
           <div className="pt-2 text-sm italic text-gray">$66.88</div>
         </div>
@@ -39,7 +44,8 @@ const ClaimFees = ({ balance }: { balance: string | undefined }) => {
               <span className="font-medium">ETH</span>
             </div>
             <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-              Balance: {parseFloat(parseFloat(balance ?? "0").toFixed(4))}
+              Balance:{" "}
+              {parseFloat(parseFloat(ethBalance ? ethBalance : "0").toFixed(4))}
             </h2>
           </div>
         </div>
