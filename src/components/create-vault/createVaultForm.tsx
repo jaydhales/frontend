@@ -9,7 +9,8 @@ import { Button } from "../ui/button";
 import { CreateVaultInputValues } from "@/lib/schemas";
 import type { TCreateVaultKeys } from "@/lib/types";
 import { useCreateVault } from "./hooks/useCreateVault";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import ProgressAlert from "../shared/mintForm/progressAlert";
 export default function CreateVaultForm() {
   const form = useForm<z.infer<typeof CreateVaultInputValues>>({
     resolver: zodResolver(CreateVaultInputValues),
@@ -23,16 +24,19 @@ export default function CreateVaultForm() {
   const formData = form.watch();
   const { longToken, versusToken, leverageTier } = formData;
   const data = useCreateVault({ longToken, versusToken, leverageTier });
-  const { writeContract } = useWriteContract();
+  const { writeContract,  isPending,  data: hash, } = useWriteContract();
   const onSubmit = () => {
     if (form.formState.isValid && data?.request) {
       writeContract(data?.request);
     }
   };
 
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash });
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <ProgressAlert waitForSign={isPending} isTxPending={isConfirming} isTxSuccess={isConfirmed}/>
         <div className="grid  gap-y-2">
           <div className="w-full space-y-2">
             <TokenInput name="longToken" title="Long Token" />
@@ -91,7 +95,7 @@ export default function CreateVaultForm() {
               </p>
             }
           </div>
-        </div>
+        </Progress>
 
         <div className="flex justify-center">
           <Button
