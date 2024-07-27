@@ -16,7 +16,7 @@ import ClaimFees from "@/components/stake/claimFees/claimFees";
 
 import { useEffect } from "react";
 import { useAccount } from "wagmi";
-import { formatUnits } from "viem";
+import { formatUnits, formatEther } from "viem";
 import { api } from "@/trpc/react";
 
 const StakeTabs = () => {
@@ -36,6 +36,13 @@ const StakeTabs = () => {
     { enabled: isConnected }
   );
 
+  const { data: dividends } = api.user.getDividends.useQuery(
+    {
+      staker: address,
+    },
+    { enabled: isConnected }
+  );
+
   const safeUnstakedBalance = useMemo(() => {
     return z.coerce.bigint().default(0n).safeParse(userBalance);
   }, [userBalance]);
@@ -44,10 +51,18 @@ const StakeTabs = () => {
     return z.coerce.bigint().default(0n).safeParse(totalBalance);
   }, [totalBalance]);
 
+  const safeDividends = useMemo(() => {
+    return z.coerce.bigint().default(0n).safeParse(dividends);
+  }, [dividends]);
+
   useEffect(() => {
     console.log("Debug: ");
-    console.log(safeUnstakedBalance.data);
-  }, [safeUnstakedBalance]);
+    console.log(`Unstaked SIR: ${safeUnstakedBalance.data}`);
+    console.log(
+      `Staked SIR: ${safeUnstakedBalance.success && safeTotalBalance.success && safeTotalBalance.data - safeUnstakedBalance.data}`
+    );
+    console.log(`Dividends: ${safeDividends.data}`);
+  }, [safeTotalBalance, safeUnstakedBalance, safeDividends]);
 
   return (
     <Tabs defaultValue="stake">
@@ -80,6 +95,9 @@ const StakeTabs = () => {
                   ? safeTotalBalance.data - safeUnstakedBalance.data
                   : 0n,
                 18
+              )}
+              dividends={formatEther(
+                safeDividends.success ? safeDividends.data : 0n
               )}
             ></UnstakeForm>
             ;
