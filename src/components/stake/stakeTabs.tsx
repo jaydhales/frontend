@@ -1,5 +1,8 @@
 "use client";
 
+import { useMemo } from "react";
+import { z } from "zod";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Container } from "@/components/ui/container";
 
@@ -11,7 +14,30 @@ import UnstakeFormProvider from "@/components/providers/unstakeFormProvider";
 
 import ClaimFees from "@/components/stake/claimFees/claimFees";
 
+import { useEffect } from "react";
+import { useAccount } from "wagmi";
+import { formatUnits } from "viem";
+import { api } from "@/trpc/react";
+
 const StakeTabs = () => {
+  const { address, isConnected } = useAccount();
+
+  const { data: userBalance } = api.user.getUnstakedSirBalance.useQuery(
+    {
+      user: address,
+    },
+    { enabled: isConnected }
+  );
+
+  const safeUnstakedBalance = useMemo(() => {
+    return z.coerce.bigint().default(0n).safeParse(userBalance);
+  }, [userBalance]);
+
+  useEffect(() => {
+    console.log("Debug: ");
+    console.log(safeUnstakedBalance.data);
+  }, [safeUnstakedBalance]);
+
   return (
     <Tabs defaultValue="stake">
       <div className="flex justify-center">
@@ -25,7 +51,12 @@ const StakeTabs = () => {
       <TabsContent value="stake">
         <Container>
           <StakeFormProvider>
-            <StakeForm></StakeForm>
+            <StakeForm
+              balance={formatUnits(
+                safeUnstakedBalance.success ? safeUnstakedBalance.data : 0n,
+                18
+              )}
+            ></StakeForm>
           </StakeFormProvider>
         </Container>
       </TabsContent>
