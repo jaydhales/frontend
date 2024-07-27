@@ -13,7 +13,11 @@ import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
 import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 
-const UnstakeForm = () => {
+interface Props {
+  balance?: string;
+}
+
+const UnstakeForm = ({ balance }: Props) => {
   const form = useFormContext<TUnstakeFormFields>();
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
@@ -27,7 +31,7 @@ const UnstakeForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormLabel htmlFor="stake">Amount:</FormLabel>
-          <UnstakeInput form={form} balance="68.86"></UnstakeInput>
+          <UnstakeInput form={form} balance={balance}></UnstakeInput>
           <ClaimFeesCheckbox form={form}></ClaimFeesCheckbox>
 
           <div className=" flex-col flex items-center justify-center mt-[20px]">
