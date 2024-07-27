@@ -43,6 +43,15 @@ const StakeTabs = () => {
     { enabled: isConnected }
   );
 
+  const { data: ethBalance } = api.user.getEthBalance.useQuery(
+    {
+      userAddress: address,
+    },
+    {
+      enabled: isConnected,
+    }
+  );
+
   const safeUnstakedBalance = useMemo(() => {
     return z.coerce.bigint().default(0n).safeParse(userBalance);
   }, [userBalance]);
@@ -56,13 +65,15 @@ const StakeTabs = () => {
   }, [dividends]);
 
   useEffect(() => {
-    console.log("Debug: ");
     console.log(`Unstaked SIR: ${safeUnstakedBalance.data}`);
     console.log(
       `Staked SIR: ${safeUnstakedBalance.success && safeTotalBalance.success && safeTotalBalance.data - safeUnstakedBalance.data}`
     );
     console.log(`Dividends: ${safeDividends.data}`);
-  }, [safeTotalBalance, safeUnstakedBalance, safeDividends]);
+    console.log(
+      `ETH Balance: ${parseFloat(formatEther(ethBalance ?? 0n)).toFixed(4)}`
+    );
+  }, [safeTotalBalance, safeUnstakedBalance, safeDividends, ethBalance]);
 
   return (
     <Tabs defaultValue="stake">
@@ -106,7 +117,13 @@ const StakeTabs = () => {
       </TabsContent>
       <TabsContent value="claimFees">
         <Container>
-          <ClaimFees balance={"111.1"}></ClaimFees>
+          <ClaimFees
+            ethBalance={formatEther(ethBalance ?? 0n)}
+            claimAmount={formatEther(
+              safeDividends.success ? safeDividends.data : 0n
+            )}
+          ></ClaimFees>
+          3
         </Container>
       </TabsContent>
     </Tabs>
