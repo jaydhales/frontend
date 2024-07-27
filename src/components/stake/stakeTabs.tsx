@@ -29,9 +29,20 @@ const StakeTabs = () => {
     { enabled: isConnected }
   );
 
+  const { data: totalBalance } = api.user.getTotalSirBalance.useQuery(
+    {
+      user: address,
+    },
+    { enabled: isConnected }
+  );
+
   const safeUnstakedBalance = useMemo(() => {
     return z.coerce.bigint().default(0n).safeParse(userBalance);
   }, [userBalance]);
+
+  const safeTotalBalance = useMemo(() => {
+    return z.coerce.bigint().default(0n).safeParse(totalBalance);
+  }, [totalBalance]);
 
   useEffect(() => {
     console.log("Debug: ");
@@ -63,7 +74,15 @@ const StakeTabs = () => {
       <TabsContent value="unstake">
         <Container>
           <UnstakeFormProvider>
-            <UnstakeForm></UnstakeForm>
+            <UnstakeForm
+              balance={formatUnits(
+                safeTotalBalance.success && safeUnstakedBalance.success
+                  ? safeTotalBalance.data - safeUnstakedBalance.data
+                  : 0n,
+                18
+              )}
+            ></UnstakeForm>
+            ;
           </UnstakeFormProvider>
         </Container>
       </TabsContent>
