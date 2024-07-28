@@ -31,7 +31,7 @@ const ClaimFees = ({ ethBalance, claimAmount }: Props) => {
         <div>
           <div className="flex flex-col justify-between gap-y-3">
             <div
-              className={`flex items-center justify-center gap-x-2 rounded-md py-1`}
+              className={`flex items-center justify-end gap-x-2 rounded-md py-1`}
             >
               <Image
                 src={
