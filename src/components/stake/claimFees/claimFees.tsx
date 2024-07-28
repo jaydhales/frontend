@@ -24,7 +24,7 @@ const ClaimFees = ({ ethBalance, claimAmount }: Props) => {
       <div className="flex justify-between rounded-md bg-primary p-3">
         <div className="flex flex-col justify-between">
           <div className="h-10 w-40 rounded-md ring-offset-background bg-card text-[28px]">
-            {claimAmount}
+            {parseFloat(claimAmount ?? "0").toFixed(4)}
           </div>
           <div className="pt-2 text-sm italic text-gray">$66.88</div>
         </div>
@@ -44,8 +44,7 @@ const ClaimFees = ({ ethBalance, claimAmount }: Props) => {
               <span className="font-medium">ETH</span>
             </div>
             <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-              Balance:{" "}
-              {parseFloat(parseFloat(ethBalance ? ethBalance : "0").toFixed(4))}
+              Balance: {parseFloat(parseFloat(ethBalance ?? "0").toFixed(4))}
             </h2>
           </div>
         </div>

@@ -65,6 +65,7 @@ const StakeTabs = () => {
   }, [dividends]);
 
   useEffect(() => {
+    console.log("---TABS---");
     console.log(`Unstaked SIR: ${safeUnstakedBalance.data}`);
     console.log(
       `Staked SIR: ${safeUnstakedBalance.success && safeTotalBalance.success && safeTotalBalance.data - safeUnstakedBalance.data}`
@@ -111,7 +112,6 @@ const StakeTabs = () => {
                 safeDividends.success ? safeDividends.data : 0n
               )}
             ></UnstakeForm>
-            ;
           </UnstakeFormProvider>
         </Container>
       </TabsContent>
@@ -123,7 +123,6 @@ const StakeTabs = () => {
               safeDividends.success ? safeDividends.data : 0n
             )}
           ></ClaimFees>
-          3
         </Container>
       </TabsContent>
     </Tabs>
