@@ -21,6 +21,7 @@ export default function CreateVaultForm() {
       versusToken: "",
     },
   });
+
   const formData = form.watch();
   const { longToken, versusToken, leverageTier } = formData;
   const data = useCreateVault({ longToken, versusToken, leverageTier });
