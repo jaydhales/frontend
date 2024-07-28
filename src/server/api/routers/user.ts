@@ -10,7 +10,6 @@ import {
 } from "@/server/queries/vaults";
 import { VaultContract } from "@/contracts/vault";
 import { SirContract } from "@/contracts/sir";
-import { g } from "vitest/dist/suite-IbNSsUWN.js";
 
 export const userRouter = createTRPCRouter({
   getBalance: publicProcedure
