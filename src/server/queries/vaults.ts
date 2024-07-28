@@ -12,6 +12,7 @@ const vaults = gql`
     collateralSymbol
     vaultId
     leverageTier
+    totalValueLocked
   }
 
   query VaultQuery {
