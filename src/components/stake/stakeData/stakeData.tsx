@@ -1,32 +1,38 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { formatUnits } from "viem";
 
-const StakeData = () => {
-  const [totalSIRLocked, setTotalSIRLocked] = useState<bigint | undefined>(0n);
+interface supplyProps {
+  data?: bigint;
+}
 
-  const { data: unstakedSupply }: { data?: bigint } =
+const StakeData = () => {
+  const { data: unstakedSupply }: supplyProps =
     api.user.getSirSupply.useQuery();
-  const { data: totalSupply }: { data?: bigint } =
+  const { data: totalSupply }: supplyProps =
     api.user.getSirTotalSupply.useQuery();
 
-  useEffect(() => {
-    setTotalSIRLocked(
-      totalSupply && unstakedSupply && totalSupply - unstakedSupply
-    );
+  const totalValueLocked = useMemo(() => {
+    if (totalSupply !== undefined && unstakedSupply != undefined) {
+      return totalSupply - unstakedSupply;
+    }
+  }, [unstakedSupply, totalSupply]);
 
+  useEffect(() => {
     console.log("---DATA---");
     console.log(`Unstaked SIR Supply: ${unstakedSupply}`);
-  }, [unstakedSupply, totalSupply]);
+    console.log(`Total SIR Supply: ${totalSupply}`);
+    console.log(`Total Value Locked: ${totalValueLocked}`);
+  }, [unstakedSupply, totalSupply, totalValueLocked]);
 
   return (
     <div className="flex justify-evenly py-[24px]">
       <div className="bg-secondary rounded-md w-[47%] py-2 flex flex-col justify-center items-center gap-2">
         <div className="text-sm font-light">Total SIR Locked</div>
         <div className="text-2xl font-semibold font-lora">
-          {parseFloat(formatUnits(totalSIRLocked ?? 0n, 18)).toFixed(4)}
+          {parseFloat(formatUnits(totalValueLocked ?? 0n, 18)).toFixed(4)}
         </div>
       </div>
       <div className="bg-secondary rounded-md w-[47%] py-2 flex flex-col justify-center items-center gap-2">
