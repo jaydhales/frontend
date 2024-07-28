@@ -1,4 +1,3 @@
-import type { vaultsQuery } from "@/../.graphclient";
 import { graphqlClient } from "@/lib/graphqlClient";
 import type { TAddressString, TVaults } from "@/lib/types";
 import { gql } from "graphql-request";
