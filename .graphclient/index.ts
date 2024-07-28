@@ -592,6 +592,7 @@ export type Vault = {
   collateralSymbol: Scalars['String']['output'];
   debtSymbol: Scalars['String']['output'];
   leverageTier: Scalars['Int']['output'];
+  totalValueLocked: Scalars['BigInt']['output'];
 };
 
 export type Vault_filter = {
@@ -723,6 +724,14 @@ export type Vault_filter = {
   leverageTier_lte?: InputMaybe<Scalars['Int']['input']>;
   leverageTier_in?: InputMaybe<Array<Scalars['Int']['input']>>;
   leverageTier_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  totalValueLocked?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValueLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValueLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValueLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValueLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValueLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValueLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalValueLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Vault_filter>>>;
@@ -736,7 +745,8 @@ export type Vault_orderBy =
   | 'debtToken'
   | 'collateralSymbol'
   | 'debtSymbol'
-  | 'leverageTier';
+  | 'leverageTier'
+  | 'totalValueLocked';
 
 export type _Block_ = {
   /** The hash of the block */
@@ -1004,6 +1014,7 @@ export type VaultResolvers<ContextType = MeshContext, ParentType extends Resolve
   collateralSymbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   debtSymbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   leverageTier?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalValueLocked?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1107,9 +1118,9 @@ const merger = new(BareMerger as any)({
         store: rootStore.child('bareMerger')
       })
 const documentHashMap = {
-        "9ee31b28323c888d91bdbd18446778cad65d964b2f0427cbafe4049dfd8f63b9": VaultsDocument,
-"62c84b846dcd85026717c0103b00c1ce279b480bedc3ebf00e0f163b09f1e170": GetUserTeaPositionsDocument,
-"fbe98310062c8cbcde813882ab841dc350d3a90840cc6020fb8208d2089c4ce9": GetUserApePositionsDocument
+        "1570d7c1257c9f12ff312df28d432a74a4aa5ba3b0cc8055951e3e8fcf8fe397": VaultQueryDocument,
+"17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36": GetUserApePositionsDocument,
+"d0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce": GetUserTeaPositionsDocument
       }
 additionalEnvelopPlugins.push(usePersistedOperations({
         getPersistedOperation(key) {
@@ -1131,26 +1142,26 @@ additionalEnvelopPlugins.push(usePersistedOperations({
     get documents() {
       return [
       {
-        document: VaultsDocument,
+        document: VaultQueryDocument,
         get rawSDL() {
-          return printWithCache(VaultsDocument);
+          return printWithCache(VaultQueryDocument);
         },
-        location: 'VaultsDocument.graphql',
-        sha256Hash: '9ee31b28323c888d91bdbd18446778cad65d964b2f0427cbafe4049dfd8f63b9'
-      },{
-        document: GetUserTeaPositionsDocument,
-        get rawSDL() {
-          return printWithCache(GetUserTeaPositionsDocument);
-        },
-        location: 'GetUserTeaPositionsDocument.graphql',
-        sha256Hash: '62c84b846dcd85026717c0103b00c1ce279b480bedc3ebf00e0f163b09f1e170'
+        location: 'VaultQueryDocument.graphql',
+        sha256Hash: '1570d7c1257c9f12ff312df28d432a74a4aa5ba3b0cc8055951e3e8fcf8fe397'
       },{
         document: GetUserApePositionsDocument,
         get rawSDL() {
           return printWithCache(GetUserApePositionsDocument);
         },
         location: 'GetUserApePositionsDocument.graphql',
-        sha256Hash: 'fbe98310062c8cbcde813882ab841dc350d3a90840cc6020fb8208d2089c4ce9'
+        sha256Hash: '17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36'
+      },{
+        document: GetUserTeaPositionsDocument,
+        get rawSDL() {
+          return printWithCache(GetUserTeaPositionsDocument);
+        },
+        location: 'GetUserTeaPositionsDocument.graphql',
+        sha256Hash: 'd0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce'
       }
     ];
     },
@@ -1205,26 +1216,26 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
   const sdkRequester$ = getBuiltGraphClient().then(({ sdkRequesterFactory }) => sdkRequesterFactory(globalContext));
   return getSdk<TOperationContext, TGlobalContext>((...args) => sdkRequester$.then(sdkRequester => sdkRequester(...args)));
 }
-export type VaultFieldsFragment = Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier'>;
+export type VaultFieldsFragment = Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalValueLocked'>;
 
-export type vaultsQueryVariables = Exact<{ [key: string]: never; }>;
+export type VaultQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type vaultsQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier'>> };
+export type VaultQueryQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalValueLocked'>> };
 
 export type getUserApePositionsQueryVariables = Exact<{
   user?: InputMaybe<Scalars['Bytes']['input']>;
 }>;
 
 
-export type getUserApePositionsQuery = { userPositions: Array<Pick<UserPosition, 'user' | 'balance' | 'APE' | 'vaultId' | 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'leverageTier'>> };
+export type getUserApePositionsQuery = { userPositions: Array<Pick<UserPosition, 'user' | 'vaultId' | 'APE' | 'balance' | 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'leverageTier'>> };
 
 export type getUserTeaPositionsQueryVariables = Exact<{
   user?: InputMaybe<Scalars['Bytes']['input']>;
 }>;
 
 
-export type getUserTeaPositionsQuery = { userPositions: Array<Pick<UserPosition, 'user' | 'vaultId' | 'balance' | 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'leverageTier'>> };
+export type getUserTeaPositionsQuery = { userPositionTeas: Array<Pick<UserPositionTea, 'user' | 'vaultId' | 'balance' | 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'leverageTier'>> };
 
 export const VaultFieldsFragmentDoc = gql`
     fragment VaultFields on Vault {
@@ -1234,22 +1245,23 @@ export const VaultFieldsFragmentDoc = gql`
   collateralSymbol
   vaultId
   leverageTier
+  totalValueLocked
 }
     ` as unknown as DocumentNode<VaultFieldsFragment, unknown>;
-export const vaultsDocument = gql`
-    query vaults {
+export const VaultQueryDocument = gql`
+    query VaultQuery {
   vaults {
     ...VaultFields
   }
 }
-    ${VaultFieldsFragmentDoc}` as unknown as DocumentNode<vaultsQuery, vaultsQueryVariables>;
+    ${VaultFieldsFragmentDoc}` as unknown as DocumentNode<VaultQueryQuery, VaultQueryQueryVariables>;
 export const getUserApePositionsDocument = gql`
     query getUserApePositions($user: Bytes) {
   userPositions(where: {user: $user}) {
     user
-    balance
-    APE
     vaultId
+    APE
+    balance
     debtToken
     debtSymbol
     collateralToken
@@ -1260,7 +1272,7 @@ export const getUserApePositionsDocument = gql`
     ` as unknown as DocumentNode<getUserApePositionsQuery, getUserApePositionsQueryVariables>;
 export const getUserTeaPositionsDocument = gql`
     query getUserTeaPositions($user: Bytes) {
-  userPositions(where: {user: $user}) {
+  userPositionTeas(where: {user: $user}) {
     user
     vaultId
     balance
@@ -1279,8 +1291,8 @@ export const getUserTeaPositionsDocument = gql`
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    vaults(variables?: vaultsQueryVariables, options?: C): Promise<vaultsQuery> {
-      return requester<vaultsQuery, vaultsQueryVariables>(vaultsDocument, variables, options) as Promise<vaultsQuery>;
+    VaultQuery(variables?: VaultQueryQueryVariables, options?: C): Promise<VaultQueryQuery> {
+      return requester<VaultQueryQuery, VaultQueryQueryVariables>(VaultQueryDocument, variables, options) as Promise<VaultQueryQuery>;
     },
     getUserApePositions(variables?: getUserApePositionsQueryVariables, options?: C): Promise<getUserApePositionsQuery> {
       return requester<getUserApePositionsQuery, getUserApePositionsQueryVariables>(getUserApePositionsDocument, variables, options) as Promise<getUserApePositionsQuery>;

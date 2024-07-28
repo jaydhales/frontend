@@ -609,6 +609,7 @@ type Vault {
   collateralSymbol: String!
   debtSymbol: String!
   leverageTier: Int!
+  totalValueLocked: BigInt!
 }
 
 input Vault_filter {
@@ -740,6 +741,14 @@ input Vault_filter {
   leverageTier_lte: Int
   leverageTier_in: [Int!]
   leverageTier_not_in: [Int!]
+  totalValueLocked: BigInt
+  totalValueLocked_not: BigInt
+  totalValueLocked_gt: BigInt
+  totalValueLocked_lt: BigInt
+  totalValueLocked_gte: BigInt
+  totalValueLocked_lte: BigInt
+  totalValueLocked_in: [BigInt!]
+  totalValueLocked_not_in: [BigInt!]
   """Filter for the block changed event."""
   _change_block: BlockChangedFilter
   and: [Vault_filter]
@@ -754,6 +763,7 @@ enum Vault_orderBy {
   collateralSymbol
   debtSymbol
   leverageTier
+  totalValueLocked
 }
 
 type _Block_ {
