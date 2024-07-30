@@ -91,8 +91,8 @@ const StakeTabs = () => {
           <StakeFormProvider>
             <StakeForm
               balance={formatUnits(
-                safeUnstakedBalance.success ? safeUnstakedBalance.data : 0n,
-                18
+                safeUnstakedBalance.data ?? 0n,
+                12
               )}
             ></StakeForm>
           </StakeFormProvider>
@@ -106,7 +106,7 @@ const StakeTabs = () => {
                 safeTotalBalance.success && safeUnstakedBalance.success
                   ? safeTotalBalance.data - safeUnstakedBalance.data
                   : 0n,
-                18
+                12
               )}
               dividends={formatEther(
                 safeDividends.success ? safeDividends.data : 0n
