@@ -1,5 +1,5 @@
 {
-  "9ee31b28323c888d91bdbd18446778cad65d964b2f0427cbafe4049dfd8f63b9": "#graphql\n\nfragment VaultFields on Vault {\n  debtToken\n  debtSymbol\n  collateralToken\n  collateralSymbol\n  vaultId\n  leverageTier\n}\n\nquery vaults {\n  vaults {\n    ...VaultFields\n  }\n}",
-  "fbe98310062c8cbcde813882ab841dc350d3a90840cc6020fb8208d2089c4ce9": "query getUserApePositions($user: Bytes) {\n  userPositions(where: { user: $user }) {\n    user\n    balance\n    APE\n    vaultId\n    debtToken\n    debtSymbol\n    collateralToken\n    collateralSymbol\n    leverageTier\n  }\n}",
-  "62c84b846dcd85026717c0103b00c1ce279b480bedc3ebf00e0f163b09f1e170": "query getUserTeaPositions($user: Bytes) {\n  userPositions(where: { user: $user }) {\n    user\n    vaultId\n    balance\n    debtToken\n    debtSymbol\n    collateralToken\n    collateralSymbol\n    leverageTier\n  }\n}"
+  "1570d7c1257c9f12ff312df28d432a74a4aa5ba3b0cc8055951e3e8fcf8fe397": "#graphql\n\nfragment VaultFields on Vault {\n  debtToken\n  debtSymbol\n  collateralToken\n  collateralSymbol\n  vaultId\n  leverageTier\n  totalValueLocked\n}\n\nquery VaultQuery {\n  vaults {\n    ...VaultFields\n  }\n}",
+  "17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36": "query getUserApePositions($user: Bytes) {\n  userPositions(where: { user: $user }) {\n    user\n    vaultId\n    APE\n    balance\n    debtToken\n    debtSymbol\n    collateralToken\n    collateralSymbol\n    leverageTier\n  }\n}",
+  "d0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce": "query getUserTeaPositions($user: Bytes) {\n  userPositionTeas(where: { user: $user }) {\n    user\n    vaultId\n    balance\n    debtToken\n    debtSymbol\n    collateralToken\n    collateralSymbol\n    leverageTier\n  }\n}"
 }

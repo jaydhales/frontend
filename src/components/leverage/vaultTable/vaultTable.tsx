@@ -11,7 +11,6 @@ export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
     const x = parseInt(vaultPage);
     if (isFinite(x)) pagination = x;
   }
-  console.log(vaultQuery, "VAULT QUERY");
   return (
     <table className="w-full">
       <caption className="pb-2  font-lora text-[1.95rem] font-bold">
@@ -24,7 +23,7 @@ export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
           .map((pool, ind) => {
             return (
               <VaultTableRow
-                key={pool.vaultId.toString()}
+                key={pool.vaultId}
                 pool={pool}
                 number={ind.toString()}
                 badgeVariant={{

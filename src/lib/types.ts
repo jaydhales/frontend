@@ -1,5 +1,4 @@
 import type { UseFormReturn } from "react-hook-form";
-import type { VaultFieldsFragment } from "../../.graphclient";
 import type { z } from "zod";
 import type { CreateVaultInputValues } from "./schemas";
 
@@ -15,9 +14,19 @@ export type TPool = {
   debtTokenSymbol: string;
   collateralTokenSymbol: string;
 };
+
+export interface VaultFieldFragment {
+  debtToken: string;
+  debtSymbol: string;
+  collateralToken: string;
+  collateralSymbol: string;
+  vaultId: string;
+  leverageTier: number;
+  totalValueLocked: string;
+}
 export type TVaults =
   | {
-      vaults: VaultFieldsFragment[];
+      vaults: VaultFieldFragment[];
     }
   | undefined;
 export enum LeverageTier {
