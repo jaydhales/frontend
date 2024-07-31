@@ -15,15 +15,24 @@ import StakeInput from "@/components/stake/stakeForm/stakeInput";
 import type { TStakeFormFields } from "@/lib/types";
 
 import { z } from "zod";
-import { parseUnits } from "viem";
+import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 
 import { useStake } from "@/components/stake/hooks/useStake";
+import { useApprove } from "@/components/shared/mintForm/hooks/useApprove";
+import { SirContract } from "@/contracts/sir";
 
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { ESubmitType, useCheckSubmitValid } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
+
+
+type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
-  balance?: string;
+  balance?: bigint;
+  allowance?: bigint;
+  ethBalance?: bigint;
 }
 
-const StakeForm = ({ balance }: Props) => {
+const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
   const form = useFormContext<TStakeFormFields>();
   const formData = form.watch();
 
@@ -44,22 +53,52 @@ const StakeForm = ({ balance }: Props) => {
     );
   };
 
-  const { Stake, isFetching, error } = useStake({
+  const { Stake, isFetching } = useStake({
     amount: safeStake.success
       ? parseUnits(safeStake.data.toString() ?? "0", 12)
       : undefined,
   });
 
-  useEffect(() => {
-    console.log(Stake, isFetching, error);
-  }, [Stake, isFetching, error]);
+  const { approveSimulate } = useApprove({
+    tokenAddr: SirContract.address,
+    approveContract: SirContract.address
+  })
+
+  // useEffect(() => {
+  //   console.log("STAKE:")
+  //   console.log(Stake, isFetching);
+  //   console.log("APPROVE:")
+  //   console.log(approveSimulate)
+  // }, [Stake, isFetching, approveSimulate]);
+
+  const { writeContract, error, data: hash, isPending } = useWriteContract();
+  const {isLoading: isConfirming, isSuccess: isConfirmed} = useWaitForTransactionReceipt({hash});
+
+  const { isValid, errorMessage, submitType } = useCheckSubmitValid({
+    deposit: safeStake.success ? safeStake.data.toString() : "0",
+    depositToken: SirContract.address,
+    mintRequest: Stake?.request as SimulateReq,
+    mintWithETHRequest: Stake?.request as SimulateReq,
+    approveWriteRequest: approveSimulate?.data?.request as SimulateReq,
+    tokenAllowance: allowance, 
+    tokenBalance: balance,
+    ethBalance: ethBalance,
+    mintFetching: isFetching,
+    approveFetching: approveSimulate.isFetching,
+    useEth: false
+  })
+
+  
 
   return (
     <Card className="mx-auto w-[80%]">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormLabel htmlFor="stake">Stake:</FormLabel>
-          <StakeInput form={form} balance={balance}></StakeInput>
+          <StakeInput form={form} balance={formatUnits(
+                balance ?? 0n,
+                12
+              )}></StakeInput>
           <div className=" flex-col flex items-center justify-center mt-[20px]">
             {address && (
               <Button
