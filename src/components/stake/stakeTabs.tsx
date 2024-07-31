@@ -19,12 +19,16 @@ import { useAccount } from "wagmi";
 import { formatUnits, formatEther } from "viem";
 import { api } from "@/trpc/react";
 
+import { SirContract } from "@/contracts/sir";
+
 const StakeTabs = () => {
   const { address, isConnected } = useAccount();
 
-  const { data: userBalance } = api.user.getUnstakedSirBalance.useQuery(
+  const { data: balance } = api.user.getBalance.useQuery(
     {
-      user: address,
+      userAddress: address,
+      tokenAddress: SirContract.address,
+      spender: SirContract.address
     },
     { enabled: isConnected }
   );
@@ -52,10 +56,6 @@ const StakeTabs = () => {
     }
   );
 
-  const safeUnstakedBalance = useMemo(() => {
-    return z.coerce.bigint().default(0n).safeParse(userBalance);
-  }, [userBalance]);
-
   const safeTotalBalance = useMemo(() => {
     return z.coerce.bigint().default(0n).safeParse(totalBalance);
   }, [totalBalance]);
@@ -66,15 +66,16 @@ const StakeTabs = () => {
 
   useEffect(() => {
     console.log("---TABS---");
-    console.log(`Unstaked SIR: ${safeUnstakedBalance.data}`);
+    console.log(`Unstaked SIR: ${balance?.tokenBalance?.result}`);
+    console.log(`Unstaked SIR Allowance: ${balance?.tokenAllowance?.result}`);
     console.log(
-      `Staked SIR: ${safeUnstakedBalance.success && safeTotalBalance.success && safeTotalBalance.data - safeUnstakedBalance.data}`
+      `Staked SIR: ${balance?.tokenBalance?.result && safeTotalBalance.success && safeTotalBalance.data - balance?.tokenBalance?.result}`
     );
     console.log(`Dividends: ${safeDividends.data}`);
     console.log(
       `ETH Balance: ${parseFloat(formatEther(ethBalance ?? 0n)).toFixed(4)}`
     );
-  }, [safeTotalBalance, safeUnstakedBalance, safeDividends, ethBalance]);
+  }, [balance, safeTotalBalance, safeDividends, ethBalance]);
 
   return (
     <Tabs defaultValue="stake">
@@ -90,10 +91,9 @@ const StakeTabs = () => {
         <Container>
           <StakeFormProvider>
             <StakeForm
-              balance={formatUnits(
-                safeUnstakedBalance.data ?? 0n,
-                12
-              )}
+              balance={balance?.tokenBalance?.result}
+              allowance={balance?.tokenAllowance?.result}
+              ethBalance={ethBalance}
             ></StakeForm>
           </StakeFormProvider>
         </Container>
@@ -103,8 +103,8 @@ const StakeTabs = () => {
           <UnstakeFormProvider>
             <UnstakeForm
               balance={formatUnits(
-                safeTotalBalance.success && safeUnstakedBalance.success
-                  ? safeTotalBalance.data - safeUnstakedBalance.data
+                safeTotalBalance.success && balance?.tokenBalance?.result
+                  ? safeTotalBalance.data - balance?.tokenBalance?.result
                   : 0n,
                 12
               )}
