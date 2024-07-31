@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { Card } from "@/components/ui/card";
 import { Form, FormLabel } from "@/components/ui/form";
@@ -15,8 +15,9 @@ import StakeInput from "@/components/stake/stakeForm/stakeInput";
 import type { TStakeFormFields } from "@/lib/types";
 
 import { z } from "zod";
+import { parseUnits } from "viem";
 
-// import { useCheckStakeValid } from "@/components/stake/hooks/checkStakeValid";
+import { useStake } from "@/components/stake/hooks/useStake";
 
 interface Props {
   balance?: string;
@@ -35,8 +36,23 @@ const StakeForm = ({ balance }: Props) => {
 
   const onSubmit = () => {
     console.log("form submitted");
-    console.log(safeStake.data);
+    console.log("after change");
+    console.log(
+      safeStake.success
+        ? parseUnits(safeStake.data.toString() ?? "0", 12)
+        : undefined
+    );
   };
+
+  const { Stake, isFetching, error } = useStake({
+    amount: safeStake.success
+      ? parseUnits(safeStake.data.toString() ?? "0", 12)
+      : undefined,
+  });
+
+  useEffect(() => {
+    console.log(Stake, isFetching, error);
+  }, [Stake, isFetching, error]);
 
   return (
     <Card className="mx-auto w-[80%]">
