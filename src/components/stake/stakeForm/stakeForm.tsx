@@ -22,8 +22,10 @@ import { useApprove } from "@/components/shared/mintForm/hooks/useApprove";
 import { SirContract } from "@/contracts/sir";
 
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { ESubmitType, useCheckSubmitValid } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
-
+import {
+  ESubmitType,
+  useCheckSubmitValid,
+} from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -43,16 +45,6 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
     return z.coerce.number().safeParse(formData.stake);
   }, [formData.stake]);
 
-  const onSubmit = () => {
-    console.log("form submitted");
-    console.log("after change");
-    console.log(
-      safeStake.success
-        ? parseUnits(safeStake.data.toString() ?? "0", 12)
-        : undefined
-    );
-  };
-
   const { Stake, isFetching } = useStake({
     amount: safeStake.success
       ? parseUnits(safeStake.data.toString() ?? "0", 12)
@@ -61,8 +53,8 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
 
   const { approveSimulate } = useApprove({
     tokenAddr: SirContract.address,
-    approveContract: SirContract.address
-  })
+    approveContract: SirContract.address,
+  });
 
   // useEffect(() => {
   //   console.log("STAKE:")
@@ -72,7 +64,8 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
   // }, [Stake, isFetching, approveSimulate]);
 
   const { writeContract, error, data: hash, isPending } = useWriteContract();
-  const {isLoading: isConfirming, isSuccess: isConfirmed} = useWaitForTransactionReceipt({hash});
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash });
 
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
     deposit: safeStake.success ? safeStake.data.toString() : "0",
@@ -80,34 +73,43 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
     mintRequest: Stake?.request as SimulateReq,
     mintWithETHRequest: Stake?.request as SimulateReq,
     approveWriteRequest: approveSimulate?.data?.request as SimulateReq,
-    tokenAllowance: allowance, 
+    tokenAllowance: allowance,
     tokenBalance: balance,
     ethBalance: ethBalance,
     mintFetching: isFetching,
     approveFetching: approveSimulate.isFetching,
-    useEth: false
-  })
+    useEth: false,
+  });
 
-  
+  useEffect(() => {
+    console.log(isValid, errorMessage, submitType);
+  }, [isValid, errorMessage, submitType, formData]);
+
+  const onSubmit = () => {
+    if (submitType === null) return;
+    if (submitType === ESubmitType.mint && Stake) {
+      writeContract(Stake?.request);
+      return;
+    }
+    if (submitType === ESubmitType.approve && approveSimulate?.data?.request) {
+      writeContract(approveSimulate?.data?.request);
+      return;
+    }
+  };
 
   return (
     <Card className="mx-auto w-[80%]">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormLabel htmlFor="stake">Stake:</FormLabel>
-          <StakeInput form={form} balance={formatUnits(
-                balance ?? 0n,
-                12
-              )}></StakeInput>
+          <StakeInput
+            form={form}
+            balance={formatUnits(balance ?? 0n, 12)}
+          ></StakeInput>
           <div className=" flex-col flex items-center justify-center mt-[20px]">
             {address && (
-              <Button
-                variant={"submit"}
-                type="submit"
-                // disabled={!isValid}
-              >
-                {/* {submitType === ESubmitType.mint ? "Stake" : "Approve"} */}
-                Stake
+              <Button variant={"submit"} type="submit" disabled={!isValid}>
+                {submitType === ESubmitType.mint ? "Stake" : "Approve"}
               </Button>
             )}
             {!address && (
