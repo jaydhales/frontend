@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
+import { SirContract } from "@/contracts/sir";
+
 interface Props {
   deposit: string | undefined;
   depositToken: string;
@@ -12,7 +14,7 @@ interface Props {
   ethBalance: bigint | undefined;
   mintFetching: boolean;
   approveFetching: boolean;
-  useEth: boolean
+  useEth: boolean;
 }
 export enum ESubmitType {
   "mint",
@@ -36,10 +38,13 @@ export const useCheckSubmitValid = ({
   mintWithETHRequest,
   tokenBalance,
   ethBalance,
-  useEth
+  useEth,
+  depositToken,
 }: Props) => {
+  const decimals = depositToken === SirContract.address ? 12 : 18;
+
   const { isValid, errorMessage, submitType } = useMemo(() => {
-    if (parseUnits(deposit ?? "0", 18) <= 0n) {
+    if (parseUnits(deposit ?? "0", decimals) <= 0n) {
       return {
         isValid: false,
         errorMessage: "Enter amount greater than 0.",
@@ -47,7 +52,7 @@ export const useCheckSubmitValid = ({
       };
     }
     if (useEth) {
-      if ((ethBalance ?? 0n) < parseUnits(deposit ?? "0", 18)) {
+      if ((ethBalance ?? 0n) < parseUnits(deposit ?? "0", decimals)) {
         return {
           isValid: false,
           errorMessage: "Insufficient Balance.",
@@ -68,7 +73,9 @@ export const useCheckSubmitValid = ({
         submitType: ESubmitType.mint,
       };
     }
-    if ((tokenBalance ?? 0n) < parseUnits(deposit ?? "0", 18)) {
+    if ((tokenBalance ?? 0n) < parseUnits(deposit ?? "0", decimals)) {
+      console.log(tokenBalance ?? 0n);
+      console.log(parseUnits(deposit ?? "0", decimals));
       return {
         isValid: false,
         errorMessage: "Insufficient Balance.",
@@ -76,7 +83,7 @@ export const useCheckSubmitValid = ({
       };
     }
     // CHECK ALLOWANCE FIRST
-    if (parseUnits(deposit ?? "0", 18) > (tokenAllowance ?? 0n)) {
+    if (parseUnits(deposit ?? "0", decimals) > (tokenAllowance ?? 0n)) {
       if (approveWriteRequest)
         return {
           isValid: true,
@@ -121,7 +128,18 @@ export const useCheckSubmitValid = ({
         };
       }
     }
-
-  }, [deposit, useEth, tokenBalance, tokenAllowance, mintRequest, ethBalance, mintWithETHRequest, approveWriteRequest, approveFetching, mintFetching]);
+  }, [
+    deposit,
+    useEth,
+    tokenBalance,
+    tokenAllowance,
+    mintRequest,
+    ethBalance,
+    mintWithETHRequest,
+    approveWriteRequest,
+    approveFetching,
+    mintFetching,
+    decimals,
+  ]);
   return { isValid, errorMessage, submitType };
 };
