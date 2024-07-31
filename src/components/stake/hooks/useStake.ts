@@ -1,10 +1,7 @@
-"use client";
+'use client'
 
 import { useSimulateContract } from "wagmi";
 import { SirContract } from "@/contracts/sir";
-import type { TAddressString } from "@/lib/types";
-import { parseUnits } from "viem";
-import { z } from "zod";
 import { useEffect } from "react";
 
 interface Props {
@@ -23,7 +20,6 @@ export const useStake = ({ amount }: Props) => {
     args: [amount],
   });
 
-  console.log("simulating staking...");
   useEffect(() => {
     refetch().catch((e) => console.log(e));
   }, [refetch]);
