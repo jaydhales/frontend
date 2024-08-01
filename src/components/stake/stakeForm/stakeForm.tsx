@@ -27,6 +27,8 @@ import {
   useCheckSubmitValid,
 } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
 
+import useSetError from "@/components/stake/hooks/useSetError";
+
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
   balance?: bigint;
@@ -97,6 +99,13 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
     }
   };
 
+  useSetError({
+    formData,
+    setError: form.setError,
+    errorMessage,
+    rootErrorMessage: form.formState.errors.root?.message,
+  });
+
   return (
     <Card className="mx-auto w-[80%]">
       <Form {...form}>
@@ -106,7 +115,8 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
             form={form}
             balance={formatUnits(balance ?? 0n, 12)}
           ></StakeInput>
-          <div className=" flex-col flex items-center justify-center mt-[20px]">
+
+          <div className=" flex-col flex items-center justify-center pt-[20px]">
             {address && (
               <Button variant={"submit"} type="submit" disabled={!isValid}>
                 {submitType === ESubmitType.mint ? "Stake" : "Approve"}
@@ -121,14 +131,16 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
                 Connect Wallet
               </Button>
             )}
-            <GasFeeEstimation></GasFeeEstimation>
-
-            <div className="w-[450px]">
-              <p className="h-[20px] text-left text-sm text-red-400">
-                {address && <>{form.formState.errors.root?.message}</>}
-              </p>
-            </div>
+            {form.formState.errors.root?.message && (
+              <div className="w-[450px] pt-[20px] flex justify-center items-center">
+                <p className="h-[20px] text-center text-sm text-red-400">
+                  {address && <>{form.formState.errors.root?.message}</>}
+                </p>
+              </div>
+            )}
           </div>
+
+          {/* <GasFeeEstimation></GasFeeEstimation>s */}
         </form>
       </Form>
     </Card>
