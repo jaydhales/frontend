@@ -58,13 +58,13 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
                 Connect Wallet
               </Button>
             )}
-            <GasFeeEstimation></GasFeeEstimation>
-
-            <div className="w-[450px]">
-              <p className="h-[20px] text-left text-sm text-red-400">
-                {address && <>{form.formState.errors.root?.message}</>}
-              </p>
-            </div>
+            {form.formState.errors.root?.message && (
+              <div className="w-[450px] pt-[20px] flex justify-center items-center">
+                <p className="h-[20px] text-center text-sm text-red-400">
+                  {address && <>{form.formState.errors.root?.message}</>}
+                </p>
+              </div>
+            )}
           </div>
         </form>
       </Form>
