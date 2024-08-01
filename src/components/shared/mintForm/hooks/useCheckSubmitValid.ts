@@ -7,14 +7,14 @@ interface Props {
   deposit: string | undefined;
   depositToken: string;
   mintRequest: SimulateContractReturnType["request"] | undefined;
-  mintWithETHRequest: SimulateContractReturnType["request"] | undefined;
-  approveWriteRequest: SimulateContractReturnType["request"] | undefined;
-  tokenAllowance: bigint | undefined;
+  mintWithETHRequest?: SimulateContractReturnType["request"] | undefined;
+  approveWriteRequest?: SimulateContractReturnType["request"] | undefined;
+  tokenAllowance?: bigint | undefined;
   tokenBalance: bigint | undefined;
-  ethBalance: bigint | undefined;
+  ethBalance?: bigint | undefined;
   mintFetching: boolean;
   approveFetching: boolean;
-  useEth: boolean;
+  useEth?: boolean;
 }
 export enum ESubmitType {
   "mint",
@@ -74,8 +74,6 @@ export const useCheckSubmitValid = ({
       };
     }
     if ((tokenBalance ?? 0n) < parseUnits(deposit ?? "0", decimals)) {
-      console.log(tokenBalance ?? 0n);
-      console.log(parseUnits(deposit ?? "0", decimals));
       return {
         isValid: false,
         errorMessage: "Insufficient Balance.",
