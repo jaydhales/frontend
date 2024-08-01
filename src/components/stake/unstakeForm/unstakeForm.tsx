@@ -77,6 +77,18 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 
+  const { isValid, errorMessage, submitType } = useCheckSubmitValid({
+    deposit: safeAmount.success ? safeAmount.data.toString() : "0",
+    depositToken: SirContract.address,
+    mintRequest: Unstake?.request as SimulateReq,
+    tokenBalance: balance,
+    mintFetching: unstakeFetching,
+  });
+
+  useEffect(() => {
+    console.log(isValid, errorMessage, submitType);
+  }, [isValid, errorMessage, submitType, formData]);
+
   return (
     <Card className="mx-auto w-[80%]">
       <Form {...form}>
