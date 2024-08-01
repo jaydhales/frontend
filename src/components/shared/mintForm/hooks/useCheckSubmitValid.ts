@@ -13,7 +13,7 @@ interface Props {
   tokenBalance: bigint | undefined;
   ethBalance?: bigint | undefined;
   mintFetching: boolean;
-  approveFetching: boolean;
+  approveFetching?: boolean;
   useEth?: boolean;
 }
 export enum ESubmitType {
