@@ -73,19 +73,16 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
     deposit: safeStake.success ? safeStake.data.toString() : "0",
     depositToken: SirContract.address,
     mintRequest: Stake?.request as SimulateReq,
-    mintWithETHRequest: Stake?.request as SimulateReq,
     approveWriteRequest: approveSimulate?.data?.request as SimulateReq,
     tokenAllowance: allowance,
     tokenBalance: balance,
-    ethBalance: ethBalance,
     mintFetching: isFetching,
     approveFetching: approveSimulate.isFetching,
-    useEth: false,
   });
 
-  useEffect(() => {
-    console.log(isValid, errorMessage, submitType);
-  }, [isValid, errorMessage, submitType, formData]);
+  // useEffect(() => {
+  //   console.log(isValid, errorMessage, submitType);
+  // }, [isValid, errorMessage, submitType, formData]);
 
   const onSubmit = () => {
     if (submitType === null) return;
