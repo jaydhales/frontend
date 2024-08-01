@@ -80,9 +80,9 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
     mintFetching: unstakeFetching,
   });
 
-  // useEffect(() => {
-  //   console.log(isValid, errorMessage, submitType);
-  // }, [isValid, errorMessage, submitType, formData]);
+  useEffect(() => {
+    console.log(isValid, errorMessage, submitType);
+  }, [isValid, errorMessage, submitType, formData]);
 
   const onSubmit = () => {
     if (submitType === null) return;
@@ -98,6 +98,13 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
       }
     }
   };
+
+  useUnstakeError({
+    formData,
+    setError: form.setError,
+    errorMessage,
+    rootErrorMessage: form.formState.errors.root?.message,
+  });
 
   return (
     <Card className="mx-auto w-[80%]">
