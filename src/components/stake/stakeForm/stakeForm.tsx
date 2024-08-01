@@ -27,7 +27,7 @@ import {
   useCheckSubmitValid,
 } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
 
-import useSetError from "@/components/stake/hooks/useSetError";
+import useStakeError from "@/components/stake/hooks/useStakeError";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -96,7 +96,7 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
     }
   };
 
-  useSetError({
+  useStakeError({
     formData,
     setError: form.setError,
     errorMessage,
