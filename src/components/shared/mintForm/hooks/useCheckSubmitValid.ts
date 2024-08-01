@@ -81,7 +81,10 @@ export const useCheckSubmitValid = ({
       };
     }
     // CHECK ALLOWANCE FIRST
-    if (parseUnits(deposit ?? "0", decimals) > (tokenAllowance ?? 0n)) {
+    if (
+      parseUnits(deposit ?? "0", decimals) > (tokenAllowance ?? 0n) &&
+      approveWriteRequest
+    ) {
       if (approveWriteRequest)
         return {
           isValid: true,
