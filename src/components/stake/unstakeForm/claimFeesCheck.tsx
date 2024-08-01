@@ -11,9 +11,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 interface Props {
   form: TUnstakeForm;
   dividends?: string;
+  disabled?: boolean;
 }
 
-const ClaimFeesCheckbox = ({ form, dividends }: Props) => {
+const ClaimFeesCheckbox = ({ form, dividends, disabled }: Props) => {
   return (
     <FormField
       control={form.control}
@@ -26,6 +27,7 @@ const ClaimFeesCheckbox = ({ form, dividends }: Props) => {
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  disabled={disabled}
                 ></Checkbox>
                 <FormLabel className="text-lg font-medium">
                   Claim my fees

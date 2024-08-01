@@ -73,6 +73,7 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
           <ClaimFeesCheckbox
             form={form}
             dividends={dividends}
+            disabled={!Boolean(Claim?.result)}
           ></ClaimFeesCheckbox>
 
           <div className=" flex-col flex items-center justify-center mt-[20px]">
