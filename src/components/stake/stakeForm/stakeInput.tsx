@@ -1,5 +1,3 @@
-'use client'
-
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import type { TStakeForm } from "@/lib/types";
@@ -8,8 +6,6 @@ import { BalancePercent } from "@/components/shared/balancePercent";
 import sir_logo from "@/../public/images/sir-logo.svg";
 import Image, { type StaticImageData } from "next/image";
 
-import { useEffect } from "react";
-
 interface Props {
   form: TStakeForm;
   balance?: string;
@@ -17,11 +13,6 @@ interface Props {
 
 const StakeInput = ({ form, balance }: Props) => {
   const logo = sir_logo as StaticImageData;
-
-  useEffect(() => {
-    console.log("Debug:")
-    console.log(balance);
-  }, [balance])
 
   return (
     <div className="flex justify-between rounded-md bg-primary p-3">
