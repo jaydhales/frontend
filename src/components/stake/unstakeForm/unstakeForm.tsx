@@ -12,6 +12,12 @@ import UnstakeInput from "./unstakeInput";
 import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
 import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
+import { useMemo, useEffect } from "react";
+
+import { parseUnits } from "viem";
+import { z } from "zod";
+import { useUnstake } from "../hooks/useUnstake";
+import { useClaim } from "../hooks/useClaim";
 
 interface Props {
   balance?: string;
@@ -20,12 +26,43 @@ interface Props {
 
 const UnstakeForm = ({ balance, dividends }: Props) => {
   const form = useFormContext<TUnstakeFormFields>();
+  const formData = form.watch();
+
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
   const onSubmit = () => {
     console.log("form submitted");
+    console.log(formData.amount);
+    console.log(formData.claimFees);
   };
+
+  const safeAmount = useMemo(() => {
+    return z.coerce.number().safeParse(formData.amount);
+  }, [formData.amount]);
+
+  const {
+    Unstake,
+    isFetching: unstakeFetching,
+    error: unstakeError,
+  } = useUnstake({
+    amount: safeAmount.success
+      ? parseUnits(safeAmount.data.toString() ?? "0", 12)
+      : undefined,
+  });
+
+  useEffect(() => {
+    console.log("UNSTAKE");
+    console.log(Unstake, unstakeFetching, unstakeError);
+  }, [formData, Unstake, unstakeFetching, unstakeError]);
+
+  const { Claim, isFetching: claimFetching, error: claimError } = useClaim();
+
+  useEffect(() => {
+    console.log("Claim");
+    console.log(Claim, claimFetching, claimError);
+    console.log("Dividends to be claimed: ", !!Claim?.result);
+  }, [formData, Claim, claimFetching, claimError]);
 
   return (
     <Card className="mx-auto w-[80%]">
