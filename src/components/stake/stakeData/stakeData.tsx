@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { formatUnits } from "viem";
 
 interface supplyProps {
@@ -32,7 +32,7 @@ const StakeData = () => {
       <div className="bg-secondary rounded-md w-[47%] py-2 flex flex-col justify-center items-center gap-2">
         <div className="text-sm font-light">Total SIR Locked</div>
         <div className="text-2xl font-semibold font-lora">
-          {parseFloat(formatUnits(totalValueLocked ?? 0n, 18)).toFixed(4)}
+          {parseFloat(formatUnits(totalValueLocked ?? 0n, 12)).toFixed(4)}
         </div>
       </div>
       <div className="bg-secondary rounded-md w-[47%] py-2 flex flex-col justify-center items-center gap-2">
