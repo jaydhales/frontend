@@ -20,8 +20,13 @@ import { useUnstake } from "../hooks/useUnstake";
 import { useClaim } from "../hooks/useClaim";
 
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { useCheckSubmitValid } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
+import {
+  ESubmitType,
+  useCheckSubmitValid,
+} from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
 import { SirContract } from "@/contracts/sir";
+
+import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -35,16 +40,6 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
 
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
-
-  useEffect(() => {
-    console.log(balance);
-  }, [balance]);
-
-  const onSubmit = () => {
-    console.log("form submitted");
-    console.log(formData.amount);
-    console.log(formData.claimFees);
-  };
 
   const safeAmount = useMemo(() => {
     return z.coerce.number().safeParse(formData.amount);
@@ -60,18 +55,18 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
       : undefined,
   });
 
-  useEffect(() => {
-    console.log("UNSTAKE");
-    console.log(Unstake, unstakeFetching, unstakeError);
-  }, [formData, Unstake, unstakeFetching, unstakeError]);
+  // useEffect(() => {
+  //   console.log("UNSTAKE");
+  //   console.log(Unstake, unstakeFetching, unstakeError);
+  // }, [formData, Unstake, unstakeFetching, unstakeError]);
 
   const { Claim, isFetching: claimFetching, error: claimError } = useClaim();
 
-  useEffect(() => {
-    console.log("Claim");
-    console.log(Claim, claimFetching, claimError);
-    console.log("Dividends to be claimed: ", Claim?.result);
-  }, [formData, Claim, claimFetching, claimError]);
+  // useEffect(() => {
+  //   console.log("Claim");
+  //   console.log(Claim, claimFetching, claimError);
+  //   console.log("Dividends to be claimed: ", Claim?.result);
+  // }, [formData, Claim, claimFetching, claimError]);
 
   const { writeContract, error, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -85,9 +80,24 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
     mintFetching: unstakeFetching,
   });
 
-  useEffect(() => {
-    console.log(isValid, errorMessage, submitType);
-  }, [isValid, errorMessage, submitType, formData]);
+  // useEffect(() => {
+  //   console.log(isValid, errorMessage, submitType);
+  // }, [isValid, errorMessage, submitType, formData]);
+
+  const onSubmit = () => {
+    if (submitType === null) return;
+    if (submitType === ESubmitType.mint && Unstake && Claim) {
+      if (Boolean(Claim?.result)) {
+        writeContract(Unstake?.request);
+        writeContract(Claim?.request);
+        return;
+      } else {
+        writeContract(Unstake?.request);
+
+        return;
+      }
+    }
+  };
 
   return (
     <Card className="mx-auto w-[80%]">
@@ -106,12 +116,7 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
 
           <div className=" flex-col flex items-center justify-center mt-[20px]">
             {address && (
-              <Button
-                variant={"submit"}
-                type="submit"
-                // disabled={!isValid}
-              >
-                {/* {submitType === ESubmitType.mint ? "Stake" : "Approve"} */}
+              <Button variant={"submit"} type="submit" disabled={!isValid}>
                 Unstake
               </Button>
             )}
