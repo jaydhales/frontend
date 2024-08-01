@@ -14,11 +14,16 @@ import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
 import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 import { useMemo, useEffect } from "react";
 
-import { parseUnits } from "viem";
+import { type SimulateContractReturnType, parseUnits } from "viem";
 import { z } from "zod";
 import { useUnstake } from "../hooks/useUnstake";
 import { useClaim } from "../hooks/useClaim";
 
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useCheckSubmitValid } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
+import { SirContract } from "@/contracts/sir";
+
+type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
   balance?: string;
   dividends?: string;
@@ -61,8 +66,12 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
   useEffect(() => {
     console.log("Claim");
     console.log(Claim, claimFetching, claimError);
-    console.log("Dividends to be claimed: ", !!Claim?.result);
+    console.log("Dividends to be claimed: ", Claim?.result);
   }, [formData, Claim, claimFetching, claimError]);
+
+  const { writeContract, error, data: hash, isPending } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash });
 
   return (
     <Card className="mx-auto w-[80%]">
