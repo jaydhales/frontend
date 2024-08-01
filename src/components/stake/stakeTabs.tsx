@@ -28,7 +28,7 @@ const StakeTabs = () => {
     {
       userAddress: address,
       tokenAddress: SirContract.address,
-      spender: SirContract.address
+      spender: SirContract.address,
     },
     { enabled: isConnected }
   );
@@ -102,12 +102,11 @@ const StakeTabs = () => {
         <Container>
           <UnstakeFormProvider>
             <UnstakeForm
-              balance={formatUnits(
+              balance={
                 safeTotalBalance.success && balance?.tokenBalance?.result
                   ? safeTotalBalance.data - balance?.tokenBalance?.result
-                  : 0n,
-                12
-              )}
+                  : 0n
+              }
               dividends={formatEther(
                 safeDividends.success ? safeDividends.data : 0n
               )}

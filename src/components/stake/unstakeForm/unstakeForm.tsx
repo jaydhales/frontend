@@ -14,7 +14,7 @@ import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
 import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 import { useMemo, useEffect } from "react";
 
-import { type SimulateContractReturnType, parseUnits } from "viem";
+import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { z } from "zod";
 import { useUnstake } from "../hooks/useUnstake";
 import { useClaim } from "../hooks/useClaim";
@@ -25,7 +25,7 @@ import { SirContract } from "@/contracts/sir";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
-  balance?: string;
+  balance?: bigint;
   dividends?: string;
 }
 
@@ -35,6 +35,10 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
 
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
+
+  useEffect(() => {
+    console.log(balance);
+  }, [balance]);
 
   const onSubmit = () => {
     console.log("form submitted");
@@ -78,7 +82,10 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormLabel htmlFor="stake">Amount:</FormLabel>
-          <UnstakeInput form={form} balance={balance}></UnstakeInput>
+          <UnstakeInput
+            form={form}
+            balance={formatUnits(balance ?? 0n, 12)}
+          ></UnstakeInput>
           <ClaimFeesCheckbox
             form={form}
             dividends={dividends}
