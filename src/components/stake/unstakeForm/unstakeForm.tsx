@@ -11,13 +11,12 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import UnstakeInput from "./unstakeInput";
 import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
-import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
+// import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 import { useMemo, useEffect } from "react";
 
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { z } from "zod";
 import { useUnstake } from "../hooks/useUnstake";
-import { useClaim } from "../hooks/useClaim";
 
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import {
@@ -32,9 +31,18 @@ type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
   balance?: bigint;
   dividends?: string;
+  claimSimulate: SimulateReq;
+  claimResult: bigint | undefined;
+  claimFetching: boolean;
 }
 
-const UnstakeForm = ({ balance, dividends }: Props) => {
+const UnstakeForm = ({
+  balance,
+  dividends,
+  claimSimulate,
+  claimResult,
+  claimFetching,
+}: Props) => {
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
@@ -45,28 +53,11 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
     return z.coerce.number().safeParse(formData.amount);
   }, [formData.amount]);
 
-  const {
-    Unstake,
-    isFetching: unstakeFetching,
-    error: unstakeError,
-  } = useUnstake({
+  const { Unstake, isFetching: unstakeFetching } = useUnstake({
     amount: safeAmount.success
       ? parseUnits(safeAmount.data.toString() ?? "0", 12)
       : undefined,
   });
-
-  // useEffect(() => {
-  //   console.log("UNSTAKE");
-  //   console.log(Unstake, unstakeFetching, unstakeError);
-  // }, [formData, Unstake, unstakeFetching, unstakeError]);
-
-  const { Claim, isFetching: claimFetching, error: claimError } = useClaim();
-
-  // useEffect(() => {
-  //   console.log("Claim");
-  //   console.log(Claim, claimFetching, claimError);
-  //   console.log("Dividends to be claimed: ", Claim?.result);
-  // }, [formData, Claim, claimFetching, claimError]);
 
   const { writeContract, error, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -78,6 +69,8 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
     mintRequest: Unstake?.request as SimulateReq,
     tokenBalance: balance,
     mintFetching: unstakeFetching,
+    approveWriteRequest: claimSimulate,
+    approveFetching: claimFetching,
   });
 
   useEffect(() => {
@@ -86,10 +79,10 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
 
   const onSubmit = () => {
     if (submitType === null) return;
-    if (submitType === ESubmitType.mint && Unstake && Claim) {
-      if (Boolean(Claim?.result)) {
+    if (submitType === ESubmitType.mint && Unstake && claimSimulate) {
+      if (Boolean(claimResult)) {
         writeContract(Unstake?.request);
-        writeContract(Claim?.request);
+        writeContract(claimSimulate);
         return;
       } else {
         writeContract(Unstake?.request);
@@ -118,13 +111,15 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
           <ClaimFeesCheckbox
             form={form}
             dividends={dividends}
-            disabled={!Boolean(Claim?.result)}
+            disabled={!Boolean(claimResult)}
           ></ClaimFeesCheckbox>
 
           <div className=" flex-col flex items-center justify-center mt-[20px]">
             {address && (
               <Button variant={"submit"} type="submit" disabled={!isValid}>
-                Unstake
+                {form.formState.errors.root?.message
+                  ? form.formState.errors.root?.message.toString()
+                  : "Unstake"}
               </Button>
             )}
             {!address && (
@@ -136,13 +131,13 @@ const UnstakeForm = ({ balance, dividends }: Props) => {
                 Connect Wallet
               </Button>
             )}
-            {form.formState.errors.root?.message && (
+            {/* {form.formState.errors.root?.message && (
               <div className="w-[450px] pt-[20px] flex justify-center items-center">
                 <p className="h-[20px] text-center text-sm text-red-400">
                   {address && <>{form.formState.errors.root?.message}</>}
                 </p>
               </div>
-            )}
+            )} */}
           </div>
         </form>
       </Form>
