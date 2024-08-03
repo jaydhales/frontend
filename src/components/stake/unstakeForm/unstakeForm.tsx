@@ -12,7 +12,8 @@ import UnstakeInput from "./unstakeInput";
 import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
 // import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
-import { useMemo, useEffect } from "react";
+// import { useEffect } from "react";
+import { useMemo } from "react";
 
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { z } from "zod";
@@ -72,10 +73,6 @@ const UnstakeForm = ({
     approveWriteRequest: claimSimulate,
     approveFetching: claimFetching,
   });
-
-  useEffect(() => {
-    console.log(isValid, errorMessage, submitType);
-  }, [isValid, errorMessage, submitType, formData]);
 
   const onSubmit = () => {
     if (submitType === null) return;
