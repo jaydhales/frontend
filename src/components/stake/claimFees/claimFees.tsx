@@ -5,16 +5,40 @@ import { useAccount } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import Image from "next/image";
-import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
+// import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 
+import { type SimulateContractReturnType } from "viem";
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+
+type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
   ethBalance?: string;
   claimAmount?: string;
+  claimSimulate: SimulateReq;
+  claimResult: bigint | undefined;
+  claimFetching: boolean;
 }
 
-const ClaimFees = ({ ethBalance, claimAmount }: Props) => {
+const ClaimFees = ({
+  ethBalance,
+  claimAmount,
+  claimSimulate,
+  claimResult,
+  claimFetching,
+}: Props) => {
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
+
+  const { writeContract, error, data: hash, isPending } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash });
+
+  const onSubmit = () => {
+    if (claimSimulate && Boolean(claimResult)) {
+      writeContract(claimSimulate);
+      return;
+    }
+  };
 
   return (
     <Card className="mx-auto w-[80%]">
@@ -54,9 +78,9 @@ const ClaimFees = ({ ethBalance, claimAmount }: Props) => {
           <Button
             variant={"submit"}
             type="submit"
-            // disabled={!isValid}
+            onClick={onSubmit}
+            disabled={!Boolean(claimResult) || claimFetching}
           >
-            {/* {submitType === ESubmitType.mint ? "Stake" : "Approve"} */}
             Claim
           </Button>
         )}
@@ -69,7 +93,7 @@ const ClaimFees = ({ ethBalance, claimAmount }: Props) => {
             Connect Wallet
           </Button>
         )}
-        <GasFeeEstimation></GasFeeEstimation>
+        {/* <GasFeeEstimation></GasFeeEstimation> */}
       </div>
     </Card>
   );

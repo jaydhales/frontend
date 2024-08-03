@@ -129,6 +129,9 @@ const StakeTabs = () => {
             claimAmount={formatEther(
               safeDividends.success ? safeDividends.data : 0n
             )}
+            claimSimulate={Claim?.request as SimulateReq}
+            claimResult={Claim?.result}
+            claimFetching={claimFetching}
           ></ClaimFees>
         </Container>
       </TabsContent>
