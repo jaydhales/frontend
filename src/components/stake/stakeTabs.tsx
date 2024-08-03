@@ -16,10 +16,13 @@ import ClaimFees from "@/components/stake/claimFees/claimFees";
 
 import { useEffect } from "react";
 import { useAccount } from "wagmi";
-import { formatUnits, formatEther } from "viem";
+import { type SimulateContractReturnType, formatEther } from "viem";
 import { api } from "@/trpc/react";
 
 import { SirContract } from "@/contracts/sir";
+import { useClaim } from "@/components/stake/hooks/useClaim";
+
+type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
 const StakeTabs = () => {
   const { address, isConnected } = useAccount();
@@ -77,6 +80,8 @@ const StakeTabs = () => {
     );
   }, [balance, safeTotalBalance, safeDividends, ethBalance]);
 
+  const { Claim, isFetching: claimFetching } = useClaim();
+
   return (
     <Tabs defaultValue="stake">
       <div className="flex justify-center">
@@ -110,6 +115,9 @@ const StakeTabs = () => {
               dividends={formatEther(
                 safeDividends.success ? safeDividends.data : 0n
               )}
+              claimSimulate={Claim?.request as SimulateReq}
+              claimResult={Claim?.result}
+              claimFetching={claimFetching}
             ></UnstakeForm>
           </UnstakeFormProvider>
         </Container>
