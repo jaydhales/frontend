@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+// import { useEffect } from "react";
+import { useMemo } from "react";
 
 import { Card } from "@/components/ui/card";
 import { Form, FormLabel } from "@/components/ui/form";
@@ -10,7 +11,7 @@ import { useFormContext } from "react-hook-form";
 import { useAccount } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
-import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
+// import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 import StakeInput from "@/components/stake/stakeForm/stakeInput";
 import type { TStakeFormFields } from "@/lib/types";
 
@@ -22,10 +23,7 @@ import { useApprove } from "@/components/shared/mintForm/hooks/useApprove";
 import { SirContract } from "@/contracts/sir";
 
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import {
-  ESubmitType,
-  useCheckSubmitValid,
-} from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
+import { useCheckSubmitValid } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
 
 import useStakeError from "@/components/stake/hooks/useStakeError";
 
@@ -62,7 +60,7 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 
-  const { isValid, errorMessage, submitType } = useCheckSubmitValid({
+  const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeStake.success ? safeStake.data.toString() : "0",
     depositToken: SirContract.address,
     mintRequest: Stake?.request as SimulateReq,
@@ -73,11 +71,9 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
     approveFetching: approveSimulate.isFetching,
   });
 
-  const onSubmit = () => { 
-    if (submitType === null) return;    
-
-    if(Stake) {
-      writeContract(Stake?.request)
+  const onSubmit = () => {
+    if (Stake) {
+      writeContract(Stake?.request);
       return;
     }
   };
@@ -102,9 +98,11 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
           <div className=" flex-col flex items-center justify-center pt-[20px]">
             {address && (
               <Button variant={"submit"} type="submit" disabled={!isValid}>
-                {form.formState.errors.root?.message ? form.formState.errors.root?.message.toString() : "Stake"}
+                {form.formState.errors.root?.message
+                  ? form.formState.errors.root?.message.toString()
+                  : "Stake"}
               </Button>
-            )} 
+            )}
             {!address && (
               <Button
                 onClick={() => openConnectModal?.()}
@@ -123,7 +121,7 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
             )} */}
           </div>
 
-          {/* <GasFeeEstimation></GasFeeEstimation>s */}
+          {/* <GasFeeEstimation></GasFeeEstimation>*/}
         </form>
       </Form>
     </Card>
