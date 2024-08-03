@@ -58,13 +58,6 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
     approveContract: SirContract.address,
   });
 
-  // useEffect(() => {
-  //   console.log("STAKE:")
-  //   console.log(Stake, isFetching);
-  //   console.log("APPROVE:")
-  //   console.log(approveSimulate)
-  // }, [Stake, isFetching, approveSimulate]);
-
   const { writeContract, error, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
@@ -80,18 +73,11 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
     approveFetching: approveSimulate.isFetching,
   });
 
-  // useEffect(() => {
-  //   console.log(isValid, errorMessage, submitType);
-  // }, [isValid, errorMessage, submitType, formData]);
+  const onSubmit = () => { 
+    if (submitType === null) return;    
 
-  const onSubmit = () => {
-    if (submitType === null) return;
-    if (submitType === ESubmitType.mint && Stake) {
-      writeContract(Stake?.request);
-      return;
-    }
-    if (submitType === ESubmitType.approve && approveSimulate?.data?.request) {
-      writeContract(approveSimulate?.data?.request);
+    if(Stake) {
+      writeContract(Stake?.request)
       return;
     }
   };
@@ -116,9 +102,9 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
           <div className=" flex-col flex items-center justify-center pt-[20px]">
             {address && (
               <Button variant={"submit"} type="submit" disabled={!isValid}>
-                {submitType === ESubmitType.mint ? "Stake" : "Approve"}
+                {form.formState.errors.root?.message ? form.formState.errors.root?.message.toString() : "Stake"}
               </Button>
-            )}
+            )} 
             {!address && (
               <Button
                 onClick={() => openConnectModal?.()}
@@ -128,13 +114,13 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
                 Connect Wallet
               </Button>
             )}
-            {form.formState.errors.root?.message && (
+            {/* {form.formState.errors.root?.message && (
               <div className="w-[450px] pt-[20px] flex justify-center items-center">
                 <p className="h-[20px] text-center text-sm text-red-400">
                   {address && <>{form.formState.errors.root?.message}</>}
                 </p>
               </div>
-            )}
+            )} */}
           </div>
 
           {/* <GasFeeEstimation></GasFeeEstimation>s */}
