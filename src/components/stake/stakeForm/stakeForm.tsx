@@ -26,6 +26,7 @@ import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { useCheckSubmitValid } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
 
 import useStakeError from "@/components/stake/hooks/useStakeError";
+import ProgressAlert from "@/components/shared/mintForm/progressAlert";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -34,7 +35,7 @@ interface Props {
   ethBalance?: bigint;
 }
 
-const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
+const StakeForm = ({ balance, allowance }: Props) => {
   const form = useFormContext<TStakeFormFields>();
   const formData = form.watch();
 
@@ -86,45 +87,52 @@ const StakeForm = ({ balance, allowance, ethBalance }: Props) => {
   });
 
   return (
-    <Card className="mx-auto w-[80%]">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormLabel htmlFor="stake">Stake:</FormLabel>
-          <StakeInput
-            form={form}
-            balance={formatUnits(balance ?? 0n, 12)}
-          ></StakeInput>
+    <>
+      <ProgressAlert
+        isTxSuccess={isConfirmed}
+        isTxPending={isConfirming}
+        waitForSign={isPending}
+      />
+      <Card className="mx-auto w-[80%]">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FormLabel htmlFor="stake">Stake:</FormLabel>
+            <StakeInput
+              form={form}
+              balance={formatUnits(balance ?? 0n, 12)}
+            ></StakeInput>
 
-          <div className=" flex-col flex items-center justify-center pt-[20px]">
-            {address && (
-              <Button variant={"submit"} type="submit" disabled={!isValid}>
-                {form.formState.errors.root?.message
-                  ? form.formState.errors.root?.message.toString()
-                  : "Stake"}
-              </Button>
-            )}
-            {!address && (
-              <Button
-                onClick={() => openConnectModal?.()}
-                variant="submit"
-                type="button"
-              >
-                Connect Wallet
-              </Button>
-            )}
-            {/* {form.formState.errors.root?.message && (
+            <div className=" flex-col flex items-center justify-center pt-[20px]">
+              {address && (
+                <Button variant={"submit"} type="submit" disabled={!isValid}>
+                  {form.formState.errors.root?.message
+                    ? form.formState.errors.root?.message.toString()
+                    : "Stake"}
+                </Button>
+              )}
+              {!address && (
+                <Button
+                  onClick={() => openConnectModal?.()}
+                  variant="submit"
+                  type="button"
+                >
+                  Connect Wallet
+                </Button>
+              )}
+              {/* {form.formState.errors.root?.message && (
               <div className="w-[450px] pt-[20px] flex justify-center items-center">
                 <p className="h-[20px] text-center text-sm text-red-400">
                   {address && <>{form.formState.errors.root?.message}</>}
                 </p>
               </div>
             )} */}
-          </div>
+            </div>
 
-          {/* <GasFeeEstimation></GasFeeEstimation>*/}
-        </form>
-      </Form>
-    </Card>
+            {/* <GasFeeEstimation></GasFeeEstimation>*/}
+          </form>
+        </Form>
+      </Card>
+    </>
   );
 };
 
