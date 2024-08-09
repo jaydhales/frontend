@@ -133,6 +133,7 @@ const UnstakeForm = ({
                 </Button>
               )}
               {/* {form.formState.errors.root?.message && (
+
               <div className="w-[450px] pt-[20px] flex justify-center items-center">
                 <p className="h-[20px] text-center text-sm text-red-400">
                   {address && <>{form.formState.errors.root?.message}</>}
