@@ -14,7 +14,7 @@ export default function TopSelects({
   leverageTiers,
 }: Props) {
   return (
-    <div className=" grid grid-cols-3 gap-x-4">
+    <div className=" grid md:grid-cols-3 gap-x-4">
       <Select
         name="versus"
         title="Versus:"
