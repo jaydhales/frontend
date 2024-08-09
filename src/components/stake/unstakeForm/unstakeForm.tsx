@@ -52,7 +52,7 @@ const UnstakeForm = () => {
             )}
             <GasFeeEstimation></GasFeeEstimation>
 
-            <div className="w-[450px]">
+            <div className="  md:w-[450px]">
               <p className="h-[20px] text-left text-sm text-red-400">
                 {address && <>{form.formState.errors.root?.message}</>}
               </p>

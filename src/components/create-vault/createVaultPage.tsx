@@ -14,7 +14,7 @@ export default function CreateVaultPage() {
           veritatis impedit.
         </h2>
         <br />
-        <Card className="w-[450px]">
+        <Card className="md:w-[450px]">
           <CreateVaultForm />
         </Card>
       </div>
