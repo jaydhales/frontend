@@ -23,8 +23,6 @@ export function Header() {
     openConnectModal?.();
     return;
   };
-  const pathname = usePathname();
-  console.log({ pathname });
   return (
     <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
       <Link href={"/"} className="flex items-center gap-x-2">
