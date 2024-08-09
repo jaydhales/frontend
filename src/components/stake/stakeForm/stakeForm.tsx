@@ -101,7 +101,6 @@ const StakeForm = ({ balance, allowance }: Props) => {
               form={form}
               balance={formatUnits(balance ?? 0n, 12)}
             ></StakeInput>
-
             <div className=" flex-col flex items-center justify-center pt-[20px]">
               {address && (
                 <Button variant={"submit"} type="submit" disabled={!isValid}>
