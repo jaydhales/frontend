@@ -2,11 +2,14 @@
 import Image, { type StaticImageData } from "next/image";
 import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
+
 import { Button } from "./ui/button";
 import sir_logo from "@/../public/images/sir-logo.svg";
 import { type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 export function Header() {
   const { openAccountModal } = useAccountModal();
   const { openConnectModal } = useConnectModal();
@@ -29,7 +32,7 @@ export function Header() {
         <h1 className="font-lora text-[24px] font-bold">SIR. Trading</h1>
       </Link>
       <div className="col-span-3 flex justify-center">
-        <nav>
+        <nav className="hidden lg:block">
           <ul className="flex gap-x-[16px] bg-[#0A0A0F] px-[12px] py-[12px] font-semibold text-muted-foreground">
             <NavItem url={"/"}>Leverage</NavItem>
             <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
@@ -39,7 +42,7 @@ export function Header() {
           </ul>
         </nav>
       </div>
-      <div className="flex justify-end">
+      <div className="flex items-center gap-x-2 justify-end">
         <Button onClick={open} variant={"brown"} className="rounded-full">
           {!address && "Connect Wallet"}
           {address &&
@@ -47,6 +50,25 @@ export function Header() {
               "..." +
               address.slice(address.length - 5, address.length)}
         </Button>
+        <div className="lg:hidden text-white">
+          <Sheet>
+            <SheetTrigger>
+              <Menu className="cursor-pointer" />
+            </SheetTrigger>
+            <SheetContent>
+              <div className="flex justify-center">
+                <ul className="text-muted-foreground bg-[#0A0A0F] text-center">
+                  {" "}
+                  <NavItem url={"/"}>Leverage</NavItem>
+                  <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
+                  <NavItem url={"/stake"}>Stake</NavItem>
+                  <NavItem url={""}>My tokens</NavItem>
+                  <NavItem url={"/create-vault"}>Create Vault</NavItem>
+                </ul>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </div>
   );
