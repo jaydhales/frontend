@@ -28,7 +28,7 @@ export function VaultTableRow({
         setValue("long", pool.collateralToken + "," + pool.collateralSymbol);
         setValue("leverageTier", pool.leverageTier.toString());
       }}
-      className="grid cursor-pointer grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
+      className="grid cursor-pointer text-sm  grid-cols-7 md:grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
     >
       <th className="">{pool.vaultId}</th>
       <th className="col-span-3 flex">
@@ -57,7 +57,7 @@ export function VaultTableRow({
           {...badgeVariant}
         >{`${getLeverageRatio(pool.leverageTier)}x`}</Badge>
       </th>
-      <th className="col-span-2 text-right">
+      <th className="md:col-span-2 text-right">
         {roundDown(
           parseFloat(formatUnits(parseUnits(pool.totalValueLocked, 0), 18)),
           4,
