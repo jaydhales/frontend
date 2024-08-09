@@ -10,7 +10,10 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, children, ...props }, ref) => {
     return (
       <div
-        className={cn("rounded-[8px] bg-secondary p-[20px]", className)}
+        className={cn(
+          "rounded-[8px] bg-secondary p-[8px] md:p-[20px]",
+          className,
+        )}
         ref={ref}
         {...props}
       >
