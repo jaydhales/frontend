@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useSimulateContract } from "wagmi";
 import { SirContract } from "@/contracts/sir";
@@ -17,7 +17,7 @@ export const useStake = ({ amount }: Props) => {
   } = useSimulateContract({
     ...SirContract,
     functionName: "stake",
-    args: [amount],
+    args: [amount ?? 0n],
   });
 
   useEffect(() => {

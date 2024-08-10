@@ -17,7 +17,7 @@ export const useUnstake = ({ amount }: Props) => {
   } = useSimulateContract({
     ...SirContract,
     functionName: "unstake",
-    args: [amount],
+    args: [amount ?? 0n],
   });
 
   useEffect(() => {
