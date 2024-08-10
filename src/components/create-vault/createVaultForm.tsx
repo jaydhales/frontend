@@ -15,7 +15,7 @@ import { Select, SelectItem } from "../ui/select";
 import { SelectContent, SelectTrigger } from "@radix-ui/react-select";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { getLogoAsset } from "@/lib/utils";
+import { getLogoAsset, mapLeverage } from "@/lib/utils";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -98,7 +98,9 @@ export default function CreateVaultForm() {
                   <Select onValueChange={field.onChange}>
                     <SelectTrigger className="w-full flex justify-between bg-primary py-2 rounded-md px-2 ">
                       <h2 className="text-[14px] flex items-center">
-                        {!field.value ? "Select ratio" : field.value}
+                        {!field.value
+                          ? "Select ratio"
+                          : mapLeverage(field.value)}
                       </h2>
                       <ChevronDown />
                     </SelectTrigger>
@@ -109,6 +111,7 @@ export default function CreateVaultForm() {
                       <SelectItem value="-1">1.5</SelectItem>
                       <SelectItem value="-2">1.25</SelectItem>
                       <SelectItem value="-3">1.125</SelectItem>
+                      <SelectItem value="-4">1.0625</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>

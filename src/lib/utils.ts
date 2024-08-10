@@ -27,6 +27,25 @@ export async function getAssetInfo(address: TAddressString | undefined) {
   ).then((r) => r.json());
   return assetSchema.safeParse(result);
 }
+export function mapLeverage(key: string): string | undefined {
+  if (key === "2") {
+    return "5";
+  } else if (key === "1") {
+    return "3";
+  } else if (key === "0") {
+    return "2";
+  } else if (key === "-1") {
+    return "1.5";
+  } else if (key === "-2") {
+    return "1.25";
+  } else if (key === "-3") {
+    return "1.125";
+  } else if (key === "-4") {
+    return "1.0635";
+  } else {
+    return undefined; // Return undefined if the key does not match any condition
+  }
+}
 /**
  * To compute the leverage ratio: l = 1+2^k where k is the leverageTier.
  * @param LeverageTier - number
