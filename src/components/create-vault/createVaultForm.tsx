@@ -37,7 +37,7 @@ const tokens = [
 export default function CreateVaultForm() {
   const form = useForm<z.infer<typeof CreateVaultInputValues>>({
     resolver: zodResolver(CreateVaultInputValues),
-    mode: "onChange",
+    mode: "all",
     defaultValues: {
       leverageTier: "",
       longToken: "",
