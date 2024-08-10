@@ -3,7 +3,6 @@ import type { TAddressString } from "@/lib/types";
 export const SirContract = {
   address: "0x2aA12f98795E7A65072950AfbA9d1E023D398241" as TAddressString,
 
-
   abi: [
     {
       type: "constructor",
@@ -435,4 +434,5 @@ export const SirContract = {
     { type: "error", name: "NoAuctionLot", inputs: [] },
     { type: "error", name: "NoFeesCollectedYet", inputs: [] },
     { type: "error", name: "PermitDeadlineExpired", inputs: [] },
+  ] as const,
 };
