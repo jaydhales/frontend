@@ -48,7 +48,7 @@ const StakeInput = ({ form, balance }: Props) => {
       />
       <div className="flex flex-col items-end">
         <div
-          className={`flex w-[104px] items-center justify-center gap-x-2 rounded-md py-1`}
+          className={`flex w-[104px] items-center justify-end gap-x-2 rounded-md py-1`}
         >
           <Image src={logo} alt="sir-logo" width={25} height={25} />
           <span className="font-medium">SIR</span>

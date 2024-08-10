@@ -11,56 +11,139 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import UnstakeInput from "./unstakeInput";
 import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
-import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
+// import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
+// import { useEffect } from "react";
+import { useMemo } from "react";
 
-const UnstakeForm = () => {
+import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
+import { z } from "zod";
+import { useUnstake } from "../hooks/useUnstake";
+
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useCheckSubmitValid } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
+import { SirContract } from "@/contracts/sir";
+
+import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
+import ProgressAlert from "@/components/shared/mintForm/progressAlert";
+
+type SimulateReq = SimulateContractReturnType["request"] | undefined;
+interface Props {
+  balance?: bigint;
+  dividends?: string;
+  claimSimulate: SimulateReq;
+  claimResult: bigint | undefined;
+  claimFetching: boolean;
+}
+
+const UnstakeForm = ({
+  balance,
+  dividends,
+  claimSimulate,
+  claimResult,
+  claimFetching,
+}: Props) => {
   const form = useFormContext<TUnstakeFormFields>();
+  const formData = form.watch();
+
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
+  const safeAmount = useMemo(() => {
+    return z.coerce.number().safeParse(formData.amount);
+  }, [formData.amount]);
+
+  const { Unstake, isFetching: unstakeFetching } = useUnstake({
+    amount: safeAmount.success
+      ? parseUnits(safeAmount.data.toString() ?? "0", 12)
+      : undefined,
+  });
+
+  const { writeContract, error, data: hash, isPending } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash });
+
+  const { isValid, errorMessage } = useCheckSubmitValid({
+    deposit: safeAmount.success ? safeAmount.data.toString() : "0",
+    depositToken: SirContract.address,
+    mintRequest: Unstake?.request as SimulateReq,
+    tokenBalance: balance,
+    mintFetching: unstakeFetching,
+    approveWriteRequest: claimSimulate,
+    approveFetching: claimFetching,
+  });
+
   const onSubmit = () => {
-    console.log("form submitted");
+    if (Unstake && claimSimulate) {
+      if (Boolean(claimResult)) {
+        writeContract(Unstake?.request);
+        writeContract(claimSimulate);
+        return;
+      } else {
+        console.log("here");
+        writeContract(Unstake?.request);
+
+        return;
+      }
+    }
   };
 
+  useUnstakeError({
+    formData,
+    setError: form.setError,
+    errorMessage,
+    rootErrorMessage: form.formState.errors.root?.message,
+  });
+
   return (
-    <Card className="mx-auto w-[80%]">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormLabel htmlFor="stake">Amount:</FormLabel>
-          <UnstakeInput form={form} balance="68.86"></UnstakeInput>
-          <ClaimFeesCheckbox form={form}></ClaimFeesCheckbox>
+    <>
+      <ProgressAlert
+        isTxSuccess={isConfirmed}
+        isTxPending={isConfirming}
+        waitForSign={isPending}
+      />
+      <Card className="mx-auto w-[80%]">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FormLabel htmlFor="stake">Amount:</FormLabel>
+            <UnstakeInput
+              form={form}
+              balance={formatUnits(balance ?? 0n, 12)}
+            ></UnstakeInput>
+            <ClaimFeesCheckbox
+              form={form}
+              dividends={dividends}
+              disabled={!Boolean(claimResult)}
+            ></ClaimFeesCheckbox>
 
-          <div className=" flex-col flex items-center justify-center mt-[20px]">
-            {address && (
-              <Button
-                variant={"submit"}
-                type="submit"
-                // disabled={!isValid}
-              >
-                {/* {submitType === ESubmitType.mint ? "Stake" : "Approve"} */}
-                Unstake
-              </Button>
-            )}
-            {!address && (
-              <Button
-                onClick={() => openConnectModal?.()}
-                variant="submit"
-                type="button"
-              >
-                Connect Wallet
-              </Button>
-            )}
-            <GasFeeEstimation></GasFeeEstimation>
-
-            <div className="  md:w-[450px]">
-              <p className="h-[20px] text-left text-sm text-red-400">
-                {address && <>{form.formState.errors.root?.message}</>}
-              </p>
+            <div className=" flex-col flex items-center justify-center mt-[20px]">
+              {address && (
+                <Button variant={"submit"} type="submit" disabled={!isValid}>
+                  {form.formState.errors.root?.message
+                    ? form.formState.errors.root?.message.toString()
+                    : "Unstake"}
+                </Button>
+              )}
+              {!address && (
+                <Button
+                  onClick={() => openConnectModal?.()}
+                  variant="submit"
+                  type="button"
+                >
+                  Connect Wallet
+                </Button>
+              )}
+              {/* {form.formState.errors.root?.message && (
+              <div className="w-[450px] pt-[20px] flex justify-center items-center">
+                <p className="h-[20px] text-center text-sm text-red-400">
+                  {address && <>{form.formState.errors.root?.message}</>}
+                </p>
+              </div>
+            )} */}
             </div>
-          </div>
-        </form>
-      </Form>
-    </Card>
+          </form>
+        </Form>
+      </Card>
+    </>
   );
 };
 
