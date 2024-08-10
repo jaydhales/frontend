@@ -10,7 +10,7 @@ import { z } from "zod";
 import { useAccount } from "wagmi";
 import { api } from "@/trpc/react";
 import { useMintApeOrTea } from "../hooks/useMintApeOrTea";
-import MintFormDisplay from "./mint-form-display";
+import MintFormController from "./mint-form-controller";
 import { useApprove } from "./hooks/useApprove";
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 export function MintForm({
@@ -60,7 +60,7 @@ export function MintForm({
   });
 
   return (
-    <MintFormDisplay
+    <MintFormController
       approveFetching={approveSimulate.isFetching}
       approveSimulate={approveSimulate.data?.request as SimulateReq}
       MintWithEth={MintWithEth?.request as SimulateReq}

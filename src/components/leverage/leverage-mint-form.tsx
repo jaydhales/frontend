@@ -1,6 +1,6 @@
 "use client";
 import { findVault, formatDataInput } from "@/lib/utils";
-import MintForm from "../shared/mintForm/mint-form-display";
+import MintForm from "../shared/mintForm/mint-form-controller";
 import { useFormContext } from "react-hook-form";
 import { AssistantContract } from "@/contracts/assistant";
 import type { SimulateContractReturnType } from "viem";

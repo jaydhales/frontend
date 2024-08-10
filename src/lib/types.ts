@@ -1,5 +1,6 @@
 import type { UseFormReturn } from "react-hook-form";
-import type { VaultFieldsFragment } from "../../.graphclient";
+import type { z } from "zod";
+import type { CreateVaultInputValues } from "./schemas";
 
 export type TAddressString = `0x${string}`;
 // vaultParams.debtToken, vaultParams.collateralToken, vaultParams.leverageTier, vaultId
@@ -13,10 +14,20 @@ export type TPool = {
   debtTokenSymbol: string;
   collateralTokenSymbol: string;
 };
+
+export interface VaultFieldFragment {
+  debtToken: string;
+  debtSymbol: string;
+  collateralToken: string;
+  collateralSymbol: string;
+  vaultId: string;
+  leverageTier: number;
+  totalValueLocked: string;
+}
 export type TVaults =
   | {
-    vaults: { vaults: VaultFieldsFragment[] };
-  }
+      vaults: VaultFieldFragment[];
+    }
   | undefined;
 export enum LeverageTier {
   "one",
@@ -27,16 +38,20 @@ export enum LeverageTier {
 
 export type TBurnRow =
   | {
-    User: string;
-    leverageTier: string;
-    balance: bigint;
-    APE: string;
-    collateralToken: string;
-    debtToken: string;
-    collateralSymbol: string;
-    debtSymbol: string;
-  }
+      User: string;
+      leverageTier: string;
+      balance: bigint;
+      APE: string;
+      collateralToken: string;
+      debtToken: string;
+      collateralSymbol: string;
+      debtSymbol: string;
+    }
   | undefined;
+
+export type TCreateVaultForm = UseFormReturn<TCreateVaultFields, undefined>;
+export type TCreateVaultFields = z.infer<typeof CreateVaultInputValues>;
+export type TCreateVaultKeys = keyof TCreateVaultFields;
 
 export type TStakeForm = UseFormReturn<TStakeFormFields, undefined>;
 export interface TStakeFormFields {

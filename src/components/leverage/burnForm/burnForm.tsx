@@ -1,5 +1,4 @@
-"use client";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UseFormReturn } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
@@ -8,12 +7,12 @@ import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
 import { parseUnits } from "viem";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
-import ProgressAlert from "@/components/shared/mintForm/progressAlert";
 import { Section } from "./section";
-import { Button } from "@/components/ui/button";
-import { SectionTwo } from "./sectionTwo";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
+import ProgressAlert from "@/components/shared/mintForm/progressAlert";
+import { Button } from "@/components/ui/button";
+import { SectionTwo } from "./sectionTwo";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),

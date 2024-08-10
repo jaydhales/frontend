@@ -1,11 +1,10 @@
 import Select from "@/components/shared/Select";
-import type { TMintForm } from "@/lib/types";
-import type { VaultFieldsFragment } from "../../../../.graphclient";
+import type { TMintForm, VaultFieldFragment } from "@/lib/types";
 import { getLeverageRatio, getLogoAsset } from "@/lib/utils";
 interface Props {
   form: TMintForm;
-  long: VaultFieldsFragment[];
-  versus: VaultFieldsFragment[];
+  long: VaultFieldFragment[];
+  versus: VaultFieldFragment[];
   leverageTiers: number[];
 }
 export default function TopSelects({
@@ -15,7 +14,7 @@ export default function TopSelects({
   leverageTiers,
 }: Props) {
   return (
-    <div className=" grid grid-cols-3 gap-x-4">
+    <div className=" grid md:grid-cols-3 gap-x-4">
       <Select
         name="versus"
         title="Versus:"
