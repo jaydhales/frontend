@@ -35,7 +35,7 @@ export function Header() {
             <div className="flex gap-x-[16px] bg-primary/40  rounded-md">
               <NavItem url={"/"}>Leverage</NavItem>
               <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
-              <NavItem url={"/"}>My tokens</NavItem>
+              <NavItem url={"/my-tokens"}>My tokens</NavItem>
             </div>
             <NavItem url={"/stake"}>Stake</NavItem>
             <NavItem url={"/create-vault"}>Create Vault</NavItem>
