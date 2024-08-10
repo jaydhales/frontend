@@ -13,7 +13,8 @@ export function useCreateVault({
   if (!isFinite(lt)) {
     lt = 0;
   }
-  const { data } = useSimulateContract({
+  console.log(lt, "LT");
+  const { data, error } = useSimulateContract({
     ...VaultContract,
     functionName: "initialize",
     args: [
@@ -24,5 +25,6 @@ export function useCreateVault({
       },
     ],
   });
+  console.log(data, error);
   return data;
 }
