@@ -23,8 +23,6 @@ export function Header() {
     openConnectModal?.();
     return;
   };
-  const pathname = usePathname();
-  console.log({ pathname });
   return (
     <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
       <Link href={"/"} className="flex items-center gap-x-2">
@@ -34,10 +32,12 @@ export function Header() {
       <div className="col-span-3 flex justify-center">
         <nav className="hidden lg:block">
           <ul className="flex gap-x-[16px] bg-[#0A0A0F] px-[12px] py-[12px] font-semibold text-muted-foreground">
-            <NavItem url={"/"}>Leverage</NavItem>
-            <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
+            <div className="flex gap-x-[16px] bg-primary/40  rounded-md">
+              <NavItem url={"/"}>Leverage</NavItem>
+              <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
+              <NavItem url={"/"}>My tokens</NavItem>
+            </div>
             <NavItem url={"/stake"}>Stake</NavItem>
-            <NavItem url={""}>My tokens</NavItem>
             <NavItem url={"/create-vault"}>Create Vault</NavItem>
           </ul>
         </nav>
@@ -50,19 +50,20 @@ export function Header() {
               "..." +
               address.slice(address.length - 5, address.length)}
         </Button>
-        <div className="lg:hidden text-white">
+        <div className="lg:hidden flex items-center text-white">
           <Sheet>
             <SheetTrigger>
-              <Menu className="cursor-pointer" />
+              <Menu className="cursor-pointer" size={30} />
             </SheetTrigger>
             <SheetContent>
               <div className="flex justify-center">
-                <ul className="text-muted-foreground bg-[#0A0A0F] text-center">
-                  {" "}
-                  <NavItem url={"/"}>Leverage</NavItem>
-                  <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
+                <ul className="text-muted-foreground space-y-4 text-center">
+                  <div className="bg-primary/40 rounded-md">
+                    <NavItem url={"/"}>Leverage</NavItem>
+                    <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
+                    <NavItem url={""}>My tokens</NavItem>
+                  </div>
                   <NavItem url={"/stake"}>Stake</NavItem>
-                  <NavItem url={""}>My tokens</NavItem>
                   <NavItem url={"/create-vault"}>Create Vault</NavItem>
                 </ul>
               </div>
@@ -74,14 +75,23 @@ export function Header() {
   );
 }
 
-function NavItem({ url, children }: { children: ReactNode; url: string }) {
+function NavItem({
+  url,
+  children,
+  main,
+}: {
+  children: ReactNode;
+  url: string;
+  main?: boolean;
+}) {
   const path = usePathname();
   const active = url === path;
   return (
     <Link href={url}>
       <li
         data-active={active ? "true" : "false"}
-        className="cursor-pointer data-[active=true]:text-white hover:text-white"
+        data-main={main ? "true" : "false"}
+        className="cursor-pointer px-2 py-1 rounded-md data-[main=true]:bg-primary data-[active=true]:text-white hover:text-white"
       >
         {children}
       </li>
