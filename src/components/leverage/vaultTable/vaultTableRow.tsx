@@ -55,12 +55,13 @@ export function VaultTableRow({
       <th>
         <Badge
           {...badgeVariant}
+          className="text-[10px]"
         >{`${getLeverageRatio(pool.leverageTier)}x`}</Badge>
       </th>
       <th className="md:col-span-2 text-right">
         {roundDown(
           parseFloat(formatUnits(parseUnits(pool.totalValueLocked, 0), 18)),
-          4,
+          3,
         )}
       </th>
     </tr>
