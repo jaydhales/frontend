@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import type { TVaults } from "@/lib/types";
 import { VaultTableRow } from "./vaultTableRow";
