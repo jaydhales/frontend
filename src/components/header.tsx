@@ -35,7 +35,7 @@ export function Header() {
             <div className="flex gap-x-[16px] bg-primary/40  rounded-md">
               <NavItem url={"/"}>Leverage</NavItem>
               <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
-              <NavItem url={"/dashboard"}>Dashboard</NavItem>
+              <NavItem url={"/portfolio"}>Portfolio</NavItem>
             </div>
             <NavItem url={"/stake"}>Stake</NavItem>
             <NavItem url={"/create-vault"}>Create Vault</NavItem>
@@ -61,7 +61,7 @@ export function Header() {
                   <div className="bg-primary/40 rounded-md">
                     <NavItem url={"/"}>Leverage</NavItem>
                     <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
-                    <NavItem url={"/dashboard"}>Dashboard</NavItem>
+                    <NavItem url={"/portfolio"}>Portfolio</NavItem>
                   </div>
                   <NavItem url={"/stake"}>Stake</NavItem>
                   <NavItem url={"/create-vault"}>Create Vault</NavItem>
