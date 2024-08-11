@@ -56,8 +56,8 @@ export default function BurnTable({ isApe }: { isApe: boolean }) {
       {!selectedRow && (
         <table className="flex flex-col gap-y-4">
           <caption className="hidden">Burn Tokens</caption>
-          <BurnTableHeaders />
           <tbody>
+            <BurnTableHeaders />
             {isApe ? (
               <>
                 {ape.data?.userPositions.map((r) => (
