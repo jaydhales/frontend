@@ -12,12 +12,13 @@ export default function BurnTable({ isApe }: { isApe: boolean }) {
   const { address } = useAccount();
   const ape = api.user.getApePositions.useQuery(
     { address },
-    { enabled: isApe },
+    // { enabled: isApe },
   );
   const tea = api.user.getTeaPositions.useQuery(
     { address },
-    { enabled: !isApe },
+    // { enabled: !isApe },
   );
+  console.log(tea, ape, "TEA/APE", isApe);
 
   const selectedRowParamsApe = useMemo(() => {
     return ape.data?.userPositions.find((r) => r.vaultId === selectedRow);
