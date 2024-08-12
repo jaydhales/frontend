@@ -6,64 +6,67 @@ import SelectedRow from "./selected-row";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 
-export default function BurnTable({ isApe }: { isApe: boolean }) {
-  const [selectedRow, setSelectedRow] = useState<string | undefined>();
+export default function BurnTable() {
+  const [selectedRow, setSelectedRow] = useState<
+    | {
+        vaultId: string;
+        isApe: boolean;
+      }
+    | undefined
+  >();
 
   const { address } = useAccount();
-  const ape = api.user.getApePositions.useQuery(
-    { address },
-    // { enabled: isApe },
-  );
-  const tea = api.user.getTeaPositions.useQuery(
-    { address },
-    // { enabled: !isApe },
-  );
-  console.log(tea, ape, "TEA/APE", isApe);
+  const ape = api.user.getApePositions.useQuery({ address });
+  const tea = api.user.getTeaPositions.useQuery({ address });
 
   const selectedRowParamsApe = useMemo(() => {
-    return ape.data?.userPositions.find((r) => r.vaultId === selectedRow);
+    return ape.data?.userPositions.find(
+      (r) => r.vaultId === selectedRow?.vaultId && selectedRow.isApe,
+    );
   }, [ape.data?.userPositions, selectedRow]);
   const selectedRowParamsTea = useMemo(() => {
-    return tea.data?.userPositionTeas.find((r) => r.vaultId === selectedRow);
+    return tea.data?.userPositionTeas.find(
+      (r) => r.vaultId === selectedRow?.vaultId && !selectedRow.isApe,
+    );
   }, [selectedRow, tea.data?.userPositionTeas]);
 
   return (
     <div className="relative">
-      {selectedRow &&
-        (isApe
-          ? selectedRowParamsApe && (
-              <>
-                <SelectedRow
-                  isApe
-                  params={selectedRowParamsApe}
-                  apeAddress={selectedRowParamsApe?.APE}
-                  close={() => {
-                    setSelectedRow(undefined);
-                  }}
-                />
-              </>
-            )
-          : selectedRowParamsTea && (
-              <>
-                <SelectedRow
-                  isApe={false}
-                  params={selectedRowParamsTea}
-                  close={() => {
-                    setSelectedRow(undefined);
-                  }}
-                />
-              </>
-            ))}
+      {selectedRowParamsApe && (
+        <>
+          <SelectedRow
+            isApe
+            params={selectedRowParamsApe}
+            apeAddress={selectedRowParamsApe?.APE}
+            close={() => {
+              setSelectedRow(undefined);
+            }}
+          />
+        </>
+      )}
+      {selectedRowParamsTea && (
+        <>
+          <SelectedRow
+            isApe={false}
+            params={selectedRowParamsTea}
+            close={() => {
+              setSelectedRow(undefined);
+            }}
+          />
+        </>
+      )}
       {!selectedRow && (
-        <table className="flex flex-col gap-y-4">
+        <table className="w-full">
           <caption className="hidden">Burn Tokens</caption>
-          <tbody>
+          <tbody className="flex flex-col gap-y-4">
             <BurnTableHeaders />
-            {isApe ? (
+            {
               <>
                 {ape.data?.userPositions.map((r) => (
                   <BurnTableRow
-                    setSelectedRow={setSelectedRow}
+                    setSelectedRow={() =>
+                      setSelectedRow({ vaultId: r.vaultId, isApe: true })
+                    }
                     key={r.vaultId}
                     row={{
                       id: r.vaultId,
@@ -80,9 +83,6 @@ export default function BurnTable({ isApe }: { isApe: boolean }) {
                     apeAddress={r.APE}
                   ></BurnTableRow>
                 ))}
-              </>
-            ) : (
-              <>
                 {tea.data?.userPositionTeas.map((r) => {
                   return (
                     <BurnTableRow
@@ -91,12 +91,17 @@ export default function BurnTable({ isApe }: { isApe: boolean }) {
                       }}
                       key={r.id}
                       isApe={false}
-                      setSelectedRow={setSelectedRow}
+                      setSelectedRow={() =>
+                        setSelectedRow({
+                          vaultId: r.vaultId,
+                          isApe: true,
+                        })
+                      }
                     />
                   );
                 })}
               </>
-            )}
+            }
           </tbody>
         </table>
       )}
