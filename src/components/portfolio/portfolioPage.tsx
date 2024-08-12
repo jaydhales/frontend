@@ -5,7 +5,6 @@ import { Container } from "../ui/container";
 import PageHeader from "../shared/pageHeader";
 
 export default function PortfolioPage() {
-  const isApe = true;
   return (
     <div>
       <PageHeader>Portfolio</PageHeader>
