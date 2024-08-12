@@ -4,7 +4,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Container } from "../ui/container";
 import { Card } from "../ui/card";
 import VaultTable from "./vaultTable/vaultTable";
-import BurnTable from "./burnTable/burnTable";
 import MintFormProvider from "../providers/mintFormProvider";
 import type { TVaults } from "@/lib/types";
 import Pagination from "../shared/pagination";
@@ -45,13 +44,7 @@ export default function MintTabs({
         </Container>
       </TabsContent>
       {/*  */}
-      <TabsContent value="burn">
-        <Container>
-          <Card>
-            <BurnTable isApe={isApe} />
-          </Card>
-        </Container>
-      </TabsContent>
+      <TabsContent value="burn"></TabsContent>
     </Tabs>
   );
 }
