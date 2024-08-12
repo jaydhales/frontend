@@ -11,8 +11,8 @@ export default function PortfolioPage() {
       <PageHeader>Portfolio</PageHeader>
       <div className="pt-6"></div>
       <Container>
-        <Card>
-          <BurnTable isApe={isApe} />
+        <Card className="lg:w-[900px]">
+          <BurnTable />
         </Card>
       </Container>
     </div>
