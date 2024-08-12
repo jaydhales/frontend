@@ -34,7 +34,7 @@ export function Header() {
           <ul className="flex gap-x-[16px] bg-[#0A0A0F] px-[12px] py-[12px] font-semibold text-muted-foreground">
             <div className="flex gap-x-[16px] bg-primary/40  rounded-md">
               <NavItem url={"/"}>Leverage</NavItem>
-              <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
+              <NavItem url={"/liquidity"}>Liquidity</NavItem>
               <NavItem url={"/portfolio"}>Portfolio</NavItem>
             </div>
             <NavItem url={"/stake"}>Stake</NavItem>
@@ -60,7 +60,7 @@ export function Header() {
                 <ul className="text-muted-foreground space-y-4 text-center">
                   <div className="bg-primary/40 rounded-md">
                     <NavItem url={"/"}>Leverage</NavItem>
-                    <NavItem url={"/liquidity"}>Provide Liquidity</NavItem>
+                    <NavItem url={"/liquidity"}>Liquidity</NavItem>
                     <NavItem url={"/portfolio"}>Portfolio</NavItem>
                   </div>
                   <NavItem url={"/stake"}>Stake</NavItem>
