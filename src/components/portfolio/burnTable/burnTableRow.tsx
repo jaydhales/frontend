@@ -23,13 +23,16 @@ export default function BurnTableRow({
   });
 
   return (
-    <tr className="grid grid-cols-5 items-center text-left text-gray text-white">
-      <th>{row.vaultId}</th>
+    <tr className="grid gap-x-4 grid-cols-5 items-center text-left text-gray text-white">
+      <th className="flex gap-x-2">
+        <span>{isApe ? "Ape" : "Tea"}</span>
+        <span>{row.vaultId} </span>
+      </th>
       <th>{row.debtSymbol}</th>
       <th>{row.collateralSymbol}</th>
       <th>{getLeverageRatio(parseInt(row.leverageTier))}x</th>
       <th>
-        <div className="flex items-center justify-between">
+        <div className="flex gap-x-8 items-center justify-between">
           {isApe ? (
             <span>
               {parseFloat(parseFloat(formatUnits(apeBal ?? 0n, 18)).toFixed(4))}
