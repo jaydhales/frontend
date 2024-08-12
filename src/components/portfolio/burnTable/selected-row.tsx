@@ -39,8 +39,11 @@ export default function SelectedRow({
           <X />
         </button>
         <BurnTableHeaders />
-        <tr className="grid h-[41px] grid-cols-5 items-center text-left text-gray text-white">
-          <th>{params?.vaultId}</th>
+        <tr className="grid h-[41px] gap-x-4 grid-cols-5 items-center text-left text-gray text-white">
+          <th>
+            {isApe ? "Ape" : "Tea"}
+            {params?.vaultId}
+          </th>
           <th>{params?.debtSymbol}</th>
           <th>{params?.collateralSymbol}</th>
           <th>{getLeverageRatio(parseInt(params?.leverageTier ?? "0"))}x</th>
