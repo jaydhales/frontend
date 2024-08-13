@@ -1,6 +1,6 @@
-import LeverageContent from "@/components/leverage/leverageContent";
+import LeverageLiquidityContent from "@/components/leverage-liquidity/leverageLiquidityContent";
+import { MintForm } from "@/components/leverage-liquidity/mintForm/mint-form";
 import LeveragePage from "@/components/leverage/leveragePage";
-import { MintForm } from "@/components/shared/mintForm/mint-form";
 
 import { api } from "@/trpc/server";
 
@@ -9,11 +9,11 @@ export default async function Home() {
   return (
     <main className="flex flex-col items-center justify-center text-white">
       <LeveragePage>
-        <LeverageContent
+        <LeverageLiquidityContent
           isApe
           form={<MintForm isApe vaultsQuery={vaultQuery} />}
           vaultsQuery={vaultQuery}
-        ></LeverageContent>
+        ></LeverageLiquidityContent>
       </LeveragePage>
     </main>
   );
