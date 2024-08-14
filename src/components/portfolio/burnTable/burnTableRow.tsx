@@ -92,13 +92,15 @@ export function BurnTableRowMobile({
           </span>
         )}
       </MobileTh>
-      <Button
-        onClick={() => setSelectedRow(row.vaultId)}
-        type="button"
-        variant="outline"
-      >
-        Burn
-      </Button>
+      <th>
+        <Button
+          onClick={() => setSelectedRow(row.vaultId)}
+          type="button"
+          variant="outline"
+        >
+          Burn
+        </Button>
+      </th>
     </tr>
   );
 }
