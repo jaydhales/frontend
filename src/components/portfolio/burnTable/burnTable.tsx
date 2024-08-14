@@ -116,7 +116,7 @@ export default function BurnTable() {
                         setSelectedRow={() =>
                           setSelectedRow({
                             vaultId: r.vaultId,
-                            isApe: true,
+                            isApe: false,
                           })
                         }
                       />
