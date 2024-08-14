@@ -9,7 +9,7 @@ import Image from "next/image";
 
 import { type SimulateContractReturnType } from "viem";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import ProgressAlert from "@/components/shared/mintForm/progressAlert";
+import ProgressAlert from "@/components/leverage-liquidity/mintForm/progressAlert";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
