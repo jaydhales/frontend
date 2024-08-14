@@ -68,7 +68,7 @@ export default function BurnTable() {
                       setSelectedRow={() =>
                         setSelectedRow({ vaultId: r.vaultId, isApe: true })
                       }
-                      key={r.vaultId}
+                      key={r.vaultId + "apea"}
                       row={{
                         id: r.vaultId,
                         balance: r.balance,
@@ -87,7 +87,7 @@ export default function BurnTable() {
                       setSelectedRow={() =>
                         setSelectedRow({ vaultId: r.vaultId, isApe: true })
                       }
-                      key={r.vaultId}
+                      key={r.vaultId + "ape"}
                       row={{
                         id: r.vaultId,
                         balance: r.balance,
@@ -111,7 +111,7 @@ export default function BurnTable() {
                         row={{
                           ...r,
                         }}
-                        key={r.id}
+                        key={r.id + "teaa"}
                         isApe={false}
                         setSelectedRow={() =>
                           setSelectedRow({
@@ -121,7 +121,7 @@ export default function BurnTable() {
                         }
                       />
                       <BurnTableRowMobile
-                        key={r.id + "1"}
+                        key={r.id + "tea"}
                         row={{ ...r }}
                         isApe={false}
                         setSelectedRow={() =>
