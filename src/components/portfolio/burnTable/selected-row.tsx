@@ -41,7 +41,7 @@ export default function SelectedRow({
         <BurnTableHeaders />
         <tr className="grid h-[41px] gap-x-4 grid-cols-5 items-center text-left text-gray text-white">
           <th>
-            {isApe ? "Ape" : "Tea"}
+            {isApe ? "APE-" : "TEA-"}
             {params?.vaultId}
           </th>
           <th>{params?.debtSymbol}</th>
