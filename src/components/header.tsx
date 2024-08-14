@@ -5,7 +5,7 @@ import { useAccount } from "wagmi";
 
 import { Button } from "./ui/button";
 import sir_logo from "@/../public/images/sir-logo.svg";
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
@@ -15,6 +15,8 @@ export function Header() {
   const { openConnectModal } = useConnectModal();
   const { address } = useAccount();
   const logo = sir_logo as StaticImageData;
+
+  const [openModal, setOpen] = useState(false);
   const open = () => {
     if (address) {
       openAccountModal?.();
@@ -51,7 +53,7 @@ export function Header() {
               address.slice(address.length - 5, address.length)}
         </Button>
         <div className="lg:hidden flex items-center text-white">
-          <Sheet>
+          <Sheet open={openModal} onOpenChange={setOpen}>
             <SheetTrigger>
               <Menu className="cursor-pointer" size={30} />
             </SheetTrigger>
@@ -59,12 +61,22 @@ export function Header() {
               <div className="flex justify-center">
                 <ul className="text-muted-foreground space-y-4 text-center">
                   <div className="bg-primary/40 rounded-md">
-                    <NavItem url={"/"}>Leverage</NavItem>
-                    <NavItem url={"/liquidity"}>Liquidity</NavItem>
-                    <NavItem url={"/portfolio"}>Portfolio</NavItem>
+                    <NavItem onClick={() => setOpen(false)} url={"/"}>
+                      Leverage
+                    </NavItem>
+                    <NavItem onClick={() => setOpen(false)} url={"/liquidity"}>
+                      Liquidity
+                    </NavItem>
+                    <NavItem onClick={() => setOpen(false)} url={"/portfolio"}>
+                      Portfolio
+                    </NavItem>
                   </div>
-                  <NavItem url={"/stake"}>Stake</NavItem>
-                  <NavItem url={"/create-vault"}>Create Vault</NavItem>
+                  <NavItem onClick={() => setOpen(false)} url={"/stake"}>
+                    Stake
+                  </NavItem>
+                  <NavItem onClick={() => setOpen(false)} url={"/create-vault"}>
+                    Create Vault
+                  </NavItem>
                 </ul>
               </div>
             </SheetContent>
@@ -79,7 +91,9 @@ function NavItem({
   url,
   children,
   main,
+  onClick,
 }: {
+  onClick?: () => void;
   children: ReactNode;
   url: string;
   main?: boolean;
@@ -87,7 +101,7 @@ function NavItem({
   const path = usePathname();
   const active = url === path;
   return (
-    <Link href={url}>
+    <Link onClick={onClick} href={url}>
       <li
         data-active={active ? "true" : "false"}
         data-main={main ? "true" : "false"}
