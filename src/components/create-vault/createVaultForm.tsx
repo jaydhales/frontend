@@ -10,12 +10,12 @@ import { CreateVaultInputValues } from "@/lib/schemas";
 import type { TAddressString, TCreateVaultKeys } from "@/lib/types";
 import { useCreateVault } from "./hooks/useCreateVault";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
-import ProgressAlert from "../shared/mintForm/progressAlert";
 import { Select, SelectItem } from "../ui/select";
 import { SelectContent, SelectTrigger } from "@radix-ui/react-select";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { getLogoAsset, mapLeverage } from "@/lib/utils";
+import ProgressAlert from "../leverage-liquidity/mintForm/progressAlert";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
