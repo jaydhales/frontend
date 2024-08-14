@@ -4,7 +4,7 @@ import { getLeverageRatio } from "@/lib/utils";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { formatUnits } from "viem";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 interface Props {
   row: TUserPosition;
   isApe: boolean;
@@ -69,7 +69,7 @@ export function BurnTableRowMobile({
     isApe,
   });
   return (
-    <tr className="md:hidden flex flex-col gap-y-4 px-4 text-[14px] border-b pb-4">
+    <tr className="md:hidden border-opacity-35 w-[380px] flex flex-col gap-y-4 px-4 text-[14px] border-b border-white pb-4">
       <MobileTh title="Token">
         <div>
           <span>{isApe ? "APE" : "TEA"}-</span>
