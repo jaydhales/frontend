@@ -9,10 +9,14 @@ export function Section({
   form,
   bg,
   balance,
+  vaultId,
+  isApe,
 }: {
   form: TBurnForm;
   bg: string;
   balance: bigint | undefined;
+  vaultId: string;
+  isApe: boolean;
 }) {
   return (
     <div className={`w-full rounded-md ${bg} px-2 py-3`}>
@@ -43,11 +47,11 @@ export function Section({
           )}
         />
 
-        <div>
-          <div className="flex h-[45px] w-[140px] items-center gap-x-2 rounded-md bg-secondary px-2">
-            <div className="h-[28px] w-[28px] rounded-full bg-primary"></div>
-            <h3>TEA</h3>
-          </div>
+        <div className="flex items-center">
+          <h3 className="text-xl">
+            {isApe ? "APE-" : "TEA-"}
+            {vaultId}
+          </h3>
         </div>
       </div>
       <div className="flex items-end justify-between pt-2">
@@ -64,4 +68,13 @@ export function Section({
       </div>
     </div>
   );
+}
+{
+  /* <div className="flex h-[45px] w-[140px] items-center gap-x-2 rounded-md bg-secondary px-2"> */
+}
+{
+  /*   <h3>TEA</h3> */
+}
+{
+  /* </div> */
 }

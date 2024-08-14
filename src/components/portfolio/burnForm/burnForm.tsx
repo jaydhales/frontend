@@ -64,7 +64,6 @@ export default function BurnForm({
   const utils = api.useUtils();
   useEffect(() => {
     if (receiptData) {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       if (isApe) {
         utils.user.getApeBalance.invalidate().catch((e) => {
           console.log(e);
@@ -94,6 +93,7 @@ export default function BurnForm({
       writeContract(burnData.request);
     }
   };
+  console.log(isApe);
   return (
     <FormProvider {...form}>
       <ProgressAlert
@@ -106,7 +106,13 @@ export default function BurnForm({
           <label htmlFor="a" className="">
             Burn Amount
           </label>
-          <Section balance={balance} bg="bg-primary" form={form} />
+          <Section
+            balance={balance}
+            bg="bg-primary"
+            form={form}
+            vaultId={row.vaultId}
+            isApe={isApe}
+          />
           <div className="pt-2"></div>
           <div>
             <label htmlFor="a" className="">
