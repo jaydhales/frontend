@@ -10,9 +10,9 @@ import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { Section } from "./section";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
-import ProgressAlert from "@/components/shared/mintForm/progressAlert";
 import { Button } from "@/components/ui/button";
 import { SectionTwo } from "./sectionTwo";
+import ProgressAlert from "@/components/leverage-liquidity/mintForm/progressAlert";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
