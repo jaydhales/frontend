@@ -20,11 +20,11 @@ import { z } from "zod";
 import { useUnstake } from "../hooks/useUnstake";
 
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { useCheckSubmitValid } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
 import { SirContract } from "@/contracts/sir";
 
 import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
-import ProgressAlert from "@/components/shared/mintForm/progressAlert";
+import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
+import ProgressAlert from "@/components/leverage-liquidity/mintForm/progressAlert";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -58,7 +58,7 @@ const UnstakeForm = ({
       : undefined,
   });
 
-  const { writeContract, error, data: hash, isPending } = useWriteContract();
+  const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 

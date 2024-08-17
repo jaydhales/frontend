@@ -19,14 +19,14 @@ import { z } from "zod";
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 
 import { useStake } from "@/components/stake/hooks/useStake";
-import { useApprove } from "@/components/shared/mintForm/hooks/useApprove";
 import { SirContract } from "@/contracts/sir";
 
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { useCheckSubmitValid } from "@/components/shared/mintForm/hooks/useCheckSubmitValid";
 
 import useStakeError from "@/components/stake/hooks/useStakeError";
-import ProgressAlert from "@/components/shared/mintForm/progressAlert";
+import { useApprove } from "@/components/leverage-liquidity/mintForm/hooks/useApprove";
+import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
+import ProgressAlert from "@/components/leverage-liquidity/mintForm/progressAlert";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -57,7 +57,7 @@ const StakeForm = ({ balance, allowance }: Props) => {
     approveContract: SirContract.address,
   });
 
-  const { writeContract, error, data: hash, isPending } = useWriteContract();
+  const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 

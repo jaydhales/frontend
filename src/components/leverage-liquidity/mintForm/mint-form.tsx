@@ -1,6 +1,5 @@
 "use client";
 import { findVault, formatDataInput } from "@/lib/utils";
-import MintForm from "../shared/mintForm/mint-form-controller";
 import { useFormContext } from "react-hook-form";
 import { AssistantContract } from "@/contracts/assistant";
 import type { SimulateContractReturnType } from "viem";
@@ -10,10 +9,11 @@ import { useMemo } from "react";
 import { z } from "zod";
 import { useAccount } from "wagmi";
 import { api } from "@/trpc/react";
-import { useApprove } from "../shared/mintForm/hooks/useApprove";
-import { useMintApeOrTea } from "../shared/hooks/useMintApeOrTea";
+import MintFormController from "./mint-form-controller";
+import { useApprove } from "./hooks/useApprove";
+import { useMintApeOrTea } from "@/components/shared/hooks/useMintApeOrTea";
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
-export function LeverageMintForm({
+export function MintForm({
   vaultsQuery,
   isApe,
 }: {
@@ -60,10 +60,10 @@ export function LeverageMintForm({
   });
 
   return (
-    <MintForm
+    <MintFormController
       approveFetching={approveSimulate.isFetching}
       approveSimulate={approveSimulate.data?.request as SimulateReq}
-      MintWithEth={MintWithEth as SimulateReq}
+      MintWithEth={MintWithEth?.request as SimulateReq}
       Mint={Mint?.request as SimulateReq}
       vaultsQuery={vaultsQuery}
       mintFetching={mintFetching}
