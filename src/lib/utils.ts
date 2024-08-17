@@ -77,6 +77,7 @@ export function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
     }
   })?.vaultId;
 }
+
 export function getApeAddress({
   vaultId,
   vaultAddress,
@@ -112,6 +113,8 @@ export function formatBigInt(b: bigint | undefined, fixed: number) {
 }
 
 const BASE_FEE = 0.4;
+const L_FEE = 0.2345;
+
 /**
  *
  * @param k - Leverage Tier should be values -4 to 2
@@ -120,5 +123,15 @@ const BASE_FEE = 0.4;
 export function calculateVaultFee(k: number) {
   const l = getLeverageRatio(k);
   const a = 1 / (1 + (l - 1) * BASE_FEE);
+  return (1 * 10 - a * 10) / 10;
+}
+
+/**
+ *
+ * @param k - Leverage Tier should be values -4 to 2
+ * @returns number
+ */
+export function calculateTeaVaultFee() {
+  const a = 1 / (1 + L_FEE);
   return (1 * 10 - a * 10) / 10;
 }

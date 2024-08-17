@@ -94,7 +94,7 @@ export default function CreateVaultForm() {
               name="leverageTier"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Leverage Ratio</FormLabel>{" "}
+                  <FormLabel>Leverage</FormLabel>{" "}
                   <Select onValueChange={field.onChange}>
                     <SelectTrigger className="w-full flex justify-between bg-primary py-2 rounded-md px-2 ">
                       <h2 className="text-[14px] flex items-center">

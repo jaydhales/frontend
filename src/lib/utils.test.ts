@@ -13,7 +13,6 @@ test("Test utils add function.", () => {
 test("Test calculate leverage tier ratio.", () => {
   expect(getLeverageRatio(-1)).toBe(1.5);
 });
-
 test("Test calculate leverage tier ratio.", () => {
   expect(calculateVaultFee(-1)).toBe(0.2);
 });
