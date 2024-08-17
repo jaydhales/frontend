@@ -111,7 +111,7 @@ export function formatBigInt(b: bigint | undefined, fixed: number) {
   return parseFloat(parsed.toFixed(fixed));
 }
 
-const BASE_FEE = 0.5;
+const BASE_FEE = 0.4;
 /**
  *
  * @param k - Leverage Tier should be values -4 to 2
