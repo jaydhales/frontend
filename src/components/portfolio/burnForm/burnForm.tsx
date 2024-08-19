@@ -91,9 +91,9 @@ export default function BurnForm({
   const onSubmit = () => {
     if (burnData?.request) {
       writeContract(burnData.request);
+      form.reset({ deposit: "" });
     }
   };
-  console.log(isApe);
   return (
     <FormProvider {...form}>
       <ProgressAlert
