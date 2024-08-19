@@ -117,15 +117,18 @@ export default function MintFormDisplay({
     }
     if (useEth && MintWithEth) {
       writeContract(MintWithEth);
+      form.resetField("deposit");
       return;
     }
     // CHECK ALLOWANCE
     if (submitType === ESubmitType.mint && Mint) {
       writeContract?.(Mint);
+      form.resetField("deposit");
       return;
     }
     if (submitType === ESubmitType.approve && approveSimulate) {
       writeContract(approveSimulate);
+      form.resetField("deposit");
       return;
     }
   };
