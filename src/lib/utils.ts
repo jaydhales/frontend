@@ -4,7 +4,8 @@ import { encodePacked, formatUnits, getAddress, keccak256, toHex } from "viem";
 import type { TAddressString, TMintFormFields, TVaults } from "./types";
 import { assetSchema } from "./schemas";
 import { z } from "zod";
-
+import numeral from "numeral";
+import { BASE_FEE, L_FEE } from "@/data/constants";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -105,15 +106,34 @@ export function roundDown(float: number, decimals: number) {
   return roundedDown;
 }
 
+/**
+ * @returns string | Will round down to 10th decimal
+ */
+export function formatNumber(number: number) {
+  // round down
+  const factor = Math.pow(10, 10);
+  const n = Math.floor(number * factor) / factor;
+
+  if (n < 0.000000001) {
+    const factor = Math.pow(10, 10);
+    const roundedDown = Math.floor(n * factor) / factor;
+    return roundedDown.toExponential();
+  }
+  if (n > 9999) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+    const num = numeral(n);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    return num.format("0.0a") as string;
+  }
+  return n.toString();
+}
+
 export function formatBigInt(b: bigint | undefined, fixed: number) {
   const parsed =
     Math.floor(parseFloat(formatUnits(b ?? 0n, 18)) * 10 ** fixed) /
     10 ** fixed;
   return parseFloat(parsed.toFixed(fixed));
 }
-
-const BASE_FEE = 0.4;
-const L_FEE = 0.2345;
 
 /**
  *
