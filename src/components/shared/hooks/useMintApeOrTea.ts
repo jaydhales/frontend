@@ -39,6 +39,7 @@ export function useMintApeOrTea({
     collateralToken: collateralToken as TAddressString,
     leverageTier,
   };
+
   const {
     data: Mint,
     refetch,
@@ -54,6 +55,7 @@ export function useMintApeOrTea({
       amount ?? 0n,
     ],
   });
+
   const { data: MintWithEth, error } = useSimulateContract({
     ...AssistantContract,
     functionName: "mintWithETH",
@@ -65,7 +67,7 @@ export function useMintApeOrTea({
     value: amount ?? 0n,
   });
 
-  console.log(error);
+  console.log(error, MintWithEth, "Error");
   useEffect(() => {
     refetch().catch((e) => console.log(e));
   }, [refetch, tokenAllowance]);
