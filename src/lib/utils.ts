@@ -109,24 +109,27 @@ export function roundDown(float: number, decimals: number) {
 /**
  * @returns string | Will round down to 10th decimal
  */
-export function formatNumber(number: number) {
+export function formatNumber(number: number, decimals?: number) {
   // round down
   const factor = Math.pow(10, 10);
-  const n = Math.floor(number * factor) / factor;
+  let n = Math.floor(number * factor) / factor;
 
+  if (n === 0) {
+    return "0";
+  }
   if (n < 0.000000001) {
     const factor = Math.pow(10, 10);
     const roundedDown = Math.floor(n * factor) / factor;
     return roundedDown.toExponential();
-  }
-  if (n === 0) {
-    return "0";
   }
   if (n > 9999) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     const num = numeral(n);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     return num.format("0.0a");
+  }
+  if (decimals) {
+    n = roundDown(n, decimals);
   }
   return n.toString();
 }
