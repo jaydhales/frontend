@@ -10,6 +10,7 @@ import Image from "next/image";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
 import type { VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
+import ToolTip from "@/components/ui/tooltip";
 export function VaultTableRow({
   badgeVariant,
   pool,
@@ -51,7 +52,10 @@ export function VaultTableRow({
           {pool.collateralSymbol}/{pool.debtSymbol}
         </span>
       </th>
-      <th>{roundDown(fee, 2)}%</th>
+      <th className="flex gap-x-1 items-center">
+        {roundDown(fee, 2)}%{" "}
+        <ToolTip>Fee charged to apes when minting or burning.</ToolTip>
+      </th>
       <th>
         <Badge
           {...badgeVariant}
