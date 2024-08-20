@@ -32,4 +32,5 @@ test("Test Format Number", () => {
   expect(formatNumber(10000000)).toBe("10.0m");
   expect(formatNumber(0.00012323)).toBe("0.00012323");
   expect(formatNumber(0.0000001)).toBe("1e-7");
+  expect(formatNumber(0)).toBe("0");
 });
