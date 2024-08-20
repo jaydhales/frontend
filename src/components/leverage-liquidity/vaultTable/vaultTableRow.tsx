@@ -67,6 +67,7 @@ export function VaultTableRow({
         {formatNumber(
           parseFloat(formatUnits(parseUnits(pool.totalValueLocked, 0), 18)),
         )}
+            4,
       </th>
     </tr>
   );
