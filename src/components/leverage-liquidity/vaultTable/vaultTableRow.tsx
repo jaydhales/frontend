@@ -30,10 +30,10 @@ export function VaultTableRow({
         setValue("long", pool.collateralToken + "," + pool.collateralSymbol);
         setValue("leverageTier", pool.leverageTier.toString());
       }}
-      className="grid cursor-pointer text-sm  grid-cols-7 md:grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
+      className="grid cursor-pointer text-sm grid-cols-5   md:grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
     >
       <th className="">{pool.vaultId}</th>
-      <th className="col-span-3 flex">
+      <th className="md:col-span-3 flex">
         <Image
           className="h-6 w-6 rounded-full "
           src={getLogoAsset(pool.collateralToken as `0x${string}`)}
@@ -49,7 +49,7 @@ export function VaultTableRow({
           alt=""
         />
         <div className="px-2"></div>
-        <span>
+        <span className="hidden md:block">
           {pool.collateralSymbol}/{pool.debtSymbol}
         </span>
       </th>
