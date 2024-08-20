@@ -63,11 +63,21 @@ export function VaultTableRow({
           className="text-[10px]"
         >{`${getLeverageRatio(pool.leverageTier)}x`}</Badge>
       </th>
-      <th className="md:col-span-2 text-right">
-        {formatNumber(
-          parseFloat(formatUnits(parseUnits(pool.totalValueLocked, 0), 18)),
-        )}
+
+      <th className="md:col-span-2 flex justify-end items-center gap-x-1 text-right">
+        <span>
+          {formatNumber(
+            parseFloat(formatUnits(parseUnits(pool.totalValueLocked, 0), 18)),
             4,
+          )}
+        </span>
+        <Image
+          className="h-6 w-6 rounded-full "
+          src={getLogoAsset(pool.collateralToken as `0x${string}`)}
+          width={28}
+          height={28}
+          alt=""
+        />
       </th>
     </tr>
   );

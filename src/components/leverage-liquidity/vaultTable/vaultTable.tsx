@@ -40,9 +40,9 @@ export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
 
 function VaultTableRowHeaders() {
   return (
-    <tr className="grid grid-cols-7 md:grid-cols-8 px-1 text-left text-[14px] font-normal text-gray">
+    <tr className="grid grid-cols-5 md:grid-cols-8 px-1 text-left text-[14px] font-normal text-gray">
       <th>#</th>
-      <th className="col-span-3">Pool</th>
+      <th className="md:col-span-3">Pool</th>
       <th>Fees</th>
       <th>Leverage</th>
       <th className="md:col-span-2 text-right">TVL</th>
