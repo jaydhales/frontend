@@ -27,9 +27,7 @@ export function BalancePercent({
         50%
       </span>{" "}
       <span
-        onClick={() =>
-          setValue(roundDown(parseFloat(balance ?? "0"), 4).toString())
-        }
+        onClick={() => setValue(balance ?? "")}
         role="button"
         aria-label="Max Balance"
       >

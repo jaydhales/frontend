@@ -63,12 +63,7 @@ export default function MintFormDisplay({
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
 
-  const safeDeposit = useMemo(() => {
-    return z.coerce.number().safeParse(formData.deposit);
-  }, [formData.deposit]);
-
-  const { writeContract, error, data: hash, isPending } = useWriteContract();
-  console.log(error, "WRITE ERROR");
+  const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
   // Invalidate if approve or mint tx is successful.
@@ -86,11 +81,10 @@ export default function MintFormDisplay({
     utils.user.getEthBalance,
     useEth,
   ]);
-
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
     ethBalance: userEthBalance,
     useEth,
-    deposit: safeDeposit.success ? safeDeposit.data.toString() : "0",
+    deposit: formData.deposit ?? "0",
     depositToken: formData.depositToken,
     mintRequest: Mint,
     mintWithETHRequest: MintWithEth,
