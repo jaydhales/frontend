@@ -1,6 +1,7 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import {
   calculateVaultFee,
+  formatNumber,
   getLeverageRatio,
   getLogoAsset,
   roundDown,
@@ -63,9 +64,8 @@ export function VaultTableRow({
         >{`${getLeverageRatio(pool.leverageTier)}x`}</Badge>
       </th>
       <th className="md:col-span-2 text-right">
-        {roundDown(
+        {formatNumber(
           parseFloat(formatUnits(parseUnits(pool.totalValueLocked, 0), 18)),
-          3,
         )}
       </th>
     </tr>
