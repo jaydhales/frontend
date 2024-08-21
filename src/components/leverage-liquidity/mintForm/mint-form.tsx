@@ -9,10 +9,13 @@ import { useMemo } from "react";
 import { z } from "zod";
 import { useAccount } from "wagmi";
 import { api } from "@/trpc/react";
-import MintFormController from "./mint-form-controller";
 import { useApprove } from "./hooks/useApprove";
 import { useMintApeOrTea } from "@/components/shared/hooks/useMintApeOrTea";
+import MintFormWrapper from "./mint-form-wrapper";
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
+/**
+ * Contains simulation hooks.
+ */
 export function MintForm({
   vaultsQuery,
   isApe,
@@ -38,6 +41,7 @@ export function MintForm({
   const safeDeposit = useMemo(() => {
     return z.coerce.number().safeParse(formData.deposit);
   }, [formData.deposit]);
+
   const {
     Mint,
     MintWithEth,
@@ -60,7 +64,8 @@ export function MintForm({
   });
 
   return (
-    <MintFormController
+    <MintFormWrapper
+      userBalance={userBalance}
       approveFetching={approveSimulate.isFetching}
       approveSimulate={approveSimulate.data?.request as SimulateReq}
       mintWithEth={MintWithEth?.request as SimulateReq}

@@ -22,8 +22,7 @@ interface Props {
   isTxSuccess: boolean;
 }
 /**
- * DepositForm
- * Reusable Form for depositing with Vault params.
+ * Form layout container
  */
 export default function MintFormLayout({
   quoteData,
@@ -55,8 +54,6 @@ export default function MintFormLayout({
         />
 
         <div className=" flex-col flex items-center justify-center gap-y-2 pt-4">
-          {/* TODO */}
-          {/* Dont set size w-[450px] on all elements. */}
           <p className="md:w-[450px] pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
           {address && (
             <SubmitAndProgressButton
@@ -66,9 +63,6 @@ export default function MintFormLayout({
               isTxSuccess={isTxSuccess}
               submitType={submitType}
             />
-            // <Button disabled={!isValid} variant={"submit"} type="submit">
-            //   {submitType === ESubmitType.mint ? "Mint" : "Approve"}
-            // </Button>
           )}
           {!address && (
             <Button
