@@ -57,7 +57,7 @@ export function VaultTableRow({
         {roundDown(fee, 2)}%{" "}
         <ToolTip>Fee charged to apes when minting or burning.</ToolTip>
       </th>
-      <th>
+      <th className="pl-2">
         <Badge
           {...badgeVariant}
           className="text-[10px]"

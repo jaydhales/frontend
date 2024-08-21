@@ -44,7 +44,7 @@ function VaultTableRowHeaders() {
       <th>#</th>
       <th className="md:col-span-3">Pool</th>
       <th>Fees</th>
-      <th>Leverage</th>
+      <th className="pl-2">Leverage</th>
       <th className="md:col-span-2 text-right">TVL</th>
     </tr>
   );
