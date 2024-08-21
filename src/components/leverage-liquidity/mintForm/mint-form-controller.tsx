@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api } from "@/trpc/react";
 import {
   useAccount,
@@ -24,15 +24,15 @@ import MintFormLayout from "./mint-form-layout";
 
 export default function MintFormDisplay({
   vaultsQuery,
-  Mint,
-  MintWithEth,
+  mint,
+  mintWithEth,
   approveFetching,
   approveSimulate,
   mintFetching,
 }: {
   vaultsQuery: TVaults;
-  Mint: SimulateContractReturnType["request"] | undefined;
-  MintWithEth: SimulateContractReturnType["request"] | undefined;
+  mint: SimulateContractReturnType["request"] | undefined;
+  mintWithEth: SimulateContractReturnType["request"] | undefined;
   mintFetching: boolean;
   approveFetching: boolean;
   approveSimulate: SimulateContractReturnType["request"] | undefined;
@@ -86,8 +86,8 @@ export default function MintFormDisplay({
     useEth,
     deposit: formData.deposit ?? "0",
     depositToken: formData.depositToken,
-    mintRequest: Mint,
-    mintWithETHRequest: MintWithEth,
+    mintRequest: mint,
+    mintWithETHRequest: mintWithEth,
     approveWriteRequest: approveSimulate,
     tokenBalance: userBalance?.tokenBalance?.result,
     tokenAllowance: userBalance?.tokenAllowance?.result,
@@ -109,14 +109,14 @@ export default function MintFormDisplay({
     if (submitType === null) {
       return;
     }
-    if (useEth && MintWithEth) {
-      writeContract(MintWithEth);
+    if (useEth && mintWithEth) {
+      writeContract(mintWithEth);
       form.resetField("deposit");
       return;
     }
     // CHECK ALLOWANCE
-    if (submitType === ESubmitType.mint && Mint) {
-      writeContract?.(Mint);
+    if (submitType === ESubmitType.mint && mint) {
+      writeContract?.(mint);
       form.resetField("deposit");
       return;
     }
@@ -129,12 +129,15 @@ export default function MintFormDisplay({
 
   return (
     <>
-      <ProgressAlert
+      {/* <ProgressAlert */}
+      {/*   isTxSuccess={isConfirmed} */}
+      {/*   isTxPending={isConfirming} */}
+      {/*   waitForSign={isPending} */}
+      {/* /> */}
+      <MintFormLayout
         isTxSuccess={isConfirmed}
         isTxPending={isConfirming}
         waitForSign={isPending}
-      />
-      <MintFormLayout
         quoteData={quoteData}
         isValid={isValid}
         topSelects={

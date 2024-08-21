@@ -63,8 +63,8 @@ export function MintForm({
     <MintFormController
       approveFetching={approveSimulate.isFetching}
       approveSimulate={approveSimulate.data?.request as SimulateReq}
-      MintWithEth={MintWithEth?.request as SimulateReq}
-      Mint={Mint?.request as SimulateReq}
+      mintWithEth={MintWithEth?.request as SimulateReq}
+      mint={Mint?.request as SimulateReq}
       vaultsQuery={vaultsQuery}
       mintFetching={mintFetching}
     />
