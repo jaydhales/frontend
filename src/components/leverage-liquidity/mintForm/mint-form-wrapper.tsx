@@ -13,11 +13,9 @@ import { useFormContext } from "react-hook-form";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
 import TopSelects from "./topSelects";
-import { AssistantContract } from "@/contracts/assistant";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
-import { formatDataInput } from "@/lib/utils";
 import MintFormLayout from "./mint-form-layout";
 type TUserBalance =
   | {

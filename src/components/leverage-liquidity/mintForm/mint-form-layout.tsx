@@ -4,10 +4,10 @@ import { FormLabel } from "@/components/ui/form";
 import type { TMintFormFields } from "@/lib/types";
 import { formatBigInt } from "@/lib/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useFormContext, Form } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { useAccount } from "wagmi";
 import Estimations from "./estimations";
-import { ESubmitType } from "./hooks/useCheckSubmitValid";
+import type { ESubmitType } from "./hooks/useCheckSubmitValid";
 import SubmitAndProgressButton from "@/components/shared/submitAndProgressButton";
 
 interface Props {
