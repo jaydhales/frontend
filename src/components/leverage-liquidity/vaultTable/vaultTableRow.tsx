@@ -1,6 +1,7 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import {
   calculateVaultFee,
+  formatNumber,
   getLeverageRatio,
   getLogoAsset,
   roundDown,
@@ -10,6 +11,7 @@ import Image from "next/image";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
 import type { VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
+import ToolTip from "@/components/ui/tooltip";
 export function VaultTableRow({
   badgeVariant,
   pool,
@@ -28,10 +30,10 @@ export function VaultTableRow({
         setValue("long", pool.collateralToken + "," + pool.collateralSymbol);
         setValue("leverageTier", pool.leverageTier.toString());
       }}
-      className="grid cursor-pointer text-sm  grid-cols-7 md:grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
+      className="grid cursor-pointer text-sm grid-cols-5   md:grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
     >
       <th className="">{pool.vaultId}</th>
-      <th className="col-span-3 flex">
+      <th className="md:col-span-3 flex">
         <Image
           className="h-6 w-6 rounded-full "
           src={getLogoAsset(pool.collateralToken as `0x${string}`)}
@@ -47,22 +49,35 @@ export function VaultTableRow({
           alt=""
         />
         <div className="px-2"></div>
-        <span>
+        <span className="hidden md:block">
           {pool.collateralSymbol}/{pool.debtSymbol}
         </span>
       </th>
-      <th>{roundDown(fee, 2)}%</th>
-      <th>
+      <th className="flex gap-x-1 items-center">
+        {roundDown(fee, 2)}%{" "}
+        <ToolTip>Fee charged to apes when minting or burning.</ToolTip>
+      </th>
+      <th className="pl-2">
         <Badge
           {...badgeVariant}
           className="text-[10px]"
         >{`${getLeverageRatio(pool.leverageTier)}x`}</Badge>
       </th>
-      <th className="md:col-span-2 text-right">
-        {roundDown(
-          parseFloat(formatUnits(parseUnits(pool.totalValueLocked, 0), 18)),
-          3,
-        )}
+
+      <th className="md:col-span-2 flex justify-end items-center gap-x-1 text-right">
+        <span>
+          {formatNumber(
+            parseFloat(formatUnits(parseUnits(pool.totalValueLocked, 0), 18)),
+            4,
+          )}
+        </span>
+        <Image
+          className="h-6 w-6 rounded-full "
+          src={getLogoAsset(pool.collateralToken as `0x${string}`)}
+          width={28}
+          height={28}
+          alt=""
+        />
       </th>
     </tr>
   );

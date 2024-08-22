@@ -2,7 +2,9 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
 name: Run Tests
-
+env:
+  NEXT_PUBLIC_ENV: "development"
+  NEXT_PUBLIC_APE_HASH: "0x"
 on:
   push:
     branches: ["main"]

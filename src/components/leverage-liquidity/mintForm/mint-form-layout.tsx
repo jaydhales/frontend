@@ -4,10 +4,11 @@ import { FormLabel } from "@/components/ui/form";
 import type { TMintFormFields } from "@/lib/types";
 import { formatBigInt } from "@/lib/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useFormContext, Form } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { useAccount } from "wagmi";
 import Estimations from "./estimations";
-import { ESubmitType } from "./hooks/useCheckSubmitValid";
+import type { ESubmitType } from "./hooks/useCheckSubmitValid";
+import SubmitAndProgressButton from "@/components/shared/submitAndProgressButton";
 
 interface Props {
   quoteData: bigint | undefined;
@@ -16,10 +17,12 @@ interface Props {
   submitType: ESubmitType;
   isValid: boolean;
   onSubmit: () => void;
+  waitForSign: boolean;
+  isTxPending: boolean;
+  isTxSuccess: boolean;
 }
 /**
- * DepositForm
- * Reusable Form for depositing with Vault params.
+ * Form layout container
  */
 export default function MintFormLayout({
   quoteData,
@@ -27,6 +30,9 @@ export default function MintFormLayout({
   depositInputs,
   isValid,
   submitType,
+  isTxSuccess,
+  isTxPending,
+  waitForSign,
   onSubmit,
 }: Props) {
   const form = useFormContext<TMintFormFields>();
@@ -48,13 +54,15 @@ export default function MintFormLayout({
         />
 
         <div className=" flex-col flex items-center justify-center gap-y-2 pt-4">
-          {/* TODO */}
-          {/* Dont set size w-[450px] on all elements. */}
           <p className="md:w-[450px] pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
           {address && (
-            <Button disabled={!isValid} variant={"submit"} type="submit">
-              {submitType === ESubmitType.mint ? "Mint" : "Approve"}
-            </Button>
+            <SubmitAndProgressButton
+              isValid={isValid}
+              waitForSign={waitForSign}
+              isTxPending={isTxPending}
+              isTxSuccess={isTxSuccess}
+              submitType={submitType}
+            />
           )}
           {!address && (
             <Button

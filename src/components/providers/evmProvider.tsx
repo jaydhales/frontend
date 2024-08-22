@@ -1,17 +1,34 @@
 "use client";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
-    cookieStorage,
-    cookieToInitialState,
-    createStorage,
-    WagmiProvider,
+  cookieStorage,
+  cookieToInitialState,
+  createStorage,
+  WagmiProvider,
 } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-const main = {
-    ...mainnet,
-    rpcUrls: { default: { http: ["/api/rpc"] } },
-    id: 1,
+import { env } from "@/env";
+const getChainId = () => {
+  if (env.NEXT_PUBLIC_ENV === "test") {
+    return 433;
+  }
+  if (env.NEXT_PUBLIC_ENV === "development") {
+    return 1;
+  }
+  if (env.NEXT_PUBLIC_ENV === "production") {
+    return 1;
+  }
+  return 1;
+};
+const chainId = getChainId();
+
+const chain = {
+  ...mainnet,
+  // NOTE MAYBE REMOVE THIS.
+  // All rpc calls are done through trpc
+  // rpcUrls: { default: { http: ["/api/rpc"] } },
+  id: chainId,
 };
 
 // const config = getDefaultConfig({
@@ -22,29 +39,28 @@ const main = {
 // });
 
 export const wagmiConfig = getDefaultConfig({
-    appName: "SIR",
-    projectId:
-        process.env.NEXT_PUBLIC_PROJECT_ID ??
-        "934acc697f01fec33b75c19d9bb2e3c7",
-    chains: [main],
-    ssr: true,
-    storage: createStorage({
-        storage: cookieStorage,
-    }),
+  appName: "SIR",
+  projectId:
+    process.env.NEXT_PUBLIC_PROJECT_ID ?? "934acc697f01fec33b75c19d9bb2e3c7",
+  chains: [chain],
+  ssr: true,
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
 });
 function EvmProvider({
-    children,
-    cookie,
+  children,
+  cookie,
 }: {
-    children: React.ReactNode;
-    cookie: string | null;
+  children: React.ReactNode;
+  cookie: string | null;
 }) {
-    const initialState = cookieToInitialState(wagmiConfig, cookie);
-    return (
-        <WagmiProvider config={wagmiConfig} initialState={initialState}>
-            <RainbowKitProvider>{children}</RainbowKitProvider>
-        </WagmiProvider>
-    );
+  const initialState = cookieToInitialState(wagmiConfig, cookie);
+  return (
+    <WagmiProvider config={wagmiConfig} initialState={initialState}>
+      <RainbowKitProvider>{children}</RainbowKitProvider>
+    </WagmiProvider>
+  );
 }
 
 export default EvmProvider;

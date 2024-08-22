@@ -1,8 +1,7 @@
-import type { TAddressString } from "@/lib/types";
+import { EContracts, getAddress } from "@/lib/contractAddresses";
 
 export const SirContract = {
-  address: "0x2aA12f98795E7A65072950AfbA9d1E023D398241" as TAddressString,
-
+  address: getAddress(EContracts.SIR),
   abi: [
     {
       type: "constructor",
