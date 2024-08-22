@@ -1,14 +1,14 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
-
+console.log(process.env, "PROCESS ENv");
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars.
    */
   server: {
-    ENV: z.enum(["development", "test", "production"]),
     RPC_URL: z.string().optional(),
+    SUBGRAPH_URL: z.string(),
   },
 
   /**
@@ -17,6 +17,8 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
+    NEXT_PUBLIC_ENV: z.enum(["development", "test", "production"]),
+    NEXT_PUBLIC_APE_HASH: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
@@ -25,8 +27,10 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    RPC_URL: process.env.RPC_URL,
-    ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_ENV: process.env.NEXT_PUBLIC_ENV,
+    NEXT_PUBLIC_APE_HASH: process.env.NEXT_PUBLIC_APE_HASH,
+    RPC_URL: process.env.ENV,
+    SUBGRAPH_URL: process.env.SUBGRAPH_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

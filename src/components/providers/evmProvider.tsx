@@ -10,13 +10,13 @@ import { mainnet } from "wagmi/chains";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { env } from "@/env";
 const getChainId = () => {
-  if (env.ENV === "test") {
+  if (env.NEXT_PUBLIC_ENV === "test") {
     return 433;
   }
-  if (env.ENV === "development") {
+  if (env.NEXT_PUBLIC_ENV === "development") {
     return 1;
   }
-  if (env.ENV === "production") {
+  if (env.NEXT_PUBLIC_ENV === "production") {
     return 1;
   }
   return 1;

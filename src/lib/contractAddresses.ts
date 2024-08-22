@@ -7,7 +7,7 @@ export enum EContracts {
   "ASSISTANT",
 }
 export function getAddress(contract: EContracts): TAddressString {
-  const network_type = env.ENV;
+  const network_type = env.NEXT_PUBLIC_ENV;
 
   if (contract === EContracts.SIR) {
     if (network_type === EEnviroment.DEV) {

@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import { LeverageTier } from "@/lib/types";
 
 export const RPC_URL = "";
@@ -12,10 +13,8 @@ export const LeverageTiers = {
   [LeverageTier.three]: -3,
   [LeverageTier.four]: -4,
 };
-export const GRAPHQL_URL =
-  "http://140.82.62.189:8000/subgraphs/name/sir-trade/index";
+
 export const ASSET_URL =
   "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/";
-export const APE_HASH =
-  "0xd70a1cd68926694bc48c81d12b7ba5860e5e626f8cb02ac636fdead1f1044a45";
+export const APE_HASH = env.NEXT_PUBLIC_APE_HASH;
 //redeploy
