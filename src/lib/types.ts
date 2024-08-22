@@ -2,6 +2,12 @@ import type { UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
 import type { CreateVaultInputValues } from "./schemas";
 
+export enum ENetworkType {
+  "PRODUCTION" = "PRODUCTION",
+  "DEV" = "DEV",
+  "PRIVATE" = "PRIVATE",
+}
+
 export type TAddressString = `0x${string}`;
 // vaultParams.debtToken, vaultParams.collateralToken, vaultParams.leverageTier, vaultId
 export type TPool = {
