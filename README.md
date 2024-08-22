@@ -14,5 +14,7 @@ twitter:
 
 ### ENVIRONMENT VARIABLES
 
-ENV = `'test' | 'development' | 'production'`
+NEXT_PUBLIC_ENV = `'test' | 'development' | 'production'`
 RPC_URL = `[HTTP_RPC_URL]`
+SUBGRAPH_URL = `[HTTP_URL]`
+NEXT_PUBLIC_APE_HASH= `[address]`
