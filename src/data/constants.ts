@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import type { TAddressString } from "@/lib/types";
 import { LeverageTier } from "@/lib/types";
 
 export const RPC_URL = "";
@@ -16,5 +17,5 @@ export const LeverageTiers = {
 
 export const ASSET_URL =
   "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/";
-export const APE_HASH = env.NEXT_PUBLIC_APE_HASH;
+export const APE_HASH = env.NEXT_PUBLIC_APE_HASH as TAddressString;
 //redeploy
