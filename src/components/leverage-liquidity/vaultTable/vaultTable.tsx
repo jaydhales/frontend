@@ -4,7 +4,13 @@ import type { TVaults } from "@/lib/types";
 import { VaultTableRow } from "./vaultTableRow";
 import { useSearchParams } from "next/navigation";
 
-export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
+export default function VaultTable({
+  vaultQuery,
+  isApe,
+}: {
+  vaultQuery: TVaults;
+  isApe: boolean;
+}) {
   const params = useSearchParams();
   const vaultPage = params.get("vault-page");
   let pagination = 1;
@@ -30,6 +36,7 @@ export default function VaultTable({ vaultQuery }: { vaultQuery: TVaults }) {
                 badgeVariant={{
                   variant: ind % 2 === 0 ? "yellow" : "default",
                 }}
+                isApe={isApe}
               />
             );
           })}

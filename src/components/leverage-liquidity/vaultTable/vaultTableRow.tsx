@@ -1,5 +1,6 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import {
+  calculateTeaVaultFee,
   calculateVaultFee,
   formatNumber,
   getLeverageRatio,
@@ -15,12 +16,17 @@ import ToolTip from "@/components/ui/tooltip";
 export function VaultTableRow({
   badgeVariant,
   pool,
+  isApe,
 }: {
   badgeVariant: VariantProps<typeof badgeVariants>;
   number: string;
   pool: VaultFieldFragment;
+  isApe: boolean;
 }) {
-  const fee = calculateVaultFee(pool.leverageTier) * 100;
+  const fee = isApe
+    ? calculateVaultFee(pool.leverageTier) * 100
+    : calculateTeaVaultFee();
+
   const { setValue } = useMintFormProviderApi();
   console.log("Rerender vault table row");
   return (
