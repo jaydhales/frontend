@@ -1,6 +1,5 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
-console.log(process.env, "PROCESS ENv");
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -19,6 +18,9 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_ENV: z.enum(["development", "test", "production"]),
     NEXT_PUBLIC_APE_HASH: z.string(),
+    NEXT_PUBLIC_ASSISTANT_ADDRESS: z.string(),
+    NEXT_PUBLIC_SIR_ADDRESS: z.string(),
+
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
@@ -31,6 +33,8 @@ export const env = createEnv({
     NEXT_PUBLIC_APE_HASH: process.env.NEXT_PUBLIC_APE_HASH,
     RPC_URL: process.env.ENV,
     SUBGRAPH_URL: process.env.SUBGRAPH_URL,
+    NEXT_PUBLIC_ASSISTANT_ADDRESS: process.env.NEXT_PUBLIC_ASSISTANT_ADDRESS,
+    NEXT_PUBLIC_SIR_ADDRESS: process.env.NEXT_PUBLIC_SIR_ADDRESS,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
