@@ -16,7 +16,6 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_ENV: z.enum(["development", "test", "production"]),
     NEXT_PUBLIC_APE_HASH: z.string(),
     NEXT_PUBLIC_ASSISTANT_ADDRESS: z.string(),
     NEXT_PUBLIC_SIR_ADDRESS: z.string(),
@@ -29,7 +28,6 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    NEXT_PUBLIC_ENV: process.env.NEXT_PUBLIC_ENV,
     NEXT_PUBLIC_APE_HASH: process.env.NEXT_PUBLIC_APE_HASH,
     RPC_URL: process.env.ENV,
     SUBGRAPH_URL: process.env.SUBGRAPH_URL,
