@@ -17,7 +17,8 @@ import { useMemo } from "react";
 
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { z } from "zod";
-import { useUnstake } from "../hooks/useUnstake";
+import { useUnstake } from "@/components/stake/hooks/useUnstake";
+import { useUnstakeAndClaim } from "@/components/stake/hooks/useUnstakeAndClaim";
 
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { SirContract } from "@/contracts/sir";
@@ -35,13 +36,7 @@ interface Props {
   claimFetching: boolean;
 }
 
-const UnstakeForm = ({
-  balance,
-  dividends,
-  claimSimulate,
-  claimResult,
-  claimFetching,
-}: Props) => {
+const UnstakeForm = ({ balance, dividends, claimResult }: Props) => {
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
@@ -58,6 +53,13 @@ const UnstakeForm = ({
       : undefined,
   });
 
+  const { UnstakeAndClaim, isFetching: unstakeAndClaimFetching } =
+    useUnstakeAndClaim({
+      amount: safeAmount.success
+        ? parseUnits(safeAmount.data.toString() ?? "0", 12)
+        : undefined,
+    });
+
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
@@ -68,20 +70,17 @@ const UnstakeForm = ({
     mintRequest: Unstake?.request as SimulateReq,
     tokenBalance: balance,
     mintFetching: unstakeFetching,
-    approveWriteRequest: claimSimulate,
-    approveFetching: claimFetching,
+    approveWriteRequest: UnstakeAndClaim?.request as SimulateReq,
+    approveFetching: unstakeAndClaimFetching,
   });
 
   const onSubmit = () => {
-    if (Unstake && claimSimulate) {
+    if (Unstake && UnstakeAndClaim) {
       if (Boolean(claimResult)) {
-        writeContract(Unstake?.request);
-        writeContract(claimSimulate);
+        writeContract(UnstakeAndClaim?.request);
         return;
       } else {
-        console.log("here");
         writeContract(Unstake?.request);
-
         return;
       }
     }
