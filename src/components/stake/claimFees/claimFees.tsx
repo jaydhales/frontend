@@ -5,11 +5,14 @@ import { useAccount } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import Image from "next/image";
+import { useEffect } from "react";
 // import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 
 import { type SimulateContractReturnType } from "viem";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import ProgressAlert from "@/components/leverage-liquidity/mintForm/progressAlert";
+
+import { api } from "@/trpc/react";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -27,12 +30,19 @@ const ClaimFees = ({
   claimResult,
   claimFetching,
 }: Props) => {
+  const utils = api.useUtils();
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
   const { writeContract, error, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
+
+  useEffect(() => {
+    if (isConfirmed) {
+      utils.user.getBalance.invalidate().catch((e) => console.log(e));
+    }
+  }, [isConfirming, isConfirmed, utils.user.getBalance]);
 
   const onSubmit = () => {
     if (claimSimulate && Boolean(claimResult)) {

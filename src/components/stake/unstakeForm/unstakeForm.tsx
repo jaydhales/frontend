@@ -13,7 +13,7 @@ import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
 // import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 // import { useEffect } from "react";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { z } from "zod";
@@ -27,6 +27,8 @@ import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
 import ProgressAlert from "@/components/leverage-liquidity/mintForm/progressAlert";
 
+import { api } from "@/trpc/react";
+
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
   balance?: bigint;
@@ -37,6 +39,7 @@ interface Props {
 }
 
 const UnstakeForm = ({ balance, dividends, claimResult }: Props) => {
+  const utils = api.useUtils();
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
@@ -63,6 +66,12 @@ const UnstakeForm = ({ balance, dividends, claimResult }: Props) => {
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
+
+  useEffect(() => {
+    if (isConfirmed) {
+      utils.user.getBalance.invalidate().catch((e) => console.log(e));
+    }
+  }, [isConfirming, isConfirmed, utils.user.getBalance]);
 
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeAmount.success ? safeAmount.data.toString() : "0",

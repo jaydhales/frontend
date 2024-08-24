@@ -1,7 +1,6 @@
 "use client";
 
-// import { useEffect } from "react";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 
 import { Card } from "@/components/ui/card";
 import { Form, FormLabel } from "@/components/ui/form";
@@ -35,7 +34,10 @@ interface Props {
   ethBalance?: bigint;
 }
 
+import { api } from "@/trpc/react";
+
 const StakeForm = ({ balance, allowance }: Props) => {
+  const utils = api.useUtils();
   const form = useFormContext<TStakeFormFields>();
   const formData = form.watch();
 
@@ -60,6 +62,12 @@ const StakeForm = ({ balance, allowance }: Props) => {
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
+
+  useEffect(() => {
+    if (isConfirmed) {
+      utils.user.getBalance.invalidate().catch((e) => console.log(e));
+    }
+  }, [isConfirming, isConfirmed, utils.user.getBalance]);
 
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeStake.success ? safeStake.data.toString() : "0",
