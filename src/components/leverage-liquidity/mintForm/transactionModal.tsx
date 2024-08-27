@@ -52,7 +52,7 @@ export default function TransactionModal({
               }}
             />
           </div>
-          <div className="px-6 bg-black/15 py-4">
+          <div className="px-6 bg-black/15 pt-5 pb-6">
             <h2 className="text-left font-lora text-lg">{data.message}</h2>
             <div className="flex gap-x-2 py-2">
               <h3 className="">ETH</h3>
