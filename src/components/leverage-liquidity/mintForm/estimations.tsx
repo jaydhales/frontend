@@ -11,7 +11,7 @@ export default function Estimations({
       <div className="pt-1"></div>
       <div className="rounded-md bg-primary p-3">
         <h2 className={`text-xl `}>{ape} APE</h2>
-        <h2 className=" text-sm italic text-gray">{"$20.55 (-X.XX%)"}</h2>
+        <h2 className=" text-sm italic text-gray-500">{"$20.55 (-X.XX%)"}</h2>
       </div>
     </div>
   );

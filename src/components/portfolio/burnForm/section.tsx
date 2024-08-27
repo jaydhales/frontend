@@ -62,7 +62,7 @@ export function Section({
           }}
         />
 
-        <span className="text-sm italic text-gray">
+        <span className="text-sm italic text-gray-500">
           Balance {formatBigInt(balance, 4)}
         </span>
       </div>

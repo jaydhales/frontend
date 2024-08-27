@@ -76,7 +76,7 @@ export default function MintFormLayout({
         />
 
         <div className=" flex-col flex items-center justify-center gap-y-2 pt-4">
-          <p className="md:w-[450px] pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
+          <p className="md:w-[450px] pb-2 text-center text-sm text-gray-500">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
           {address && (
             <Button
               disabled={!isValid}
