@@ -24,7 +24,6 @@ import { SirContract } from "@/contracts/sir";
 
 import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
-import ProgressAlert from "@/components/leverage-liquidity/mintForm/progressAlert";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -59,8 +58,8 @@ const UnstakeForm = ({
   });
 
   const { writeContract, data: hash, isPending } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({ hash });
+  // const { isLoading: isConfirming, isSuccess: isConfirmed } =
+  //   useWaitForTransactionReceipt({ hash });
 
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeAmount.success ? safeAmount.data.toString() : "0",
@@ -96,11 +95,11 @@ const UnstakeForm = ({
 
   return (
     <>
-      <ProgressAlert
-        isTxSuccess={isConfirmed}
-        isTxPending={isConfirming}
-        waitForSign={isPending}
-      />
+      {/* <ProgressAlert */}
+      {/*   isTxSuccess={isConfirmed} */}
+      {/*   isTxPending={isConfirming} */}
+      {/*   waitForSign={isPending} */}
+      {/* /> */}
       <Card className="mx-auto w-[80%]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
