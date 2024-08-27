@@ -15,6 +15,7 @@ const lora = Lora({
   subsets: ["latin"],
   variable: "--font-lora",
 });
+
 // console.log(Inter, "INTER");
 export const metadata = {
   title: "Sir",
@@ -28,6 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const cookie = headers().get("cookie");
+
   // const headerList = headers();
   // const country = headerList.get("x-country");
   return (
