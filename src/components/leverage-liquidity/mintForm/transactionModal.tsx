@@ -4,13 +4,15 @@ import { X } from "lucide-react";
 
 import type { ReactNode } from "react";
 import { useMemo } from "react";
+import { formatUnits } from "viem";
 interface Props {
   waitForSign: boolean;
   isTxPending: boolean;
   isTxSuccess: boolean;
   setOpen: (b: boolean) => void;
   open: boolean;
-  children: ReactNode;
+  button: ReactNode;
+  quoteData: bigint | undefined;
 }
 export default function TransactionModal({
   waitForSign,
@@ -18,7 +20,8 @@ export default function TransactionModal({
   isTxSuccess,
   open,
   setOpen,
-  children,
+  button,
+  quoteData,
 }: Props) {
   const data = useMemo(() => {
     if (isTxSuccess) {
@@ -57,17 +60,17 @@ export default function TransactionModal({
             <div className="flex gap-x-2 py-2">
               <h3 className="">ETH</h3>
               <span className="text-gray-500">{"->"}</span>
-              <h3>APE</h3>
+              <h3>{formatUnits(quoteData ?? 0n, 0)}APE</h3>
             </div>
           </div>
           <div className="flex py-4 px-6  w-full flex-col gap-y-4 items-center">
             <div className="flex flex-col w-full py-2 gap-y-1">
-              <StatRow />
-              <StatRow />
-              <StatRow />
+              <StatRow title={"Price"} value={"Val"} />
+              <StatRow title={"Price"} value={"Val"} />
+              <StatRow title={"Price"} value={"Val"} />
             </div>
 
-            {children}
+            {button}
           </div>
         </div>
       </AlertDialogContent>
@@ -75,11 +78,11 @@ export default function TransactionModal({
   );
 }
 
-function StatRow() {
+function StatRow({ title, value }: { title: string; value: string }) {
   return (
     <div className="flex justify-between text-[13px]">
-      <h3 className="text-gray-500 ">Price</h3>
-      <h4>398</h4>
+      <h3 className="text-gray-500 ">{title}</h3>
+      <h4>{value}</h4>
     </div>
   );
 }
