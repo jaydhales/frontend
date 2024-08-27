@@ -9,7 +9,6 @@ import Image from "next/image";
 
 import { type SimulateContractReturnType } from "viem";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import ProgressAlert from "@/components/leverage-liquidity/mintForm/progressAlert";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -43,11 +42,6 @@ const ClaimFees = ({
 
   return (
     <>
-      <ProgressAlert
-        isTxSuccess={isConfirmed}
-        isTxPending={isConfirming}
-        waitForSign={isPending}
-      />
       <Card className="mx-auto w-[80%]">
         <div className="text-sm font-medium leading-none pb-1 pt-2">
           Amount to claim:{" "}
