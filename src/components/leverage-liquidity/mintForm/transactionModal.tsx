@@ -56,7 +56,7 @@ export default function TransactionModal({
             <h2 className="text-left font-lora text-lg">{data.message}</h2>
             <div className="flex gap-x-2 py-2">
               <h3 className="">ETH</h3>
-              <span className="text-gray">{"->"}</span>
+              <span className="text-gray-500">{"->"}</span>
               <h3>APE</h3>
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function TransactionModal({
 function StatRow() {
   return (
     <div className="flex justify-between text-[13px]">
-      <h3 className="text-gray ">Price</h3>
+      <h3 className="text-gray-500 ">Price</h3>
       <h4>398</h4>
     </div>
   );

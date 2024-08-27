@@ -24,7 +24,7 @@ export function BurnTableRow({
   });
 
   return (
-    <tr className="  hidden md:grid gap-x-4 grid-cols-5 items-center text-left text-gray text-white">
+    <tr className="  hidden md:grid gap-x-4 grid-cols-5 items-center text-left  text-white">
       <th className="flex">
         <span>{isApe ? "APE" : "TEA"}-</span>
         <span>{row.vaultId} </span>
@@ -108,7 +108,7 @@ export function BurnTableRowMobile({
 function MobileTh({ title, children }: { title: string; children: ReactNode }) {
   return (
     <th className="flex justify-between gap-x-12">
-      <h2 className="text-gray font-light">{title}</h2>
+      <h2 className="text-gray-500 font-light">{title}</h2>
       {children}
     </th>
   );

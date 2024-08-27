@@ -67,7 +67,7 @@ const ClaimFees = ({
             <div className="h-10 w-40 rounded-md ring-offset-background bg-card text-[28px]">
               {parseFloat(claimAmount ?? "0").toFixed(4)}
             </div>
-            <div className="pt-2 text-sm italic text-gray">$66.88</div>
+            <div className="pt-2 text-sm italic text-gray-500">$66.88</div>
           </div>
           <div>
             <div className="flex flex-col justify-between gap-y-3">
