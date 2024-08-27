@@ -7,7 +7,7 @@ interface Props {
   isTxPending: boolean;
   isTxSuccess: boolean;
 }
-export default function ProgressAlert({
+export default function TransactionModal({
   waitForSign,
   isTxPending,
   isTxSuccess,
