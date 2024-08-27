@@ -43,14 +43,26 @@ export default function MintFormLayout({
 
   return (
     <Card>
-      <TransactionModal
-        waitForSign={waitForSign}
-        isTxPending={isTxPending}
-        isTxSuccess={isTxSuccess}
-        setOpen={setOpenTransactionModal}
-        open={openTransactionModal}
-      />
       <form onSubmit={form.handleSubmit(onSubmit)}>
+        <TransactionModal
+          waitForSign={waitForSign}
+          isTxPending={isTxPending}
+          isTxSuccess={isTxSuccess}
+          setOpen={setOpenTransactionModal}
+          open={openTransactionModal}
+        >
+          {address && (
+            <Button
+              onClick={() => onSubmit()}
+              disabled={!isValid}
+              variant="modal"
+              type="submit"
+            >
+              {submitType === ESubmitType.mint ? "Mint" : "Approve"}
+            </Button>
+          )}
+        </TransactionModal>
+
         {topSelects}
         <div>
           <FormLabel htmlFor="deposit">Deposit:</FormLabel>
@@ -69,6 +81,7 @@ export default function MintFormLayout({
             <Button
               disabled={!isValid}
               variant="submit"
+              type="button"
               onClick={() => {
                 setOpenTransactionModal(true);
               }}
