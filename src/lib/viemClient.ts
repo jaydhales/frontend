@@ -5,7 +5,7 @@ import { env } from "@/env";
 
 import { createPublicClient, http } from "viem";
 import { mainnet } from "viem/chains";
-console.log(process.env.RPC_URL, "RPC");
+console.log(env.RPC_URL, "RPC");
 const viemClient = createPublicClient({
   chain: mainnet,
   transport: http(env.RPC_URL ?? "https://rpc.ankr.com/eth"),
