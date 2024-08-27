@@ -84,7 +84,7 @@ export default function MintFormWrapper({
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
-
+  console.log(userEthBalance, "USER ETH BALANCE");
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
@@ -150,6 +150,10 @@ export default function MintFormWrapper({
     }
   };
 
+  let balance = userBalance?.tokenBalance?.result;
+  if (useEth) {
+    balance = userEthBalance;
+  }
   return (
     <>
       <MintFormLayout
@@ -172,11 +176,7 @@ export default function MintFormWrapper({
             setUseEth={(b: boolean) => {
               setUseEth(b);
             }}
-            balance={formatUnits(
-              (useEth ? userEthBalance : userBalance?.tokenBalance?.result) ??
-                0n,
-              18,
-            )}
+            balance={formatUnits(balance ?? 0n, 18)}
             form={form}
             depositAsset={formData.long}
           />
