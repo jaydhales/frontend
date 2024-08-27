@@ -23,7 +23,13 @@ const config = {
       },
       colors: {
         border: "hsl(var(--border))",
-        gray: "hsl(var(--gray))",
+        gray: {
+          100: "hsl(var(--gray-100), alpha-value)",
+          200: "hsl(var(--gray-200), alpha-value)",
+          300: "hsl(var(--gray-300), alpha-value)",
+          400: "hsl(var(--gray-400), alpha-value)",
+          500: "hsl(var(--gray-500), alpha-value)",
+        },
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background), <alpha-value>)",
