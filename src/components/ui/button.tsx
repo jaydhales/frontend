@@ -19,6 +19,8 @@ const buttonVariants = cva(
           "bg-transparent text-muted-foreground border rounded-md px-4 py-2 text-[14px] font-semibold hover:bg-primary",
         submit:
           "md:w-[450px] w-[280px] rounded-md bg-accent py-2 text-xl font-semibold hover:bg-accent-100",
+        modal:
+          "md:w-[300px] w-[280px] rounded-lg bg-accent py-2 text-xl  hover:bg-accent-100",
       },
     },
     defaultVariants: {
