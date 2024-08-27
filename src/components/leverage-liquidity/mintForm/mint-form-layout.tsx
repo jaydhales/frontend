@@ -7,8 +7,9 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useFormContext } from "react-hook-form";
 import { useAccount } from "wagmi";
 import Estimations from "./estimations";
-import type { ESubmitType } from "./hooks/useCheckSubmitValid";
-import SubmitAndProgressButton from "@/components/shared/submitAndProgressButton";
+import { ESubmitType } from "./hooks/useCheckSubmitValid";
+import TransactionModal from "./transactionModal";
+import { useState } from "react";
 
 interface Props {
   quoteData: bigint | undefined;
@@ -38,8 +39,17 @@ export default function MintFormLayout({
   const form = useFormContext<TMintFormFields>();
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
+  const [openTransactionModal, setOpenTransactionModal] = useState(false);
+
   return (
     <Card>
+      <TransactionModal
+        waitForSign={waitForSign}
+        isTxPending={isTxPending}
+        isTxSuccess={isTxSuccess}
+        setOpen={setOpenTransactionModal}
+        open={openTransactionModal}
+      />
       <form onSubmit={form.handleSubmit(onSubmit)}>
         {topSelects}
         <div>
@@ -56,13 +66,15 @@ export default function MintFormLayout({
         <div className=" flex-col flex items-center justify-center gap-y-2 pt-4">
           <p className="md:w-[450px] pb-2 text-center text-sm text-gray">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
           {address && (
-            <SubmitAndProgressButton
-              isValid={isValid}
-              waitForSign={waitForSign}
-              isTxPending={isTxPending}
-              isTxSuccess={isTxSuccess}
-              submitType={submitType}
-            />
+            <Button
+              disabled={!isValid}
+              variant="submit"
+              onClick={() => {
+                setOpenTransactionModal(true);
+              }}
+            >
+              {submitType === ESubmitType.mint ? "Mint" : "Approve"}
+            </Button>
           )}
           {!address && (
             <Button

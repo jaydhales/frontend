@@ -1,30 +1,21 @@
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 interface Props {
   waitForSign: boolean;
   isTxPending: boolean;
   isTxSuccess: boolean;
+  setOpen: (b: boolean) => void;
+  open: boolean;
 }
 export default function TransactionModal({
   waitForSign,
   isTxPending,
   isTxSuccess,
+  open,
+  setOpen,
 }: Props) {
-  const [o, setOpen] = useState(false);
-  useEffect(() => {
-    if (isTxPending) {
-      setOpen(true);
-    }
-    if (waitForSign) {
-      setOpen(true);
-    }
-    if (isTxSuccess) {
-      setOpen(true);
-    }
-  }, [isTxPending, isTxSuccess, waitForSign]);
-
   const data = useMemo(() => {
     if (isTxSuccess) {
       return { message: "Success!", success: true };
@@ -38,7 +29,7 @@ export default function TransactionModal({
     return {};
   }, [waitForSign, isTxPending, isTxSuccess]);
   return (
-    <AlertDialog open={o} onOpenChange={setOpen}>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent
         align="center"
         animate="none"
