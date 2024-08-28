@@ -12,7 +12,6 @@ import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
 import { SectionTwo } from "./sectionTwo";
-import ProgressAlert from "@/components/leverage-liquidity/mintForm/progressAlert";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -62,6 +61,7 @@ export default function BurnForm({
   });
 
   const utils = api.useUtils();
+
   useEffect(() => {
     if (receiptData) {
       if (isApe) {
@@ -96,11 +96,6 @@ export default function BurnForm({
   };
   return (
     <FormProvider {...form}>
-      <ProgressAlert
-        isTxSuccess={isConfirmed}
-        isTxPending={isConfirming}
-        waitForSign={isPending}
-      />
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <label htmlFor="a" className="">
@@ -132,7 +127,7 @@ export default function BurnForm({
           />
           <div className="pt-2"></div>
           <div className="flex justify-center">
-            <h4 className="w-[400px] text-center text-sm italic text-gray">
+            <h4 className="w-[400px] text-center text-sm italic text-gray-500">
               With leveraging you risk losing up to 100% of your deposit, you
               can not lose more than your deposit.
             </h4>

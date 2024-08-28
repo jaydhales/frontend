@@ -47,7 +47,7 @@ export default function VaultTable({
 
 function VaultTableRowHeaders() {
   return (
-    <tr className="grid grid-cols-5 md:grid-cols-8 px-1 text-left text-[14px] font-normal text-gray">
+    <tr className="grid grid-cols-5 md:grid-cols-8 px-1 text-left text-[14px] font-normal text-gray-500">
       <th>#</th>
       <th className="md:col-span-3">Pool</th>
       <th>Fees</th>

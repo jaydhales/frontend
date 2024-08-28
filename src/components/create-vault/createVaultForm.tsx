@@ -15,7 +15,6 @@ import { SelectContent, SelectTrigger } from "@radix-ui/react-select";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { getLogoAsset, mapLeverage } from "@/lib/utils";
-import ProgressAlert from "../leverage-liquidity/mintForm/progressAlert";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -60,11 +59,6 @@ export default function CreateVaultForm() {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <ProgressAlert
-          waitForSign={isPending}
-          isTxPending={isConfirming}
-          isTxSuccess={isConfirmed}
-        />
         <div className="grid  gap-y-2">
           <div className="w-full space-y-2">
             <TokenInput name="longToken" title="Long Token" />

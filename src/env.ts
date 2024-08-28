@@ -6,7 +6,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    RPC_URL: z.string().optional(),
+    RPC_URL: z.string(),
     SUBGRAPH_URL: z.string(),
   },
 
@@ -20,6 +20,7 @@ export const env = createEnv({
     NEXT_PUBLIC_ASSISTANT_ADDRESS: z.string(),
     NEXT_PUBLIC_SIR_ADDRESS: z.string(),
 
+    NEXT_PUBLIC_VAULT_ADDRESS: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
@@ -28,8 +29,9 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    NEXT_PUBLIC_VAULT_ADDRESS: process.env.NEXT_PUBLIC_VAULT_ADDRESS,
     NEXT_PUBLIC_APE_HASH: process.env.NEXT_PUBLIC_APE_HASH,
-    RPC_URL: process.env.ENV,
+    RPC_URL: process.env.RPC_URL,
     SUBGRAPH_URL: process.env.SUBGRAPH_URL,
     NEXT_PUBLIC_ASSISTANT_ADDRESS: process.env.NEXT_PUBLIC_ASSISTANT_ADDRESS,
     NEXT_PUBLIC_SIR_ADDRESS: process.env.NEXT_PUBLIC_SIR_ADDRESS,

@@ -26,7 +26,6 @@ import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import useStakeError from "@/components/stake/hooks/useStakeError";
 import { useApprove } from "@/components/leverage-liquidity/mintForm/hooks/useApprove";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
-import ProgressAlert from "@/components/leverage-liquidity/mintForm/progressAlert";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -57,7 +56,7 @@ const StakeForm = ({ balance, allowance }: Props) => {
     approveContract: SirContract.address,
   });
 
-  const { writeContract, data: hash, isPending } = useWriteContract();
+  const { writeContract, data: hash } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 
@@ -88,11 +87,6 @@ const StakeForm = ({ balance, allowance }: Props) => {
 
   return (
     <>
-      <ProgressAlert
-        isTxSuccess={isConfirmed}
-        isTxPending={isConfirming}
-        waitForSign={isPending}
-      />
       <Card className="mx-auto w-[80%]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>

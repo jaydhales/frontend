@@ -8,17 +8,7 @@ import {
 } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { env } from "@/env";
 const getChainId = () => {
-  if (env.NEXT_PUBLIC_ENV === "test") {
-    return 433;
-  }
-  if (env.NEXT_PUBLIC_ENV === "development") {
-    return 1;
-  }
-  if (env.NEXT_PUBLIC_ENV === "production") {
-    return 1;
-  }
   return 1;
 };
 const chainId = getChainId();
@@ -27,7 +17,7 @@ const chain = {
   ...mainnet,
   // NOTE MAYBE REMOVE THIS.
   // All rpc calls are done through trpc
-  // rpcUrls: { default: { http: ["/api/rpc"] } },
+  rpcUrls: { default: { http: ["/api/rpc"] } },
   id: chainId,
 };
 

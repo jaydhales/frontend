@@ -84,16 +84,19 @@ export default function MintFormWrapper({
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
-
+  console.log(userEthBalance, "USER ETH BALANCE");
   const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
   // Invalidate if approve or mint tx is successful.
   useEffect(() => {
+    console.log(isConfirmed, isConfirming, "C");
     if (isConfirmed && !useEth) {
+      form.resetField("deposit");
       utils.user.getBalance.invalidate().catch((e) => console.log(e));
     }
     if (isConfirmed && useEth) {
+      form.resetField("deposit");
       utils.user.getEthBalance.invalidate().catch((e) => console.log(e));
     }
   }, [
@@ -102,6 +105,7 @@ export default function MintFormWrapper({
     utils.user.getBalance,
     utils.user.getEthBalance,
     useEth,
+    form,
   ]);
 
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
@@ -134,22 +138,23 @@ export default function MintFormWrapper({
     }
     if (useEth && mintWithEth) {
       writeContract(mintWithEth);
-      form.resetField("deposit");
       return;
     }
     // CHECK ALLOWANCE
     if (submitType === ESubmitType.mint && mint) {
       writeContract?.(mint);
-      form.resetField("deposit");
       return;
     }
     if (submitType === ESubmitType.approve && approveSimulate) {
       writeContract(approveSimulate);
-      form.resetField("deposit");
       return;
     }
   };
 
+  let balance = userBalance?.tokenBalance?.result;
+  if (useEth) {
+    balance = userEthBalance;
+  }
   return (
     <>
       <MintFormLayout
@@ -172,11 +177,7 @@ export default function MintFormWrapper({
             setUseEth={(b: boolean) => {
               setUseEth(b);
             }}
-            balance={formatUnits(
-              (useEth ? userEthBalance : userBalance?.tokenBalance?.result) ??
-                0n,
-              18,
-            )}
+            balance={formatUnits(balance ?? 0n, 18)}
             form={form}
             depositAsset={formData.long}
           />
