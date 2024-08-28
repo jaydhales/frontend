@@ -8,8 +8,8 @@ import { useFormContext } from "react-hook-form";
 import { useAccount } from "wagmi";
 import Estimations from "./estimations";
 import { ESubmitType } from "./hooks/useCheckSubmitValid";
-import TransactionModal from "./transactionModal";
 import { useState } from "react";
+import TransactionModal from "./transactionModal";
 
 interface Props {
   quoteData: bigint | undefined;
