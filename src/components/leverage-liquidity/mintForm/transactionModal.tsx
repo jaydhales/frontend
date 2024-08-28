@@ -1,5 +1,5 @@
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+import { formatNumber } from "@/lib/utils";
 import { X } from "lucide-react";
 
 import type { ReactNode } from "react";
@@ -38,6 +38,7 @@ export default function TransactionModal({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent
+        title="Mint Modal"
         align="center"
         animate="none"
         closeColor={"black"}
@@ -60,7 +61,15 @@ export default function TransactionModal({
             <div className="flex gap-x-2 py-2">
               <h3 className="">ETH</h3>
               <span className="text-gray-500">{"->"}</span>
-              <h3>{formatUnits(quoteData ?? 0n, 0)}APE</h3>
+              <h3 className="space-x-1">
+                <span>
+                  {formatNumber(
+                    parseFloat(formatUnits(quoteData ?? 0n, 18)),
+                    4,
+                  )}
+                </span>
+                <span className="text-gray text-sm">APE</span>
+              </h3>
             </div>
           </div>
           <div className="flex py-4 px-6  w-full flex-col gap-y-4 items-center">
