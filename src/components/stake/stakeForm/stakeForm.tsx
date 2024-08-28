@@ -58,7 +58,7 @@ const StakeForm = ({ balance, allowance }: Props) => {
     approveContract: SirContract.address,
   });
 
-  const { writeContract, data: hash, isPending } = useWriteContract();
+  const { writeContract, data: hash } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 
