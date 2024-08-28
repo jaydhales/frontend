@@ -26,6 +26,9 @@ export function getLogoAsset(address: `0x${string}` | undefined) {
     if (chainId === "11155111") {
       return "sepolia";
     }
+    if (chainId === "17000") {
+      return "holesky";
+    }
   };
 
   const chainName = getChainName();
