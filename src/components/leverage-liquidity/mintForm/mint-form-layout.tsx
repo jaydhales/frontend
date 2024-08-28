@@ -45,28 +45,31 @@ export default function MintFormLayout({
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <TransactionModal
+          button={
+            address && (
+              <Button
+                onClick={() => onSubmit()}
+                disabled={!isValid}
+                variant="modal"
+                type="submit"
+              >
+                {submitType === ESubmitType.mint ? "Mint" : "Approve"}
+              </Button>
+            )
+          }
           waitForSign={waitForSign}
           isTxPending={isTxPending}
           isTxSuccess={isTxSuccess}
+          quoteData={quoteData}
           setOpen={setOpenTransactionModal}
           open={openTransactionModal}
-        >
-          {address && (
-            <Button
-              onClick={() => onSubmit()}
-              disabled={!isValid}
-              variant="modal"
-              type="submit"
-            >
-              {submitType === ESubmitType.mint ? "Mint" : "Approve"}
-            </Button>
-          )}
-        </TransactionModal>
-
+        />
+        {/* Versus, Long, and Leverage Dropdowns */}
         {topSelects}
         <div>
           <FormLabel htmlFor="deposit">Deposit:</FormLabel>
           <div className="pt-1"></div>
+          {/* Deposit Input, Deposit Asset, User Balance */}
           {depositInputs}
         </div>
 
