@@ -14,7 +14,12 @@ twitter:
 
 ### ENVIRONMENT VARIABLES
 
-NEXT_PUBLIC_ENV = `'test' | 'development' | 'production'`
-RPC_URL = `[HTTP_RPC_URL]`
-SUBGRAPH_URL = `[HTTP_URL]`
-NEXT_PUBLIC_APE_HASH= `[address]`
+```
+RPC_URL= RPC URL for backend calls
+SUBGRAPH_URL=Subgraph query url
+NEXT_PUBLIC_APE_HASH= Ape HASH
+NEXT_PUBLIC_SIR_ADDRESS= Sir Contract Address
+NEXT_PUBLIC_ASSISTANT_ADDRESS= Assistant Contract Address
+NEXT_PUBLIC_VAULT_ADDRESS= Vault Contract Address
+NEXT_PUBLIC_CHAIN_ID= Chain id - Ex. 1
+```
