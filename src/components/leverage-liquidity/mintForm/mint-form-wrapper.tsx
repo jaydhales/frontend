@@ -86,16 +86,23 @@ export default function MintFormWrapper({
   );
   console.log(userEthBalance, "USER ETH BALANCE");
   const { writeContract, data: hash, isPending } = useWriteContract();
+  const [currentTxType, setCurrentTxType] = useState<
+    "approve" | "mint" | undefined
+  >();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
   // Invalidate if approve or mint tx is successful.
   useEffect(() => {
-    console.log(isConfirmed, isConfirming, "C");
-    if (isConfirmed && !useEth) {
+    if (
+      isConfirmed &&
+      !useEth &&
+      form.getValues("deposit") &&
+      currentTxType === "mint"
+    ) {
       form.resetField("deposit");
       utils.user.getBalance.invalidate().catch((e) => console.log(e));
     }
-    if (isConfirmed && useEth) {
+    if (isConfirmed && useEth && form.getValues("deposit")) {
       form.resetField("deposit");
       utils.user.getEthBalance.invalidate().catch((e) => console.log(e));
     }
@@ -104,6 +111,7 @@ export default function MintFormWrapper({
     isConfirmed,
     utils.user.getBalance,
     utils.user.getEthBalance,
+    currentTxType,
     useEth,
     form,
   ]);
@@ -142,10 +150,12 @@ export default function MintFormWrapper({
     }
     // CHECK ALLOWANCE
     if (submitType === ESubmitType.mint && mint) {
+      setCurrentTxType("mint");
       writeContract?.(mint);
       return;
     }
     if (submitType === ESubmitType.approve && approveSimulate) {
+      setCurrentTxType("approve");
       writeContract(approveSimulate);
       return;
     }
@@ -158,7 +168,7 @@ export default function MintFormWrapper({
   return (
     <>
       <MintFormLayout
-        isTxSuccess={isConfirmed}
+        isTxSuccess={false}
         isTxPending={isConfirming}
         waitForSign={isPending}
         quoteData={quoteData}
