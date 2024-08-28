@@ -6,8 +6,21 @@ import { env } from "@/env";
 import { createPublicClient, http } from "viem";
 import { mainnet } from "viem/chains";
 console.log(env.RPC_URL, "RPC");
+const getChainId = () => {
+  const result = env.NEXT_PUBLIC_CHAIN_ID;
+  return parseInt(result);
+};
+const chainId = getChainId();
+
+const chain = {
+  ...mainnet,
+  // NOTE MAYBE REMOVE THIS.
+  // All rpc calls are done through trpc
+  rpcUrls: { default: { http: ["/api/rpc"] } },
+  id: chainId,
+};
 const viemClient = createPublicClient({
-  chain: mainnet,
+  chain: chain,
   transport: http(env.RPC_URL ?? "https://rpc.ankr.com/eth"),
 });
 export const readContract = viemClient.readContract;

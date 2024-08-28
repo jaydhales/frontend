@@ -8,8 +8,10 @@ import {
 } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { env } from "@/env";
 const getChainId = () => {
-  return 1;
+  const result = env.NEXT_PUBLIC_CHAIN_ID;
+  return parseInt(result);
 };
 const chainId = getChainId();
 
