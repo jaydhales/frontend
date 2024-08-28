@@ -6,6 +6,7 @@ import { assetSchema } from "./schemas";
 import { z } from "zod";
 import numeral from "numeral";
 import { BASE_FEE, L_FEE } from "@/data/constants";
+import { env } from "@/env";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -17,7 +18,18 @@ export function getLogoAsset(address: `0x${string}` | undefined) {
   if (!address) {
     return "";
   }
-  return `https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/${getAddress(address)}/logo.png`;
+  const getChainName = () => {
+    const chainId = env.NEXT_PUBLIC_CHAIN_ID;
+    if (chainId === "1") {
+      return "ethereum";
+    }
+    if (chainId === "11155111") {
+      return "sepolia";
+    }
+  };
+
+  const chainName = getChainName();
+  return `https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/${chainName}/assets/${getAddress(address)}/logo.png`;
 }
 export async function getAssetInfo(address: TAddressString | undefined) {
   if (!address) {
