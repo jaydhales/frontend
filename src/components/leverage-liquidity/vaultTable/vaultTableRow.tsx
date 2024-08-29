@@ -1,7 +1,7 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import {
   calculateTeaVaultFee,
-  calculateVaultFee,
+  calculateApeVaultFee,
   formatNumber,
   getLeverageRatio,
   getLogoAsset,
@@ -24,7 +24,7 @@ export function VaultTableRow({
   isApe: boolean;
 }) {
   const fee = isApe
-    ? calculateVaultFee(pool.leverageTier) * 100
+    ? calculateApeVaultFee(pool.leverageTier) * 100
     : calculateTeaVaultFee();
 
   const { setValue } = useMintFormProviderApi();

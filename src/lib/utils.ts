@@ -161,7 +161,7 @@ export function formatBigInt(b: bigint | undefined, fixed: number) {
  * @param k - Leverage Tier should be values -4 to 2
  * @returns number
  */
-export function calculateVaultFee(k: number) {
+export function calculateApeVaultFee(k: number) {
   const l = getLeverageRatio(k);
   const a = 1 / (1 + (l - 1) * BASE_FEE);
   return (1 * 10 - a * 10) / 10;
