@@ -25,7 +25,7 @@ export function MintForm({
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
-  /** ##MINT APE## */
+
   const { address } = useAccount();
   const { data: userBalance } = api.user.getBalance.useQuery(
     {
@@ -67,11 +67,13 @@ export function MintForm({
     <MintFormWrapper
       userBalance={userBalance}
       approveFetching={approveSimulate.isFetching}
-      approveSimulate={approveSimulate.data?.request as SimulateReq}
-      mintWithEth={MintWithEth?.request as SimulateReq}
-      mint={Mint?.request as SimulateReq}
+      requests={{
+        mintRequest: Mint?.request as SimulateReq,
+        mintWithETHRequest: MintWithEth?.request as SimulateReq,
+        approveWriteRequest: approveSimulate.data?.request as SimulateReq,
+      }}
       vaultsQuery={vaultsQuery}
-      mintFetching={mintFetching}
+      isMintFetching={mintFetching}
     />
   );
 }

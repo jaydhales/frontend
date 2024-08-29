@@ -1,4 +1,9 @@
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import type { TAddressString, TMintForm } from "@/lib/types";
 import { BalancePercent } from "@/components/shared/balancePercent";
@@ -14,13 +19,17 @@ interface Props {
   useEth: boolean;
   setUseEth: (b: boolean) => void;
 }
-export default function DepositInputs({
-  form,
-  depositAsset,
-  balance,
-  useEth,
-  setUseEth,
-}: Props) {
+
+function Root({ children }: { children: React.ReactNode }) {
+  return (
+    <div>
+      <FormLabel htmlFor="deposit">Deposit:</FormLabel>
+      <div className="pt-1"></div>
+      {children}
+    </div>
+  );
+}
+function Inputs({ form, depositAsset, balance, useEth, setUseEth }: Props) {
   return (
     <div className="flex justify-between rounded-md bg-primary p-3">
       <div>
@@ -130,3 +139,9 @@ function AssetInfo({
     </>
   );
 }
+
+const DepositInputs = {
+  Root,
+  Inputs,
+};
+export default DepositInputs;

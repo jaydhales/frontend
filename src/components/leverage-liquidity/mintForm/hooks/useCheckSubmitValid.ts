@@ -6,9 +6,11 @@ import { SirContract } from "@/contracts/sir";
 interface Props {
   deposit: string | undefined;
   depositToken: string;
-  mintRequest: SimulateContractReturnType["request"] | undefined;
-  mintWithETHRequest?: SimulateContractReturnType["request"] | undefined;
-  approveWriteRequest?: SimulateContractReturnType["request"] | undefined;
+  requests: {
+    mintRequest?: SimulateContractReturnType["request"] | undefined;
+    mintWithETHRequest?: SimulateContractReturnType["request"] | undefined;
+    approveWriteRequest?: SimulateContractReturnType["request"] | undefined;
+  };
   tokenAllowance?: bigint | undefined;
   tokenBalance: bigint | undefined;
   ethBalance?: bigint | undefined;
@@ -30,12 +32,10 @@ export enum ESubmitType {
  */
 export const useCheckSubmitValid = ({
   deposit,
-  mintRequest,
-  approveWriteRequest,
   tokenAllowance,
   mintFetching,
+  requests,
   approveFetching,
-  mintWithETHRequest,
   tokenBalance,
   ethBalance,
   useEth,
@@ -66,7 +66,7 @@ export const useCheckSubmitValid = ({
         };
       }
 
-      if (mintWithETHRequest) {
+      if (requests.mintWithETHRequest) {
         return {
           isValid: true,
           errorMessage: "",
@@ -89,9 +89,9 @@ export const useCheckSubmitValid = ({
     // CHECK ALLOWANCE FIRST
     if (
       parseUnits(deposit ?? "0", decimals) > (tokenAllowance ?? 0n) &&
-      approveWriteRequest
+      requests.approveWriteRequest
     ) {
-      if (approveWriteRequest)
+      if (requests.approveWriteRequest)
         return {
           isValid: true,
           errorMessage: null,
@@ -114,7 +114,7 @@ export const useCheckSubmitValid = ({
       }
     }
 
-    if (mintRequest)
+    if (requests.mintRequest)
       return {
         isValid: true,
         errorMessage: null,
@@ -137,16 +137,16 @@ export const useCheckSubmitValid = ({
     }
   }, [
     deposit,
+    decimals,
     useEth,
     tokenBalance,
     tokenAllowance,
-    mintRequest,
+    requests.approveWriteRequest,
+    requests.mintRequest,
+    requests.mintWithETHRequest,
     ethBalance,
-    mintWithETHRequest,
-    approveWriteRequest,
     approveFetching,
     mintFetching,
-    decimals,
   ]);
   return { isValid, errorMessage, submitType };
 };
