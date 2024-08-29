@@ -7,7 +7,6 @@ import {
   useWriteContract,
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
-import type { SimulateContractReturnType } from "viem";
 import { formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
 import type { TMintFormFields, TVaults } from "@/lib/types";
@@ -16,34 +15,28 @@ import TopSelects from "./topSelects";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
-import type { TUserBalance } from "./types";
 import { Card } from "@/components/ui/card";
 import { calculateApeVaultFee, formatBigInt, formatNumber } from "@/lib/utils";
 import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
 import TransactionModal from "./transactionModal";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
+import { useTransactions } from "./hooks/useTransactions";
 interface Props {
   vaultsQuery: TVaults;
-  requests: {
-    mintRequest: SimulateContractReturnType["request"] | undefined;
-    mintWithETHRequest?: SimulateContractReturnType["request"] | undefined;
-    approveWriteRequest?: SimulateContractReturnType["request"] | undefined;
-  };
-  isMintFetching: boolean;
-  approveFetching: boolean;
-  userBalance: TUserBalance;
+  isApe: boolean;
 }
+
 /**
  * Contains form actions and validity.
  */
-export default function MintFormWrapper({
-  vaultsQuery,
-  requests,
-  approveFetching,
-  isMintFetching,
-  userBalance,
-}: Props) {
+export default function MintForm({ vaultsQuery, isApe }: Props) {
+  const { requests, isApproveFetching, isMintFetching, userBalance } =
+    useTransactions({
+      isApe,
+      vaultsQuery,
+    });
+
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
   const [useEth, setUseEth] = useState(false);
@@ -56,6 +49,7 @@ export default function MintFormWrapper({
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
+
   const { writeContract, data: hash, isPending, reset } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
@@ -74,7 +68,7 @@ export default function MintFormWrapper({
     tokenBalance: userBalance?.tokenBalance?.result,
     tokenAllowance: userBalance?.tokenAllowance?.result,
     mintFetching: isMintFetching,
-    approveFetching,
+    approveFetching: isApproveFetching,
   });
   const { quoteData } = useQuoteMint({ formData });
   useSetRootError({

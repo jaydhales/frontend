@@ -4,8 +4,8 @@ import { Card } from "@/components/ui/card";
 import React from "react";
 import type { TVaults } from "@/lib/types";
 import { Container } from "@/components/ui/container";
-import { MintForm } from "./mintForm/mint-form";
 import VaultTable from "./vaultTable/vaultTable";
+import MintForm from "./mintForm/mintForm";
 
 export default function LeverageLiquidityContent({
   vaultsQuery,
