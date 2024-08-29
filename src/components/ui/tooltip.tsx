@@ -9,8 +9,7 @@ const ToolTip: FC<TooltipsProps> = ({ children }) => {
   return (
     <div className="flex relative">
       <div className="group ">
-        <div className="h-12 hidden -left-[90px]  w-[200px] items-center bg-black p-3 rounded-md -top-14 absolute group-hover:flex">
-          {" "}
+        <div className="h-12 z-[1000] hidden -left-[90px]  w-[200px] items-center bg-black p-3 rounded-md -top-14 absolute group-hover:flex">
           {children}
         </div>
         <div>
