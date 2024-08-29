@@ -33,7 +33,6 @@ export function useMintApeOrTea({
     vaultAddress: VaultContract.address,
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
-  console.log(apeAddress);
   const vault = {
     debtToken: debtToken as TAddressString,
     collateralToken: collateralToken as TAddressString,
@@ -66,8 +65,6 @@ export function useMintApeOrTea({
     ],
     value: amount ?? 0n,
   });
-
-  console.log(error, MintWithEth, "Error");
   useEffect(() => {
     refetch().catch((e) => console.log(e));
   }, [refetch, tokenAllowance]);
