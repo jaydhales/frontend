@@ -83,6 +83,9 @@ export default function TransactionModal({
                 <span className="text-gray-300 text-sm">APE</span>
               </h3>
             </div>
+            <div className="text-[12px] italic text-gray-400 items-center pt-2 w-[300px]">
+              <span>Output is estimated.</span>
+            </div>
           </div>
           <div className="flex py-4 px-6  w-full flex-col gap-y-4 items-center">
             <div className="flex flex-col w-full py-2 gap-y-1">{stats}</div>
