@@ -10,7 +10,7 @@ export default async function Home() {
     <main className="flex flex-col items-center justify-center text-white">
       <LeverageLiquidityPage title="Provide Liquidity">
         <LeverageLiquidityContent
-          isApe
+          isApe={false}
           form={<MintForm isApe vaultsQuery={vaultQuery} />}
           vaultsQuery={vaultQuery}
         ></LeverageLiquidityContent>
