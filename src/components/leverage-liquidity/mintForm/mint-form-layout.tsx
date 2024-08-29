@@ -97,12 +97,11 @@ export default function MintFormLayout({
           {/* Deposit Input, Deposit Asset, User Balance */}
           {depositInputs}
         </div>
-
+        <div className="pt-2"></div>
         <Estimations
           disabled={!Boolean(quoteData)}
           ape={formatBigInt(quoteData, 4).toString()}
         />
-
         <div className=" flex-col flex items-center justify-center gap-y-2 pt-4">
           <p className="md:w-[450px] pb-2 text-center text-sm text-gray-500">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
           {address && (
