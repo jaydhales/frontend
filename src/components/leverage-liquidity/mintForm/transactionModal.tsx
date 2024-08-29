@@ -16,7 +16,7 @@ interface Props {
   stats: ReactNode;
   quoteData: bigint | undefined;
   depositAmt: string | undefined;
-  depositAsset: string;
+  depositAssetName: string;
 }
 export default function TransactionModal({
   waitForSign,
@@ -28,6 +28,7 @@ export default function TransactionModal({
   quoteData,
   depositAmt,
   stats,
+  depositAssetName,
 }: Props) {
   const data = useMemo(() => {
     if (isTxSuccess) {
@@ -67,7 +68,9 @@ export default function TransactionModal({
             <div className="flex gap-x-2 py-2">
               <h3 className="space-x-1">
                 <span>{depositAmt}</span>
-                <span className="text-gray-300 text-sm">ETH</span>
+                <span className="text-gray-300 text-sm">
+                  {depositAssetName}
+                </span>
               </h3>
               <span className="text-gray-500">{"->"}</span>
               <h3 className="space-x-1">

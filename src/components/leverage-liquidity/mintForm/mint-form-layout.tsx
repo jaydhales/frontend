@@ -21,6 +21,7 @@ interface Props {
   waitForSign: boolean;
   isTxPending: boolean;
   isTxSuccess: boolean;
+  usingEth: boolean;
 }
 
 /**
@@ -35,6 +36,7 @@ export default function MintFormLayout({
   isTxSuccess,
   isTxPending,
   waitForSign,
+  usingEth,
   onSubmit,
 }: Props) {
   const form = useFormContext<TMintFormFields>();
@@ -51,7 +53,9 @@ export default function MintFormLayout({
       return undefined;
     }
   }, [levTier]);
-
+  const collateralAssetName = usingEth
+    ? "ETH"
+    : form.getValues("long").split(",")[1] ?? "";
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -63,7 +67,7 @@ export default function MintFormLayout({
           setOpen={setOpenTransactionModal}
           open={openTransactionModal}
           depositAmt={form.getValues("deposit")}
-          depositAsset={""}
+          depositAssetName={collateralAssetName}
           button={
             address && (
               <Button
