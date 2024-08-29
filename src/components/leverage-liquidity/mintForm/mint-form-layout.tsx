@@ -8,7 +8,7 @@ import { useFormContext } from "react-hook-form";
 import { useAccount } from "wagmi";
 import Estimations from "./estimations";
 import { ESubmitType } from "./hooks/useCheckSubmitValid";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TransactionModal, { TransactionModalStat } from "./transactionModal";
 
 interface Props {
@@ -19,6 +19,7 @@ interface Props {
   isValid: boolean;
   onSubmit: () => void;
   waitForSign: boolean;
+  reset: () => void;
   isTxPending: boolean;
   isTxSuccess: boolean;
   usingEth: boolean;
@@ -37,6 +38,7 @@ export default function MintFormLayout({
   isTxPending,
   waitForSign,
   usingEth,
+  reset,
   onSubmit,
 }: Props) {
   const form = useFormContext<TMintFormFields>();
@@ -48,6 +50,7 @@ export default function MintFormLayout({
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
     if (isFinite(lev)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       return formatNumber(calculateApeVaultFee(lev) * 100, 2);
     } else {
       return undefined;
@@ -60,6 +63,7 @@ export default function MintFormLayout({
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <TransactionModal
+          reset={reset}
           waitForSign={waitForSign}
           isTxPending={isTxPending}
           isTxSuccess={isTxSuccess}
