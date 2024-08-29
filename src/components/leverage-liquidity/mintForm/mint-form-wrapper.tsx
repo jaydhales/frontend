@@ -168,6 +168,7 @@ export default function MintFormWrapper({
   return (
     <>
       <MintFormLayout
+        usingEth={useEth}
         isTxSuccess={false}
         isTxPending={isConfirming}
         waitForSign={isPending}
