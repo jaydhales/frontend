@@ -17,12 +17,14 @@ interface Props {
   quoteData: bigint | undefined;
   depositAmt: string | undefined;
   depositAssetName: string;
+  reset: () => void;
 }
 export default function TransactionModal({
   waitForSign,
   isTxPending,
   isTxSuccess,
   open,
+  reset,
   setOpen,
   button,
   quoteData,
@@ -59,6 +61,7 @@ export default function TransactionModal({
               className="cursor-pointer"
               size={20}
               onClick={() => {
+                reset();
                 setOpen(false);
               }}
             />

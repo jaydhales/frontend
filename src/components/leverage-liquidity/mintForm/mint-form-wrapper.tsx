@@ -85,7 +85,7 @@ export default function MintFormWrapper({
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
   console.log(userEthBalance, "USER ETH BALANCE");
-  const { writeContract, data: hash, isPending } = useWriteContract();
+  const { writeContract, data: hash, isPending, reset } = useWriteContract();
   const [currentTxType, setCurrentTxType] = useState<
     "approve" | "mint" | undefined
   >();
@@ -168,6 +168,7 @@ export default function MintFormWrapper({
   return (
     <>
       <MintFormLayout
+        reset={reset}
         usingEth={useEth}
         isTxSuccess={false}
         isTxPending={isConfirming}
