@@ -2,14 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FormLabel } from "@/components/ui/form";
 import type { TMintFormFields } from "@/lib/types";
-import { formatBigInt } from "@/lib/utils";
+import { calculateApeVaultFee, formatBigInt, formatNumber } from "@/lib/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useFormContext } from "react-hook-form";
 import { useAccount } from "wagmi";
 import Estimations from "./estimations";
 import { ESubmitType } from "./hooks/useCheckSubmitValid";
-import { useState } from "react";
-import TransactionModal from "./transactionModal";
+import { useMemo, useState } from "react";
+import TransactionModal, { TransactionModalStat } from "./transactionModal";
 
 interface Props {
   quoteData: bigint | undefined;
@@ -22,6 +22,7 @@ interface Props {
   isTxPending: boolean;
   isTxSuccess: boolean;
 }
+
 /**
  * Form layout container
  */
@@ -37,14 +38,32 @@ export default function MintFormLayout({
   onSubmit,
 }: Props) {
   const form = useFormContext<TMintFormFields>();
+
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
   const [openTransactionModal, setOpenTransactionModal] = useState(false);
+  const levTier = form.getValues("leverageTier");
+  const fee = useMemo(() => {
+    const lev = parseFloat(levTier);
+    if (isFinite(lev)) {
+      return formatNumber(calculateApeVaultFee(lev) * 100, 2);
+    } else {
+      return undefined;
+    }
+  }, [levTier]);
 
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <TransactionModal
+          waitForSign={waitForSign}
+          isTxPending={isTxPending}
+          isTxSuccess={isTxSuccess}
+          quoteData={quoteData}
+          setOpen={setOpenTransactionModal}
+          open={openTransactionModal}
+          depositAmt={form.getValues("deposit")}
+          depositAsset={""}
           button={
             address && (
               <Button
@@ -57,12 +76,14 @@ export default function MintFormLayout({
               </Button>
             )
           }
-          waitForSign={waitForSign}
-          isTxPending={isTxPending}
-          isTxSuccess={isTxSuccess}
-          quoteData={quoteData}
-          setOpen={setOpenTransactionModal}
-          open={openTransactionModal}
+          stats={
+            <>
+              <TransactionModalStat
+                title={"Fee"}
+                value={fee ? fee.toString() + "%" : "0%"}
+              />
+            </>
+          }
         />
         {/* Versus, Long, and Leverage Dropdowns */}
         {topSelects}
