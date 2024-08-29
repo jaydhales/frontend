@@ -46,7 +46,7 @@ export function UniswapV2Form() {
     if (error) {
       form.setError("swapToken", { message: error?.message });
     }
-  }, [error]);
+  }, [error, form]);
   const { writeContract } = useWriteContract();
   function onSubmit() {
     writeContract(data!.request);

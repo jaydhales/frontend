@@ -1,7 +1,7 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import {
   calculateTeaVaultFee,
-  calculateVaultFee,
+  calculateApeVaultFee,
   formatNumber,
   getLeverageRatio,
   getLogoAsset,
@@ -24,7 +24,7 @@ export function VaultTableRow({
   isApe: boolean;
 }) {
   const fee = isApe
-    ? calculateVaultFee(pool.leverageTier) * 100
+    ? calculateApeVaultFee(pool.leverageTier) * 100
     : calculateTeaVaultFee();
 
   const { setValue } = useMintFormProviderApi();
@@ -78,10 +78,10 @@ export function VaultTableRow({
           )}
         </span>
         <Image
-          className="h-6 w-6 rounded-full "
+          className="h-5 w-5 rounded-full "
           src={getLogoAsset(pool.collateralToken as `0x${string}`)}
-          width={28}
-          height={28}
+          width={50}
+          height={50}
           alt=""
         />
       </th>
