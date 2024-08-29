@@ -134,7 +134,7 @@ export default function MintFormWrapper({
           />
           <TransactionModal.Info
             usingEth={useEth}
-            isTxSuccess={false}
+            isTxSuccess={isConfirmed}
             isTxPending={isConfirming}
             waitForSign={isPending}
             quoteData={quoteData}
