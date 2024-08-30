@@ -88,7 +88,13 @@ function SubmitButton({
   children: ReactNode;
 }) {
   return (
-    <Button onClick={onClick} disabled={disabled} variant="modal" type="submit">
+    <Button
+      className="text-[16px]"
+      onClick={onClick}
+      disabled={disabled}
+      variant="modal"
+      type="submit"
+    >
       {children}
     </Button>
   );
