@@ -3,6 +3,7 @@ import React from "react";
 import type { TVaults } from "@/lib/types";
 import { VaultTableRow } from "./vaultTableRow";
 import { useSearchParams } from "next/navigation";
+import ToolTip from "@/components/ui/tooltip";
 
 export default function VaultTable({
   vaultQuery,
@@ -50,7 +51,12 @@ function VaultTableRowHeaders() {
     <tr className="grid grid-cols-5 md:grid-cols-8 px-1 text-left text-[14px] font-normal text-gray-500">
       <th>#</th>
       <th className="md:col-span-3">Pool</th>
-      <th>Fees</th>
+      <th className="flex items-center gap-x-1">
+        Fees
+        <ToolTip size={15}>
+          Fee charged to apes when minting or burning.
+        </ToolTip>
+      </th>
       <th className="pl-2">Leverage</th>
       <th className="md:col-span-2 text-right">TVL</th>
     </tr>
