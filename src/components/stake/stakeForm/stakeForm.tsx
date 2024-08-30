@@ -69,6 +69,7 @@ const StakeForm = ({ balance, allowance }: Props) => {
     },
     tokenAllowance: allowance,
     tokenBalance: balance,
+    mintFetching: isFetching,
     approveFetching: approveSimulate.isFetching,
   });
 
