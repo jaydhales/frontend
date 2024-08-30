@@ -1,6 +1,6 @@
 import LeverageLiquidityContent from "@/components/leverage-liquidity/leverageLiquidityContent";
 import LeverageLiquidityPage from "@/components/leverage-liquidity/leverageLiquidityPage";
-import { MintForm } from "@/components/leverage-liquidity/mintForm/mint-form";
+import MintForm from "@/components/leverage-liquidity/mintForm/mintForm";
 
 import { api } from "@/trpc/server";
 
