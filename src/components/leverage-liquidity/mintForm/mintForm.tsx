@@ -153,6 +153,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       return undefined;
     }
   }, [levTier]);
+  const modalSubmit = () => {
+    if (!isConfirmed) {
+      onSubmit();
+    } else {
+      setOpenTransactionModal(false);
+    }
+  };
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -172,7 +179,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 />
                 <TransactionModal.Disclaimer>
                   Output is estimated.
-                </TransactionModal.Disclaimer>{" "}
+                </TransactionModal.Disclaimer>
               </>
             )}
             {isConfirmed && (
@@ -198,13 +205,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             </TransactionModal.StatContainer>
             {
               <TransactionModal.SubmitButton
-                onClick={() => {
-                  if (!isConfirmed) {
-                    onSubmit();
-                  } else {
-                    setOpenTransactionModal(false);
-                  }
-                }}
+                onClick={modalSubmit}
                 disabled={!isValid && !isConfirmed}
               >
                 {isConfirmed ? (
