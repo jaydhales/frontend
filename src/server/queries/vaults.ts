@@ -57,7 +57,6 @@ export const executeGetUserTeaPositions = async ({
   user: TAddressString;
 }) => {
   const result = await graphqlClient.request(userTeaPositionsQuery, { user });
-  console.log(result, "RESULT");
   return result as userPositionsQueryTea;
 };
 
@@ -67,13 +66,11 @@ export const executeGetUserApePositions = async ({
   user: TAddressString;
 }) => {
   const result = await graphqlClient.request(userApePositionsQuery, { user });
-  console.log(result, "RESULT");
   return result as userPositionsQueryApe;
 };
 
 export const executeVaultsQuery = async () => {
   const result = await graphqlClient.request(vaults);
-  console.log(result, "RESULT");
   return result as TVaults;
 };
 
