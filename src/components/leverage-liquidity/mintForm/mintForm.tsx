@@ -7,7 +7,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
-import { formatUnits } from "viem";
+import { formatUnits, parseEventLogs } from "viem";
 import { useFormContext } from "react-hook-form";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
@@ -54,8 +54,20 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   );
 
   const { writeContract, data: hash, isPending, reset } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({ hash });
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    data,
+  } = useWaitForTransactionReceipt({ hash });
+  // useEffect(() => {
+  //   if (data?.logs) {
+  //     const logs = data.logs.filter(l => l.  )
+  //     const parsed = parseEventLogs({
+  //       abi: [],
+  //       logs: data.logs,
+  //     });
+  //   }
+  // }, [data?.logs]);
   // Invalidate if approve or mint tx is successful.
   const [currentTxType, setCurrentTxType] = useState<
     // Used to know which
