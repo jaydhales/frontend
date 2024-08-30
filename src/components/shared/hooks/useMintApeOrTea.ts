@@ -1,5 +1,5 @@
 "use client";
-import { useSimulateContract } from "wagmi";
+import { useEstimateGas, useSimulateContract } from "wagmi";
 import { AssistantContract } from "@/contracts/assistant";
 import type { TAddressString } from "@/lib/types";
 import { parseUnits } from "viem";
@@ -33,7 +33,6 @@ export function useMintApeOrTea({
     vaultAddress: VaultContract.address,
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
-  console.log(apeAddress, "APE ADDRESS");
   const vault = {
     debtToken: debtToken as TAddressString,
     collateralToken: collateralToken as TAddressString,
@@ -55,7 +54,6 @@ export function useMintApeOrTea({
       amount ?? 0n,
     ],
   });
-
   const { data: MintWithEth } = useSimulateContract({
     ...AssistantContract,
     functionName: "mintWithETH",
