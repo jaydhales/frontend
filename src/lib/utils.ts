@@ -124,7 +124,7 @@ export function roundDown(float: number, decimals: number) {
 /**
  * @returns string | Will round down to 10th decimal
  */
-export function formatNumber(number: number, decimals?: number) {
+export function formatNumber(number: number, decimals?: number): string {
   // round down
   const factor = Math.pow(10, 10);
   let n = Math.floor(number * factor) / factor;
