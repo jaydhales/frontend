@@ -79,11 +79,12 @@ const StakeForm = ({ balance, allowance }: Props) => {
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeStake.success ? safeStake.data.toString() : "0",
     depositToken: SirContract.address,
-    mintRequest: Stake?.request as SimulateReq,
-    approveWriteRequest: approveSimulate?.data?.request as SimulateReq,
+    requests: {
+      approveWriteRequest: approveSimulate?.data?.request as SimulateReq,
+      mintRequest: Stake?.request as SimulateReq,
+    },
     tokenAllowance: allowance,
     tokenBalance: balance,
-    mintFetching: isFetching,
     approveFetching: approveSimulate.isFetching,
   });
 
