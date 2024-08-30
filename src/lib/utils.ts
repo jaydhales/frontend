@@ -81,7 +81,7 @@ export function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
 
-  return vaultQuery?.vaults.find((v) => {
+  const result = vaultQuery?.vaults.find((v) => {
     if (
       v.collateralToken === collateralToken &&
       v.debtToken === debtToken &&
@@ -92,6 +92,9 @@ export function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
       return false;
     }
   })?.vaultId;
+
+  const safeVaultId = z.coerce.number().safeParse(result);
+  return safeVaultId.success ? safeVaultId.data : 0;
 }
 
 export function getApeAddress({
@@ -124,7 +127,16 @@ export function roundDown(float: number, decimals: number) {
 /**
  * @returns string | Will round down to 10th decimal
  */
-export function formatNumber(number: number, decimals?: number): string {
+export function formatNumber(
+  number: number | string,
+  decimals?: number,
+): string {
+  if (typeof number === "string") {
+    number = parseFloat(number);
+    if (!isFinite(number)) {
+      return "0";
+    }
+  }
   // round down
   const factor = Math.pow(10, 10);
   let n = Math.floor(number * factor) / factor;
