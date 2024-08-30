@@ -86,6 +86,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         data: log.data,
         topics: log.topics,
       });
+      console.log(parsed, "PARSED");
     }
   }, [data?.logs, apeAddress]);
   // Invalidate if approve or mint tx is successful.
