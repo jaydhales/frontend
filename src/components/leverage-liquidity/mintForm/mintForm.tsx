@@ -178,7 +178,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 {isConfirmed ? (
                   <>Close</>
                 ) : (
-                  <>{submitType === ESubmitType.mint ? "Mint" : "Approve"}</>
+                  <>
+                    {submitType === ESubmitType.mint
+                      ? "Confirm Mint"
+                      : " Confirm Approve"}
+                  </>
                 )}
               </TransactionModal.SubmitButton>
             }
