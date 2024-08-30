@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { api } from "@/trpc/react";
 import {
   useAccount,
@@ -19,9 +19,12 @@ import { Card } from "@/components/ui/card";
 import { calculateApeVaultFee, formatBigInt, formatNumber } from "@/lib/utils";
 import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
-import TransactionModal from "./transactionModal";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
+import { Status } from "./transactionStatus";
+import { Estimates } from "./transactionEstimates";
+import { CircleCheck } from "lucide-react";
+import TransactionModal from "@/components/shared/transactionModal";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -105,6 +108,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   }
 
   const [openTransactionModal, setOpenTransactionModal] = useState(false);
+
+  useEffect(() => {
+    if (isConfirmed && !openTransactionModal) {
+      reset();
+    }
+  }, [isConfirmed, reset, openTransactionModal]);
+
   const levTier = form.getValues("leverageTier");
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
@@ -122,17 +132,31 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           setOpen={setOpenTransactionModal}
           open={openTransactionModal}
         >
-          <TransactionModal.Close
-            setOpen={setOpenTransactionModal}
-            reset={reset}
-          />
-          <TransactionModal.Info
-            usingEth={useEth}
-            isTxSuccess={isConfirmed}
-            isTxPending={isConfirming}
-            waitForSign={isPending}
-            quoteData={quoteData}
-          />
+          <TransactionModal.Close setOpen={setOpenTransactionModal} />
+          <TransactionModal.InfoContainer>
+            {!isConfirmed && (
+              <>
+                <Status isTxPending={isConfirming} waitForSign={isPending} />
+                <Estimates
+                  isApe={isApe}
+                  usingEth={useEth}
+                  collateralEstimate={quoteData}
+                />
+                <TransactionModal.Disclaimer>
+                  Output is estimated.
+                </TransactionModal.Disclaimer>{" "}
+              </>
+            )}
+            {isConfirmed && (
+              <div className="space-y-2">
+                <div className="flex justify-center">
+                  <CircleCheck size={40} color="#137C6F" />
+                </div>
+                <h1 className="text-center">Transaction Successful!</h1>
+              </div>
+            )}
+          </TransactionModal.InfoContainer>
+          {/* ---------------------------------- */}
           <TransactionModal.StatSubmitContainer>
             <TransactionModal.StatContainer>
               <TransactionModal.StatRow
@@ -140,12 +164,24 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 value={fee ? fee.toString() + "%" : "0%"}
               />
             </TransactionModal.StatContainer>
-            <TransactionModal.SubmitButton
-              onClick={() => onSubmit()}
-              disabled={!isValid}
-            >
-              {submitType === ESubmitType.mint ? "Mint" : "Approve"}
-            </TransactionModal.SubmitButton>
+            {
+              <TransactionModal.SubmitButton
+                onClick={() => {
+                  if (!isConfirmed) {
+                    onSubmit();
+                  } else {
+                    setOpenTransactionModal(false);
+                  }
+                }}
+                disabled={!isValid && !isConfirmed}
+              >
+                {isConfirmed ? (
+                  <>Close</>
+                ) : (
+                  <>{submitType === ESubmitType.mint ? "Mint" : "Approve"}</>
+                )}
+              </TransactionModal.SubmitButton>
+            }
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
 
