@@ -7,7 +7,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
-import { formatUnits, decodeEventLog } from "viem";
+import { formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
@@ -33,8 +33,6 @@ import { CircleCheck } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { VaultContract } from "@/contracts/vault";
 import { APE_HASH } from "@/data/constants";
-import { z } from "zod";
-import { ApeContract } from "@/contracts/ape";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 interface Props {
   vaultsQuery: TVaults;
@@ -240,9 +238,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             depositAsset={formData.long}
           />
         </DepositInputs.Root>
-        {/* {depositInputs} */}
 
-        <div className="pt-2"></div>
         <Estimations
           disabled={!Boolean(quoteData)}
           ape={formatBigInt(quoteData, 4).toString()}
@@ -252,9 +248,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <p className="md:w-[450px] pb-2 text-center text-sm text-gray-500">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
           <MintFormSubmit.OpenTransactionModalButton
             isValid={isValid}
-            onClick={() => {
-              setOpenTransactionModal(true);
-            }}
+            onClick={() => setOpenTransactionModal(true)}
             submitType={submitType}
           />
           <MintFormSubmit.ConnectButton />
