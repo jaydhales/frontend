@@ -43,12 +43,6 @@ export const useCheckSubmitValid = ({
 }: Props) => {
   const decimals = depositToken === SirContract.address ? 12 : 18;
 
-  console.log(
-    ethBalance,
-    deposit,
-    parseUnits(deposit ?? "0", 18),
-    "Balances..",
-  );
   const { isValid, errorMessage, submitType } = useMemo(() => {
     if (parseUnits(deposit ?? "0", decimals) <= 0n) {
       return {
