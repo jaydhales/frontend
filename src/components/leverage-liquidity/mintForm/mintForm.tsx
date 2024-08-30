@@ -35,6 +35,7 @@ import { VaultContract } from "@/contracts/vault";
 import { APE_HASH } from "@/data/constants";
 import { z } from "zod";
 import { ApeContract } from "@/contracts/ape";
+import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -58,37 +59,31 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     vaultsQuery,
   });
   const { address } = useAccount();
+
   const { data: userEthBalance } = api.user.getEthBalance.useQuery(
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
 
   const vaultId = findVault(vaultsQuery, formData);
-  const safeVaultId = z.coerce.number().safeParse(vaultId);
   const apeAddress = getApeAddress({
     apeHash: APE_HASH,
     vaultAddress: VaultContract.address,
-    vaultId: safeVaultId.success ? safeVaultId.data : 0,
+    vaultId,
   });
 
   const { writeContract, data: hash, isPending, reset } = useWriteContract();
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
-    data,
+    data: transactionData,
   } = useWaitForTransactionReceipt({ hash });
-  useEffect(() => {
-    if (data?.logs) {
-      const log = data.logs.find((l) => l.address === apeAddress);
-      if (!log) return;
-      const parsed = decodeEventLog({
-        abi: ApeContract.abi,
-        data: log.data,
-        topics: log.topics,
-      });
-      console.log(parsed, "PARSED");
-    }
-  }, [data?.logs, apeAddress]);
+
+  const { tokenReceived } = useGetReceivedTokens({
+    apeAddress,
+    logs: transactionData?.logs,
+  });
+
   // Invalidate if approve or mint tx is successful.
   const [currentTxType, setCurrentTxType] = useState<
     // Used to know which
@@ -106,6 +101,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     mintFetching: isMintFetching,
     approveFetching: isApproveFetching,
   });
+
   const { quoteData } = useQuoteMint({ formData });
   useSetRootError({
     formData,
@@ -139,7 +135,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   if (useEth) {
     balance = userEthBalance;
   }
-
   const [openTransactionModal, setOpenTransactionModal] = useState(false);
 
   useEffect(() => {
@@ -185,7 +180,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 <div className="flex justify-center">
                   <CircleCheck size={40} color="#189a8b" />
                 </div>
-                <h1 className="text-center">Transaction Successful!</h1>
+                <h2 className="text-center">Transaction Successful!</h2>
+                <h3 className="text-center">
+                  APE received:{" "}
+                  {formatNumber(formatUnits(tokenReceived ?? 0n, 18), 4)}
+                </h3>
               </div>
             )}
           </TransactionModal.InfoContainer>
