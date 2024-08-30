@@ -1,31 +1,27 @@
-"use client";
-import { findVault, formatDataInput } from "@/lib/utils";
-import { useFormContext } from "react-hook-form";
+import { useMintApeOrTea } from "@/components/shared/hooks/useMintApeOrTea";
 import { AssistantContract } from "@/contracts/assistant";
+import type { TMintFormFields, TVaults } from "@/lib/types";
+import { formatDataInput, findVault } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import { useMemo } from "react";
+import { useFormContext } from "react-hook-form";
 import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
-import type { TMintFormFields, TVaults } from "@/lib/types";
-import { useMemo } from "react";
-import { z } from "zod";
 import { useAccount } from "wagmi";
-import { api } from "@/trpc/react";
-import { useApprove } from "./hooks/useApprove";
-import { useMintApeOrTea } from "@/components/shared/hooks/useMintApeOrTea";
-import MintFormWrapper from "./mint-form-wrapper";
+import { z } from "zod";
+import { useApprove } from "./useApprove";
+
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
-/**
- * Contains simulation hooks.
- */
-export function MintForm({
-  vaultsQuery,
+export function useTransactions({
   isApe,
+  vaultsQuery,
 }: {
-  vaultsQuery: TVaults;
   isApe: boolean;
+  vaultsQuery: TVaults;
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
-  /** ##MINT APE## */
+
   const { address } = useAccount();
   const { data: userBalance } = api.user.getBalance.useQuery(
     {
@@ -63,15 +59,14 @@ export function MintForm({
     approveContract: AssistantContract.address,
   });
 
-  return (
-    <MintFormWrapper
-      userBalance={userBalance}
-      approveFetching={approveSimulate.isFetching}
-      approveSimulate={approveSimulate.data?.request as SimulateReq}
-      mintWithEth={MintWithEth?.request as SimulateReq}
-      mint={Mint?.request as SimulateReq}
-      vaultsQuery={vaultsQuery}
-      mintFetching={mintFetching}
-    />
-  );
+  return {
+    requests: {
+      mintRequest: Mint?.request as SimulateReq,
+      mintWithETHRequest: MintWithEth?.request as SimulateReq,
+      approveWriteRequest: approveSimulate.data?.request as SimulateReq,
+    },
+    isApproveFetching: approveSimulate.isFetching,
+    isMintFetching: mintFetching,
+    userBalance,
+  };
 }
