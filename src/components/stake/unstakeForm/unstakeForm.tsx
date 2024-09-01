@@ -11,19 +11,19 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import UnstakeInput from "./unstakeInput";
 import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
-// import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
-// import { useEffect } from "react";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { z } from "zod";
-import { useUnstake } from "../hooks/useUnstake";
+import { useUnstake } from "@/components/stake/hooks/useUnstake";
+import { useUnstakeAndClaim } from "@/components/stake/hooks/useUnstakeAndClaim";
 
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { SirContract } from "@/contracts/sir";
 
 import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
+import { api } from "@/trpc/react";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -34,13 +34,8 @@ interface Props {
   claimFetching: boolean;
 }
 
-const UnstakeForm = ({
-  balance,
-  dividends,
-  claimSimulate,
-  claimResult,
-  claimFetching,
-}: Props) => {
+const UnstakeForm = ({ balance, dividends, claimResult }: Props) => {
+  const utils = api.useUtils();
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
@@ -57,32 +52,52 @@ const UnstakeForm = ({
       : undefined,
   });
 
-  const { writeContract, data: hash, isPending } = useWriteContract();
-  // const { isLoading: isConfirming, isSuccess: isConfirmed } =
-  //   useWaitForTransactionReceipt({ hash });
+  const { UnstakeAndClaim, isFetching: unstakeAndClaimFetching } =
+    useUnstakeAndClaim({
+      amount: safeAmount.success
+        ? parseUnits(safeAmount.data.toString() ?? "0", 12)
+        : undefined,
+    });
+
+  const { writeContract, data: hash } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash });
+
+  useEffect(() => {
+    if (isConfirmed) {
+      utils.user.getBalance.invalidate().catch((e) => console.log(e));
+      utils.user.getDividends.invalidate().catch((e) => console.log(e));
+      utils.user.getSirTotalSupply.invalidate().catch((e) => console.log(e));
+      utils.user.getSirSupply.invalidate().catch((e) => console.log(e));
+    }
+  }, [
+    isConfirming,
+    isConfirmed,
+    utils.user.getBalance,
+    utils.user.getDividends,
+    utils.user.getSirTotalSupply,
+    utils.user.getSirSupply,
+  ]);
 
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeAmount.success ? safeAmount.data.toString() : "0",
     depositToken: SirContract.address,
     requests: {
       mintRequest: Unstake?.request as SimulateReq,
-      approveWriteRequest: claimSimulate,
+      approveWriteRequest: UnstakeAndClaim?.request as SimulateReq,
     },
     tokenBalance: balance,
     mintFetching: unstakeFetching,
-    approveFetching: claimFetching,
+    approveFetching: unstakeAndClaimFetching,
   });
 
   const onSubmit = () => {
-    if (Unstake && claimSimulate) {
+    if (Unstake && UnstakeAndClaim) {
       if (Boolean(claimResult)) {
-        writeContract(Unstake?.request);
-        writeContract(claimSimulate);
+        writeContract(UnstakeAndClaim?.request);
         return;
       } else {
-        console.log("here");
         writeContract(Unstake?.request);
-
         return;
       }
     }
