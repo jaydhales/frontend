@@ -5,8 +5,8 @@ import * as classVarianceAuthority from "class-variance-authority";
 const InputVariants = classVarianceAuthority.cva(
   "flex  w-[200px] rounded-md py-2 px-2 text-sm ring-offset-background " +
     "file:border-0 file:bg-transparent file:text-sm file:font-medium " +
-    "placeholder:text-muted-foreground  focus-visible:outline-none focus:ring-2 " +
-    "focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+    "placeholder:text-muted-foreground  focus-visible:outline-none  " +
+    "disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       background: {
@@ -18,7 +18,7 @@ const InputVariants = classVarianceAuthority.cva(
       height: { sm: "h-6", md: "h-8", lg: "h-10" },
     },
     defaultVariants: { background: "transparent", height: "lg" },
-  },
+  }
 );
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> &
   classVarianceAuthority.VariantProps<typeof InputVariants>;
@@ -32,7 +32,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {...props}
       />
     );
-  },
+  }
 );
 Input.displayName = "Input";
 
