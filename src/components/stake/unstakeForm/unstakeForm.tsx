@@ -23,6 +23,7 @@ import { SirContract } from "@/contracts/sir";
 
 import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
+
 import { api } from "@/trpc/react";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
@@ -78,6 +79,7 @@ const UnstakeForm = ({ balance, dividends, claimResult }: Props) => {
     utils.user.getSirTotalSupply,
     utils.user.getSirSupply,
   ]);
+    }
 
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeAmount.success ? safeAmount.data.toString() : "0",
