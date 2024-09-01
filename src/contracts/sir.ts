@@ -49,7 +49,6 @@ export const SirContract = {
             { name: "bidder", type: "address", internalType: "address" },
             { name: "bid", type: "uint96", internalType: "uint96" },
             { name: "startTime", type: "uint40", internalType: "uint40" },
-            { name: "winnerPaid", type: "bool", internalType: "bool" },
           ],
         },
       ],
@@ -261,6 +260,13 @@ export const SirContract = {
       stateMutability: "nonpayable",
     },
     {
+      type: "function",
+      name: "unstakeAndClaim",
+      inputs: [{ name: "amount", type: "uint80", internalType: "uint80" }],
+      outputs: [{ name: "dividends_", type: "uint96", internalType: "uint96" }],
+      stateMutability: "nonpayable",
+    },
+    {
       type: "event",
       name: "Approval",
       inputs: [
@@ -347,6 +353,25 @@ export const SirContract = {
         },
         {
           name: "newBid",
+          type: "uint96",
+          indexed: false,
+          internalType: "uint96",
+        },
+      ],
+      anonymous: false,
+    },
+    {
+      type: "event",
+      name: "DividendsClaimed",
+      inputs: [
+        {
+          name: "staker",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
+        {
+          name: "amount",
           type: "uint96",
           indexed: false,
           internalType: "uint96",
