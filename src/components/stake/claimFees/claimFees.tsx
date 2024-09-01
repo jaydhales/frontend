@@ -39,9 +39,9 @@ const ClaimFees = ({
 
   useEffect(() => {
     if (isConfirmed) {
-      utils.user.getBalance.invalidate().catch((e) => console.log(e));
+      utils.user.getEthBalance.invalidate().catch((e) => console.log(e));
     }
-  }, [isConfirming, isConfirmed, utils.user.getBalance]);
+  }, [isConfirming, isConfirmed, utils.user.getEthBalance]);
 
   const onSubmit = () => {
     if (claimSimulate && Boolean(claimResult)) {

@@ -65,8 +65,16 @@ const StakeForm = ({ balance, allowance }: Props) => {
   useEffect(() => {
     if (isConfirmed) {
       utils.user.getBalance.invalidate().catch((e) => console.log(e));
+      utils.user.getSirTotalSupply.invalidate().catch((e) => console.log(e));
+      utils.user.getSirSupply.invalidate().catch((e) => console.log(e));
     }
-  }, [isConfirming, isConfirmed, utils.user.getBalance]);
+  }, [
+    isConfirming,
+    isConfirmed,
+    utils.user.getBalance,
+    utils.user.getSirTotalSupply,
+    utils.user.getSirSupply,
+  ]);
 
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeStake.success ? safeStake.data.toString() : "0",

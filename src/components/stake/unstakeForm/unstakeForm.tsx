@@ -62,15 +62,25 @@ const UnstakeForm = ({ balance, dividends, claimResult }: Props) => {
         : undefined,
     });
 
-  const { writeContract, data: hash, isPending } = useWriteContract();
-  // const { isLoading: isConfirming, isSuccess: isConfirmed } =
-  //   useWaitForTransactionReceipt({ hash });
+  const { writeContract, data: hash } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash });
 
   useEffect(() => {
     if (isConfirmed) {
       utils.user.getBalance.invalidate().catch((e) => console.log(e));
+      utils.user.getDividends.invalidate().catch((e) => console.log(e));
+      utils.user.getSirTotalSupply.invalidate().catch((e) => console.log(e));
+      utils.user.getSirSupply.invalidate().catch((e) => console.log(e));
     }
-  }, [isConfirming, isConfirmed, utils.user.getBalance]);
+  }, [
+    isConfirming,
+    isConfirmed,
+    utils.user.getBalance,
+    utils.user.getDividends,
+    utils.user.getSirTotalSupply,
+    utils.user.getSirSupply,
+  ]);
 
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeAmount.success ? safeAmount.data.toString() : "0",
