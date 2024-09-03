@@ -22,8 +22,6 @@ import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
 import { api } from "@/trpc/react";
 
-import { api } from "@/trpc/react";
-
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
 interface Props {
