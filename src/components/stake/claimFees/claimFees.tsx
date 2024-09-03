@@ -12,7 +12,6 @@ import { type SimulateContractReturnType } from "viem";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 
 import { api } from "@/trpc/react";
-
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
   ethBalance?: string;
