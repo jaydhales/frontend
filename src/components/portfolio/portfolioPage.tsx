@@ -4,7 +4,8 @@ import BurnTable from "./burnTable/burnTable";
 import { Card } from "../ui/card";
 import { Container } from "../ui/container";
 import PageHeader from "../shared/pageHeader";
-import { Button } from "../ui/button";
+import { StakedCard } from "./stakedCard";
+import ClaimCard from "./claimCard";
 
 export default function PortfolioPage() {
   return (
@@ -13,34 +14,8 @@ export default function PortfolioPage() {
       <div className="pt-6"></div>
       <Container>
         <div className="grid grid-cols-2 gap-x-4">
-          <Card className="border border-secondary-100">
-            <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
-              <span>Staked Value</span>
-            </h2>
-            <div className="pt-2"></div>
-            <div className="bg-secondary-200 px-2 py-4 rounded-md text-2xl">
-              <div className="flex items-center justify-between">
-                <h3 className="text-3xl">
-                  7291 <span className="text-gray-500 text-[14px]">SIR</span>
-                </h3>
-                <Button className="py-2">Unstake</Button>
-              </div>
-            </div>
-          </Card>
-          <Card className="border border-secondary-100">
-            <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
-              <span>Claimable Value</span>
-            </h2>
-            <div className="pt-2"></div>
-            <div className="bg-secondary-200 px-2 py-4 rounded-md text-2xl">
-              <div className="flex items-center justify-between">
-                <h3 className="text-3xl">
-                  7291 <span className="text-gray-500 text-[14px]">SIR</span>
-                </h3>
-                <Button className="py-2">Claim</Button>
-              </div>
-            </div>
-          </Card>
+          <StakedCard />
+          <ClaimCard />
         </div>
         <div className="pt-8"></div>
         <Card className="lg:w-[900px] border border-secondary-100 ">
