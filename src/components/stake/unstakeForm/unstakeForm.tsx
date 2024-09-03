@@ -19,7 +19,7 @@ import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { z } from "zod";
 import { useUnstake } from "../hooks/useUnstake";
 
-import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useWriteContract } from "wagmi";
 import { SirContract } from "@/contracts/sir";
 
 import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
