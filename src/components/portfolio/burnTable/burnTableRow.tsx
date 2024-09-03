@@ -25,14 +25,17 @@ export function BurnTableRow({
 
   return (
     <tr className="  hidden md:grid gap-x-4 grid-cols-5 items-center text-left  text-white">
-      <th className="flex">
-        <span>{isApe ? "APE" : "TEA"}-</span>
-        <span>{row.vaultId} </span>
+      <th className="flex font-normal items-center gap-x-1 ">
+        <span className="">{isApe ? "APE" : "TEA"}</span>
+        <span className="text-gray-500">-</span>
+        <span className="text-accent-100 text-xl ">{row.vaultId} </span>
       </th>
-      <th>{row.debtSymbol}</th>
-      <th>{row.collateralSymbol}</th>
-      <th>{getLeverageRatio(parseInt(row.leverageTier))}x</th>
-      <th>
+      <th className="font-normal text-gray-200">{row.debtSymbol}</th>
+      <th className="font-normal text-gray-200">{row.collateralSymbol}</th>
+      <th className="font-normal text-gray-200">
+        {getLeverageRatio(parseInt(row.leverageTier))}x
+      </th>
+      <th className="font-normal">
         <div className="flex gap-x-8 items-center justify-between">
           {isApe ? (
             <span>
@@ -47,7 +50,7 @@ export function BurnTableRow({
           <Button
             onClick={() => setSelectedRow(row.vaultId)}
             type="button"
-            variant="outline"
+            className=" py-2 px-5 rounded-full text-[14px] "
           >
             Burn
           </Button>

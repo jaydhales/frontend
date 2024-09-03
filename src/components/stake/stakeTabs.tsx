@@ -33,21 +33,21 @@ const StakeTabs = () => {
       tokenAddress: SirContract.address,
       spender: SirContract.address,
     },
-    { enabled: isConnected }
+    { enabled: isConnected },
   );
 
   const { data: totalBalance } = api.user.getTotalSirBalance.useQuery(
     {
       user: address,
     },
-    { enabled: isConnected }
+    { enabled: isConnected },
   );
 
   const { data: dividends } = api.user.getDividends.useQuery(
     {
       staker: address,
     },
-    { enabled: isConnected }
+    { enabled: isConnected },
   );
 
   const { data: ethBalance } = api.user.getEthBalance.useQuery(
@@ -56,7 +56,7 @@ const StakeTabs = () => {
     },
     {
       enabled: isConnected,
-    }
+    },
   );
 
   const safeTotalBalance = useMemo(() => {
@@ -72,11 +72,11 @@ const StakeTabs = () => {
     console.log(`Unstaked SIR: ${balance?.tokenBalance?.result}`);
     console.log(`Unstaked SIR Allowance: ${balance?.tokenAllowance?.result}`);
     console.log(
-      `Staked SIR: ${balance?.tokenBalance?.result && safeTotalBalance.success && safeTotalBalance.data - balance?.tokenBalance?.result}`
+      `Staked SIR: ${balance?.tokenBalance?.result && safeTotalBalance.success && safeTotalBalance.data - balance?.tokenBalance?.result}`,
     );
     console.log(`Dividends: ${safeDividends.data}`);
     console.log(
-      `ETH Balance: ${parseFloat(formatEther(ethBalance ?? 0n)).toFixed(4)}`
+      `ETH Balance: ${parseFloat(formatEther(ethBalance ?? 0n)).toFixed(4)}`,
     );
   }, [balance, safeTotalBalance, safeDividends, ethBalance]);
 
@@ -113,7 +113,7 @@ const StakeTabs = () => {
                   : 0n
               }
               dividends={formatEther(
-                safeDividends.success ? safeDividends.data : 0n
+                safeDividends.success ? safeDividends.data : 0n,
               )}
               claimSimulate={Claim?.request as SimulateReq}
               claimResult={Claim?.result}
@@ -127,7 +127,7 @@ const StakeTabs = () => {
           <ClaimFees
             ethBalance={formatEther(ethBalance ?? 0n)}
             claimAmount={formatEther(
-              safeDividends.success ? safeDividends.data : 0n
+              safeDividends.success ? safeDividends.data : 0n,
             )}
             claimSimulate={Claim?.request as SimulateReq}
             claimResult={Claim?.result}

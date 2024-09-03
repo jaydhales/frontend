@@ -43,7 +43,7 @@ export function useTransactions({
     MintWithEth,
     isFetching: mintFetching,
   } = useMintApeOrTea({
-    vaultId: findVault(vaultsQuery, formData),
+    vaultId: findVault(vaultsQuery, formData).toString(),
     isApe,
     debtToken: formatDataInput(formData.versus), //value formatted : address,symbol
     collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
