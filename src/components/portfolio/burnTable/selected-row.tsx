@@ -28,6 +28,7 @@ export default function SelectedRow({
       <h1>Hello</h1>
     </div>;
   }
+
   return (
     <div>
       <div className="flex flex-col gap-y-4 border-b-2 pb-8">
@@ -39,7 +40,7 @@ export default function SelectedRow({
           <X />
         </button>
         <BurnTableHeaders />
-        <tr className="grid h-[41px] gap-x-4 grid-cols-5 items-center text-left text-gray-500 text-white">
+        <tr className="grid h-[41px] gap-x-4 grid-cols-5 items-center text-left text-white">
           <th>
             {isApe ? "APE-" : "TEA-"}
             {params?.vaultId}
@@ -51,7 +52,7 @@ export default function SelectedRow({
         </tr>
       </div>
       <div className="flex justify-center pt-4">
-        <div className=" w-[500px] justify-between">
+        <div className="justify-between">
           <BurnForm isApe={isApe} balance={data} row={params} />
         </div>
       </div>
