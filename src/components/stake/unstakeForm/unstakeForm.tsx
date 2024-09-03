@@ -25,6 +25,7 @@ import { SirContract } from "@/contracts/sir";
 
 import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
+import { api } from "@/trpc/react";
 
 import { api } from "@/trpc/react";
 
@@ -91,6 +92,7 @@ const UnstakeForm = ({ balance, dividends, claimResult }: Props) => {
     },
     tokenBalance: balance,
     mintFetching: unstakeFetching,
+    approveFetching: unstakeAndClaimFetching,
   });
 
   const onSubmit = () => {
