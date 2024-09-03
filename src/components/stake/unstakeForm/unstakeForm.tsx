@@ -85,11 +85,12 @@ const UnstakeForm = ({ balance, dividends, claimResult }: Props) => {
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeAmount.success ? safeAmount.data.toString() : "0",
     depositToken: SirContract.address,
-    mintRequest: Unstake?.request as SimulateReq,
+    requests: {
+      mintRequest: Unstake?.request as SimulateReq,
+      approveWriteRequest: UnstakeAndClaim?.request as SimulateReq,
+    },
     tokenBalance: balance,
     mintFetching: unstakeFetching,
-    approveWriteRequest: UnstakeAndClaim?.request as SimulateReq,
-    approveFetching: unstakeAndClaimFetching,
   });
 
   const onSubmit = () => {
