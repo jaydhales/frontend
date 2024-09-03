@@ -8,6 +8,7 @@ import { StakedCard } from "./stakedCard";
 import ClaimCard from "./claimCard";
 
 export default function PortfolioPage() {
+  const [value, setValue] = useState<"ape" | "tea" | "all">("ape");
   return (
     <div>
       <PageHeader>Portfolio</PageHeader>
@@ -23,17 +24,22 @@ export default function PortfolioPage() {
             <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
               <span>My Tokens</span>
             </h2>
-            <Slider />
+            <Slider value={value} setValue={setValue} />
           </div>
-          <BurnTable />
+          <BurnTable filter={value} />
         </Card>
       </Container>
     </div>
   );
 }
 
-function Slider() {
-  const [value, setValue] = useState<"ape" | "tea" | "all">("ape");
+function Slider({
+  value,
+  setValue,
+}: {
+  value: "ape" | "tea" | "all";
+  setValue: (a: "ape" | "tea" | "all") => void;
+}) {
   return (
     <div>
       <div className="rounded-full flex gap-x-1  items-center border border-secondary-100">

@@ -6,7 +6,11 @@ import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import { BurnTableRow, BurnTableRowMobile } from "./burnTableRow";
 
-export default function BurnTable() {
+export default function BurnTable({
+  filter,
+}: {
+  filter: "ape" | "tea" | "all";
+}) {
   const [selectedRow, setSelectedRow] = useState<
     | {
         vaultId: string;
@@ -29,7 +33,33 @@ export default function BurnTable() {
       (r) => r.vaultId === selectedRow?.vaultId && !selectedRow.isApe,
     );
   }, [selectedRow, tea.data?.userPositionTeas]);
-
+  const hasPositions = useMemo(() => {
+    const apeLength = ape?.data?.userPositions?.length ?? 0;
+    const teaLength = tea?.data?.userPositionTeas?.length ?? 0;
+    if (filter === "ape") {
+      if (apeLength > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (filter === "tea") {
+      if (teaLength > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      if (apeLength > 0 || teaLength > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }, [
+    ape?.data?.userPositions?.length,
+    filter,
+    tea?.data?.userPositionTeas?.length,
+  ]);
   return (
     <div className="relative">
       {selectedRowParamsApe && (
@@ -60,79 +90,95 @@ export default function BurnTable() {
           <caption className="hidden">Burn Tokens</caption>
           <tbody className="flex flex-col gap-y-4">
             <BurnTableHeaders />
-            {
+            {!hasPositions ? (
+              <div className="flex justify-center py-6">
+                <h1 className="text-gray-300">No Positions</h1>
+              </div>
+            ) : (
               <>
-                {ape.data?.userPositions.map((r) => (
+                {(filter === "ape" || filter == "all") && (
                   <>
-                    <BurnTableRowMobile
-                      setSelectedRow={() =>
-                        setSelectedRow({ vaultId: r.vaultId, isApe: true })
-                      }
-                      key={r.vaultId + "apea"}
-                      row={{
-                        id: r.vaultId,
-                        balance: r.balance,
-                        user: r.user,
-                        collateralSymbol: r.collateralSymbol,
-                        debtSymbol: r.debtSymbol,
-                        collateralToken: r.collateralToken,
-                        debtToken: r.debtToken,
-                        leverageTier: r.leverageTier,
-                        vaultId: r.vaultId,
-                      }}
-                      isApe={true}
-                      apeAddress={r.APE}
-                    />
-                    <BurnTableRow
-                      setSelectedRow={() =>
-                        setSelectedRow({ vaultId: r.vaultId, isApe: true })
-                      }
-                      key={r.vaultId + "ape"}
-                      row={{
-                        id: r.vaultId,
-                        balance: r.balance,
-                        user: r.user,
-                        collateralSymbol: r.collateralSymbol,
-                        debtSymbol: r.debtSymbol,
-                        collateralToken: r.collateralToken,
-                        debtToken: r.debtToken,
-                        leverageTier: r.leverageTier,
-                        vaultId: r.vaultId,
-                      }}
-                      isApe={true}
-                      apeAddress={r.APE}
-                    />
-                  </>
-                ))}
-                {tea.data?.userPositionTeas.map((r) => {
-                  return (
-                    <>
-                      <BurnTableRow
-                        row={{
-                          ...r,
-                        }}
-                        key={r.id + "teaa"}
-                        isApe={false}
-                        setSelectedRow={() =>
-                          setSelectedRow({
+                    {ape.data?.userPositions.map((r) => (
+                      <>
+                        <BurnTableRowMobile
+                          setSelectedRow={() =>
+                            setSelectedRow({ vaultId: r.vaultId, isApe: true })
+                          }
+                          key={r.vaultId + "apea"}
+                          row={{
+                            id: r.vaultId,
+                            balance: r.balance,
+                            user: r.user,
+                            collateralSymbol: r.collateralSymbol,
+                            debtSymbol: r.debtSymbol,
+                            collateralToken: r.collateralToken,
+                            debtToken: r.debtToken,
+                            leverageTier: r.leverageTier,
                             vaultId: r.vaultId,
-                            isApe: false,
-                          })
-                        }
-                      />
-                      <BurnTableRowMobile
-                        key={r.id + "tea"}
-                        row={{ ...r }}
-                        isApe={false}
-                        setSelectedRow={() =>
-                          setSelectedRow({ vaultId: r.vaultId, isApe: false })
-                        }
-                      />
-                    </>
-                  );
-                })}
+                          }}
+                          isApe={true}
+                          apeAddress={r.APE}
+                        />
+                        <BurnTableRow
+                          setSelectedRow={() =>
+                            setSelectedRow({ vaultId: r.vaultId, isApe: true })
+                          }
+                          key={r.vaultId + "ape"}
+                          row={{
+                            id: r.vaultId,
+                            balance: r.balance,
+                            user: r.user,
+                            collateralSymbol: r.collateralSymbol,
+                            debtSymbol: r.debtSymbol,
+                            collateralToken: r.collateralToken,
+                            debtToken: r.debtToken,
+                            leverageTier: r.leverageTier,
+                            vaultId: r.vaultId,
+                          }}
+                          isApe={true}
+                          apeAddress={r.APE}
+                        />
+                      </>
+                    ))}
+                  </>
+                )}
+                {(filter === "tea" || filter == "all") && (
+                  <>
+                    {" "}
+                    {tea.data?.userPositionTeas.map((r) => {
+                      return (
+                        <>
+                          <BurnTableRow
+                            row={{
+                              ...r,
+                            }}
+                            key={r.id + "teaa"}
+                            isApe={false}
+                            setSelectedRow={() =>
+                              setSelectedRow({
+                                vaultId: r.vaultId,
+                                isApe: false,
+                              })
+                            }
+                          />
+                          <BurnTableRowMobile
+                            key={r.id + "tea"}
+                            row={{ ...r }}
+                            isApe={false}
+                            setSelectedRow={() =>
+                              setSelectedRow({
+                                vaultId: r.vaultId,
+                                isApe: false,
+                              })
+                            }
+                          />
+                        </>
+                      );
+                    })}
+                  </>
+                )}
               </>
-            }
+            )}
           </tbody>
         </table>
       )}
