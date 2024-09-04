@@ -158,6 +158,16 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       setOpenTransactionModal(false);
     }
   };
+  let submitButtonText =
+    submitType === ESubmitType.mint ? "Confirm Mint" : "Confirm Approve";
+  if (isConfirmed) {
+    submitButtonText = "Close";
+  }
+  if (isPending || isConfirming) {
+    console.log("HERE 167;");
+    submitButtonText = "Pending...";
+  }
+
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -204,17 +214,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             {
               <TransactionModal.SubmitButton
                 onClick={modalSubmit}
-                disabled={!isValid && !isConfirmed}
+                disabled={(!isValid && !isConfirmed) || isPending}
+                loading={isPending || isConfirming}
               >
-                {isConfirmed ? (
-                  <>Close</>
-                ) : (
-                  <>
-                    {submitType === ESubmitType.mint
-                      ? "Confirm Mint"
-                      : " Confirm Approve"}
-                  </>
-                )}
+                {submitButtonText}
               </TransactionModal.SubmitButton>
             }
           </TransactionModal.StatSubmitContainer>
