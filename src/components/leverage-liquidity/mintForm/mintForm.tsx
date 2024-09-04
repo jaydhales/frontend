@@ -7,7 +7,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
-import { formatUnits } from "viem";
+import { formatEther, formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
@@ -167,7 +167,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     console.log("HERE 167;");
     submitButtonText = "Pending...";
   }
-
+  console.log(
+    "NUMBERs",
+    quoteData,
+    formatEther(quoteData ?? 0n),
+    parseFloat(fee ?? "0") / 100,
+  );
+  const deposit = form.getValues("deposit");
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -198,7 +204,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 <h2 className="text-center">Transaction Successful!</h2>
                 <h3 className="text-center">
                   APE received:{" "}
-                  {formatNumber(formatUnits(tokenReceived ?? 0n, 18), 4)}
+                  {formatNumber(formatUnits(tokenReceived ?? 0n, 18), 6)}
                 </h3>
               </div>
             )}
@@ -207,9 +213,19 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <TransactionModal.StatSubmitContainer>
             <TransactionModal.StatContainer>
               <TransactionModal.StatRow
-                title={"Fee"}
+                title={"Fee Percent"}
                 value={fee ? fee.toString() + "%" : "0%"}
               />
+              <TransactionModal.StatRow
+                title="Fee Amount"
+                value={
+                  formatNumber(
+                    parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
+                  ) +
+                  " " +
+                  form.getValues("long").split(",")[1]
+                }
+              ></TransactionModal.StatRow>
             </TransactionModal.StatContainer>
             {
               <TransactionModal.SubmitButton
