@@ -32,9 +32,9 @@ export default function SelectedRow({
 
   return (
     <div>
-      <div className="flex flex-col gap-y-4  pb-4">
+      <div className="flex flex-col gap-y-4 pb-4">
         <BurnTableHeaders />
-        <tr className="grid h-[41px] gap-x-4 relative grid-cols-5 items-center text-left text-white">
+        <tr className="grid h-8 gap-x-4 relative grid-cols-5 items-center text-left text-white">
           <button
             type="button"
             onClick={() => close()}
@@ -53,8 +53,10 @@ export default function SelectedRow({
           <th className="font-normal">
             {getLeverageRatio(parseInt(params?.leverageTier ?? "0"))}x
           </th>
-          <th className="font-normal">
-            {formatNumber(formatEther(data ?? 0n), 4)}
+          <th className="font-normal  flex items-center ">
+            <h2 className="h-8 flex items-center">
+              <span>{formatNumber(formatEther(data ?? 0n), 4)}</span>
+            </h2>
           </th>
         </tr>
       </div>
