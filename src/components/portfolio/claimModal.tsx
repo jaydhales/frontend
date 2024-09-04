@@ -25,10 +25,10 @@ export function ClaimModal({ open, setOpen }: Props) {
   );
 
   const { data: dividends } = api.user.getDividends.useQuery(
+    { staker: address },
     {
-      staker: address,
+      enabled: isConnected,
     },
-    { enabled: isConnected },
   );
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
