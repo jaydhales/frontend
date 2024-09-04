@@ -38,7 +38,7 @@ export default function SelectedRow({
           <button
             type="button"
             onClick={() => close()}
-            className="absolute top-2 right-2   cursor-pointer text-white/80 transition-transform hover:scale-105 hover:text-white"
+            className="absolute top-1 right-2   cursor-pointer text-white/80 transition-transform hover:scale-105 hover:text-white"
           >
             <X />
           </button>
