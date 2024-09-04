@@ -21,7 +21,7 @@ export function StakedCard() {
       <UnstakeFormProvider>
         <UnstakeModal open={openModal} setOpen={setOpenModal} />
       </UnstakeFormProvider>
-      <div className="bg-secondary-300 px-2 py-2 rounded-md text-2xl">
+      <div className="bg-secondary-400 px-2 py-2 rounded-md text-2xl">
         <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
           <span>Staked Sir</span>
         </h2>
