@@ -22,7 +22,7 @@ export default function LeverageLiquidityContent({
           <MintForm vaultsQuery={vaultsQuery} isApe={isApe} />
           <Card>
             <div className="flex h-full flex-col justify-between">
-              <VaultTable isApe={isApe} vaultQuery={vaultsQuery} />
+              <VaultTable vaultQuery={vaultsQuery} />
               <Pagination
                 max={Math.ceil((vaultsQuery?.vaults.length ?? 0) / 10)}
               />
