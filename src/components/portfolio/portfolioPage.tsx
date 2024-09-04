@@ -15,8 +15,7 @@ export default function PortfolioPage() {
       <Container>
         <Card className="lg:w-[900px] border border-secondary-200 ">
           <PageHeader>Portfolio</PageHeader>
-          <div className="pt-8"></div>
-          <div className="pb-4"></div>
+          <div className="pb-6"></div>
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-x-3">
               <SirCard />
