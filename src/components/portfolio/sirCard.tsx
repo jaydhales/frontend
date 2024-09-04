@@ -6,6 +6,7 @@ import { formatNumber } from "@/lib/utils";
 import UnstakeFormProvider from "../providers/unstakeFormProvider";
 import { UnstakeModal } from "./unstakeModal";
 import { useState } from "react";
+import Link from "next/link";
 
 export function SirCard() {
   const { isConnected, address } = useAccount();
@@ -21,7 +22,7 @@ export function SirCard() {
       <UnstakeFormProvider>
         <UnstakeModal open={openModal} setOpen={setOpenModal} />
       </UnstakeFormProvider>
-      <div className="bg-secondary-300 px-2 py-2 rounded-md text-2xl">
+      <div className="bg-secondary-400 px-2 py-2 rounded-md text-2xl">
         <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
           <span>Sir</span>
         </h2>
@@ -32,9 +33,11 @@ export function SirCard() {
               <span className="text-gray-500 text-sm"> SIR</span>
             </h4>
           </div>
-          <Button onClick={() => setOpenModal(true)} className="py-2">
-            Stake
-          </Button>
+          <Link href="/stake">
+            <Button role="nav" className="py-2">
+              Stake
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
