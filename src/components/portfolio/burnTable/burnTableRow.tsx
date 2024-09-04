@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import type { TAddressString } from "@/lib/types";
-import { getLeverageRatio } from "@/lib/utils";
+import { getLeverageRatio, formatNumber } from "@/lib/utils";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { formatUnits } from "viem";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
@@ -38,13 +38,9 @@ export function BurnTableRow({
       <th className="font-normal">
         <div className="flex gap-x-8 items-center justify-between">
           {isApe ? (
-            <span>
-              {parseFloat(parseFloat(formatUnits(apeBal ?? 0n, 18)).toFixed(4))}
-            </span>
+            <span>{formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}</span>
           ) : (
-            <span>
-              {parseFloat(parseFloat(formatUnits(teaBal ?? 0n, 18)).toFixed(4))}
-            </span>
+            <span>{formatNumber(formatUnits(teaBal ?? 0n, 18), 4)}</span>
           )}
 
           <Button

@@ -1,10 +1,11 @@
 import { X } from "lucide-react";
 import BurnTableHeaders from "./burnTableHeader";
 import type { TAddressString } from "@/lib/types";
-import { formatBigInt, getLeverageRatio } from "@/lib/utils";
+import { formatNumber, getLeverageRatio } from "@/lib/utils";
 import BurnForm from "../burnForm/burnForm";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
+import { formatEther } from "viem";
 
 export default function SelectedRow({
   params,
@@ -31,28 +32,34 @@ export default function SelectedRow({
 
   return (
     <div>
-      <div className="flex flex-col gap-y-4 border-b-2 pb-8">
-        <button
-          type="button"
-          onClick={() => close()}
-          className="absolute -right-4 -top-12 cursor-pointer text-white/80 transition-transform hover:scale-105 hover:text-white"
-        >
-          <X />
-        </button>
+      <div className="flex flex-col gap-y-4  pb-4">
         <BurnTableHeaders />
-        <tr className="grid h-[41px] gap-x-4 grid-cols-5 items-center text-left text-white">
-          <th>
-            {isApe ? "APE-" : "TEA-"}
-            {params?.vaultId}
+        <tr className="grid h-[41px] gap-x-4 relative grid-cols-5 items-center text-left text-white">
+          <button
+            type="button"
+            onClick={() => close()}
+            className="absolute top-2 right-2   cursor-pointer text-white/80 transition-transform hover:scale-105 hover:text-white"
+          >
+            <X />
+          </button>
+
+          <th className="flex font-normal items-center gap-x-1 ">
+            <span className="">{isApe ? "APE" : "TEA"}</span>
+            <span className="text-gray-500">-</span>
+            <span className="text-accent-100 text-xl ">{params.vaultId} </span>
           </th>
-          <th>{params?.debtSymbol}</th>
-          <th>{params?.collateralSymbol}</th>
-          <th>{getLeverageRatio(parseInt(params?.leverageTier ?? "0"))}x</th>
-          <th>{formatBigInt(data, 4)}</th>
+          <th className="font-normal">{params?.debtSymbol}</th>
+          <th className="font-normal">{params?.collateralSymbol}</th>
+          <th className="font-normal">
+            {getLeverageRatio(parseInt(params?.leverageTier ?? "0"))}x
+          </th>
+          <th className="font-normal">
+            {formatNumber(formatEther(data ?? 0n), 4)}
+          </th>
         </tr>
       </div>
       <div className="flex justify-center pt-4">
-        <div className="justify-between">
+        <div className="justify-between bg-secondary-700 p-4 rounded-lg">
           <BurnForm isApe={isApe} balance={data} row={params} />
         </div>
       </div>
