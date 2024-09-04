@@ -9,6 +9,7 @@ import Image from "next/image";
 
 import { type SimulateContractReturnType } from "viem";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { formatNumber } from "@/lib/utils";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -29,7 +30,7 @@ const ClaimFees = ({
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const { writeContract, error, data: hash, isPending } = useWriteContract();
+  const { writeContract, data: hash } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 
@@ -44,16 +45,16 @@ const ClaimFees = ({
     <>
       <Card className="">
         <h2 className="text-center text-2xl pb-6 font-lora ">Claim</h2>
-        <div className=" rounded-md bg-primary p-3">
-          <div className="text-sm font-medium leading-none pb-1 pt-2">
+        <div className=" rounded-md bg-secondary-300 px-3 py-2">
+          <div className="text-sm font-medium leading-none py-1">
             Amount to claim{" "}
           </div>
           <div className="flex justify-between">
             <div className="flex flex-col justify-between">
               <div className="h-10 w-40 rounded-md ring-offset-background bg-card text-[28px]">
-                {parseFloat(claimAmount ?? "0").toFixed(4)}
+                {formatNumber(claimAmount ?? "0")}
               </div>
-              <div className="pt-2 text-sm italic text-gray-500">$66.88</div>
+              {/* <div className="pt-2 text-sm italic text-gray-500">$66.88</div> */}
             </div>
             <div>
               <div className="flex flex-col justify-between gap-y-3">
