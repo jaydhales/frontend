@@ -105,7 +105,6 @@ const UnstakeForm = ({
       <Card className="w-full ">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormLabel htmlFor="stake">Amount:</FormLabel>
             <UnstakeInput
               form={form}
               balance={formatUnits(balance ?? 0n, 12)}
