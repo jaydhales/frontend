@@ -8,7 +8,7 @@ interface EstimateProps {
   usingEth: boolean;
   isApe: boolean;
 }
-export function Estimates({
+export function TransactionEstimates({
   isApe,
   collateralEstimate,
   usingEth,

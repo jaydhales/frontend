@@ -28,12 +28,12 @@ import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
 import { Status } from "./transactionStatus";
-import { Estimates } from "./transactionEstimates";
 import { CircleCheck } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { VaultContract } from "@/contracts/vault";
 import { APE_HASH } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
+import { TransactionEstimates } from "./transactionEstimates";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -185,8 +185,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <TransactionModal.InfoContainer>
             {!isConfirmed && (
               <>
-                <Status isTxPending={isConfirming} waitForSign={isPending} />
-                <Estimates
+                <Status isTxPending={isConfirming} waitForSign={isPending} />{" "}
+                <TransactionEstimates
                   isApe={isApe}
                   usingEth={useEth}
                   collateralEstimate={quoteData}
