@@ -1,6 +1,5 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import {
-  calculateTeaVaultFee,
   calculateApeVaultFee,
   formatNumber,
   getLeverageRatio,
