@@ -6,20 +6,24 @@ import { Container } from "../ui/container";
 import PageHeader from "../shared/pageHeader";
 import { StakedCard } from "./stakedCard";
 import ClaimCard from "./claimCard";
+import { SirCard } from "./sirCard";
 
 export default function PortfolioPage() {
-  const [value, setValue] = useState<"ape" | "tea" | "all">("ape");
+  const [value, setValue] = useState<"ape" | "tea" | "all">("all");
   return (
     <div>
-      <PageHeader>Portfolio</PageHeader>
-      <div className="pt-6"></div>
       <Container>
-        <div className="grid grid-cols-2 gap-x-4">
-          <StakedCard />
-          <ClaimCard />
-        </div>
-        <div className="pt-8"></div>
-        <Card className="lg:w-[900px] border border-secondary-100 ">
+        <Card className="lg:w-[900px] border border-secondary-200 ">
+          <PageHeader>Portfolio</PageHeader>
+          <div className="pb-6"></div>
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-x-3">
+              <SirCard />
+              <StakedCard />
+            </div>
+            <ClaimCard />
+          </div>
+          <div className="pt-8"></div>
           <div className="flex justify-between items-center pb-8">
             <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
               <span>My Tokens</span>
@@ -44,6 +48,13 @@ function Slider({
     <div>
       <div className="rounded-full flex gap-x-1  items-center border border-secondary-100">
         <div
+          onClick={() => setValue("all")}
+          data-active={value === "all" ? "true" : ""}
+          className="data-[active=true]:bg-gray-600 rounded-full px-3 text-sm py-1 cursor-pointer"
+        >
+          ALL
+        </div>
+        <div
           data-active={value === "ape" ? "true" : ""}
           className="data-[active=true]:bg-gray-600 rounded-full px-3 text-sm py-1 cursor-pointer"
           onClick={() => setValue("ape")}
@@ -56,13 +67,6 @@ function Slider({
           className="data-[active=true]:bg-gray-600 rounded-full px-3 text-sm py-1 cursor-pointer"
         >
           TEA
-        </div>
-        <div
-          onClick={() => setValue("all")}
-          data-active={value === "all" ? "true" : ""}
-          className="data-[active=true]:bg-gray-600 rounded-full px-3 text-sm py-1 cursor-pointer"
-        >
-          ALL
         </div>
       </div>
     </div>

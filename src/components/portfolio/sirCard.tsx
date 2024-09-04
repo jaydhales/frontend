@@ -6,8 +6,9 @@ import { formatNumber } from "@/lib/utils";
 import UnstakeFormProvider from "../providers/unstakeFormProvider";
 import { UnstakeModal } from "./unstakeModal";
 import { useState } from "react";
+import Link from "next/link";
 
-export function StakedCard() {
+export function SirCard() {
   const { isConnected, address } = useAccount();
   const { data: totalBalance } = api.user.getTotalSirBalance.useQuery(
     {
@@ -23,7 +24,7 @@ export function StakedCard() {
       </UnstakeFormProvider>
       <div className="bg-secondary-400 px-2 py-2 rounded-md text-2xl">
         <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
-          <span>Staked Sir</span>
+          <span>Sir</span>
         </h2>
         <div className="flex items-center justify-between">
           <div className="text-3xl   ">
@@ -32,9 +33,11 @@ export function StakedCard() {
               <span className="text-gray-500 text-sm"> SIR</span>
             </h4>
           </div>
-          <Button onClick={() => setOpenModal(true)} className="py-2">
-            Unstake
-          </Button>
+          <Link href="/stake">
+            <Button role="nav" className="py-2">
+              Stake
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

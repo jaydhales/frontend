@@ -102,7 +102,7 @@ const UnstakeForm = ({
       {/*   isTxPending={isConfirming} */}
       {/*   waitForSign={isPending} */}
       {/* /> */}
-      <Card className="mx-auto w-[80%]">
+      <Card className="w-full ">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormLabel htmlFor="stake">Amount:</FormLabel>
