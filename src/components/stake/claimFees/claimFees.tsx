@@ -9,6 +9,7 @@ import Image from "next/image";
 
 import { type SimulateContractReturnType } from "viem";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { formatNumber } from "@/lib/utils";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -29,7 +30,7 @@ const ClaimFees = ({
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const { writeContract, error, data: hash, isPending } = useWriteContract();
+  const { writeContract, data: hash } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 
@@ -43,34 +44,38 @@ const ClaimFees = ({
   return (
     <>
       <Card className="">
-        <div className="text-sm font-medium leading-none pb-1 pt-2">
-          Amount to claim:{" "}
-        </div>
-        <div className="flex justify-between rounded-md bg-primary p-3">
-          <div className="flex flex-col justify-between">
-            <div className="h-10 w-40 rounded-md ring-offset-background bg-card text-[28px]">
-              {parseFloat(claimAmount ?? "0").toFixed(4)}
-            </div>
-            <div className="pt-2 text-sm italic text-gray-500">$66.88</div>
+        <h2 className="text-center text-2xl pb-6 font-lora ">Claim</h2>
+        <div className=" rounded-md bg-secondary-300 px-3 py-2">
+          <div className="text-sm font-medium leading-none py-1">
+            Amount to claim{" "}
           </div>
-          <div>
-            <div className="flex flex-col justify-between gap-y-3">
-              <div
-                className={`flex items-center justify-end gap-x-2 rounded-md py-1`}
-              >
-                <Image
-                  src={
-                    "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/info/logo.png"
-                  }
-                  alt="sir-logo"
-                  width={25}
-                  height={25}
-                />
-                <span className="font-medium">ETH</span>
+          <div className="flex justify-between">
+            <div className="flex flex-col justify-between">
+              <div className="h-10 w-40 rounded-md ring-offset-background bg-card text-[28px]">
+                {formatNumber(claimAmount ?? "0")}
               </div>
-              <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-                Balance: {parseFloat(parseFloat(ethBalance ?? "0").toFixed(4))}
-              </h2>
+              {/* <div className="pt-2 text-sm italic text-gray-500">$66.88</div> */}
+            </div>
+            <div>
+              <div className="flex flex-col justify-between gap-y-3">
+                <div
+                  className={`flex items-center justify-end gap-x-2 rounded-md py-1`}
+                >
+                  <Image
+                    src={
+                      "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/info/logo.png"
+                    }
+                    alt="sir-logo"
+                    width={25}
+                    height={25}
+                  />
+                  <span className="font-medium">ETH</span>
+                </div>
+                <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
+                  Balance:{" "}
+                  {parseFloat(parseFloat(ethBalance ?? "0").toFixed(4))}
+                </h2>
+              </div>
             </div>
           </div>
         </div>

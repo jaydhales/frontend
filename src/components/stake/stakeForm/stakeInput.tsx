@@ -42,7 +42,7 @@ const StakeInput = ({ form, balance }: Props) => {
                 ></Input>
               </FormControl>
             </FormItem>
-            <h2 className="pt-2 text-sm italic text-gray-500">{"$20.55"}</h2>
+            {/* <h2 className="pt-2 text-sm italic text-gray-500">{"$20.55"}</h2> */}
           </div>
         )}
       />

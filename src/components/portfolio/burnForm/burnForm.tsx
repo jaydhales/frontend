@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UseFormReturn } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
@@ -12,6 +12,7 @@ import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
 import { SectionTwo } from "./sectionTwo";
+import TransactionModal from "@/components/shared/transactionModal";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -89,14 +90,41 @@ export default function BurnForm({
   const { isValid, error } = useCheckValidityBurn(formData, balance);
 
   const onSubmit = () => {
+    if (isConfirmed) {
+      return setOpen(false);
+    }
     if (burnData?.request) {
       writeContract(burnData.request);
       form.reset({ deposit: "" });
     }
   };
+  const [open, setOpen] = useState(false);
+  let submitButtonText = "Confirm Burn";
+  if (isPending || isConfirming) {
+    submitButtonText = "Pending...";
+  }
+  if (isConfirmed) {
+    submitButtonText = "Close";
+  }
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <TransactionModal.Root open={open} setOpen={setOpen}>
+        <TransactionModal.Close setOpen={setOpen} />
+        <TransactionModal.InfoContainer>
+          <h2 className="font-lora">Confirm Burn</h2>
+        </TransactionModal.InfoContainer>
+        {/*----*/}
+        <TransactionModal.StatSubmitContainer>
+          <TransactionModal.SubmitButton
+            disabled={false}
+            loading={isConfirming || isPending}
+            onClick={() => onSubmit()}
+          >
+            {submitButtonText}
+          </TransactionModal.SubmitButton>
+        </TransactionModal.StatSubmitContainer>
+      </TransactionModal.Root>
+      <form>
         <div className="space-y-2">
           <label htmlFor="a" className="">
             Burn Amount
@@ -140,8 +168,9 @@ export default function BurnForm({
               !Boolean(formData.deposit)
             }
             variant="submit"
+            onClick={() => setOpen(true)}
             className="w-full"
-            type="submit"
+            type="button"
           >
             Burn {isApe ? "APE" : "TEA"}
           </Button>

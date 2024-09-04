@@ -27,10 +27,7 @@ export function Estimates({
       <span className="text-gray-500">{"->"}</span>
       <h3 className="space-x-1">
         <span>
-          {formatNumber(
-            parseFloat(formatUnits(collateralEstimate ?? 0n, 18)),
-            4,
-          )}
+          {formatNumber(formatUnits(collateralEstimate ?? 0n, 18), 6)}
         </span>
         <span className="text-gray-300 text-sm">{isApe ? "APE" : "TEA"}</span>
       </h3>

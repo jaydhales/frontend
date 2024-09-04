@@ -12,20 +12,15 @@ import Image from "next/image";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
 import type { VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
-import ToolTip from "@/components/ui/tooltip";
 export function VaultTableRow({
   badgeVariant,
   pool,
-  isApe,
 }: {
   badgeVariant: VariantProps<typeof badgeVariants>;
   number: string;
   pool: VaultFieldFragment;
-  isApe: boolean;
 }) {
-  const fee = isApe
-    ? calculateApeVaultFee(pool.leverageTier) * 100
-    : calculateTeaVaultFee();
+  const fee = calculateApeVaultFee(pool.leverageTier) * 100;
 
   const { setValue } = useMintFormProviderApi();
   console.log("Rerender vault table row");

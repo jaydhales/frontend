@@ -23,6 +23,7 @@ export function UnstakeModal({ open, setOpen }: Props) {
           className={`rounded-xl relative transition-all duration-700  bg-secondary text-white`}
         >
           <TransactionModal.Close setOpen={setOpen} />
+          <h1 className="font-lora text-2xl text-center pt-4">Unstake</h1>
           <UnstakeForm
             claimSimulate={Claim?.request as SimulateReq}
             claimResult={Claim?.result}
