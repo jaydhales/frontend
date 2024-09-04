@@ -42,7 +42,7 @@ const ClaimFees = ({
 
   return (
     <>
-      <Card className="mx-auto w-[80%]">
+      <Card className="">
         <div className="text-sm font-medium leading-none pb-1 pt-2">
           Amount to claim:{" "}
         </div>
@@ -79,6 +79,7 @@ const ClaimFees = ({
             <Button
               variant={"submit"}
               type="submit"
+              className="md:w-full"
               onClick={onSubmit}
               disabled={!Boolean(claimResult) || claimFetching}
             >
@@ -89,6 +90,7 @@ const ClaimFees = ({
             <Button
               onClick={() => openConnectModal?.()}
               variant="submit"
+              className="md:w-full"
               type="button"
             >
               Connect Wallet
