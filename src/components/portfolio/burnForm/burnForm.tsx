@@ -87,6 +87,11 @@ export default function BurnForm({
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
 
+  useEffect(() => {
+    if (isConfirmed) {
+      form.setValue("deposit", "");
+    }
+  }, [form, isConfirmed]);
   const { isValid, error } = useCheckValidityBurn(formData, balance);
 
   const onSubmit = () => {
