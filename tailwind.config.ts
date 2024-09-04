@@ -63,6 +63,7 @@ const config = {
           DEFAULT: "hsl(var(--accent), <alpha-value>)",
           foreground: "hsl(var(--accent-foreground), <alpha-value>)",
           100: "hsl(var(--accent-100), <alpha-value>)",
+          600: "hsl(var(--accent-600), <alpha-value>)",
         },
         yellow: {
           DEFAULT: "hsl(var(--yellow-100), <alpha-value>)",
