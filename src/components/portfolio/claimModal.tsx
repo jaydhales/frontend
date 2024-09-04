@@ -6,6 +6,7 @@ import { api } from "@/trpc/react";
 import { formatEther, type SimulateContractReturnType } from "viem";
 import { useAccount } from "wagmi";
 
+import TransactionModal from "../shared/transactionModal";
 interface Props {
   open: boolean;
   setOpen: (b: boolean) => void;
@@ -36,11 +37,12 @@ export function ClaimModal({ open, setOpen }: Props) {
         align="center"
         animate="none"
         closeColor={"black"}
-        className="bg-transparent"
+        className="bg-transparent "
       >
         <div
-          className={`rounded-xl relative transition-all duration-700  bg-secondary text-white`}
+          className={`rounded-xl relative w-[500px]  transition-all duration-700  bg-secondary text-white`}
         >
+          <TransactionModal.Close setOpen={setOpen} />
           <ClaimFees
             ethBalance={formatEther(ethBalance ?? 0n)}
             claimAmount={formatEther(dividends ?? 0n)}
