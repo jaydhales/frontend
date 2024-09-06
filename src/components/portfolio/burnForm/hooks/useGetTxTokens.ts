@@ -26,8 +26,8 @@ export function useGetTxTokens({ logs }: Props) {
           topics: log.topics,
         });
         console.log(parsed, "LOG");
-        if (parsed.eventName === "TransferSingle") {
-          setTokenReceived(parsed.args.amount);
+        if (parsed.eventName === "Burn") {
+          setTokenReceived(parsed.args.collateralWithdrawn);
           return;
         }
       });
