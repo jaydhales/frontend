@@ -11,6 +11,7 @@ import Image from "next/image";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
 import type { VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
+import { useMemo } from "react";
 export function VaultTableRow({
   badgeVariant,
   pool,
@@ -20,6 +21,17 @@ export function VaultTableRow({
   pool: VaultFieldFragment;
 }) {
   const fee = calculateApeVaultFee(pool.leverageTier) * 100;
+  const POL = useMemo(() => {
+    const totalLocked = parseUnits(pool.totalValueLocked, 0);
+    const lockedLiquidity = parseUnits(pool.lockedLiquidity, 0);
+    if (lockedLiquidity > 0n && totalLocked > 0n) {
+      const percent = (lockedLiquidity * 10000n) / totalLocked;
+      return parseFloat(percent.toString()) / 100;
+    } else {
+      return 0n;
+    }
+  }, [pool.lockedLiquidity, pool.totalValueLocked]);
+  console.log(POL, "POL");
 
   const { setValue } = useMintFormProviderApi();
   console.log("Rerender vault table row");
