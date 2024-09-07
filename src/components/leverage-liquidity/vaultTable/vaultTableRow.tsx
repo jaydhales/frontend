@@ -12,6 +12,7 @@ import { useMintFormProviderApi } from "@/components/providers/mintFormProviderA
 import type { VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
 import { useMemo } from "react";
+
 export function VaultTableRow({
   badgeVariant,
   pool,
