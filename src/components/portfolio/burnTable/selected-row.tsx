@@ -32,7 +32,7 @@ export default function SelectedRow({
 
   return (
     <div>
-      <div className="flex flex-col gap-y-4 pb-4">
+      <div className="md:flex hidden flex-col gap-y-4 pb-4">
         <BurnTableHeaders />
         <tr className="grid h-8 gap-x-4 relative grid-cols-5 items-center text-left text-white">
           <button
@@ -62,7 +62,7 @@ export default function SelectedRow({
       </div>
       <div className="flex justify-center pt-4">
         <div className="justify-between bg-secondary-700 p-4 rounded-lg">
-          <BurnForm isApe={isApe} balance={data} row={params} />
+          <BurnForm close={close} isApe={isApe} balance={data} row={params} />
         </div>
       </div>
     </div>

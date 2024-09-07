@@ -16,6 +16,7 @@ import TransactionModal from "@/components/shared/transactionModal";
 import { TransactionEstimates } from "@/components/shared/transactionEstimates";
 import TransactionSuccess from "@/components/shared/transactionSuccess";
 import { useGetTxTokens } from "./hooks/useGetTxTokens";
+import { X } from "lucide-react";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -31,10 +32,12 @@ export default function BurnForm({
   balance,
   row,
   isApe,
+  close,
 }: {
   balance: bigint | undefined;
   isApe: boolean;
   row: TUserPosition;
+  close: () => void;
 }) {
   const form = useForm<z.infer<typeof BurnSchema>>({
     resolver: zodResolver(BurnSchema),
@@ -162,10 +165,20 @@ export default function BurnForm({
         </TransactionModal.StatSubmitContainer>
       </TransactionModal.Root>
       <form>
-        <div className="space-y-2">
-          <label htmlFor="a" className="">
-            Burn Amount
-          </label>
+        <div className="space-y-2 w-[320px] md:w-full">
+          <div className="flex justify-between">
+            <label htmlFor="a" className="">
+              Burn Amount
+            </label>
+
+            <button
+              type="button"
+              onClick={() => close()}
+              className="cursor-pointer text-white/80 transition-transform hover:scale-105 hover:text-white"
+            >
+              <X />
+            </button>
+          </div>
           <Section
             balance={balance}
             bg="bg-primary"
