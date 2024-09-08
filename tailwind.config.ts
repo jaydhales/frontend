@@ -40,6 +40,12 @@ const config = {
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary), <alpha-value>)",
+          100: "hsl(var(--secondary-100), <alpha-value>)",
+          200: "hsl(var(--secondary-200), <alpha-value>)",
+          300: "hsl(var(--secondary-300), <alpha-value>)",
+          400: "hsl(var(--secondary-400), <alpha-value>)",
+          700: "hsl(var(--secondary-700), <alpha-value>)",
+          800: "hsl(var(--secondary-800), <alpha-value>)",
           foreground: "hsl(var(--secondary-foreground), <alpha-value>)",
         },
         tertiary: {
@@ -58,6 +64,7 @@ const config = {
           DEFAULT: "hsl(var(--accent), <alpha-value>)",
           foreground: "hsl(var(--accent-foreground), <alpha-value>)",
           100: "hsl(var(--accent-100), <alpha-value>)",
+          600: "hsl(var(--accent-600), <alpha-value>)",
         },
         yellow: {
           DEFAULT: "hsl(var(--yellow-100), <alpha-value>)",

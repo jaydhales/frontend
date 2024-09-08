@@ -68,7 +68,7 @@ function Close({ setOpen }: { setOpen: (b: boolean) => void }) {
 }
 function StatRow({ title, value }: { title: string; value: string }) {
   return (
-    <div className="flex justify-between relative text-[13px]">
+    <div className="flex  justify-between relative text-[13px]">
       <h3 className="text-gray-300 ">
         <span className="flex z-20 items-center gap-x-1">
           {title} <ToolTip>Fee Info</ToolTip>
@@ -78,14 +78,17 @@ function StatRow({ title, value }: { title: string; value: string }) {
     </div>
   );
 }
+
 function SubmitButton({
   onClick,
   disabled,
   children,
+  loading,
 }: {
   onClick: () => void;
   disabled: boolean;
   children: ReactNode;
+  loading: boolean;
 }) {
   return (
     <Button
@@ -93,6 +96,7 @@ function SubmitButton({
       onClick={onClick}
       disabled={disabled}
       variant="modal"
+      state={loading ? "loading" : "default"}
       type="submit"
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UseFormReturn } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
@@ -12,6 +12,10 @@ import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
 import { SectionTwo } from "./sectionTwo";
+import TransactionModal from "@/components/shared/transactionModal";
+import { TransactionEstimates } from "@/components/shared/transactionEstimates";
+import TransactionSuccess from "@/components/shared/transactionSuccess";
+import { useGetTxTokens } from "./hooks/useGetTxTokens";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -50,12 +54,16 @@ export default function BurnForm({
     },
   );
 
-  const { writeContract, data: writeData, isPending } = useWriteContract();
+  const {
+    writeContract,
+    reset,
+    data: writeData,
+    isPending,
+  } = useWriteContract();
   const {
     data: receiptData,
     isLoading: isConfirming,
     isSuccess: isConfirmed,
-    // isError: isErrorConfirming,
   } = useWaitForTransactionReceipt({
     hash: writeData,
   });
@@ -86,17 +94,74 @@ export default function BurnForm({
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
 
+  useEffect(() => {
+    if (isConfirmed) {
+      form.setValue("deposit", "");
+    }
+  }, [form, isConfirmed]);
+
   const { isValid, error } = useCheckValidityBurn(formData, balance);
 
+  const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
   const onSubmit = () => {
+    if (isConfirmed) {
+      return setOpen(false);
+    }
     if (burnData?.request) {
       writeContract(burnData.request);
-      form.reset({ deposit: "" });
     }
   };
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (isConfirmed && !open) {
+      reset();
+    }
+  }, [isConfirmed, reset, open]);
+
+  let submitButtonText = "Confirm Burn";
+  if (isPending || isConfirming) {
+    submitButtonText = "Pending...";
+  }
+  if (isConfirmed) {
+    submitButtonText = "Close";
+  }
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <TransactionModal.Root open={open} setOpen={setOpen}>
+        <TransactionModal.Close setOpen={setOpen} />
+        <TransactionModal.InfoContainer>
+          {!isConfirmed && (
+            <>
+              <h2 className="font-lora">Confirm Burn</h2>
+              <TransactionEstimates
+                inAssetName={isApe ? "APE" : "TEA"}
+                outAssetName={row.collateralSymbol}
+                collateralEstimate={quoteBurn}
+                usingEth={false}
+              />
+            </>
+          )}
+          {isConfirmed && (
+            <TransactionSuccess
+              assetReceived={row.collateralSymbol}
+              amountReceived={tokenReceived}
+            />
+          )}
+        </TransactionModal.InfoContainer>
+        {/*----*/}
+        <TransactionModal.StatSubmitContainer>
+          <div className="pt-2"></div>
+          <TransactionModal.SubmitButton
+            disabled={false}
+            loading={isConfirming || isPending}
+            onClick={() => onSubmit()}
+          >
+            {submitButtonText}
+          </TransactionModal.SubmitButton>
+        </TransactionModal.StatSubmitContainer>
+      </TransactionModal.Root>
+      <form>
         <div className="space-y-2">
           <label htmlFor="a" className="">
             Burn Amount
@@ -140,8 +205,9 @@ export default function BurnForm({
               !Boolean(formData.deposit)
             }
             variant="submit"
+            onClick={() => setOpen(true)}
             className="w-full"
-            type="submit"
+            type="button"
           >
             Burn {isApe ? "APE" : "TEA"}
           </Button>

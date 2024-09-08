@@ -1,5 +1,5 @@
 "use client";
-import { useSimulateContract } from "wagmi";
+import { useEstimateGas, useSimulateContract } from "wagmi";
 import { AssistantContract } from "@/contracts/assistant";
 import type { TAddressString } from "@/lib/types";
 import { parseUnits } from "viem";
@@ -54,8 +54,7 @@ export function useMintApeOrTea({
       amount ?? 0n,
     ],
   });
-
-  const { data: MintWithEth, error } = useSimulateContract({
+  const { data: MintWithEth } = useSimulateContract({
     ...AssistantContract,
     functionName: "mintWithETH",
     args: [

@@ -3,9 +3,10 @@ import type { FC } from "react";
 import React from "react";
 interface TooltipsProps {
   children: React.ReactNode;
+  size?: number;
 }
 
-const ToolTip: FC<TooltipsProps> = ({ children }) => {
+const ToolTip: FC<TooltipsProps> = ({ children, size }) => {
   return (
     <div className="flex relative">
       <div className="group ">
@@ -13,7 +14,7 @@ const ToolTip: FC<TooltipsProps> = ({ children }) => {
           {children}
         </div>
         <div>
-          <Info size={16} />
+          <Info size={size ?? 16} />
         </div>
       </div>
     </div>

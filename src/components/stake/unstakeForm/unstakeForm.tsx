@@ -14,13 +14,12 @@ import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
 import { useMemo, useEffect, useState } from "react";
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { z } from "zod";
-import { useUnstake } from "@/components/stake/hooks/useUnstake";
-import { useUnstakeAndClaim } from "@/components/stake/hooks/useUnstakeAndClaim";
-import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { useUnstake } from "../hooks/useUnstake";
+
+import { useWriteContract } from "wagmi";
 import { SirContract } from "@/contracts/sir";
 import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
-import { api } from "@/trpc/react";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
@@ -57,16 +56,9 @@ const UnstakeForm = ({
       : undefined,
   });
 
-  const { UnstakeAndClaim, isFetching: unstakeAndClaimFetching } =
-    useUnstakeAndClaim({
-      amount: safeAmount.success
-        ? parseUnits(safeAmount.data.toString() ?? "0", 12)
-        : undefined,
-    });
-
-  const { writeContract, data: hash } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({ hash });
+  const { writeContract, data: hash, isPending } = useWriteContract();
+  // const { isLoading: isConfirming, isSuccess: isConfirmed } =
+  //   useWaitForTransactionReceipt({ hash });
 
   useEffect(() => {
     if (isConfirmed) {
@@ -89,11 +81,11 @@ const UnstakeForm = ({
     depositToken: SirContract.address,
     requests: {
       mintRequest: Unstake?.request as SimulateReq,
-      approveWriteRequest: UnstakeAndClaim?.request as SimulateReq,
+      approveWriteRequest: claimSimulate,
     },
     tokenBalance: balance,
     mintFetching: unstakeFetching,
-    approveFetching: unstakeAndClaimFetching,
+    approveFetching: claimFetching,
   });
 
   const onSubmit = () => {
@@ -116,20 +108,24 @@ const UnstakeForm = ({
   });
 
   return (
-    <Card className="mx-auto w-[80%]">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormLabel htmlFor="stake">Amount:</FormLabel>
-          <UnstakeInput
-            form={form}
-            balance={formatUnits(balance ?? 0n, 12)}
-          ></UnstakeInput>
-          <ClaimFeesCheckbox
-            form={form}
-            dividends={dividends}
-            disabled={!Boolean(claimResult)}
-            onChange={setClaimFees}
-          ></ClaimFeesCheckbox>
+    <>
+      {/* <ProgressAlert */}
+      {/*   isTxSuccess={isConfirmed} */}
+      {/*   isTxPending={isConfirming} */}
+      {/*   waitForSign={isPending} */}
+      {/* /> */}
+      <Card className="w-full ">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <UnstakeInput
+              form={form}
+              balance={formatUnits(balance ?? 0n, 12)}
+            ></UnstakeInput>
+            <ClaimFeesCheckbox
+              form={form}
+              dividends={dividends}
+              disabled={!Boolean(claimResult)}
+            ></ClaimFeesCheckbox>
 
           <div className="flex-col flex items-center justify-center mt-[20px]">
             {address && (

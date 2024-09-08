@@ -1,6 +1,5 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import {
-  calculateTeaVaultFee,
   calculateApeVaultFee,
   formatNumber,
   getLeverageRatio,
@@ -12,7 +11,6 @@ import Image from "next/image";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
 import type { VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
-import ToolTip from "@/components/ui/tooltip";
 export function VaultTableRow({
   badgeVariant,
   pool,
@@ -23,9 +21,7 @@ export function VaultTableRow({
   pool: VaultFieldFragment;
   isApe: boolean;
 }) {
-  const fee = isApe
-    ? calculateApeVaultFee(pool.leverageTier) * 100
-    : calculateTeaVaultFee();
+  const fee = calculateApeVaultFee(pool.leverageTier) * 100;
 
   const { setValue } = useMintFormProviderApi();
   console.log("Rerender vault table row");
@@ -39,7 +35,7 @@ export function VaultTableRow({
       className="grid cursor-pointer text-sm grid-cols-5   md:grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
     >
       <th className="">{pool.vaultId}</th>
-      <th className="md:col-span-3 flex">
+      <th className="md:col-span-3 items-center flex">
         <Image
           className="h-6 w-6 rounded-full "
           src={getLogoAsset(pool.collateralToken as `0x${string}`)}
@@ -54,14 +50,13 @@ export function VaultTableRow({
           height={28}
           alt=""
         />
-        <div className="px-2"></div>
-        <span className="hidden md:block">
+        <div className="px-1"></div>
+        <span className="hidden font-normal md:block">
           {pool.collateralSymbol}/{pool.debtSymbol}
         </span>
       </th>
-      <th className="flex gap-x-1 items-center">
+      <th className="flex text-[13px] text-red-400 font-normal gap-x-1 items-center">
         {roundDown(fee, 2)}%{" "}
-        <ToolTip>Fee charged to apes when minting or burning.</ToolTip>
       </th>
       <th className="pl-2">
         <Badge
