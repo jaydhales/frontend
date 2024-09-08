@@ -28,8 +28,8 @@ const ClaimFeesCheckbox = ({ form, dividends, disabled, onChange }: Props) => {
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={(value) => {
-                    field.onChange(value);
-                    onChange(value); // Call onChange to update the state in UnstakeForm
+                    field.onChange(Boolean(value));
+                    onChange(Boolean(value)); // Call onChange to update the state in UnstakeForm
                   }}
                   disabled={disabled}
                 ></Checkbox>
