@@ -11,7 +11,7 @@ import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
 // import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
 // import { useEffect } from "react";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { z } from "zod";
 import { useUnstake } from "@/components/stake/hooks/useUnstake";
@@ -40,6 +40,12 @@ const UnstakeForm = ({
   const formData = form.watch();
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
+
+  const [claimFees, setClaimFees] = useState(false);
+
+  useEffect(() => {
+    console.log(`CLAIM FEES: ${claimFees}`);
+  }, [claimFees]);
 
   const safeAmount = useMemo(() => {
     return z.coerce.number().safeParse(formData.amount);
@@ -92,7 +98,7 @@ const UnstakeForm = ({
 
   const onSubmit = () => {
     if (Unstake && UnstakeAndClaim) {
-      if (Boolean(claimResult)) {
+      if (Boolean(claimResult) && claimFees) {
         writeContract(UnstakeAndClaim?.request);
         return;
       } else {
@@ -122,6 +128,7 @@ const UnstakeForm = ({
             form={form}
             dividends={dividends}
             disabled={!Boolean(claimResult)}
+            onChange={setClaimFees}
           ></ClaimFeesCheckbox>
 
           <div className="flex-col flex items-center justify-center mt-[20px]">
