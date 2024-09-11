@@ -49,7 +49,7 @@ export function useTransactions({
     collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
     leverageTier: leverageTier,
     amount: safeDeposit.success
-      ? parseUnits(safeDeposit.data.toString() ?? "0", 18)
+      ? safeParseUnits(safeDeposit.data.toString() ?? "0", 18)
       : undefined,
     tokenAllowance: userBalance?.tokenAllowance?.result,
   });
@@ -69,4 +69,12 @@ export function useTransactions({
     isMintFetching: mintFetching,
     userBalance,
   };
+}
+
+function safeParseUnits(s: string, n: number) {
+  try {
+    return parseUnits(s, n);
+  } catch {
+    return 0n;
+  }
 }
