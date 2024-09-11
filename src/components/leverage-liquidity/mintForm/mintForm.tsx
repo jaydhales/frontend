@@ -167,12 +167,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     console.log("HERE 167;");
     submitButtonText = "Pending...";
   }
-  console.log(
-    "NUMBERs",
-    quoteData,
-    formatEther(quoteData ?? 0n),
-    parseFloat(fee ?? "0") / 100,
-  );
+  console.log({ balance, formatted: formatUnits(balance ?? 0n, 10) });
   const deposit = form.getValues("deposit");
   return (
     <Card>
