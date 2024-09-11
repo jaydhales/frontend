@@ -9,7 +9,7 @@ import type { TAddressString, TMintForm } from "@/lib/types";
 import { BalancePercent } from "@/components/shared/balancePercent";
 import Image from "next/image";
 
-import { getLogoAsset } from "@/lib/utils";
+import { formatNumber, getLogoAsset } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { WETH_ADDRESS } from "@/data/constants";
 interface Props {
@@ -87,7 +87,7 @@ function Inputs({ form, depositAsset, balance, useEth, setUseEth }: Props) {
           <AssetInfo depositAsset={depositAsset} useEth={useEth} />
         </div>
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-          Balance: {parseFloat(parseFloat(balance ?? "0").toFixed(4))}
+          Balance: {formatNumber(balance ?? "0")}
         </h2>
         <div className="flex justify-end"></div>
         <BalancePercent
