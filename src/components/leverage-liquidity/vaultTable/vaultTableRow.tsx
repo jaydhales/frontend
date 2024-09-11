@@ -34,7 +34,6 @@ export function VaultTableRow({
   }, [pool.lockedLiquidity, pool.totalValueLocked]);
 
   const { setValue } = useMintFormProviderApi();
-  console.log("Rerender vault table row");
   return (
     <tr
       onClick={() => {
