@@ -164,10 +164,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     submitButtonText = "Close";
   }
   if (isPending || isConfirming) {
-    console.log("HERE 167;");
     submitButtonText = "Pending...";
   }
-  console.log({ balance, formatted: formatUnits(balance ?? 0n, 10) });
   const deposit = form.getValues("deposit");
   return (
     <Card>
@@ -254,6 +252,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         </DepositInputs.Root>
 
         <Estimations
+          isApe={isApe}
           disabled={!Boolean(quoteData)}
           ape={formatBigInt(quoteData, 4).toString()}
         />
