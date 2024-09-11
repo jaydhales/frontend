@@ -571,6 +571,7 @@ export type Vault = {
   debtSymbol: Scalars['String']['output'];
   leverageTier: Scalars['Int']['output'];
   totalValueLocked: Scalars['BigInt']['output'];
+  lockedLiquidity: Scalars['BigInt']['output'];
 };
 
 export type Vault_filter = {
@@ -710,6 +711,14 @@ export type Vault_filter = {
   totalValueLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
   totalValueLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   totalValueLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  lockedLiquidity?: InputMaybe<Scalars['BigInt']['input']>;
+  lockedLiquidity_not?: InputMaybe<Scalars['BigInt']['input']>;
+  lockedLiquidity_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  lockedLiquidity_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  lockedLiquidity_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  lockedLiquidity_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  lockedLiquidity_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  lockedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Vault_filter>>>;
@@ -724,7 +733,8 @@ export type Vault_orderBy =
   | 'collateralSymbol'
   | 'debtSymbol'
   | 'leverageTier'
-  | 'totalValueLocked';
+  | 'totalValueLocked'
+  | 'lockedLiquidity';
 
 export type _Block_ = {
   /** The hash of the block */

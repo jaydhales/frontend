@@ -23,6 +23,7 @@ export interface VaultFieldFragment {
   vaultId: string;
   leverageTier: number;
   totalValueLocked: string;
+  lockedLiquidity: string;
 }
 export type TVaults =
   | {

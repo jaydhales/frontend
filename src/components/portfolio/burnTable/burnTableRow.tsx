@@ -38,7 +38,7 @@ export function BurnTableRow({
         {getLeverageRatio(parseInt(row.leverageTier))}x
       </th>
       <th className="font-normal">
-        <div className="flex gap-x-8 items-center justify-between">
+        <div className="flex lg:gap-x-8 gap-x-4 items-center">
           {isApe ? (
             <span>{formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}</span>
           ) : (
@@ -70,13 +70,14 @@ export function BurnTableRowMobile({
     isApe,
   });
   return (
-    <tr className="md:hidden border-opacity-35 w-[380px] flex flex-col gap-y-4 px-4 text-[14px] border-b border-white pb-4">
-      <MobileTh title="Token">
-        <div>
-          <span>{isApe ? "APE" : "TEA"}-</span>
-          <span>{row.vaultId} </span>
+    <tr className="md:hidden bg-black/60 p-2 rounded-md  w-full flex flex-col gap-y-4 py-2  text-[14px]   pb-4">
+      <div className=" justify-center pt-1 font-bold">
+        <div className="flex justify-center text-lg">
+          <span className="">{isApe ? "APE" : "TEA"}</span>
+          <span className="text-gray-500">-</span>
+          <span className="text-accent-100  ">{row.vaultId} </span>
         </div>
-      </MobileTh>
+      </div>
       <MobileTh title={"Long"}>{row.debtSymbol}</MobileTh>
       <MobileTh title={"Versus"}>{row.collateralSymbol}</MobileTh>
       <MobileTh title={"Leverage"}>
@@ -97,7 +98,7 @@ export function BurnTableRowMobile({
         <Button
           onClick={() => setSelectedRow(row.vaultId)}
           type="button"
-          variant="outline"
+          className="h-8 py-2 px-5 rounded-full text-[14px] "
         >
           Burn
         </Button>
