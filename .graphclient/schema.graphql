@@ -610,6 +610,7 @@ type Vault {
   debtSymbol: String!
   leverageTier: Int!
   totalValueLocked: BigInt!
+  lockedLiquidity: BigInt!
 }
 
 input Vault_filter {
@@ -749,6 +750,14 @@ input Vault_filter {
   totalValueLocked_lte: BigInt
   totalValueLocked_in: [BigInt!]
   totalValueLocked_not_in: [BigInt!]
+  lockedLiquidity: BigInt
+  lockedLiquidity_not: BigInt
+  lockedLiquidity_gt: BigInt
+  lockedLiquidity_lt: BigInt
+  lockedLiquidity_gte: BigInt
+  lockedLiquidity_lte: BigInt
+  lockedLiquidity_in: [BigInt!]
+  lockedLiquidity_not_in: [BigInt!]
   """Filter for the block changed event."""
   _change_block: BlockChangedFilter
   and: [Vault_filter]
@@ -764,6 +773,7 @@ enum Vault_orderBy {
   debtSymbol
   leverageTier
   totalValueLocked
+  lockedLiquidity
 }
 
 type _Block_ {

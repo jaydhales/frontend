@@ -12,6 +12,7 @@ const vaults = gql`
     vaultId
     leverageTier
     totalValueLocked
+    lockedLiquidity
   }
 
   query VaultQuery {

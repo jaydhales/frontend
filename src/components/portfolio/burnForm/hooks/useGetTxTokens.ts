@@ -13,11 +13,9 @@ export function useGetTxTokens({ logs }: Props) {
   const [tokenReceived, setTokenReceived] = useState<bigint | undefined>();
   useEffect(() => {
     if (logs) {
-      console.log(logs, "LOGS", VaultContract.address);
       const foundLogs = logs.filter(
         (l) => l.address === VaultContract.address.toLowerCase(),
       );
-      console.log(foundLogs, "FOUND LOGS");
       if (!foundLogs) return;
       foundLogs.forEach((log) => {
         const parsed = decodeEventLog({
@@ -25,7 +23,6 @@ export function useGetTxTokens({ logs }: Props) {
           data: log.data,
           topics: log.topics,
         });
-        console.log(parsed, "LOG");
         if (parsed.eventName === "Burn") {
           setTokenReceived(parsed.args.collateralWithdrawn);
           return;

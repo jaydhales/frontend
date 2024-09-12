@@ -13,18 +13,18 @@ export default function PortfolioPage() {
   return (
     <div className="w-full">
       <Container>
-        <Card className="lg:w-[900px] mx-auto w-full border border-secondary-200 ">
+        <Card className="lg:w-[900px] px-4 mx-auto w-full border border-secondary-200 ">
           <PageHeader>Portfolio</PageHeader>
           <div className="pb-6"></div>
-          <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-x-3">
+          <div className="space-y-3 ">
+            <div className="grid grid-cols-2  gap-x-3">
               <SirCard />
               <StakedCard />
             </div>
             <ClaimCard />
           </div>
           <div className="pt-8"></div>
-          <div className="flex justify-between items-center pb-8">
+          <div className="flex  justify-between items-center pb-4 lg:pb-8">
             <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
               <span>My Tokens</span>
             </h2>
