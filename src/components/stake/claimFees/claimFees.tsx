@@ -10,6 +10,10 @@ import Image from "next/image";
 import { type SimulateContractReturnType } from "viem";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { formatNumber } from "@/lib/utils";
+import TransactionModal from "@/components/shared/transactionModal";
+import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
+import { useState } from "react";
+import { isValid } from "zod";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -30,7 +34,7 @@ const ClaimFees = ({
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const { writeContract, data: hash } = useWriteContract();
+  const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
 
@@ -40,10 +44,29 @@ const ClaimFees = ({
       return;
     }
   };
-
+  const [open, setOpen] = useState(false);
   return (
     <>
       <Card className="">
+        <TransactionModal.Root setOpen={setOpen} open={open}>
+          <TransactionModal.InfoContainer>
+            <TransactionStatus
+              waitForSign={isPending}
+              isTxPending={isConfirming}
+            />
+            <h2>Amount to Claim</h2>
+            <h3>{formatNumber(claimAmount ?? "0")}</h3>
+          </TransactionModal.InfoContainer>
+          <TransactionModal.StatSubmitContainer>
+            <TransactionModal.SubmitButton
+              disabled={Boolean(claimSimulate) && Boolean(claimResult)}
+              onClick={() => onSubmit()}
+              loading={isPending || isConfirming}
+            >
+              Submit
+            </TransactionModal.SubmitButton>
+          </TransactionModal.StatSubmitContainer>
+        </TransactionModal.Root>
         <h2 className="text-center text-2xl pb-6 font-lora ">Claim</h2>
         <div className=" rounded-md bg-secondary-300 px-3 py-2">
           <div className="text-sm font-medium leading-none py-1">
@@ -72,8 +95,7 @@ const ClaimFees = ({
                   <span className="font-medium">ETH</span>
                 </div>
                 <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-                  Balance:{" "}
-                  {parseFloat(parseFloat(ethBalance ?? "0").toFixed(4))}
+                  Balance: {formatNumber(ethBalance ?? "0")}
                 </h2>
               </div>
             </div>
@@ -85,7 +107,11 @@ const ClaimFees = ({
               variant={"submit"}
               type="submit"
               className="md:w-full"
-              onClick={onSubmit}
+              onClick={() => {
+                if (claimSimulate && Boolean(claimResult)) {
+                  setOpen(true);
+                }
+              }}
               disabled={!Boolean(claimResult) || claimFetching}
             >
               Claim
