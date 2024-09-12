@@ -57,22 +57,23 @@ interface alertDialogContentProps
     VariantProps<typeof alertDialogCloseVariants>,
     // VariantProps<typeof alertDialogCloseVariants>,
     React.ComponentPropsWithoutRef<typeof Dialog.Content> {
+  onTop?: boolean;
   title?: string;
 }
-
+interface AlertDialogProps
+  extends React.ComponentPropsWithoutRef<typeof Dialog.Overlay> {
+  onTop?: boolean;
+}
 const AlertDialog = Dialog.Root;
-
 const AlertDialogOverlay = React.forwardRef<
   React.ElementRef<typeof Dialog.Overlay>,
-  React.ComponentPropsWithoutRef<typeof Dialog.Overlay>
->(({ className, children, ...props }, ref) => (
+  AlertDialogProps
+>(({ className, onTop, children, ...props }, ref) => (
   <Dialog.Overlay
     ref={ref}
     className={cn(
       `data-[state:closed]:animate-out data-[state:closed]:fade-out data-[state:closed]:duration-1000 fixed inset-0 bg-black/50 backdrop-blur-sm
-      duration-1000
-      fade-in
-      data-[state=open]:animate-in 
+       duration-1000 fade-in data-[state=open]:animate-in ${onTop ? "z-[400]" : ""} 
       `,
       className,
     )}
@@ -86,26 +87,31 @@ AlertDialogOverlay.displayName = Dialog.Overlay.displayName;
 const AlertDialogContent = React.forwardRef<
   React.ElementRef<typeof Dialog.Content>,
   alertDialogContentProps
->(({ children, align, animate, background, className, containerSize }, ref) => {
-  return (
-    <Dialog.Portal>
-      <AlertDialogOverlay ref={ref} />
-      <Dialog.Content
-        className={cn(
-          alertDialogContentVariants({
-            align,
-            animate,
-            background,
-            containerSize,
-          }),
-          className,
-        )}
-      >
-        {children}
-      </Dialog.Content>
-    </Dialog.Portal>
-  );
-});
+>(
+  (
+    { children, align, animate, onTop, background, className, containerSize },
+    ref,
+  ) => {
+    return (
+      <Dialog.Portal>
+        <AlertDialogOverlay onTop={onTop} ref={ref} />
+        <Dialog.Content
+          className={cn(
+            alertDialogContentVariants({
+              align,
+              animate,
+              background,
+              containerSize,
+            }),
+            className,
+          )}
+        >
+          {children}
+        </Dialog.Content>
+      </Dialog.Portal>
+    );
+  },
+);
 AlertDialogContent.displayName = Dialog.Content.displayName;
 const AlertDialogTrigger = React.forwardRef<
   React.ElementRef<typeof Dialog.Trigger>,
