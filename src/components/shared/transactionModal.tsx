@@ -12,6 +12,7 @@ function Root({ open, setOpen, children }: Props) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent
+        onTop={true}
         title="Mint Modal"
         align="center"
         animate="none"
