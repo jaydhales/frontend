@@ -4,7 +4,7 @@ interface StatusProps {
   waitForSign: boolean;
   isTxPending: boolean;
 }
-export function Status({ isTxPending, waitForSign }: StatusProps) {
+export function TransactionStatus({ isTxPending, waitForSign }: StatusProps) {
   const data = useMemo(() => {
     if (waitForSign) {
       return { message: "Please Sign Transaction." };

@@ -35,13 +35,13 @@ export default function SelectedRow({
       <div className="md:flex hidden flex-col gap-y-4 pb-4">
         <BurnTableHeaders />
         <tr className="grid h-8 gap-x-4 relative grid-cols-5 items-center text-left text-white">
-          <button
-            type="button"
-            onClick={() => close()}
-            className="absolute top-1 right-2   cursor-pointer text-white/80 transition-transform hover:scale-105 hover:text-white"
-          >
-            <X />
-          </button>
+          {/* <button */}
+          {/*   type="button" */}
+          {/*   onClick={() => close()} */}
+          {/*   className="absolute top-1 right-2   cursor-pointer text-white/80 transition-transform hover:scale-105 hover:text-white" */}
+          {/* > */}
+          {/*   <X /> */}
+          {/* </button> */}
 
           <th className="flex font-normal items-center gap-x-1 ">
             <span className="">{isApe ? "APE" : "TEA"}</span>
