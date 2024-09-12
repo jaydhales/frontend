@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { Form, FormLabel } from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
 import { useFormContext } from "react-hook-form";
@@ -27,7 +27,7 @@ import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/tran
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
-  balance?: bigint;
+  balance: bigint | undefined;
   dividends?: string;
   claimSimulate: SimulateReq;
   claimResult: bigint | undefined;
@@ -102,6 +102,7 @@ const UnstakeForm = ({
   if (isConfirmed) {
     submitButtonText = "Close";
   }
+
   return (
     <>
       <Card className="w-full ">
@@ -118,7 +119,7 @@ const UnstakeForm = ({
                 onSubmit();
               }}
               loading={isPending || isConfirming}
-              disabled={isValid}
+              disabled={!isValid}
             >
               {submitButtonText}
             </TransactionModal.SubmitButton>
@@ -146,7 +147,7 @@ const UnstakeForm = ({
                       setOpen(true);
                     }
                   }}
-                  type="submit"
+                  type="button"
                   disabled={!isValid}
                 >
                   Unstake
