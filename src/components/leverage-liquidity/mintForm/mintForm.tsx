@@ -7,7 +7,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
-import { formatEther, formatUnits } from "viem";
+import { formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
@@ -27,7 +27,7 @@ import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
-import { Status } from "./transactionStatus";
+import { TransactionStatus } from "./transactionStatus";
 import { CircleCheck } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { VaultContract } from "@/contracts/vault";
@@ -178,7 +178,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <TransactionModal.InfoContainer>
             {!isConfirmed && (
               <>
-                <Status isTxPending={isConfirming} waitForSign={isPending} />{" "}
+                <TransactionStatus
+                  isTxPending={isConfirming}
+                  waitForSign={isPending}
+                />{" "}
                 <TransactionEstimates
                   isApe={isApe}
                   usingEth={useEth}
