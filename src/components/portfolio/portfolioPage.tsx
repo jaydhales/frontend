@@ -17,11 +17,12 @@ export default function PortfolioPage() {
           <PageHeader>Portfolio</PageHeader>
           <div className="pb-6"></div>
           <div className="space-y-3 ">
-            <div className="grid grid-cols-2  gap-x-3">
-              <SirCard />
+            <SirCard />
+            <div className="grid grid-cols-2 pt-2  gap-x-3">
+              {/* <SirCard /> */}
               <StakedCard />
+              <ClaimCard />
             </div>
-            <ClaimCard />
           </div>
           <div className="pt-8"></div>
           <div className="flex  justify-between items-center pb-4 lg:pb-8">

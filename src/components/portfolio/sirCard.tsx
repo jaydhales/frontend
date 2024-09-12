@@ -1,12 +1,10 @@
 import { api } from "@/trpc/react";
-import { Button } from "../ui/button";
 import { useAccount } from "wagmi";
+
 import { formatUnits } from "viem";
 import { formatNumber } from "@/lib/utils";
-import UnstakeFormProvider from "../providers/unstakeFormProvider";
-import { UnstakeModal } from "./unstakeModal";
-import { useState } from "react";
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 export function SirCard() {
   const { isConnected, address } = useAccount();
@@ -16,28 +14,28 @@ export function SirCard() {
     },
     { enabled: isConnected },
   );
-  const [openModal, setOpenModal] = useState(false);
+
   return (
-    <div className=" border-secondary-300">
-      <UnstakeFormProvider>
-        <UnstakeModal open={openModal} setOpen={setOpenModal} />
-      </UnstakeFormProvider>
-      <div className="bg-secondary-400 px-2 py-2 rounded-md text-2xl">
-        <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
-          <span>Sir</span>
-        </h2>
-        <div className="flex items-center justify-between">
-          <div className="text-3xl   ">
-            <h4>
-              <span>{formatNumber(formatUnits(totalBalance ?? 0n, 18))}</span>
-              <span className="text-gray-500 text-sm"> SIR</span>
-            </h4>
-          </div>
-          <Link href="/stake">
-            <Button role="nav" className="py-2">
-              Stake
-            </Button>
+    <div className=" border-b border-secondary-200 pb-2">
+      <div className=" px-2 py-2 rounded-md text-2xl">
+        <div className="flex justify-between pb-2">
+          <h2 className="text-sm text-gray-200">Total Sir</h2>
+          <Link
+            href="/stake"
+            className="flex text-blue-400 text-sm  items-center gap-x-1"
+          >
+            <span className="underline  underline-offset-2">Stake</span>
+            <ChevronRight size={18} />
           </Link>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="text-3xl flex justify-between   ">
+            <div className="flex gap-x-1 items-end">
+              <span>{formatNumber(formatUnits(totalBalance ?? 0n, 18))}</span>
+              <h2 className="text-gray-400 text-sm font-light">SIR</h2>
+            </div>
+          </div>
         </div>
       </div>
     </div>
