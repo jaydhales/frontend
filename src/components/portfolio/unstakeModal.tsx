@@ -3,6 +3,7 @@ import { useClaim } from "../stake/hooks/useClaim";
 import UnstakeForm from "../stake/unstakeForm/unstakeForm";
 import { AlertDialog, AlertDialogContent } from "../ui/alert-dialog";
 import TransactionModal from "../shared/transactionModal";
+import { useGetStakedSir } from "../shared/hooks/useGetStakedSir";
 interface Props {
   open: boolean;
   setOpen: (b: boolean) => void;
@@ -10,6 +11,8 @@ interface Props {
 export function UnstakeModal({ open, setOpen }: Props) {
   type SimulateReq = SimulateContractReturnType["request"] | undefined;
   const { Claim, isFetching: claimFetching } = useClaim();
+
+  const stakedSir = useGetStakedSir();
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent
@@ -25,6 +28,7 @@ export function UnstakeModal({ open, setOpen }: Props) {
           <TransactionModal.Close setOpen={setOpen} />
           <h1 className="font-lora text-2xl text-center pt-4">Unstake</h1>
           <UnstakeForm
+            balance={stakedSir}
             claimSimulate={Claim?.request as SimulateReq}
             claimResult={Claim?.result}
             claimFetching={claimFetching}
