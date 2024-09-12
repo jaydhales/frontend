@@ -24,7 +24,7 @@ export function VaultTableRow({
   const fee = calculateApeVaultFee(pool.leverageTier) * 100;
   const POL = useMemo(() => {
     const totalLocked = parseUnits(pool.totalValueLocked, 0);
-    const lockedLiquidity = parseUnits(pool.lockedLiquidity, 0);
+    const lockedLiquidity = parseUnits(pool.lockedLiquidity as string, 0);
     if (lockedLiquidity > 0n && totalLocked > 0n) {
       const percent = (lockedLiquidity * 10000n) / totalLocked;
       return parseFloat(percent.toString()) / 100;
@@ -32,10 +32,8 @@ export function VaultTableRow({
       return 0n;
     }
   }, [pool.lockedLiquidity, pool.totalValueLocked]);
-  console.log(POL, "POL");
 
   const { setValue } = useMintFormProviderApi();
-  console.log("Rerender vault table row");
   return (
     <tr
       onClick={() => {
