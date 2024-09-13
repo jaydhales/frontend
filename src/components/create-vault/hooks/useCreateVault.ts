@@ -19,8 +19,8 @@ export function useCreateVault({
     functionName: "initialize",
     args: [
       {
-        debtToken: longToken as TAddressString,
-        collateralToken: versusToken as TAddressString,
+        debtToken: versusToken as TAddressString,
+        collateralToken: longToken as TAddressString,
         leverageTier: lt,
       },
     ],

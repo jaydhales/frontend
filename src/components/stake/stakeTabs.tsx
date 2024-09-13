@@ -74,7 +74,6 @@ const StakeTabs = () => {
     console.log(
       `Staked SIR: ${balance?.tokenBalance?.result && safeTotalBalance.success && safeTotalBalance.data - balance?.tokenBalance?.result}`,
     );
-    console.log(`Dividends: ${safeDividends.data}`);
     console.log(
       `ETH Balance: ${parseFloat(formatEther(ethBalance ?? 0n)).toFixed(4)}`,
     );

@@ -38,7 +38,7 @@ export default function CreateVaultForm() {
     resolver: zodResolver(CreateVaultInputValues),
     mode: "all",
     defaultValues: {
-      leverageTier: "",
+      leverageTier: "2",
       longToken: "",
       versusToken: "",
     },
@@ -187,7 +187,7 @@ function TokenInput({
                 type="text"
                 placeholder="0x"
                 autoComplete="off"
-                className="w-full"
+                className="w-full px-2 rounded-md"
                 background="primary"
                 minLength={1}
                 textSize="sm"
