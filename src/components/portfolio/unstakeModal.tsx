@@ -1,4 +1,4 @@
-import type { SimulateContractReturnType } from "viem";
+import { formatUnits, type SimulateContractReturnType } from "viem";
 import { useClaim } from "../stake/hooks/useClaim";
 import UnstakeForm from "../stake/unstakeForm/unstakeForm";
 import { AlertDialog, AlertDialogContent } from "../ui/alert-dialog";
