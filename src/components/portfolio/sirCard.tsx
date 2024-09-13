@@ -32,7 +32,7 @@ export function SirCard() {
         <div className="flex items-center justify-between">
           <div className="text-3xl flex justify-between   ">
             <div className="flex gap-x-1 items-end">
-              <span>{formatNumber(formatUnits(totalBalance ?? 0n, 18))}</span>
+              <span>{formatNumber(formatUnits(totalBalance ?? 0n, 12))}</span>
               <h2 className="text-gray-400 text-sm font-light">SIR</h2>
             </div>
           </div>
