@@ -80,6 +80,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const { tokenReceived } = useGetReceivedTokens({
     apeAddress,
     logs: transactionData?.logs,
+    isApe,
   });
 
   // Invalidate if approve or mint tx is successful.
@@ -152,7 +153,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     } else {
       return undefined;
     }
-  }, [levTier]);
+  }, [isApe, levTier]);
   const modalSubmit = () => {
     if (!isConfirmed) {
       onSubmit();
@@ -201,7 +202,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 </div>
                 <h2 className="text-center">Transaction Successful!</h2>
                 <h3 className="text-center">
-                  APE received:{" "}
+                  {isApe ? "APE" : "TEA"} received:{" "}
                   {formatNumber(formatUnits(tokenReceived ?? 0n, 18), 6)}
                 </h3>
               </div>
