@@ -95,7 +95,7 @@ const ClaimFees = ({
                   <span className="font-medium">ETH</span>
                 </div>
                 <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-                  Balance: {formatNumber(ethBalance ?? "0")}
+                  Balance: {formatNumber(ethBalance ?? "0", 6)}
                 </h2>
               </div>
             </div>
