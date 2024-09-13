@@ -7,7 +7,7 @@ import {
   useWriteContract,
 } from "wagmi";
 import { useSelectMemo } from "./hooks/useSelectMemo";
-import { formatEther, formatUnits } from "viem";
+import { formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
@@ -27,7 +27,7 @@ import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
-import { Status } from "./transactionStatus";
+import { TransactionStatus } from "./transactionStatus";
 import { CircleCheck } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { VaultContract } from "@/contracts/vault";
@@ -144,6 +144,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const levTier = form.getValues("leverageTier");
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
+    if (!isApe) {
+      return "19";
+    }
     if (isFinite(lev)) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       return formatNumber(calculateApeVaultFee(lev) * 100, 2);
@@ -178,7 +181,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <TransactionModal.InfoContainer>
             {!isConfirmed && (
               <>
-                <Status isTxPending={isConfirming} waitForSign={isPending} />{" "}
+                <TransactionStatus
+                  isTxPending={isConfirming}
+                  waitForSign={isPending}
+                />{" "}
                 <TransactionEstimates
                   isApe={isApe}
                   usingEth={useEth}
@@ -204,22 +210,26 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           </TransactionModal.InfoContainer>
           {/* ---------------------------------- */}
           <TransactionModal.StatSubmitContainer>
-            <TransactionModal.StatContainer>
-              <TransactionModal.StatRow
-                title={"Fee Percent"}
-                value={fee ? fee.toString() + "%" : "0%"}
-              />
-              <TransactionModal.StatRow
-                title="Fee Amount"
-                value={
-                  formatNumber(
-                    parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
-                  ) +
-                  " " +
-                  form.getValues("long").split(",")[1]
-                }
-              ></TransactionModal.StatRow>
-            </TransactionModal.StatContainer>
+            {!isConfirmed && (
+              <TransactionModal.StatContainer>
+                <TransactionModal.StatRow
+                  title={"Fee Percent"}
+                  value={fee ? fee.toString() + "%" : "0%"}
+                />
+
+                <TransactionModal.StatRow
+                  title="Fee Amount"
+                  value={
+                    formatNumber(
+                      parseFloat(deposit ?? "0") *
+                        (parseFloat(fee ?? "0") / 100),
+                    ) +
+                    " " +
+                    form.getValues("long").split(",")[1]
+                  }
+                ></TransactionModal.StatRow>
+              </TransactionModal.StatContainer>
+            )}
             {
               <TransactionModal.SubmitButton
                 onClick={modalSubmit}

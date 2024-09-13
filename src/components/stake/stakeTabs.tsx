@@ -62,7 +62,7 @@ const StakeTabs = () => {
   const safeTotalBalance = useMemo(() => {
     return z.coerce.bigint().default(0n).safeParse(totalBalance);
   }, [totalBalance]);
-
+  console.log(safeTotalBalance, "safe total balance");
   const safeDividends = useMemo(() => {
     return z.coerce.bigint().default(0n).safeParse(dividends);
   }, [dividends]);

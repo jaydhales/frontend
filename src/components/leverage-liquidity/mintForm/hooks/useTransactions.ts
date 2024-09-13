@@ -58,6 +58,7 @@ export function useTransactions({
     tokenAddr: formatDataInput(formData.long),
     approveContract: AssistantContract.address,
   });
+  console.log(approveSimulate.error, formData.long, "Approve Error");
 
   return {
     requests: {

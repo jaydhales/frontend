@@ -12,11 +12,12 @@ function Root({ open, setOpen, children }: Props) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent
+        onTop={true}
         title="Mint Modal"
         align="center"
         animate="none"
         closeColor={"black"}
-        className="bg-transparent"
+        className="bg-transparent z-[400]"
       >
         <div
           className={`rounded-xl relative transition-all duration-700  bg-secondary text-white`}
