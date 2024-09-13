@@ -148,7 +148,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       return "19";
     }
     if (isFinite(lev)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       return formatNumber(calculateApeVaultFee(lev) * 100, 2);
     } else {
       return undefined;
