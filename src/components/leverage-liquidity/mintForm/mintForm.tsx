@@ -144,6 +144,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const levTier = form.getValues("leverageTier");
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
+    if (!isApe) {
+      return "19";
+    }
     if (isFinite(lev)) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       return formatNumber(calculateApeVaultFee(lev) * 100, 2);
@@ -207,22 +210,26 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           </TransactionModal.InfoContainer>
           {/* ---------------------------------- */}
           <TransactionModal.StatSubmitContainer>
-            <TransactionModal.StatContainer>
-              <TransactionModal.StatRow
-                title={"Fee Percent"}
-                value={fee ? fee.toString() + "%" : "0%"}
-              />
-              <TransactionModal.StatRow
-                title="Fee Amount"
-                value={
-                  formatNumber(
-                    parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
-                  ) +
-                  " " +
-                  form.getValues("long").split(",")[1]
-                }
-              ></TransactionModal.StatRow>
-            </TransactionModal.StatContainer>
+            {!isConfirmed && (
+              <TransactionModal.StatContainer>
+                <TransactionModal.StatRow
+                  title={"Fee Percent"}
+                  value={fee ? fee.toString() + "%" : "0%"}
+                />
+
+                <TransactionModal.StatRow
+                  title="Fee Amount"
+                  value={
+                    formatNumber(
+                      parseFloat(deposit ?? "0") *
+                        (parseFloat(fee ?? "0") / 100),
+                    ) +
+                    " " +
+                    form.getValues("long").split(",")[1]
+                  }
+                ></TransactionModal.StatRow>
+              </TransactionModal.StatContainer>
+            )}
             {
               <TransactionModal.SubmitButton
                 onClick={modalSubmit}
