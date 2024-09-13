@@ -17,7 +17,7 @@ export function TransactionStatus({
     if (isTxPending) {
       return { message: "Pending..." };
     }
-    return { message: "Confirm " + action ?? "Mint" };
+    return { message: "Confirm " + (action ?? "Mint") };
   }, [waitForSign, isTxPending, action]);
   return <h2 className="text-left font-lora text-lg">{data.message}</h2>;
 }
