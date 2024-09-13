@@ -5,7 +5,7 @@ interface Props {
   tokenAddr: string;
   approveContract: TAddressString;
 }
-export function useApprove({ tokenAddr, approveContract }: Props) {
+export function useApproveErc20({ tokenAddr, approveContract }: Props) {
   const approveSimulate = useSimulateContract({
     address: tokenAddr as TAddressString,
     abi: erc20Abi,

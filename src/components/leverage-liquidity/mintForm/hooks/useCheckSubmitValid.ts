@@ -44,12 +44,6 @@ export const useCheckSubmitValid = ({
   const decimals = depositToken === SirContract.address ? 12 : 18;
 
   const { isValid, errorMessage, submitType } = useMemo(() => {
-    console.log(
-      parseUnits(deposit ?? "0", decimals),
-      tokenAllowance ?? 0n,
-      requests.approveWriteRequest,
-      "LOG if approve ",
-    );
     if (parseUnits(deposit ?? "0", decimals) <= 0n) {
       return {
         isValid: false,

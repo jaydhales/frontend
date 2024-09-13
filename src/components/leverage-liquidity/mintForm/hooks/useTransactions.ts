@@ -1,3 +1,4 @@
+import { useApproveErc20 } from "@/components/shared/hooks/useApproveErc20";
 import { useMintApeOrTea } from "@/components/shared/hooks/useMintApeOrTea";
 import { AssistantContract } from "@/contracts/assistant";
 import type { TMintFormFields, TVaults } from "@/lib/types";
@@ -9,7 +10,6 @@ import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
 import { useAccount } from "wagmi";
 import { z } from "zod";
-import { useApprove } from "./useApprove";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 export function useTransactions({
@@ -54,11 +54,10 @@ export function useTransactions({
     tokenAllowance: userBalance?.tokenAllowance?.result,
   });
 
-  const { approveSimulate } = useApprove({
+  const { approveSimulate } = useApproveErc20({
     tokenAddr: formatDataInput(formData.long),
     approveContract: AssistantContract.address,
   });
-  console.log(approveSimulate.error, formData.long, "Approve Error");
 
   return {
     requests: {
