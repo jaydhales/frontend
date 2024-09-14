@@ -194,6 +194,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 <TransactionStatus
                   isTxPending={isConfirming}
                   waitForSign={isPending}
+                  action={submitType === ESubmitType.mint ? "Mint" : "Approve"}
                 />
 
                 {submitType === ESubmitType.mint && (
@@ -203,9 +204,17 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                     collateralEstimate={quoteData}
                   />
                 )}
-                <TransactionModal.Disclaimer>
-                  Output is estimated.
-                </TransactionModal.Disclaimer>
+                {submitType === ESubmitType.mint && (
+                  <TransactionModal.Disclaimer>
+                    Output is estimated.
+                  </TransactionModal.Disclaimer>
+                )}
+
+                {submitType === ESubmitType.approve && (
+                  <TransactionModal.Disclaimer>
+                    Approve SIR to send token funds .....
+                  </TransactionModal.Disclaimer>
+                )}
               </>
             )}
             {isConfirmed && (
@@ -223,7 +232,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           </TransactionModal.InfoContainer>
           {/* ---------------------------------- */}
           <TransactionModal.StatSubmitContainer>
-            {!isConfirmed && (
+            {submitType === ESubmitType.mint && !isConfirmed && (
               <TransactionModal.StatContainer>
                 <TransactionModal.StatRow
                   title={"Fee Percent"}
