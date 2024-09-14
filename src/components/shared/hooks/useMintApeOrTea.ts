@@ -55,7 +55,6 @@ export function useMintApeOrTea({
       amount ?? 0n,
     ],
   });
-  console.log({ error }, "Error");
   const { data: MintWithEth } = useSimulateContract({
     ...AssistantContract,
     functionName: "mintWithETH",
