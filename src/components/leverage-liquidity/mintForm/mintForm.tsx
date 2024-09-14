@@ -31,7 +31,7 @@ import { TransactionStatus } from "./transactionStatus";
 import { CircleCheck } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { VaultContract } from "@/contracts/vault";
-import { APE_HASH } from "@/data/constants";
+import { APE_HASH, WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { TransactionEstimates } from "./transactionEstimates";
 interface Props {
@@ -57,7 +57,18 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       vaultsQuery,
       decimals,
     });
-  const [useEth, setUseEth] = useState(false);
+  const [useEthRaw, setUseEth] = useState(false);
+  const useEth = useMemo(() => {
+    // Ensure use eth toggle is not used on non-weth tokens
+    if (
+      formData.long.split(",")[0]?.toLowerCase() === WETH_ADDRESS.toLowerCase()
+    ) {
+      return useEthRaw;
+    } else {
+      false;
+    }
+  }, [useEthRaw, formData.long]);
+
   if (useEth) {
     decimals = 18;
   }
