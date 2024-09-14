@@ -15,9 +15,11 @@ type SimulateReq = SimulateContractReturnType["request"] | undefined;
 export function useTransactions({
   isApe,
   vaultsQuery,
+  decimals,
 }: {
   isApe: boolean;
   vaultsQuery: TVaults;
+  decimals: number;
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
@@ -37,7 +39,6 @@ export function useTransactions({
   const safeDeposit = useMemo(() => {
     return z.coerce.number().safeParse(formData.deposit);
   }, [formData.deposit]);
-
   const {
     Mint,
     MintWithEth,
@@ -49,7 +50,7 @@ export function useTransactions({
     collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
     leverageTier: leverageTier,
     amount: safeDeposit.success
-      ? safeParseUnits(safeDeposit.data.toString() ?? "0", 18)
+      ? safeParseUnits(safeDeposit.data.toString() ?? "0", decimals)
       : undefined,
     tokenAllowance: userBalance?.tokenAllowance?.result,
   });
