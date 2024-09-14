@@ -79,13 +79,6 @@ export const useCheckSubmitValid = ({
       };
     }
     // CHECK ALLOWANCE FIRST
-    console.log(
-      deposit,
-      tokenAllowance,
-      "ALLOWANCE",
-      requests.approveWriteRequest,
-      "Request",
-    );
     if (
       parseUnits(deposit ?? "0", decimals) > (tokenAllowance ?? 0n) &&
       requests.approveWriteRequest
