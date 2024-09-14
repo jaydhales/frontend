@@ -49,7 +49,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const { data: decimalData } = api.erc20.getErc20Decimals.useQuery({
     tokenAddress: formData.long.split(",")[0] ?? "0x",
   });
-  const decimals = decimalData ?? 18;
+  let decimals = decimalData ?? 18;
   const { requests, isApproveFetching, isMintFetching, userBalance } =
     useTransactions({
       isApe,
@@ -57,6 +57,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       decimals,
     });
   const [useEth, setUseEth] = useState(false);
+  if (useEth) {
+    decimals = 18;
+  }
   const { versus, leverageTiers, long } = useSelectMemo({
     formData,
     vaultsQuery,
@@ -114,7 +117,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     errorMessage,
     rootErrorMessage: form.formState.errors.root?.message,
   });
-
   const onSubmit = () => {
     if (submitType === null) {
       return;
@@ -176,7 +178,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   if (isPending || isConfirming) {
     submitButtonText = "Pending...";
   }
-  console.log(formData, "deposit token");
   const deposit = form.getValues("deposit");
   return (
     <Card>
