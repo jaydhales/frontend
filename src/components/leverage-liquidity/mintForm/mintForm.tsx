@@ -49,6 +49,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const { data: decimalData } = api.erc20.getErc20Decimals.useQuery({
     tokenAddress: formData.long.split(",")[0] ?? "0x",
   });
+
   let decimals = decimalData ?? 18;
   const { requests, isApproveFetching, isMintFetching, userBalance } =
     useTransactions({
@@ -193,12 +194,15 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 <TransactionStatus
                   isTxPending={isConfirming}
                   waitForSign={isPending}
-                />{" "}
-                <TransactionEstimates
-                  isApe={isApe}
-                  usingEth={useEth}
-                  collateralEstimate={quoteData}
                 />
+
+                {submitType === ESubmitType.mint && (
+                  <TransactionEstimates
+                    isApe={isApe}
+                    usingEth={useEth}
+                    collateralEstimate={quoteData}
+                  />
+                )}
                 <TransactionModal.Disclaimer>
                   Output is estimated.
                 </TransactionModal.Disclaimer>
