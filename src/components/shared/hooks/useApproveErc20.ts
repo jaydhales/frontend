@@ -23,7 +23,7 @@ function getAbi(tokenAddr: TAddressString) {
   ) {
     return nonStandardAbi;
   } else {
-    return abi;
+    return nonStandardAbi;
   }
 }
 const abi = [

@@ -82,6 +82,7 @@ const UnstakeForm = ({
     tokenBalance: balance,
     mintFetching: unstakeFetching,
     approveFetching: claimFetching,
+    decimals: 12,
   });
 
   const onSubmit = () => {

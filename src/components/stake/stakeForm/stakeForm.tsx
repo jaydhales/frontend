@@ -61,6 +61,7 @@ const StakeForm = ({ balance, allowance }: Props) => {
     useWaitForTransactionReceipt({ hash });
 
   const { isValid, errorMessage } = useCheckSubmitValid({
+    decimals: 12,
     deposit: safeStake.success ? safeStake.data.toString() : "0",
     depositToken: SirContract.address,
     requests: {
