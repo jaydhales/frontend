@@ -65,7 +65,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     ) {
       return useEthRaw;
     } else {
-      false;
+      return false;
     }
   }, [useEthRaw, formData.long]);
 
