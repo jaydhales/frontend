@@ -150,9 +150,7 @@ export function formatNumber(
     return roundedDown.toExponential();
   }
   if (n > 9999) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     const num = numeral(n);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     return num.format("0.0a");
   }
   if (decimals) {

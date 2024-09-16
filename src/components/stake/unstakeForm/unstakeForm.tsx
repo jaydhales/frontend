@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-
+import { api } from "@/trpc/react";
 import { useFormContext } from "react-hook-form";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -11,9 +11,7 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import UnstakeInput from "./unstakeInput";
 import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
-// import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
-// import { useEffect } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { z } from "zod";
@@ -26,10 +24,11 @@ import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
 import TransactionModal from "@/components/shared/transactionModal";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
+import TransactionSuccess from "@/components/shared/transactionSuccess";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
-  balance?: bigint;
+  balance: bigint | undefined;
   dividends?: string;
   claimSimulate: SimulateReq;
   claimResult: bigint | undefined;
@@ -43,6 +42,7 @@ const UnstakeForm = ({
   claimResult,
   claimFetching,
 }: Props) => {
+  console.log({ balance });
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
@@ -59,10 +59,19 @@ const UnstakeForm = ({
       : undefined,
   });
 
-  const { writeContract, data: hash, isPending } = useWriteContract();
+  const { writeContract, reset, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
-
+  const utils = api.useUtils();
+  // REFACTOR THIS INTO REUSABLE HOOK
+  useEffect(() => {
+    if (isConfirmed && form.getValues("amount")) {
+      form.resetField("amount");
+      utils.user.getUnstakedSirBalance
+        .invalidate()
+        .catch((e) => console.log(e));
+    }
+  }, [form, isConfirmed, utils.user.getUnstakedSirBalance]);
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: safeAmount.success ? safeAmount.data.toString() : "0",
     depositToken: SirContract.address,
@@ -73,6 +82,7 @@ const UnstakeForm = ({
     tokenBalance: balance,
     mintFetching: unstakeFetching,
     approveFetching: claimFetching,
+    decimals: 12,
   });
 
   const [claimFees, setClaimFees] = useState(false);
@@ -97,7 +107,14 @@ const UnstakeForm = ({
     errorMessage,
     rootErrorMessage: form.formState.errors.root?.message,
   });
+
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (isConfirmed && !open) {
+      reset();
+    }
+  }, [isConfirmed, open, reset]);
   let submitButtonText = "Confirm Unstake";
   if (isPending || isConfirming) {
     submitButtonText = "Pending...";
@@ -105,23 +122,46 @@ const UnstakeForm = ({
   if (isConfirmed) {
     submitButtonText = "Close";
   }
+
   return (
     <>
       <Card className="w-full ">
         <TransactionModal.Root setOpen={setOpen} open={open}>
+          <TransactionModal.Close setOpen={setOpen} />
           <TransactionModal.InfoContainer>
-            <TransactionStatus
-              waitForSign={isPending}
-              isTxPending={isConfirming}
-            />
+            {!isConfirmed && (
+              <>
+                <TransactionStatus
+                  action="Unstake"
+                  waitForSign={isPending}
+                  isTxPending={isConfirming}
+                />
+                <div className="py-2 flex justify-between items-center">
+                  <h2 className="text-gray-400 text-sm">Amount</h2>
+                  <h3 className="text-xl">
+                    {form.getValues("amount")}
+                    <span className="text-gray-400 pl-[2px] text-[12px]">
+                      SIR
+                    </span>
+                  </h3>
+                </div>
+              </>
+            )}
+            {isConfirmed && (
+              <TransactionSuccess amountReceived={100n} assetReceived="SIR" />
+            )}
           </TransactionModal.InfoContainer>
           <TransactionModal.StatSubmitContainer>
             <TransactionModal.SubmitButton
               onClick={() => {
-                onSubmit();
+                if (isConfirmed) {
+                  setOpen(false);
+                } else {
+                  onSubmit();
+                }
               }}
               loading={isPending || isConfirming}
-              disabled={isValid}
+              disabled={!isValid && !isConfirmed}
             >
               {submitButtonText}
             </TransactionModal.SubmitButton>
@@ -129,7 +169,12 @@ const UnstakeForm = ({
         </TransactionModal.Root>
 
         <Form {...form}>
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setOpen(true);
+            }}
+          >
             <UnstakeInput
               form={form}
               balance={formatUnits(balance ?? 0n, 12)}
@@ -150,7 +195,7 @@ const UnstakeForm = ({
                       setOpen(true);
                     }
                   }}
-                  type="submit"
+                  type="button"
                   disabled={!isValid}
                 >
                   Unstake

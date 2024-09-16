@@ -1,3 +1,4 @@
+import { useApproveErc20 } from "@/components/shared/hooks/useApproveErc20";
 import { useMintApeOrTea } from "@/components/shared/hooks/useMintApeOrTea";
 import { AssistantContract } from "@/contracts/assistant";
 import type { TMintFormFields, TVaults } from "@/lib/types";
@@ -9,15 +10,16 @@ import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
 import { useAccount } from "wagmi";
 import { z } from "zod";
-import { useApprove } from "./useApprove";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 export function useTransactions({
   isApe,
   vaultsQuery,
+  decimals,
 }: {
   isApe: boolean;
   vaultsQuery: TVaults;
+  decimals: number;
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
@@ -37,7 +39,6 @@ export function useTransactions({
   const safeDeposit = useMemo(() => {
     return z.coerce.number().safeParse(formData.deposit);
   }, [formData.deposit]);
-
   const {
     Mint,
     MintWithEth,
@@ -49,16 +50,15 @@ export function useTransactions({
     collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
     leverageTier: leverageTier,
     amount: safeDeposit.success
-      ? safeParseUnits(safeDeposit.data.toString() ?? "0", 18)
+      ? safeParseUnits(safeDeposit.data.toString() ?? "0", decimals)
       : undefined,
     tokenAllowance: userBalance?.tokenAllowance?.result,
   });
 
-  const { approveSimulate } = useApprove({
+  const { approveSimulate } = useApproveErc20({
     tokenAddr: formatDataInput(formData.long),
     approveContract: AssistantContract.address,
   });
-  console.log(approveSimulate.error, formData.long, "Approve Error");
 
   return {
     requests: {

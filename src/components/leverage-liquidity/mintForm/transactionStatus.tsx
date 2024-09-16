@@ -3,8 +3,13 @@ import { useMemo } from "react";
 interface StatusProps {
   waitForSign: boolean;
   isTxPending: boolean;
+  action?: string;
 }
-export function TransactionStatus({ isTxPending, waitForSign }: StatusProps) {
+export function TransactionStatus({
+  action,
+  isTxPending,
+  waitForSign,
+}: StatusProps) {
   const data = useMemo(() => {
     if (waitForSign) {
       return { message: "Please Sign Transaction." };
@@ -12,7 +17,7 @@ export function TransactionStatus({ isTxPending, waitForSign }: StatusProps) {
     if (isTxPending) {
       return { message: "Pending..." };
     }
-    return { message: "Confirm Mint" };
-  }, [waitForSign, isTxPending]);
+    return { message: action ?? "Mint" };
+  }, [waitForSign, isTxPending, action]);
   return <h2 className="text-left font-lora text-lg">{data.message}</h2>;
 }

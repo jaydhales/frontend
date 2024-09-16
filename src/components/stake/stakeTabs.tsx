@@ -62,7 +62,7 @@ const StakeTabs = () => {
   const safeTotalBalance = useMemo(() => {
     return z.coerce.bigint().default(0n).safeParse(totalBalance);
   }, [totalBalance]);
-
+  console.log(safeTotalBalance, "safe total balance");
   const safeDividends = useMemo(() => {
     return z.coerce.bigint().default(0n).safeParse(dividends);
   }, [dividends]);
@@ -74,7 +74,6 @@ const StakeTabs = () => {
     console.log(
       `Staked SIR: ${balance?.tokenBalance?.result && safeTotalBalance.success && safeTotalBalance.data - balance?.tokenBalance?.result}`,
     );
-    console.log(`Dividends: ${safeDividends.data}`);
     console.log(
       `ETH Balance: ${parseFloat(formatEther(ethBalance ?? 0n)).toFixed(4)}`,
     );

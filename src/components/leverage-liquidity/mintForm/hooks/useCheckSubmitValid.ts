@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
-import { SirContract } from "@/contracts/sir";
 
 interface Props {
   deposit: string | undefined;
@@ -17,6 +16,7 @@ interface Props {
   mintFetching: boolean;
   approveFetching?: boolean;
   useEth?: boolean;
+  decimals: number;
 }
 export enum ESubmitType {
   "mint",
@@ -39,17 +39,9 @@ export const useCheckSubmitValid = ({
   tokenBalance,
   ethBalance,
   useEth,
-  depositToken,
+  decimals,
 }: Props) => {
-  const decimals = depositToken === SirContract.address ? 12 : 18;
-
   const { isValid, errorMessage, submitType } = useMemo(() => {
-    console.log(
-      parseUnits(deposit ?? "0", decimals),
-      tokenAllowance ?? 0n,
-      requests.approveWriteRequest,
-      "LOG if approve ",
-    );
     if (parseUnits(deposit ?? "0", decimals) <= 0n) {
       return {
         isValid: false,
@@ -87,7 +79,6 @@ export const useCheckSubmitValid = ({
       };
     }
     // CHECK ALLOWANCE FIRST
-
     if (
       parseUnits(deposit ?? "0", decimals) > (tokenAllowance ?? 0n) &&
       requests.approveWriteRequest

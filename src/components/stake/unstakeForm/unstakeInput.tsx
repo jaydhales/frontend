@@ -10,6 +10,7 @@ import { BalancePercent } from "@/components/shared/balancePercent";
 
 import sir_logo from "@/../public/images/sir-logo.svg";
 import Image, { type StaticImageData } from "next/image";
+import { formatNumber } from "@/lib/utils";
 
 interface Props {
   form: TUnstakeForm;
@@ -61,7 +62,7 @@ const UnstakeInput = ({ form, balance }: Props) => {
             <span className="font-medium">Staked SIR</span>
           </div>
           <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-            Balance: {parseFloat(parseFloat(balance ?? "0").toFixed(4))}
+            Balance {formatNumber(balance ?? "0", 8)}
           </h2>
           <div className="flex justify-end"></div>
           <BalancePercent

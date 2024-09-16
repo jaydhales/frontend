@@ -31,7 +31,7 @@ import { TransactionStatus } from "./transactionStatus";
 import { CircleCheck } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { VaultContract } from "@/contracts/vault";
-import { APE_HASH } from "@/data/constants";
+import { APE_HASH, WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { TransactionEstimates } from "./transactionEstimates";
 interface Props {
@@ -43,15 +43,35 @@ interface Props {
  * Contains form actions and validity.
  */
 export default function MintForm({ vaultsQuery, isApe }: Props) {
+  const form = useFormContext<TMintFormFields>();
+  const formData = form.watch();
+
+  const { data: decimalData } = api.erc20.getErc20Decimals.useQuery({
+    tokenAddress: formData.long.split(",")[0] ?? "0x",
+  });
+
+  let decimals = decimalData ?? 18;
   const { requests, isApproveFetching, isMintFetching, userBalance } =
     useTransactions({
       isApe,
       vaultsQuery,
+      decimals,
     });
+  const [useEthRaw, setUseEth] = useState(false);
+  const useEth = useMemo(() => {
+    // Ensure use eth toggle is not used on non-weth tokens
+    if (
+      formData.long.split(",")[0]?.toLowerCase() === WETH_ADDRESS.toLowerCase()
+    ) {
+      return useEthRaw;
+    } else {
+      return false;
+    }
+  }, [useEthRaw, formData.long]);
 
-  const form = useFormContext<TMintFormFields>();
-  const formData = form.watch();
-  const [useEth, setUseEth] = useState(false);
+  if (useEth) {
+    decimals = 18;
+  }
   const { versus, leverageTiers, long } = useSelectMemo({
     formData,
     vaultsQuery,
@@ -80,6 +100,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const { tokenReceived } = useGetReceivedTokens({
     apeAddress,
     logs: transactionData?.logs,
+    isApe,
   });
 
   // Invalidate if approve or mint tx is successful.
@@ -90,6 +111,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   useFormSuccessReset({ isConfirming, isConfirmed, currentTxType, useEth });
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
     ethBalance: userEthBalance,
+    decimals,
     useEth,
     deposit: formData.deposit ?? "0",
     depositToken: formData.depositToken,
@@ -107,7 +129,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     errorMessage,
     rootErrorMessage: form.formState.errors.root?.message,
   });
-
   const onSubmit = () => {
     if (submitType === null) {
       return;
@@ -133,6 +154,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   if (useEth) {
     balance = userEthBalance;
   }
+
   const [openTransactionModal, setOpenTransactionModal] = useState(false);
 
   useEffect(() => {
@@ -144,13 +166,15 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const levTier = form.getValues("leverageTier");
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
+    if (!isApe) {
+      return "19";
+    }
     if (isFinite(lev)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       return formatNumber(calculateApeVaultFee(lev) * 100, 2);
     } else {
       return undefined;
     }
-  }, [levTier]);
+  }, [isApe, levTier]);
   const modalSubmit = () => {
     if (!isConfirmed) {
       onSubmit();
@@ -181,15 +205,27 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 <TransactionStatus
                   isTxPending={isConfirming}
                   waitForSign={isPending}
-                />{" "}
-                <TransactionEstimates
-                  isApe={isApe}
-                  usingEth={useEth}
-                  collateralEstimate={quoteData}
+                  action={submitType === ESubmitType.mint ? "Mint" : "Approve"}
                 />
-                <TransactionModal.Disclaimer>
-                  Output is estimated.
-                </TransactionModal.Disclaimer>
+
+                {submitType === ESubmitType.mint && (
+                  <TransactionEstimates
+                    isApe={isApe}
+                    usingEth={useEth}
+                    collateralEstimate={quoteData}
+                  />
+                )}
+                {submitType === ESubmitType.mint && (
+                  <TransactionModal.Disclaimer>
+                    Output is estimated.
+                  </TransactionModal.Disclaimer>
+                )}
+
+                {submitType === ESubmitType.approve && (
+                  <TransactionModal.Disclaimer>
+                    Approve SIR to send token funds .....
+                  </TransactionModal.Disclaimer>
+                )}
               </>
             )}
             {isConfirmed && (
@@ -199,7 +235,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 </div>
                 <h2 className="text-center">Transaction Successful!</h2>
                 <h3 className="text-center">
-                  APE received:{" "}
+                  {isApe ? "APE" : "TEA"} received:{" "}
                   {formatNumber(formatUnits(tokenReceived ?? 0n, 18), 6)}
                 </h3>
               </div>
@@ -207,22 +243,26 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           </TransactionModal.InfoContainer>
           {/* ---------------------------------- */}
           <TransactionModal.StatSubmitContainer>
-            <TransactionModal.StatContainer>
-              <TransactionModal.StatRow
-                title={"Fee Percent"}
-                value={fee ? fee.toString() + "%" : "0%"}
-              />
-              <TransactionModal.StatRow
-                title="Fee Amount"
-                value={
-                  formatNumber(
-                    parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
-                  ) +
-                  " " +
-                  form.getValues("long").split(",")[1]
-                }
-              ></TransactionModal.StatRow>
-            </TransactionModal.StatContainer>
+            {submitType === ESubmitType.mint && !isConfirmed && (
+              <TransactionModal.StatContainer>
+                <TransactionModal.StatRow
+                  title={"Fee Percent"}
+                  value={fee ? fee.toString() + "%" : "0%"}
+                />
+
+                <TransactionModal.StatRow
+                  title="Fee Amount"
+                  value={
+                    formatNumber(
+                      parseFloat(deposit ?? "0") *
+                        (parseFloat(fee ?? "0") / 100),
+                    ) +
+                    " " +
+                    form.getValues("long").split(",")[1]
+                  }
+                ></TransactionModal.StatRow>
+              </TransactionModal.StatContainer>
+            )}
             {
               <TransactionModal.SubmitButton
                 onClick={modalSubmit}
@@ -248,7 +288,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             setUseEth={(b: boolean) => {
               setUseEth(b);
             }}
-            balance={formatUnits(balance ?? 0n, 18)}
+            balance={formatUnits(balance ?? 0n, decimals)}
             form={form}
             depositAsset={formData.long}
           />

@@ -23,8 +23,8 @@ import { SirContract } from "@/contracts/sir";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 
 import useStakeError from "@/components/stake/hooks/useStakeError";
-import { useApprove } from "@/components/leverage-liquidity/mintForm/hooks/useApprove";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
+import { useApproveErc20 } from "@/components/shared/hooks/useApproveErc20";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
@@ -53,7 +53,7 @@ const StakeForm = ({ balance, allowance }: Props) => {
       : undefined,
   });
 
-  const { approveSimulate } = useApprove({
+  const { approveSimulate } = useApproveErc20({
     tokenAddr: SirContract.address,
     approveContract: SirContract.address,
   });
@@ -77,6 +77,7 @@ const StakeForm = ({ balance, allowance }: Props) => {
   ]);
 
   const { isValid, errorMessage } = useCheckSubmitValid({
+    decimals: 12,
     deposit: safeStake.success ? safeStake.data.toString() : "0",
     depositToken: SirContract.address,
     requests: {
