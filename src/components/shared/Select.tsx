@@ -24,6 +24,7 @@ import {
   CommandList,
 } from "../ui/command";
 import type { TMintForm } from "@/lib/types";
+import ImageWithFallback from "./ImageWithFallback";
 // TODO
 // rm default placeholders
 type TItem = { value: string; label: string; imageUrl?: string };
@@ -112,7 +113,7 @@ export default function Select({
                     >
                       <div className="flex items-center gap-x-2">
                         {item.imageUrl && (
-                          <Image
+                          <ImageWithFallback
                             height={100}
                             width={100}
                             className="h-[28px] w-[28px] rounded-full"
@@ -150,7 +151,7 @@ function ImageLabel({ item }: { item?: TItem }) {
   return (
     <div className="flex items-center gap-x-2">
       {item.imageUrl && (
-        <Image
+        <ImageWithFallback
           height={100}
           width={100}
           className="h-[28px] w-[28px] rounded-full"
