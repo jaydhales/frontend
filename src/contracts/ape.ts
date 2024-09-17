@@ -306,5 +306,5 @@ export const ApeContract = {
     },
     { type: "error", name: "InvalidSigner", inputs: [] },
     { type: "error", name: "PermitDeadlineExpired", inputs: [] },
-  ],
+  ] as const,
 };
