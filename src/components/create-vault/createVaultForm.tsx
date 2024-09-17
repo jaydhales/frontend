@@ -15,6 +15,7 @@ import { SelectContent, SelectTrigger } from "@radix-ui/react-select";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { getLogoAsset, mapLeverage } from "@/lib/utils";
+import ImageWithFallback from "../shared/ImageWithFallback";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -152,7 +153,7 @@ function QuickSelects({ tokens, name }: PropsQuick) {
             }}
           >
             <h2 className="text-[12px]">{e.label}</h2>
-            <Image
+            <ImageWithFallback
               width={20}
               height={20}
               className="w-6 h-6"

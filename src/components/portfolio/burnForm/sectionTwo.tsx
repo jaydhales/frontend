@@ -1,3 +1,4 @@
+import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import { formatBigInt, getLogoAsset } from "@/lib/utils";
 import Image from "next/image";
 export function SectionTwo({
@@ -26,7 +27,7 @@ export function SectionTwo({
         <div>
           <div className={"flex  gap-x-2 "}>
             <div className="flex h-[45px] w-[140px] items-center gap-x-2 rounded-md bg-primary px-2">
-              <Image
+              <ImageWithFallback
                 src={getLogoAsset(data?.collateralToken)}
                 alt="collateral"
                 width={28}

@@ -12,6 +12,7 @@ import Image from "next/image";
 import { formatNumber, getLogoAsset } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { WETH_ADDRESS } from "@/data/constants";
+import ImageWithFallback from "@/components/shared/ImageWithFallback";
 interface Props {
   form: TMintForm;
   depositAsset: string | undefined;
@@ -128,7 +129,7 @@ function AssetInfo({
   return (
     <>
       {depositAsset && (
-        <Image
+        <ImageWithFallback
           src={getLogoAsset(depositAsset?.split(",")[0] as TAddressString)}
           alt={depositAsset.split(",")[1] ?? ""}
           width={25}

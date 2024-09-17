@@ -6,17 +6,18 @@ import {
   getLogoAsset,
   roundDown,
 } from "@/lib/utils";
+import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
 import Image from "next/image";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
 import type { VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
 import { useMemo } from "react";
+import ImageWithFallback from "@/components/shared/ImageWithFallback";
 
 export function VaultTableRow({
   badgeVariant,
   pool,
-  isApe,
 }: {
   badgeVariant: VariantProps<typeof badgeVariants>;
   number: string;
@@ -47,15 +48,17 @@ export function VaultTableRow({
     >
       <th className="">{pool.vaultId}</th>
       <th className="md:col-span-3 items-center flex">
-        <Image
+        <ImageWithFallback
+          fallbackSrc={unknownImg}
           className="h-6 w-6 rounded-full "
           src={getLogoAsset(pool.collateralToken as `0x${string}`)}
           width={28}
           height={28}
           alt=""
         />
-        <Image
+        <ImageWithFallback
           className="h-6 w-6 rounded-full "
+          fallbackSrc={unknownImg}
           src={getLogoAsset(pool.debtToken as `0x${string}`)}
           width={28}
           height={28}
@@ -83,13 +86,16 @@ export function VaultTableRow({
             4,
           )}
         </span>
-        <Image
-          className="h-5 w-5 rounded-full "
-          src={getLogoAsset(pool.collateralToken as `0x${string}`)}
-          width={50}
-          height={50}
-          alt=""
-        />
+        <span className=" hidden md:block text-gray-300 font-light">
+          {pool.collateralSymbol}
+        </span>
+        {/* <Image */}
+        {/*   className="h-5 w-5 rounded-full " */}
+        {/*   src={getLogoAsset(pool.collateralToken as `0x${string}`)} */}
+        {/*   width={50} */}
+        {/*   height={50} */}
+        {/*   alt="" */}
+        {/* /> */}
       </th>
     </tr>
   );
