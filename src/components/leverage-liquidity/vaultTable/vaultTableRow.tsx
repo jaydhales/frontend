@@ -48,7 +48,7 @@ export function VaultTableRow({
       <th className="">{pool.vaultId}</th>
       <th className="md:col-span-3 items-center flex">
         <ImageWithFallback
-          fallbackSrc={unknownImg}
+          fallbackImageUrl={unknownImg}
           className="h-6 w-6 rounded-full "
           src={getLogoAsset(pool.collateralToken as `0x${string}`)}
           width={28}
@@ -57,7 +57,7 @@ export function VaultTableRow({
         />
         <ImageWithFallback
           className="h-6 w-6 rounded-full "
-          fallbackSrc={unknownImg}
+          fallbackImageUrl={unknownImg}
           src={getLogoAsset(pool.debtToken as `0x${string}`)}
           width={28}
           height={28}
