@@ -27,7 +27,7 @@ interface Props {
 const ImageWithFallback = (props: Props) => {
   let { fallbackSrc } = props;
   const { src, ...rest } = props;
-  const [imgSrc, setImgSrc] = useState(src);
+  const [imgSrc, setImgSrc] = useState<string | StaticImageData>(src);
   fallbackSrc = unknownImg;
   return (
     // eslint-disable-next-line jsx-a11y/alt-text

@@ -8,7 +8,6 @@ import {
 } from "@/lib/utils";
 import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
-import Image from "next/image";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
 import type { VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
