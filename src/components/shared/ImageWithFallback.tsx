@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import type { StaticImageData } from "next/image";
 import unknownImg from "@/../public/IconUnknown.png";
+import { fallback } from "viem";
 // Todo
 // Extend image props
 interface Props {
@@ -22,20 +23,20 @@ interface Props {
   lazyBoundary?: string | undefined;
   lazyRoot?: string | undefined;
   className?: string | undefined;
-  fallbackSrc?: string | StaticImageData;
+  fallbackImageUrl?: string | StaticImageData;
 }
 const ImageWithFallback = (props: Props) => {
-  let { fallbackSrc } = props;
+  let { fallbackImageUrl } = props;
   const { src, ...rest } = props;
   const [imgSrc, setImgSrc] = useState<string | StaticImageData>(src);
-  fallbackSrc = unknownImg;
+  fallbackImageUrl = unknownImg;
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
     <Image
       {...rest}
       src={imgSrc}
       onError={() => {
-        setImgSrc(fallbackSrc);
+        setImgSrc(fallbackImageUrl);
       }}
     />
   );
