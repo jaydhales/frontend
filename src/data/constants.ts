@@ -5,7 +5,7 @@ export const RPC_URL = "";
 export const WETH_ADDRESS =
   env.NEXT_PUBLIC_CHAIN_ID === "1"
     ? "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2".toLowerCase()
-    : "0xfff9976782d46cc05630d1f6ebab18b2324d6b14".toLowerCase();
+    : ("0xfff9976782d46cc05630d1f6ebab18b2324d6b14".toLowerCase() as TAddressString);
 
 export const BASE_FEE = 0.4;
 export const L_FEE = 0.2345;
