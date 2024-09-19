@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import type { StaticImageData } from "next/image";
 import unknownImg from "@/../public/IconUnknown.png";
-import { fallback } from "viem";
 // Todo
 // Extend image props
 interface Props {
@@ -29,7 +28,7 @@ const ImageWithFallback = (props: Props) => {
   let { fallbackImageUrl } = props;
   const { src, ...rest } = props;
   const [imgSrc, setImgSrc] = useState<string | StaticImageData>(src);
-  fallbackImageUrl = unknownImg;
+  fallbackImageUrl = unknownImg as string | StaticImageData;
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
     <Image
