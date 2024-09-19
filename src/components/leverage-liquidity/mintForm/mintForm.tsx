@@ -127,7 +127,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     approveFetching: isApproveFetching,
   });
 
-  const { quoteData } = useQuoteMint({ formData });
+  const { quoteData } = useQuoteMint({ formData, isApe });
   useSetRootError({
     formData,
     setError: form.setError,
@@ -302,7 +302,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <Estimations
           isApe={isApe}
           disabled={!Boolean(quoteData)}
-          ape={formatBigInt(quoteData, 4).toString()}
+          ape={formatNumber(formatUnits(quoteData ?? 0n, 18))}
         />
 
         <MintFormSubmit.Root>
