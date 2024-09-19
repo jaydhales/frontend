@@ -29,7 +29,7 @@ export default function SelectedRow({
       <h1>Hello</h1>
     </div>;
   }
-
+  console.log(isApe, "IS APE");
   return (
     <div>
       <div className="md:flex hidden flex-col gap-y-4 pb-4">

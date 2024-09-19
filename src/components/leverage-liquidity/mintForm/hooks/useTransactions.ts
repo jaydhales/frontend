@@ -33,7 +33,7 @@ export function useTransactions({
     },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
-
+  console.log(userBalance, "USER BALANCE");
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   const safeDeposit = useMemo(() => {
