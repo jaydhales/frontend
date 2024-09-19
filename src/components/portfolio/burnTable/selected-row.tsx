@@ -29,7 +29,9 @@ export default function SelectedRow({
       <h1>Hello</h1>
     </div>;
   }
-  console.log(isApe, "IS APE");
+  if (!data) {
+    return;
+  }
   return (
     <div>
       <div className="md:flex hidden flex-col gap-y-4 pb-4">
@@ -55,7 +57,7 @@ export default function SelectedRow({
           </th>
           <th className="font-normal  flex items-center ">
             <h2 className="h-8 flex items-center">
-              <span>{formatNumber(formatEther(data ?? 0n), 4)}</span>
+              <span>{formatNumber(formatEther(data ?? 0n), 6)}</span>
             </h2>
           </th>
         </tr>
