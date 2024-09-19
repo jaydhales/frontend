@@ -46,11 +46,14 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
 
-  const { data: decimalData } = api.erc20.getErc20Decimals.useQuery({
-    tokenAddress: formData.long.split(",")[0] ?? "0x",
-  }, {
-      enabled: Boolean(formData.long)
-    });
+  const { data: decimalData } = api.erc20.getErc20Decimals.useQuery(
+    {
+      tokenAddress: formData.long.split(",")[0] ?? "0x",
+    },
+    {
+      enabled: Boolean(formData.long),
+    },
+  );
 
   let decimals = decimalData ?? 18;
   const { requests, isApproveFetching, isMintFetching, userBalance } =
