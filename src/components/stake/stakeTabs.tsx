@@ -9,8 +9,8 @@ import { Container } from "@/components/ui/container";
 import StakeFormProvider from "@/components/providers/stakeFormProvider";
 import StakeForm from "@/components/stake/stakeForm/stakeForm";
 
-import UnstakeForm from "@/components/stake/unstakeForm/unstakeForm";
-import UnstakeFormProvider from "@/components/providers/unstakeFormProvider";
+// import UnstakeForm from "@/components/stake/unstakeForm/unstakeForm";
+// import UnstakeFormProvider from "@/components/providers/unstakeFormProvider";
 
 import ClaimFees from "@/components/stake/claimFees/claimFees";
 
@@ -103,23 +103,21 @@ const StakeTabs = () => {
         </Container>
       </TabsContent>
       <TabsContent value="unstake">
-        <Container>
-          <UnstakeFormProvider>
-            <UnstakeForm
-              balance={
-                safeTotalBalance.success && balance?.tokenBalance?.result
-                  ? safeTotalBalance.data - balance?.tokenBalance?.result
-                  : 0n
-              }
-              dividends={formatEther(
-                safeDividends.success ? safeDividends.data : 0n,
-              )}
-              claimSimulate={Claim?.request as SimulateReq}
-              claimResult={Claim?.result}
-              claimFetching={claimFetching}
-            ></UnstakeForm>
-          </UnstakeFormProvider>
-        </Container>
+        {/* <Container> */}
+        {/*   <UnstakeFormProvider> */}
+        {/*     <UnstakeForm */}
+        {/*       balance={ */}
+        {/*         safeTotalBalance.success && balance?.tokenBalance?.result */}
+        {/*           ? safeTotalBalance.data - balance?.tokenBalance?.result */}
+        {/*           : 0n */}
+        {/*       } */}
+        {/*       dividends={formatEther( */}
+        {/*         safeDividends.success ? safeDividends.data : 0n, */}
+        {/*       )} */}
+        {/*       claimResult={Claim?.result} */}
+        {/*     /> */}
+        {/*   </UnstakeFormProvider> */}
+        {/* </Container> */}
       </TabsContent>
       <TabsContent value="claimFees">
         <Container>

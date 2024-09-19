@@ -45,7 +45,7 @@ export const userRouter = createTRPCRouter({
           },
         ],
       });
-
+      console.log(balance, allowance, input.tokenAddress, "BAL ALLOWANCE");
       return {
         tokenBalance: balance,
         tokenAllowance: allowance,

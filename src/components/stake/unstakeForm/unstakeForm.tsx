@@ -85,9 +85,10 @@ const UnstakeForm = ({
     decimals: 12,
   });
 
+  const [claimFees, setClaimFees] = useState(false);
   const onSubmit = () => {
     if (Unstake && claimSimulate) {
-      if (Boolean(claimResult)) {
+      if (Boolean(claimResult) && claimFees) {
         writeContract(Unstake?.request);
         writeContract(claimSimulate);
         return;
@@ -182,6 +183,7 @@ const UnstakeForm = ({
               form={form}
               dividends={dividends}
               disabled={!Boolean(claimResult)}
+              onChange={setClaimFees}
             ></ClaimFeesCheckbox>
 
             <div className=" flex-col flex items-center justify-center mt-[20px]">

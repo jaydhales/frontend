@@ -75,6 +75,7 @@ export const vaultRouter = createTRPCRouter({
         collateralToken: z.string().startsWith("0x").optional(),
         leverageTier: z.number().optional(),
         amount: z.string().optional(),
+        isApe: z.boolean(),
       }),
     )
     .query(async ({ input }) => {
@@ -93,7 +94,7 @@ export const vaultRouter = createTRPCRouter({
           address: AssistantContract.address,
           functionName: "quoteMint",
           args: [
-            true,
+            input.isApe,
             {
               debtToken: input.debtToken as TAddressString,
               collateralToken: input.collateralToken as TAddressString,

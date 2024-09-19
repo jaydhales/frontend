@@ -12,9 +12,10 @@ interface Props {
   form: TUnstakeForm;
   dividends?: string;
   disabled?: boolean;
+  onChange: (value: boolean) => void; // Add onChange prop
 }
 
-const ClaimFeesCheckbox = ({ form, dividends, disabled }: Props) => {
+const ClaimFeesCheckbox = ({ form, dividends, disabled, onChange }: Props) => {
   return (
     <FormField
       control={form.control}
@@ -26,7 +27,10 @@ const ClaimFeesCheckbox = ({ form, dividends, disabled }: Props) => {
               <div className="flex items-center gap-x-4">
                 <Checkbox
                   checked={field.value}
-                  onCheckedChange={field.onChange}
+                  onCheckedChange={(value) => {
+                    field.onChange(Boolean(value));
+                    onChange(Boolean(value)); // Call onChange to update the state in UnstakeForm
+                  }}
                   disabled={disabled}
                 ></Checkbox>
                 <FormLabel className="text-lg font-medium">

@@ -18,7 +18,7 @@ const InputVariants = classVarianceAuthority.cva(
       height: { sm: "h-6", md: "h-8", lg: "h-10" },
     },
     defaultVariants: { background: "transparent", height: "lg" },
-  },
+  }
 );
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> &
   classVarianceAuthority.VariantProps<typeof InputVariants>;
@@ -32,7 +32,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {...props}
       />
     );
-  },
+  }
 );
 Input.displayName = "Input";
 

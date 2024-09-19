@@ -46,9 +46,14 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
 
-  const { data: decimalData } = api.erc20.getErc20Decimals.useQuery({
-    tokenAddress: formData.long.split(",")[0] ?? "0x",
-  });
+  const { data: decimalData } = api.erc20.getErc20Decimals.useQuery(
+    {
+      tokenAddress: formData.long.split(",")[0] ?? "0x",
+    },
+    {
+      enabled: Boolean(formData.long),
+    },
+  );
 
   let decimals = decimalData ?? 18;
   const { requests, isApproveFetching, isMintFetching, userBalance } =
@@ -122,7 +127,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     approveFetching: isApproveFetching,
   });
 
-  const { quoteData } = useQuoteMint({ formData });
+  const { quoteData } = useQuoteMint({ formData, isApe });
   useSetRootError({
     formData,
     setError: form.setError,
@@ -297,7 +302,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <Estimations
           isApe={isApe}
           disabled={!Boolean(quoteData)}
-          ape={formatBigInt(quoteData, 4).toString()}
+          ape={formatNumber(formatUnits(quoteData ?? 0n, 18))}
         />
 
         <MintFormSubmit.Root>

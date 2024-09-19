@@ -44,6 +44,13 @@ export default function BurnForm({
   });
   const formData = form.watch();
 
+  console.log({
+    amount: formData.deposit ?? "0",
+    isApe,
+    debtToken: row.debtToken,
+    leverageTier: parseInt(row.leverageTier),
+    collateralToken: row.collateralToken,
+  });
   const { data: quoteBurn } = api.vault.quoteBurn.useQuery(
     {
       amount: formData.deposit ?? "0",

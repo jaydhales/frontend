@@ -33,6 +33,7 @@ export function useMintApeOrTea({
     vaultAddress: VaultContract.address,
     vaultId: safeVaultId.success ? safeVaultId.data : 0,
   });
+  console.log("Ape Address:", apeAddress);
   const vault = {
     debtToken: debtToken as TAddressString,
     collateralToken: collateralToken as TAddressString,
@@ -55,6 +56,7 @@ export function useMintApeOrTea({
       amount ?? 0n,
     ],
   });
+  console.log(error, "APE OR TEA ERROR");
   const { data: MintWithEth } = useSimulateContract({
     ...AssistantContract,
     functionName: "mintWithETH",
