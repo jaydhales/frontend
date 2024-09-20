@@ -18,8 +18,8 @@ const lora = Lora({
 
 // console.log(Inter, "INTER");
 export const metadata = {
-  title: "Sir",
-  description: "Sir frontend",
+  title: "SIR",
+  description: "Description",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
