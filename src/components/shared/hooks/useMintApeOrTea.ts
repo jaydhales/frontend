@@ -39,7 +39,7 @@ export function useMintApeOrTea({
     collateralToken: collateralToken as TAddressString,
     leverageTier,
   };
-
+  console.log(`AMOUNT: ${amount}`);
   const {
     data: Mint,
     refetch,
@@ -56,7 +56,9 @@ export function useMintApeOrTea({
       amount ?? 0n,
     ],
   });
-  console.log(error, "APE OR TEA ERROR");
+  if (error) {
+    console.log(error, "APE OR TEA ERROR");
+  }
   const { data: MintWithEth } = useSimulateContract({
     ...AssistantContract,
     functionName: "mintWithETH",
