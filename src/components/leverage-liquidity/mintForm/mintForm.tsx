@@ -302,7 +302,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <Estimations
           isApe={isApe}
           disabled={!Boolean(quoteData)}
-          ape={formatNumber(formatUnits(quoteData ?? 0n, 18))}
+          ape={formatNumber(formatUnits(quoteData ?? 0n, decimals))}
         />
 
         <MintFormSubmit.Root>

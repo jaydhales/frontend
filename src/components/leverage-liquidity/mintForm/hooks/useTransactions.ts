@@ -33,12 +33,8 @@ export function useTransactions({
     },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
-  console.log(userBalance, "USER BALANCE");
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
-  const safeDeposit = useMemo(() => {
-    return z.coerce.number().safeParse(formData.deposit);
-  }, [formData.deposit]);
   const {
     Mint,
     MintWithEth,
@@ -49,9 +45,7 @@ export function useTransactions({
     debtToken: formatDataInput(formData.versus), //value formatted : address,symbol
     collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
     leverageTier: leverageTier,
-    amount: safeDeposit.success
-      ? safeParseUnits(safeDeposit.data.toString() ?? "0", decimals)
-      : undefined,
+    amount: safeParseUnits(formData.deposit ?? "0", decimals),
     tokenAllowance: userBalance?.tokenAllowance?.result,
   });
 
