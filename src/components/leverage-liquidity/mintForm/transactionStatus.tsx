@@ -1,3 +1,4 @@
+import { LoaderCircle } from "lucide-react";
 import { useMemo } from "react";
 
 interface StatusProps {
@@ -15,7 +16,7 @@ export function TransactionStatus({
       return { message: "Please Sign Transaction." };
     }
     if (isTxPending) {
-      return { message: "Pending..." };
+      return { message: <LoaderCircle className="animate-spin" /> };
     }
     return { message: action ?? "Mint" };
   }, [waitForSign, isTxPending, action]);
