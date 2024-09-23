@@ -13,7 +13,7 @@ export default function PortfolioPage() {
   return (
     <div className="w-full">
       <Container>
-        <Card className="lg:w-[900px] px-4 mx-auto w-full border border-secondary-200 ">
+        <Card className="lg:w-[900px] px-4 mx-auto bg-transparent w-full">
           <PageHeader>Portfolio</PageHeader>
           <div className="pb-6"></div>
           <div className="space-y-3 ">
@@ -25,19 +25,22 @@ export default function PortfolioPage() {
             </div>
           </div>
           <div className="pt-8"></div>
-          <div className="flex  justify-between items-center pb-4 lg:pb-8">
-            <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
-              <span>My Tokens</span>
-            </h2>
-            <Slider value={value} setValue={setValue} />
+          <div className="bg-secondary-400 px-4 py-2 rounded-md">
+            <div className="flex  justify-between items-center pb-4 lg:pb-8 ">
+              <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
+                <span>My Tokens</span>
+              </h2>
+              <Slider value={value} setValue={setValue} />
+            </div>
+            <div className="">
+              <BurnTable filter={value} />
+            </div>
           </div>
-          <BurnTable filter={value} />
         </Card>
       </Container>
     </div>
   );
 }
-
 function Slider({
   value,
   setValue,
@@ -48,28 +51,36 @@ function Slider({
   return (
     <div>
       <div className="rounded-full flex gap-x-1  items-center border border-secondary-100">
-        <div
-          onClick={() => setValue("all")}
-          data-active={value === "all" ? "true" : ""}
-          className="data-[active=true]:bg-gray-600 rounded-full px-3 text-sm py-1 cursor-pointer"
-        >
-          ALL
-        </div>
-        <div
-          data-active={value === "ape" ? "true" : ""}
-          className="data-[active=true]:bg-gray-600 rounded-full px-3 text-sm py-1 cursor-pointer"
-          onClick={() => setValue("ape")}
-        >
+        <Slide active={value === "all"} onClick={() => setValue("all")}>
+          All
+        </Slide>
+        <Slide active={value === "ape"} onClick={() => setValue("ape")}>
           APE
-        </div>
-        <div
-          onClick={() => setValue("tea")}
-          data-active={value === "tea" ? "true" : ""}
-          className="data-[active=true]:bg-gray-600 rounded-full px-3 text-sm py-1 cursor-pointer"
-        >
+        </Slide>
+        <Slide onClick={() => setValue("tea")} active={value === "tea"}>
           TEA
-        </div>
+        </Slide>
       </div>
+    </div>
+  );
+}
+
+function Slide({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      onClick={onClick}
+      data-active={active ? "true" : ""}
+      className=" w-12 text-center data-[active=true]:bg-secondary-100 rounded-full px-3 text-sm py-1 cursor-pointer"
+    >
+      {children}
     </div>
   );
 }
