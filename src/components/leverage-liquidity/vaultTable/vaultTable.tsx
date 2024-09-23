@@ -21,8 +21,8 @@ export default function VaultTable({
   }
   return (
     <table className="w-full">
-      <caption className="pb-2  font-lora text-[1.95rem] font-bold">
-        Vaults
+      <caption className="pb-2  font-lora text-[32px] font-bold">
+        Popular Vaults
       </caption>
       <tbody className="space-y-2">
         <VaultTableRowHeaders />

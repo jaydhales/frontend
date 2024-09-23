@@ -11,10 +11,9 @@ import { SirCard } from "./sirCard";
 export default function PortfolioPage() {
   const [value, setValue] = useState<"ape" | "tea" | "all">("all");
   return (
-    <div className="w-full">
+    <div className="w-full z-10">
       <Container>
         <Card className="lg:w-[900px] px-4 mx-auto bg-transparent w-full">
-          <PageHeader>Portfolio</PageHeader>
           <div className="pb-6"></div>
           <div className="space-y-3 ">
             <SirCard />

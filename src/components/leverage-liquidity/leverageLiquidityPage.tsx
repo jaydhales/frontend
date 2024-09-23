@@ -10,7 +10,7 @@ export default function LeverageLiquidityPage({
 }) {
   return (
     <div className="w-full">
-      <PageHeader>{title}</PageHeader>
+      {/* <PageHeader>{title}</PageHeader> */}
       <br />
       <div className="w-full">{children}</div>
     </div>

@@ -7,7 +7,7 @@ import { api } from "@/trpc/server";
 export default async function Home() {
   const vaultQuery = await api.vault.getVaults();
   return (
-    <main className="flex flex-col items-center justify-center text-white">
+    <main className="flex z-10 flex-col items-center justify-center text-white">
       <LeverageLiquidityPage title={"Take on Leverage"}>
         <LeverageLiquidityContent
           isApe

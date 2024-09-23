@@ -26,10 +26,12 @@ export function Header() {
     return;
   };
   return (
-    <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
+    <div className="z-10 grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
       <Link href={"/"} className="flex items-center gap-x-2">
-        <Image src={logo} alt="Sir-Trading Logo" className="h-[60px] w-auto" />
-        <h1 className="font-lora text-[24px] font-bold">SIR. Trading</h1>
+        {/* <Image src={logo} alt="Sir-Trading Logo" className="h-[60px] w-auto" /> */}
+        <h1 className="font-lora text-[32px] font-bold text-gold">
+          SIR.TRADING
+        </h1>
       </Link>
       <div className="col-span-3 flex justify-center">
         <nav className="hidden lg:block">
