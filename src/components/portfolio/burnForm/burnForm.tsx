@@ -17,6 +17,7 @@ import { TransactionEstimates } from "@/components/shared/transactionEstimates";
 import TransactionSuccess from "@/components/shared/transactionSuccess";
 import { useGetTxTokens } from "./hooks/useGetTxTokens";
 import { X } from "lucide-react";
+import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -133,6 +134,7 @@ export default function BurnForm({
   if (isPending || isConfirming) {
     submitButtonText = "Pending...";
   }
+
   if (isConfirmed) {
     submitButtonText = "Close";
   }
@@ -143,7 +145,11 @@ export default function BurnForm({
         <TransactionModal.InfoContainer>
           {!isConfirmed && (
             <>
-              <h2 className="font-lora">Confirm Burn</h2>
+              <TransactionStatus
+                action="Burn"
+                waitForSign={isPending}
+                isTxPending={isConfirming}
+              />
               <TransactionEstimates
                 inAssetName={isApe ? "APE" : "TEA"}
                 outAssetName={row.collateralSymbol}
