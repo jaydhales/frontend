@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import BurnTable from "./burnTable/burnTable";
 import { Card } from "../ui/card";
 import { Container } from "../ui/container";
-import PageHeader from "../shared/pageHeader";
+// import PageHeader from "../shared/pageHeader";
 import { StakedCard } from "./stakedCard";
 import ClaimCard from "./claimCard";
 import { SirCard } from "./sirCard";
@@ -12,9 +12,9 @@ export default function PortfolioPage() {
   const [value, setValue] = useState<"ape" | "tea" | "all">("all");
   return (
     <div className="w-full z-10">
+      <div className="pt-[44px]"></div>
       <Container>
-        <Card className="lg:w-[900px] px-4 mx-auto bg-transparent w-full">
-          <div className="pb-6"></div>
+        <Card className="lg:w-[900px] px-4 mx-auto  w-full">
           <div className="space-y-3 ">
             <SirCard />
             <div className="grid grid-cols-2 pt-2  gap-x-3">

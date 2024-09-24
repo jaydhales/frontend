@@ -11,7 +11,7 @@ export default function LeverageLiquidityPage({
   return (
     <div className="w-full">
       {/* <PageHeader>{title}</PageHeader> */}
-      <br />
+      <div className="pt-[44px]"></div>
       <div className="w-full">{children}</div>
     </div>
   );
