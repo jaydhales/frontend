@@ -171,9 +171,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const levTier = form.getValues("leverageTier");
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
+
     if (!isApe) {
       return "19";
     }
+
     if (isFinite(lev)) {
       return formatNumber(calculateApeVaultFee(lev) * 100, 2);
     } else {
@@ -251,11 +253,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             {submitType === ESubmitType.mint && !isConfirmed && (
               <TransactionModal.StatContainer>
                 <TransactionModal.StatRow
+                  info="Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
                   title={"Fee Percent"}
                   value={fee ? fee.toString() + "%" : "0%"}
                 />
 
                 <TransactionModal.StatRow
+                  info=""
                   title="Fee Amount"
                   value={
                     formatNumber(
