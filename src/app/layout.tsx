@@ -13,6 +13,7 @@ const inter = Inter({
   variable: "--font-sans",
 });
 const lora = Bebas_Neue({
+  subsets: ["latin"],
   weight: ["400"],
   variable: "--font-lora",
 });
