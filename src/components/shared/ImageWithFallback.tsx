@@ -29,6 +29,7 @@ const ImageWithFallback = (props: Props) => {
   const { src, ...rest } = props;
   const [imgSrc, setImgSrc] = useState<string | StaticImageData>(src);
   fallbackImageUrl = unknownImg as string | StaticImageData;
+  delete rest.fallbackImageUrl;
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
     <Image
