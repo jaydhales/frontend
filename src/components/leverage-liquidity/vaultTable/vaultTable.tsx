@@ -48,9 +48,14 @@ export default function VaultTable({
 
 function VaultTableRowHeaders() {
   return (
-    <tr className="grid grid-cols-5 md:grid-cols-8 px-1 text-left text-[14px] font-normal text-gray-400">
+    <tr className="grid grid-cols-6 md:grid-cols-9 px-1 text-left text-[14px] font-normal text-gray-400">
       <th className="font-medium">#</th>
       <th className="md:col-span-3 font-medium">Pool</th>
+
+      <th className="font-medium flex gap-x-1 items-center">
+        <span>PoL</span>
+        <ToolTip size={15}>Pools locked liquidity.</ToolTip>
+      </th>
       <th className="flex items-center font-medium gap-x-1">
         Fees
         <ToolTip size={15}>

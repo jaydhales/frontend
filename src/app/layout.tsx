@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import "@radix-ui/themes/styles.css";
 import { TRPCReactProvider } from "@/trpc/react";
-import Image from "next/image";
+// import Image from "next/image";
 import EvmProvider from "@/components/providers/evmProvider";
 import { headers } from "next/headers";
 import { Header } from "@/components/header";

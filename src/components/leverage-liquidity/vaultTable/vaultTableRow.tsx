@@ -43,7 +43,7 @@ export function VaultTableRow({
         setValue("long", pool.collateralToken + "," + pool.collateralSymbol);
         setValue("leverageTier", pool.leverageTier.toString());
       }}
-      className="grid cursor-pointer text-sm grid-cols-5   md:grid-cols-8 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
+      className="grid cursor-pointer text-sm grid-cols-6   md:grid-cols-9 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
     >
       <th className="">{pool.vaultId}</th>
       <th className="md:col-span-3 items-center flex">
@@ -67,6 +67,9 @@ export function VaultTableRow({
         <span className="hidden font-normal md:block">
           {pool.collateralSymbol}/{pool.debtSymbol}
         </span>
+      </th>
+      <th>
+        <h4 className="text-gray-200 font-normal">{POL}%</h4>
       </th>
       <th className="flex text-[13px] text-red-400 font-normal gap-x-1 items-center">
         {roundDown(fee, 2)}%{" "}
