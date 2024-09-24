@@ -73,8 +73,8 @@ function StatRow({
   info,
 }: {
   title: string;
-  info: string;
-  value?: string;
+  info?: string;
+  value: string;
 }) {
   return (
     <div className="flex  justify-between relative text-[13px]">
