@@ -36,18 +36,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        // style={{
-        //   backgroundImage: `url(${Bg.src})`,
-        // }}
+        style={{
+          backgroundImage: `url(${Bg.src})`,
+          backgroundRepeat: "repeat",
+        }}
         className={`relative ${lora.variable} ${inter.className} `}
       >
-        <Image
-          className="absolute object-cover   z-0 top-0 left-0  w-screen h-full"
-          src={Bg}
-          loading="eager"
-          height={1920}
-          alt={""}
-        />
+        {/* <Image */}
+        {/*   className="absolute object-fill   z-0 top-0 left-0  w-screen h-full" */}
+        {/*   src={Bg} */}
+        {/*   loading="eager" */}
+        {/*   height={1920} */}
+        {/*   alt={""} */}
+        {/* /> */}
         <TRPCReactProvider>
           <EvmProvider cookie={cookie}>
             <div className="z-10 flex min-h-screen flex-col">
