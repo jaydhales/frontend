@@ -64,7 +64,13 @@ export default function SelectedRow({
       </div>
       <div className="flex justify-center pt-4">
         <div className="justify-between bg-secondary-700 p-4 rounded-lg">
-          <BurnForm close={close} isApe={isApe} balance={data} row={params} />
+          <BurnForm
+            levTier={params.leverageTier}
+            close={close}
+            isApe={isApe}
+            balance={data}
+            row={params}
+          />
         </div>
       </div>
     </div>
