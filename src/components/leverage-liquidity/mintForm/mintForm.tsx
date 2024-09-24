@@ -19,7 +19,6 @@ import { Card } from "@/components/ui/card";
 import {
   calculateApeVaultFee,
   findVault,
-  formatBigInt,
   formatNumber,
   getApeAddress,
 } from "@/lib/utils";
@@ -56,12 +55,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   );
 
   let decimals = decimalData ?? 18;
-  const { requests, isApproveFetching, isMintFetching, userBalance } =
-    useTransactions({
-      isApe,
-      vaultsQuery,
-      decimals,
-    });
   const [useEthRaw, setUseEth] = useState(false);
   const useEth = useMemo(() => {
     // Ensure use eth toggle is not used on non-weth tokens
@@ -74,6 +67,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
   }, [useEthRaw, formData.long]);
 
+  const { requests, isApproveFetching, isMintFetching, userBalance } =
+    useTransactions({
+      useEth,
+      isApe,
+      vaultsQuery,
+      decimals,
+    });
   if (useEth) {
     decimals = 18;
   }
@@ -138,10 +138,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     if (submitType === null) {
       return;
     }
-    if (useEth && requests.mintWithETHRequest) {
-      writeContract(requests.mintWithETHRequest);
-      return;
-    }
+    // if (useEth && requests.mintWithETHRequest) {
+    //   writeContract(requests.mintWithETHRequest);
+    //   return;
+    // }
     // CHECK ALLOWANCE
     if (submitType === ESubmitType.mint && requests.mintRequest) {
       setCurrentTxType("mint");
