@@ -145,12 +145,15 @@ export default function BurnForm({
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
 
+    if (!isApe) {
+      return "19";
+    }
     if (isFinite(lev)) {
       return formatNumber(calculateApeVaultFee(lev) * 100, 2);
     } else {
       return undefined;
     }
-  }, [, levTier]);
+  }, [isApe, levTier]);
 
   return (
     <FormProvider {...form}>
@@ -184,7 +187,7 @@ export default function BurnForm({
           <TransactionModal.StatContainer>
             <TransactionModal.StatRow
               title="Fee"
-              value={fee ?? "0"}
+              value={fee ?? ""}
             ></TransactionModal.StatRow>
           </TransactionModal.StatContainer>
           <TransactionModal.SubmitButton
