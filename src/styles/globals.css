@@ -64,3 +64,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.9); /* 50% scale */
+  }
+  100% {
+    transform: scale(1); /* 100% scale */
+  }
+}
+
+.scale-up {
+  animation: scaleUp 0.2s ease-in-out;
+}

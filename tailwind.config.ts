@@ -18,6 +18,15 @@ const config = {
       },
     },
     extend: {
+      keyframes: {
+        wiggle: {
+          "0%, 100%": { transform: "rotate(-3deg)" },
+          "50%": { transform: "rotate(3deg)" },
+        },
+      },
+      animation: {
+        wiggle: "wiggle 2s linear infinite",
+      },
       fontFamily: {
         lora: ["var(--font-lora)"],
       },
