@@ -16,7 +16,7 @@ const buttonVariants = cva(
         brown: "bg-brown-700 text-brown-100 hover:bg-brown-800 py-2 px-4",
         card: "bg-primary  text-white",
         outline:
-          "bg-transparent text-muted-foreground border rounded-md px-4 py-2 text-[14px] font-semibold hover:bg-primary",
+          "bg-transparent text-muted-foreground border-2 rounded-md px-4 py-2 text-[14px] font-semibold hover:bg-primary",
         submit:
           "md:w-[450px] w-[280px] rounded-md bg-gold py-2 text-xl font-semibold hover:bg-gold/90",
         modal:
