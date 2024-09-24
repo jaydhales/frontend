@@ -30,6 +30,7 @@ const config = {
           400: "hsl(var(--gray-400), <alpha-value>)",
           500: "hsl(var(--gray-500), <alpha-value>)",
         },
+        gold: "hsl(var(--gold), <alpha-value>)",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background), <alpha-value>)",
