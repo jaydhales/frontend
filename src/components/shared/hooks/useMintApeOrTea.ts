@@ -1,11 +1,6 @@
 "use client";
 import { useSimulateContract } from "wagmi";
-import { AssistantContract } from "@/contracts/assistant";
 import type { TAddressString } from "@/lib/types";
-import { parseUnits } from "viem";
-import { z } from "zod";
-import { getApeAddress } from "@/lib/utils";
-import { APE_HASH } from "@/data/constants";
 import { VaultContract } from "@/contracts/vault";
 import { useEffect } from "react";
 interface Props {
