@@ -50,7 +50,7 @@ export const CustomConnectButton = () => {
                 return (
                   <Button
                     variant={"outline"}
-                    className="rounded-full text-white"
+                    className="rounded-full border-red-300 text-red-300"
                     onClick={openChainModal}
                     type="button"
                   >
