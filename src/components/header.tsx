@@ -47,7 +47,11 @@ export function Header() {
         </nav>
       </div>
       <div className="flex items-center gap-x-2 justify-end">
-        <Button onClick={open} variant={"brown"} className="rounded-full">
+        <Button
+          onClick={open}
+          variant={"outline"}
+          className="rounded-full text-white"
+        >
           {!address && "Connect Wallet"}
           {address &&
             address.slice(0, 5) +
