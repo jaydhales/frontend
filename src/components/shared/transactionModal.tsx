@@ -67,12 +67,20 @@ function Close({ setOpen }: { setOpen: (b: boolean) => void }) {
     </div>
   );
 }
-function StatRow({ title, value }: { title: string; value: string }) {
+function StatRow({
+  title,
+  value,
+  info,
+}: {
+  title: string;
+  info: string;
+  value?: string;
+}) {
   return (
     <div className="flex  justify-between relative text-[13px]">
       <h3 className="text-gray-300 ">
         <span className="flex z-20 items-center gap-x-1">
-          {title} <ToolTip>Fee Info</ToolTip>
+          {title} {info && <ToolTip>{info}</ToolTip>}
         </span>
       </h3>
       <h4>{value}</h4>
