@@ -36,6 +36,15 @@ export function VaultTableRow({
   }, [pool.lockedLiquidity, pool.totalApeLocked]);
 
   const { setValue } = useMintFormProviderApi();
+  const teaTvl = parseUnits(pool.totalTeaLocked, 0);
+  const apeTvl = parseUnits(pool.totalApeLocked, 0);
+
+  console.log(teaTvl, apeTvl);
+  const tvlPercent =
+    teaTvl > 0
+      ? parseFloat(formatUnits(teaTvl, 18)) /
+        parseFloat(formatUnits(apeTvl, 18))
+      : 0;
   return (
     <tr
       onClick={() => {
@@ -78,16 +87,11 @@ export function VaultTableRow({
         <Badge
           {...badgeVariant}
           className="text-[10px]"
-        >{`${getLeverageRatio(pool.leverageTier)}x`}</Badge>
+        >{`${getLeverageRatio(pool.leverageTier)}x(${formatNumber(tvlPercent, 2)}x)`}</Badge>
       </th>
 
       <th className="md:col-span-2 flex justify-end items-center gap-x-1 text-right">
-        <span>
-          {formatNumber(
-            parseFloat(formatUnits(parseUnits(pool.totalApeLocked, 0), 18)),
-            4,
-          )}
-        </span>
+        <span>{formatNumber(formatUnits(teaTvl + apeTvl, 18), 4)}</span>
         <span className=" hidden md:block text-gray-300 font-light">
           {pool.collateralSymbol}
         </span>
