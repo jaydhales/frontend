@@ -8,7 +8,11 @@ import { useBurnApe } from "./hooks/useBurnApe";
 import { parseUnits } from "viem";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { Section } from "./section";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
 import { SectionTwo } from "./sectionTwo";
@@ -18,6 +22,7 @@ import TransactionSuccess from "@/components/shared/transactionSuccess";
 import { useGetTxTokens } from "./hooks/useGetTxTokens";
 import { X } from "lucide-react";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
+import { useClaimTeaRewards } from "./hooks/useClaimTeaRewards";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -45,13 +50,6 @@ export default function BurnForm({
   });
   const formData = form.watch();
 
-  console.log({
-    amount: formData.deposit ?? "0",
-    isApe,
-    debtToken: row.debtToken,
-    leverageTier: parseInt(row.leverageTier),
-    collateralToken: row.collateralToken,
-  });
   const { data: quoteBurn } = api.vault.quoteBurn.useQuery(
     {
       amount: formData.deposit ?? "0",
@@ -64,7 +62,11 @@ export default function BurnForm({
       enabled: Boolean(formData.deposit),
     },
   );
-
+  const { address } = useAccount();
+  const { data: teaRewards } = api.user.getTeaRewards.useQuery(
+    { userAddress: address ?? "0x" },
+    { enabled: Boolean(address) && !isApe },
+  );
   const {
     writeContract,
     reset,
@@ -104,6 +106,7 @@ export default function BurnForm({
     },
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
+  const { claimRewardRequest } = useClaimTeaRewards();
 
   useEffect(() => {
     if (isConfirmed) {
@@ -114,9 +117,15 @@ export default function BurnForm({
   const { isValid, error } = useCheckValidityBurn(formData, balance);
 
   const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
+
+  const isClaimingRewards = !isApe && (teaRewards ?? 0n > 0n);
   const onSubmit = () => {
     if (isConfirmed) {
       return setOpen(false);
+    }
+    if (isClaimingRewards && claimRewardRequest) {
+      writeContract(claimRewardRequest);
+      return;
     }
     if (burnData?.request) {
       writeContract(burnData.request);
@@ -235,7 +244,8 @@ export default function BurnForm({
             className="w-full"
             type="button"
           >
-            Burn {isApe ? "APE" : "TEA"}
+            {isClaimingRewards && "Claim Rewards"}
+            {!isClaimingRewards && `Burn ${isApe ? "APE" : "TEA"}`}
           </Button>
           <div className="h-5 text-sm text-red-400">
             {error && <p>{error}</p>}
