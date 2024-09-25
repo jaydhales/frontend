@@ -63,28 +63,6 @@ export default function BurnTable({
   const loading = ape.isLoading || tea.isLoading;
   const apePosition = ape.data?.userPositions.map((r) => (
     <>
-      <BurnTableRowMobile
-        setSelectedRow={() =>
-          setSelectedRow({
-            vaultId: r.vaultId,
-            isApe: true,
-          })
-        }
-        key={r.vaultId + "apea"}
-        row={{
-          id: r.vaultId,
-          balance: r.balance,
-          user: r.user,
-          collateralSymbol: r.collateralSymbol,
-          debtSymbol: r.debtSymbol,
-          collateralToken: r.collateralToken,
-          debtToken: r.debtToken,
-          leverageTier: r.leverageTier,
-          vaultId: r.vaultId,
-        }}
-        isApe={true}
-        apeAddress={r.APE}
-      />
       <BurnTableRow
         setSelectedRow={() =>
           setSelectedRow({

@@ -4,9 +4,10 @@ import { getLeverageRatio, formatNumber } from "@/lib/utils";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { formatUnits } from "viem";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
-import type { ReactNode } from "react";
+import type { ReactNode, SetStateAction } from "react";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
+import BurnTable from "./burnTable";
 interface Props {
   row: TUserPosition;
   isApe: boolean;
@@ -32,40 +33,50 @@ export function BurnTableRow({
   const hasUnclaimedSir = teaRewards ?? 0n > 0n;
   const teaBalance = hasUnclaimedSir ? teaRewards : teaBal;
   return (
-    <tr className="hidden md:grid gap-x-4 grid-cols-5 items-center text-left  text-white">
-      <th className="flex font-normal items-center gap-x-1 ">
-        <span className="">{isApe ? "APE" : "TEA"}</span>
-        <span className="text-gray-500">-</span>
-        <span className="text-accent-100 text-xl ">{row.vaultId} </span>
-      </th>
-      <th className="font-normal  flex items-center text-gray-200">
-        {row.debtSymbol}
-      </th>
-      <th className="font-normal text-gray-200">{row.collateralSymbol}</th>
-      <th className="font-normal text-gray-200">
-        {getLeverageRatio(parseInt(row.leverageTier))}x
-      </th>
-      <th className="font-normal">
-        <div className="flex lg:gap-x-8 gap-x-4 items-center">
-          {isApe ? (
-            <span>{formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}</span>
-          ) : (
-            <span>{formatNumber(formatUnits(teaBalance ?? 0n, 18), 4)}</span>
-          )}
+    <>
+      <tr className="hidden md:grid gap-x-4 grid-cols-5 items-center text-left  text-white">
+        <th className="flex font-normal items-center gap-x-1 ">
+          <span className="">{isApe ? "APE" : "TEA"}</span>
+          <span className="text-gray-500">-</span>
+          <span className="text-accent-100 text-xl ">{row.vaultId} </span>
+        </th>
+        <th className="font-normal  flex items-center text-gray-200">
+          {row.debtSymbol}
+        </th>
+        <th className="font-normal text-gray-200">{row.collateralSymbol}</th>
+        <th className="font-normal text-gray-200">
+          {getLeverageRatio(parseInt(row.leverageTier))}x
+        </th>
+        <th className="font-normal">
+          <div className="flex lg:gap-x-8 gap-x-4 items-center">
+            {isApe ? (
+              <span>{formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}</span>
+            ) : (
+              <span>{formatNumber(formatUnits(teaBalance ?? 0n, 18), 4)}</span>
+            )}
 
-          <Button
-            onClick={() => setSelectedRow(row.vaultId)}
-            type="button"
-            className="h-8 py-2 px-5 rounded-full text-[14px] "
-          >
-            {hasUnclaimedSir ? "Claim" : "Burn"}
-          </Button>
-        </div>
-      </th>
-    </tr>
+            <Button
+              onClick={() => setSelectedRow(row.vaultId)}
+              type="button"
+              className="h-8 py-2 px-5 rounded-full text-[14px] "
+            >
+              {hasUnclaimedSir ? "Claim" : "Burn"}
+            </Button>
+          </div>
+        </th>
+      </tr>
+      <BurnTableRowMobile
+        row={{
+          ...row,
+        }}
+        apeAddress={apeAddress}
+        isApe={isApe}
+        setSelectedRow={setSelectedRow}
+      />
+    </>
   );
 }
-
+// todo share component
 export function BurnTableRowMobile({
   setSelectedRow,
   isApe,
