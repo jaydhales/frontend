@@ -125,7 +125,7 @@ const UnstakeForm = ({
 
   return (
     <>
-      <Card className="w-full ">
+      <Card className="w-full bg-secondary-800 ">
         <TransactionModal.Root setOpen={setOpen} open={open}>
           <TransactionModal.Close setOpen={setOpen} />
           <TransactionModal.InfoContainer>
