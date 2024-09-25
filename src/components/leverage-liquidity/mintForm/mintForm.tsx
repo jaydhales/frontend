@@ -29,8 +29,7 @@ import { useTransactions } from "./hooks/useTransactions";
 import { TransactionStatus } from "./transactionStatus";
 import { CircleCheck } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
-import { VaultContract } from "@/contracts/vault";
-import { APE_HASH, WETH_ADDRESS } from "@/data/constants";
+import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { TransactionEstimates } from "./transactionEstimates";
 interface Props {
@@ -88,13 +87,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
 
-  const vaultId = findVault(vaultsQuery, formData);
-  const apeAddress = getApeAddress({
-    apeHash: APE_HASH,
-    vaultAddress: VaultContract.address,
-    vaultId,
-  });
-
   const { writeContract, data: hash, isPending, reset } = useWriteContract();
   const {
     isLoading: isConfirming,
@@ -103,7 +95,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   } = useWaitForTransactionReceipt({ hash });
 
   const { tokenReceived } = useGetReceivedTokens({
-    apeAddress,
+    apeAddress: findVault(vaultsQuery, formData).result?.apeAddress ?? "0x",
     logs: transactionData?.logs,
     isApe,
   });
