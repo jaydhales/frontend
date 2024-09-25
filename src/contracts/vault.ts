@@ -9,7 +9,11 @@ export const VaultContract = {
         { name: "systemControl", type: "address", internalType: "address" },
         { name: "sir", type: "address", internalType: "address" },
         { name: "oracle", type: "address", internalType: "address" },
-        { name: "apeImplementation", type: "address", internalType: "address" },
+        {
+          name: "apeImplementation",
+          type: "address",
+          internalType: "address",
+        },
       ],
       stateMutability: "nonpayable",
     },
@@ -135,8 +139,16 @@ export const VaultContract = {
           type: "tuple",
           internalType: "struct SirStructs.Reserves",
           components: [
-            { name: "reserveApes", type: "uint144", internalType: "uint144" },
-            { name: "reserveLPers", type: "uint144", internalType: "uint144" },
+            {
+              name: "reserveApes",
+              type: "uint144",
+              internalType: "uint144",
+            },
+            {
+              name: "reserveLPers",
+              type: "uint144",
+              internalType: "uint144",
+            },
             { name: "tickPriceX42", type: "int64", internalType: "int64" },
           ],
         },
@@ -194,9 +206,14 @@ export const VaultContract = {
             { name: "leverageTier", type: "int8", internalType: "int8" },
           ],
         },
+        {
+          name: "collateralToDeposit",
+          type: "uint144",
+          internalType: "uint144",
+        },
       ],
       outputs: [{ name: "amount", type: "uint256", internalType: "uint256" }],
-      stateMutability: "nonpayable",
+      stateMutability: "payable",
     },
     {
       type: "function",
@@ -283,7 +300,11 @@ export const VaultContract = {
             { name: "baseFee", type: "uint16", internalType: "uint16" },
             { name: "lpFee", type: "uint16", internalType: "uint16" },
             { name: "mintingStopped", type: "bool", internalType: "bool" },
-            { name: "cumulativeTax", type: "uint16", internalType: "uint16" },
+            {
+              name: "cumulativeTax",
+              type: "uint16",
+              internalType: "uint16",
+            },
           ],
         },
       ],
@@ -362,7 +383,11 @@ export const VaultContract = {
           internalType: "struct SirStructs.VaultState",
           components: [
             { name: "reserve", type: "uint144", internalType: "uint144" },
-            { name: "tickPriceSatX42", type: "int64", internalType: "int64" },
+            {
+              name: "tickPriceSatX42",
+              type: "int64",
+              internalType: "int64",
+            },
             { name: "vaultId", type: "uint48", internalType: "uint48" },
           ],
         },
@@ -436,7 +461,12 @@ export const VaultContract = {
           indexed: true,
           internalType: "uint48",
         },
-        { name: "isAPE", type: "bool", indexed: false, internalType: "bool" },
+        {
+          name: "isAPE",
+          type: "bool",
+          indexed: false,
+          internalType: "bool",
+        },
         {
           name: "collateralWithdrawn",
           type: "uint144",
@@ -487,7 +517,12 @@ export const VaultContract = {
           indexed: true,
           internalType: "uint48",
         },
-        { name: "isAPE", type: "bool", indexed: false, internalType: "bool" },
+        {
+          name: "isAPE",
+          type: "bool",
+          indexed: false,
+          internalType: "bool",
+        },
         {
           name: "collateralIn",
           type: "uint144",
@@ -525,7 +560,12 @@ export const VaultContract = {
           indexed: true,
           internalType: "address",
         },
-        { name: "to", type: "address", indexed: true, internalType: "address" },
+        {
+          name: "to",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
         {
           name: "vaultIds",
           type: "uint256[]",
@@ -557,7 +597,12 @@ export const VaultContract = {
           indexed: true,
           internalType: "address",
         },
-        { name: "to", type: "address", indexed: true, internalType: "address" },
+        {
+          name: "to",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
         {
           name: "id",
           type: "uint256",
@@ -583,7 +628,12 @@ export const VaultContract = {
           indexed: false,
           internalType: "string",
         },
-        { name: "id", type: "uint256", indexed: true, internalType: "uint256" },
+        {
+          name: "id",
+          type: "uint256",
+          indexed: true,
+          internalType: "uint256",
+        },
       ],
       anonymous: false,
     },
@@ -597,7 +647,12 @@ export const VaultContract = {
           indexed: true,
           internalType: "uint48",
         },
-        { name: "tax", type: "uint8", indexed: false, internalType: "uint8" },
+        {
+          name: "tax",
+          type: "uint8",
+          indexed: false,
+          internalType: "uint8",
+        },
         {
           name: "cumulativeTax",
           type: "uint16",
@@ -608,9 +663,9 @@ export const VaultContract = {
       anonymous: false,
     },
     { type: "error", name: "LengthMismatch", inputs: [] },
+    { type: "error", name: "NotAWETHVault", inputs: [] },
     { type: "error", name: "NotAuthorized", inputs: [] },
     { type: "error", name: "TEAMaxSupplyExceeded", inputs: [] },
-    { type: "error", name: "TF", inputs: [] },
     { type: "error", name: "UnsafeRecipient", inputs: [] },
   ] as const,
 };

@@ -7,7 +7,6 @@ interface Props {
   depositToken: string;
   requests: {
     mintRequest?: SimulateContractReturnType["request"] | undefined;
-    mintWithETHRequest?: SimulateContractReturnType["request"] | undefined;
     approveWriteRequest?: SimulateContractReturnType["request"] | undefined;
   };
   tokenAllowance?: bigint | undefined;
@@ -57,8 +56,7 @@ export const useCheckSubmitValid = ({
           submitType: ESubmitType.mint,
         };
       }
-
-      if (requests.mintWithETHRequest) {
+      if (requests.mintRequest) {
         return {
           isValid: true,
           errorMessage: "",
@@ -135,7 +133,6 @@ export const useCheckSubmitValid = ({
     tokenAllowance,
     requests.approveWriteRequest,
     requests.mintRequest,
-    requests.mintWithETHRequest,
     ethBalance,
     approveFetching,
     mintFetching,
