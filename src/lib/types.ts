@@ -25,6 +25,7 @@ export interface VaultFieldFragment {
   totalApeLocked: string;
   totalTeaLocked: string;
   lockedLiquidity: string;
+  apeAddress: TAddressString;
 }
 export type TVaults =
   | {
