@@ -4,10 +4,9 @@ import { getLeverageRatio, formatNumber } from "@/lib/utils";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { formatUnits } from "viem";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
-import type { ReactNode, SetStateAction } from "react";
+import type { ReactNode } from "react";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
-import BurnTable from "./burnTable";
 interface Props {
   row: TUserPosition;
   isApe: boolean;
