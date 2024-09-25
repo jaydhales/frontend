@@ -106,16 +106,17 @@ export function getApeAddress({
   vaultAddress: TAddressString;
   apeHash: TAddressString;
 }) {
-  if (vaultId === undefined) {
-    return "0xff" as TAddressString;
-  }
-  const packed = encodePacked(
-    ["bytes1", "bytes20", "bytes32", "bytes32"],
-    ["0xff", vaultAddress, toHex(vaultId, { size: 32 }), apeHash],
-  );
-  const raw = keccak256(packed);
-  const result = ("0x" + raw.slice(-40)) as TAddressString;
-  return result;
+  // if (vaultId === undefined) {
+  //   return "0xff" as TAddressString;
+  // }
+  // const packed = encodePacked(
+  //   ["bytes1", "bytes20", "bytes32", "bytes32"],
+  //   ["0xff", vaultAddress, toHex(vaultId, { size: 32 }), apeHash],
+  // );
+  // const raw = keccak256(packed);
+  // const result = ("0x" + raw.slice(-40)) as TAddressString;
+
+  return vaultId;
 }
 
 export function roundDown(float: number, decimals: number) {
