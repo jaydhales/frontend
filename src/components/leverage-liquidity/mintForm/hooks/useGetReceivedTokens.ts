@@ -15,7 +15,6 @@ interface Props {
 export function useGetReceivedTokens({ logs, apeAddress, isApe }: Props) {
   const [tokenReceived, setTokenReceived] = useState<bigint | undefined>();
   useEffect(() => {
-    console.log(logs, "LOGS", isApe, "isAPE");
     if (logs) {
       if (isApe) {
         const foundLogs = logs.filter(

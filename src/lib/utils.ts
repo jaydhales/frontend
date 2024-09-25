@@ -91,16 +91,12 @@ export function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
     } else {
       return false;
     }
-  })?.vaultId;
-
-  const safeVaultId = z.coerce.number().safeParse(result);
-  return safeVaultId.success ? safeVaultId.data : 0;
+  });
+  return { result };
 }
 
 export function getApeAddress({
   vaultId,
-  vaultAddress,
-  apeHash,
 }: {
   vaultId: number | undefined;
   vaultAddress: TAddressString;

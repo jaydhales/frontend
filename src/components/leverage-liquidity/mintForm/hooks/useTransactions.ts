@@ -38,7 +38,7 @@ export function useTransactions({
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   const { Mint, isFetching: mintFetching } = useMintApeOrTea({
     useEth,
-    vaultId: findVault(vaultsQuery, formData).toString(),
+    vaultId: findVault(vaultsQuery, formData).result?.vaultId.toString(),
     isApe,
     debtToken: formatDataInput(formData.versus), //value formatted : address,symbol
     collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
