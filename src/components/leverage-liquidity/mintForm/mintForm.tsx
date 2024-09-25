@@ -19,7 +19,6 @@ import { Card } from "@/components/ui/card";
 import {
   calculateApeVaultFee,
   findVault,
-  formatBigInt,
   formatNumber,
   getApeAddress,
 } from "@/lib/utils";
@@ -30,8 +29,7 @@ import { useTransactions } from "./hooks/useTransactions";
 import { TransactionStatus } from "./transactionStatus";
 import { CircleCheck } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
-import { VaultContract } from "@/contracts/vault";
-import { APE_HASH, WETH_ADDRESS } from "@/data/constants";
+import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { TransactionEstimates } from "./transactionEstimates";
 interface Props {
@@ -56,12 +54,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   );
 
   let decimals = decimalData ?? 18;
-  const { requests, isApproveFetching, isMintFetching, userBalance } =
-    useTransactions({
-      isApe,
-      vaultsQuery,
-      decimals,
-    });
   const [useEthRaw, setUseEth] = useState(false);
   const useEth = useMemo(() => {
     // Ensure use eth toggle is not used on non-weth tokens
@@ -74,6 +66,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
   }, [useEthRaw, formData.long]);
 
+  const { requests, isApproveFetching, isMintFetching, userBalance } =
+    useTransactions({
+      useEth,
+      isApe,
+      vaultsQuery,
+      decimals,
+    });
   if (useEth) {
     decimals = 18;
   }
@@ -88,13 +87,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
 
-  const vaultId = findVault(vaultsQuery, formData);
-  const apeAddress = getApeAddress({
-    apeHash: APE_HASH,
-    vaultAddress: VaultContract.address,
-    vaultId,
-  });
-
   const { writeContract, data: hash, isPending, reset } = useWriteContract();
   const {
     isLoading: isConfirming,
@@ -103,7 +95,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   } = useWaitForTransactionReceipt({ hash });
 
   const { tokenReceived } = useGetReceivedTokens({
-    apeAddress,
+    apeAddress: findVault(vaultsQuery, formData).result?.apeAddress ?? "0x",
     logs: transactionData?.logs,
     isApe,
   });
@@ -138,10 +130,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     if (submitType === null) {
       return;
     }
-    if (useEth && requests.mintWithETHRequest) {
-      writeContract(requests.mintWithETHRequest);
-      return;
-    }
+    // if (useEth && requests.mintWithETHRequest) {
+    //   writeContract(requests.mintWithETHRequest);
+    //   return;
+    // }
     // CHECK ALLOWANCE
     if (submitType === ESubmitType.mint && requests.mintRequest) {
       setCurrentTxType("mint");
@@ -171,9 +163,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const levTier = form.getValues("leverageTier");
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
+
     if (!isApe) {
       return "19";
     }
+
     if (isFinite(lev)) {
       return formatNumber(calculateApeVaultFee(lev) * 100, 2);
     } else {
@@ -251,11 +245,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             {submitType === ESubmitType.mint && !isConfirmed && (
               <TransactionModal.StatContainer>
                 <TransactionModal.StatRow
+                  info="Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
                   title={"Fee Percent"}
                   value={fee ? fee.toString() + "%" : "0%"}
                 />
 
                 <TransactionModal.StatRow
+                  info=""
                   title="Fee Amount"
                   value={
                     formatNumber(

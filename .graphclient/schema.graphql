@@ -609,8 +609,11 @@ type Vault {
   collateralSymbol: String!
   debtSymbol: String!
   leverageTier: Int!
-  totalValueLocked: BigInt!
+  totalApeLocked: BigInt!
+  totalTeaLocked: BigInt!
   lockedLiquidity: BigInt!
+  taxAmount: BigInt!
+  apeAddress: Bytes!
 }
 
 input Vault_filter {
@@ -742,14 +745,22 @@ input Vault_filter {
   leverageTier_lte: Int
   leverageTier_in: [Int!]
   leverageTier_not_in: [Int!]
-  totalValueLocked: BigInt
-  totalValueLocked_not: BigInt
-  totalValueLocked_gt: BigInt
-  totalValueLocked_lt: BigInt
-  totalValueLocked_gte: BigInt
-  totalValueLocked_lte: BigInt
-  totalValueLocked_in: [BigInt!]
-  totalValueLocked_not_in: [BigInt!]
+  totalApeLocked: BigInt
+  totalApeLocked_not: BigInt
+  totalApeLocked_gt: BigInt
+  totalApeLocked_lt: BigInt
+  totalApeLocked_gte: BigInt
+  totalApeLocked_lte: BigInt
+  totalApeLocked_in: [BigInt!]
+  totalApeLocked_not_in: [BigInt!]
+  totalTeaLocked: BigInt
+  totalTeaLocked_not: BigInt
+  totalTeaLocked_gt: BigInt
+  totalTeaLocked_lt: BigInt
+  totalTeaLocked_gte: BigInt
+  totalTeaLocked_lte: BigInt
+  totalTeaLocked_in: [BigInt!]
+  totalTeaLocked_not_in: [BigInt!]
   lockedLiquidity: BigInt
   lockedLiquidity_not: BigInt
   lockedLiquidity_gt: BigInt
@@ -758,6 +769,24 @@ input Vault_filter {
   lockedLiquidity_lte: BigInt
   lockedLiquidity_in: [BigInt!]
   lockedLiquidity_not_in: [BigInt!]
+  taxAmount: BigInt
+  taxAmount_not: BigInt
+  taxAmount_gt: BigInt
+  taxAmount_lt: BigInt
+  taxAmount_gte: BigInt
+  taxAmount_lte: BigInt
+  taxAmount_in: [BigInt!]
+  taxAmount_not_in: [BigInt!]
+  apeAddress: Bytes
+  apeAddress_not: Bytes
+  apeAddress_gt: Bytes
+  apeAddress_lt: Bytes
+  apeAddress_gte: Bytes
+  apeAddress_lte: Bytes
+  apeAddress_in: [Bytes!]
+  apeAddress_not_in: [Bytes!]
+  apeAddress_contains: Bytes
+  apeAddress_not_contains: Bytes
   """Filter for the block changed event."""
   _change_block: BlockChangedFilter
   and: [Vault_filter]
@@ -772,8 +801,11 @@ enum Vault_orderBy {
   collateralSymbol
   debtSymbol
   leverageTier
-  totalValueLocked
+  totalApeLocked
+  totalTeaLocked
   lockedLiquidity
+  taxAmount
+  apeAddress
 }
 
 type _Block_ {

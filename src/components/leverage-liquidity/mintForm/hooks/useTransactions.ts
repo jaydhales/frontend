@@ -4,7 +4,6 @@ import { AssistantContract } from "@/contracts/assistant";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import { formatDataInput, findVault } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
@@ -16,10 +15,12 @@ export function useTransactions({
   isApe,
   vaultsQuery,
   decimals,
+  useEth,
 }: {
   isApe: boolean;
   vaultsQuery: TVaults;
   decimals: number;
+  useEth: boolean;
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
@@ -35,12 +36,9 @@ export function useTransactions({
   );
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
-  const {
-    Mint,
-    MintWithEth,
-    isFetching: mintFetching,
-  } = useMintApeOrTea({
-    vaultId: findVault(vaultsQuery, formData).toString(),
+  const { Mint, isFetching: mintFetching } = useMintApeOrTea({
+    useEth,
+    vaultId: findVault(vaultsQuery, formData).result?.vaultId.toString(),
     isApe,
     debtToken: formatDataInput(formData.versus), //value formatted : address,symbol
     collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
@@ -57,7 +55,6 @@ export function useTransactions({
   return {
     requests: {
       mintRequest: Mint?.request as SimulateReq,
-      mintWithETHRequest: MintWithEth?.request as SimulateReq,
       approveWriteRequest: approveSimulate.data?.request as SimulateReq,
     },
     isApproveFetching: approveSimulate.isFetching,

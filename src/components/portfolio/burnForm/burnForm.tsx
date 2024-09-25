@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UseFormReturn } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
@@ -39,11 +39,13 @@ export default function BurnForm({
   row,
   isApe,
   close,
+  levTier,
 }: {
   balance: bigint | undefined;
   isApe: boolean;
   row: TUserPosition;
   close: () => void;
+  levTier: string;
 }) {
   const form = useForm<z.infer<typeof BurnSchema>>({
     resolver: zodResolver(BurnSchema),
@@ -147,6 +149,20 @@ export default function BurnForm({
   if (isConfirmed) {
     submitButtonText = "Close";
   }
+
+  const fee = useMemo(() => {
+    const lev = parseFloat(levTier);
+
+    if (!isApe) {
+      return "19";
+    }
+    if (isFinite(lev)) {
+      return formatNumber(calculateApeVaultFee(lev) * 100, 2);
+    } else {
+      return undefined;
+    }
+  }, [isApe, levTier]);
+
   return (
     <FormProvider {...form}>
       <TransactionModal.Root open={open} setOpen={setOpen}>
@@ -176,7 +192,12 @@ export default function BurnForm({
         </TransactionModal.InfoContainer>
         {/*----*/}
         <TransactionModal.StatSubmitContainer>
-          <div className="pt-2"></div>
+          <TransactionModal.StatContainer>
+            <TransactionModal.StatRow
+              title="Fee"
+              value={fee ?? ""}
+            ></TransactionModal.StatRow>
+          </TransactionModal.StatContainer>
           <TransactionModal.SubmitButton
             disabled={false}
             loading={isConfirming || isPending}
