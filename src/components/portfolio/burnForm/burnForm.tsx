@@ -23,6 +23,7 @@ import { useGetTxTokens } from "./hooks/useGetTxTokens";
 import { X } from "lucide-react";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 import { useClaimTeaRewards } from "./hooks/useClaimTeaRewards";
+import { calculateApeVaultFee, formatNumber } from "@/lib/utils";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
