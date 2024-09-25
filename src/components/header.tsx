@@ -26,7 +26,7 @@ export function Header() {
     return;
   };
   return (
-    <div className="z-10 grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
+    <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
       <Link href={"/"} className="flex items-center gap-x-2">
         {/* <Image src={logo} alt="Sir-Trading Logo" className="h-[60px] w-auto" /> */}
         <h1 className="font-lora text-[32px] font-bold text-gold">

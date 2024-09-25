@@ -57,11 +57,11 @@ export default function RootLayout({
             backgroundBlendMode: "lighten",
             boxShadow: "0px 4px 0px 0px rgba(0,0,0,0.5)",
           }}
-          className="absolute opacity-100 top-0 left-0 w-screen h-full z-[2]"
+          className="absolute opacity-100 top-0 left-0 w-screen h-full z-[-1]"
         ></div>
         <TRPCReactProvider>
           <EvmProvider cookie={cookie}>
-            <div className="z-10 flex min-h-screen flex-col">
+            <div className=" flex min-h-screen flex-col">
               <Header />
 
               {children}
