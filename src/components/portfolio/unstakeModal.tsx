@@ -23,7 +23,7 @@ export function UnstakeModal({ open, setOpen }: Props) {
         className="bg-transparent"
       >
         <div
-          className={`rounded-xl relative transition-all duration-700  bg-secondary-800 text-white`}
+          className={`rounded-xl relative transition-all duration-700  bg-secondary text-white`}
         >
           <TransactionModal.Close setOpen={setOpen} />
           <h1 className="font-lora text-2xl text-center pt-4">Unstake</h1>
