@@ -5,6 +5,8 @@ import type { TUserPosition } from "@/server/queries/vaults";
 import { formatUnits } from "viem";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
 import type { ReactNode } from "react";
+import { api } from "@/trpc/react";
+import { useAccount } from "wagmi";
 interface Props {
   row: TUserPosition;
   isApe: boolean;
@@ -22,7 +24,12 @@ export function BurnTableRow({
     vaultId: row.vaultId,
     isApe,
   });
-
+  const { address } = useAccount();
+  const { data: teaRewards } = api.user.getTeaRewards.useQuery(
+    { userAddress: address ?? "0x" },
+    { enabled: Boolean(address) },
+  );
+  const unclaimedSir = teaRewards ?? 0n > 0n;
   return (
     <tr className="hidden md:grid gap-x-4 grid-cols-5 items-center text-left  text-white">
       <th className="flex font-normal items-center gap-x-1 ">
