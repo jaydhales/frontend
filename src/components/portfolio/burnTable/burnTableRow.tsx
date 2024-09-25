@@ -29,7 +29,8 @@ export function BurnTableRow({
     { userAddress: address ?? "0x" },
     { enabled: Boolean(address) },
   );
-  const unclaimedSir = teaRewards ?? 0n > 0n;
+  const hasUnclaimedSir = teaRewards ?? 0n > 0n;
+  const teaBalance = hasUnclaimedSir ? teaRewards : teaBal;
   return (
     <tr className="hidden md:grid gap-x-4 grid-cols-5 items-center text-left  text-white">
       <th className="flex font-normal items-center gap-x-1 ">
@@ -49,7 +50,7 @@ export function BurnTableRow({
           {isApe ? (
             <span>{formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}</span>
           ) : (
-            <span>{formatNumber(formatUnits(teaBal ?? 0n, 18), 4)}</span>
+            <span>{formatNumber(formatUnits(teaBalance ?? 0n, 18), 4)}</span>
           )}
 
           <Button
@@ -57,7 +58,7 @@ export function BurnTableRow({
             type="button"
             className="h-8 py-2 px-5 rounded-full text-[14px] "
           >
-            Burn
+            {hasUnclaimedSir ? "Claim" : "Burn"}
           </Button>
         </div>
       </th>
