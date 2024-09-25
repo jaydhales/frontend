@@ -574,6 +574,7 @@ export type Vault = {
   totalTeaLocked: Scalars['BigInt']['output'];
   lockedLiquidity: Scalars['BigInt']['output'];
   taxAmount: Scalars['BigInt']['output'];
+  apeAddress: Scalars['Bytes']['output'];
 };
 
 export type Vault_filter = {
@@ -737,6 +738,16 @@ export type Vault_filter = {
   taxAmount_lte?: InputMaybe<Scalars['BigInt']['input']>;
   taxAmount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   taxAmount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  apeAddress?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_not?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  apeAddress_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  apeAddress_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Vault_filter>>>;
@@ -754,7 +765,8 @@ export type Vault_orderBy =
   | 'totalApeLocked'
   | 'totalTeaLocked'
   | 'lockedLiquidity'
-  | 'taxAmount';
+  | 'taxAmount'
+  | 'apeAddress';
 
 export type _Block_ = {
   /** The hash of the block */

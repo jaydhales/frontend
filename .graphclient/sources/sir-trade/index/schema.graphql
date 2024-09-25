@@ -613,6 +613,7 @@ type Vault {
   totalTeaLocked: BigInt!
   lockedLiquidity: BigInt!
   taxAmount: BigInt!
+  apeAddress: Bytes!
 }
 
 input Vault_filter {
@@ -776,6 +777,16 @@ input Vault_filter {
   taxAmount_lte: BigInt
   taxAmount_in: [BigInt!]
   taxAmount_not_in: [BigInt!]
+  apeAddress: Bytes
+  apeAddress_not: Bytes
+  apeAddress_gt: Bytes
+  apeAddress_lt: Bytes
+  apeAddress_gte: Bytes
+  apeAddress_lte: Bytes
+  apeAddress_in: [Bytes!]
+  apeAddress_not_in: [Bytes!]
+  apeAddress_contains: Bytes
+  apeAddress_not_contains: Bytes
   """Filter for the block changed event."""
   _change_block: BlockChangedFilter
   and: [Vault_filter]
@@ -794,6 +805,7 @@ enum Vault_orderBy {
   totalTeaLocked
   lockedLiquidity
   taxAmount
+  apeAddress
 }
 
 type _Block_ {

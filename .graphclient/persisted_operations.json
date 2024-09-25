@@ -1,5 +1,5 @@
 {
-  "7ab60ad48262795107c5394f1b43e24215612784d33cb88eeb338b6aebf941e7": "#graphql\n\nfragment VaultFields on Vault {\n  debtToken\n  debtSymbol\n  collateralToken\n  collateralSymbol\n  vaultId\n  leverageTier\n  totalApeLocked\n  totalTeaLocked\n  lockedLiquidity\n}\n\nquery VaultQuery {\n  vaults {\n    ...VaultFields\n  }\n}",
+  "f8cc4aa516b4c7d9a80305ef4623fa8bc146c8fdc5f1c53bfc67c0d4967cf1aa": "#graphql\n\nfragment VaultFields on Vault {\n  debtToken\n  debtSymbol\n  collateralToken\n  collateralSymbol\n  vaultId\n  leverageTier\n  totalApeLocked\n  totalTeaLocked\n  lockedLiquidity\n  apeAddress\n}\n\nquery VaultQuery {\n  vaults {\n    ...VaultFields\n  }\n}",
   "17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36": "query getUserApePositions($user: Bytes) {\n  userPositions(where: { user: $user }) {\n    user\n    vaultId\n    APE\n    balance\n    debtToken\n    debtSymbol\n    collateralToken\n    collateralSymbol\n    leverageTier\n  }\n}",
   "d0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce": "query getUserTeaPositions($user: Bytes) {\n  userPositionTeas(where: { user: $user }) {\n    user\n    vaultId\n    balance\n    debtToken\n    debtSymbol\n    collateralToken\n    collateralSymbol\n    leverageTier\n  }\n}"
 }

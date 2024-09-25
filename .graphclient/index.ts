@@ -596,6 +596,7 @@ export type Vault = {
   totalTeaLocked: Scalars['BigInt']['output'];
   lockedLiquidity: Scalars['BigInt']['output'];
   taxAmount: Scalars['BigInt']['output'];
+  apeAddress: Scalars['Bytes']['output'];
 };
 
 export type Vault_filter = {
@@ -759,6 +760,16 @@ export type Vault_filter = {
   taxAmount_lte?: InputMaybe<Scalars['BigInt']['input']>;
   taxAmount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   taxAmount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  apeAddress?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_not?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  apeAddress_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  apeAddress_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  apeAddress_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Vault_filter>>>;
@@ -776,7 +787,8 @@ export type Vault_orderBy =
   | 'totalApeLocked'
   | 'totalTeaLocked'
   | 'lockedLiquidity'
-  | 'taxAmount';
+  | 'taxAmount'
+  | 'apeAddress';
 
 export type _Block_ = {
   /** The hash of the block */
@@ -1048,6 +1060,7 @@ export type VaultResolvers<ContextType = MeshContext, ParentType extends Resolve
   totalTeaLocked?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   lockedLiquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   taxAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  apeAddress?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1151,7 +1164,7 @@ const merger = new(BareMerger as any)({
         store: rootStore.child('bareMerger')
       })
 const documentHashMap = {
-        "7ab60ad48262795107c5394f1b43e24215612784d33cb88eeb338b6aebf941e7": VaultQueryDocument,
+        "f8cc4aa516b4c7d9a80305ef4623fa8bc146c8fdc5f1c53bfc67c0d4967cf1aa": VaultQueryDocument,
 "17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36": GetUserApePositionsDocument,
 "d0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce": GetUserTeaPositionsDocument
       }
@@ -1180,7 +1193,7 @@ additionalEnvelopPlugins.push(usePersistedOperations({
           return printWithCache(VaultQueryDocument);
         },
         location: 'VaultQueryDocument.graphql',
-        sha256Hash: '7ab60ad48262795107c5394f1b43e24215612784d33cb88eeb338b6aebf941e7'
+        sha256Hash: 'f8cc4aa516b4c7d9a80305ef4623fa8bc146c8fdc5f1c53bfc67c0d4967cf1aa'
       },{
         document: GetUserApePositionsDocument,
         get rawSDL() {
@@ -1249,12 +1262,12 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
   const sdkRequester$ = getBuiltGraphClient().then(({ sdkRequesterFactory }) => sdkRequesterFactory(globalContext));
   return getSdk<TOperationContext, TGlobalContext>((...args) => sdkRequester$.then(sdkRequester => sdkRequester(...args)));
 }
-export type VaultFieldsFragment = Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalApeLocked' | 'totalTeaLocked' | 'lockedLiquidity'>;
+export type VaultFieldsFragment = Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalApeLocked' | 'totalTeaLocked' | 'lockedLiquidity' | 'apeAddress'>;
 
 export type VaultQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type VaultQueryQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalApeLocked' | 'totalTeaLocked' | 'lockedLiquidity'>> };
+export type VaultQueryQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalApeLocked' | 'totalTeaLocked' | 'lockedLiquidity' | 'apeAddress'>> };
 
 export type getUserApePositionsQueryVariables = Exact<{
   user?: InputMaybe<Scalars['Bytes']['input']>;
@@ -1281,6 +1294,7 @@ export const VaultFieldsFragmentDoc = gql`
   totalApeLocked
   totalTeaLocked
   lockedLiquidity
+  apeAddress
 }
     ` as unknown as DocumentNode<VaultFieldsFragment, unknown>;
 export const VaultQueryDocument = gql`
