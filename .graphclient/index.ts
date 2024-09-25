@@ -592,8 +592,10 @@ export type Vault = {
   collateralSymbol: Scalars['String']['output'];
   debtSymbol: Scalars['String']['output'];
   leverageTier: Scalars['Int']['output'];
-  totalValueLocked: Scalars['BigInt']['output'];
+  totalApeLocked: Scalars['BigInt']['output'];
+  totalTeaLocked: Scalars['BigInt']['output'];
   lockedLiquidity: Scalars['BigInt']['output'];
+  taxAmount: Scalars['BigInt']['output'];
 };
 
 export type Vault_filter = {
@@ -725,14 +727,22 @@ export type Vault_filter = {
   leverageTier_lte?: InputMaybe<Scalars['Int']['input']>;
   leverageTier_in?: InputMaybe<Array<Scalars['Int']['input']>>;
   leverageTier_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  totalValueLocked?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  totalValueLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalApeLocked?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalApeLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalTeaLocked?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalTeaLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   lockedLiquidity?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_not?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -741,6 +751,14 @@ export type Vault_filter = {
   lockedLiquidity_lte?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   lockedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  taxAmount?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  taxAmount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Vault_filter>>>;
@@ -755,8 +773,10 @@ export type Vault_orderBy =
   | 'collateralSymbol'
   | 'debtSymbol'
   | 'leverageTier'
-  | 'totalValueLocked'
-  | 'lockedLiquidity';
+  | 'totalApeLocked'
+  | 'totalTeaLocked'
+  | 'lockedLiquidity'
+  | 'taxAmount';
 
 export type _Block_ = {
   /** The hash of the block */
@@ -1024,8 +1044,10 @@ export type VaultResolvers<ContextType = MeshContext, ParentType extends Resolve
   collateralSymbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   debtSymbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   leverageTier?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  totalValueLocked?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  totalApeLocked?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  totalTeaLocked?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   lockedLiquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  taxAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1129,7 +1151,7 @@ const merger = new(BareMerger as any)({
         store: rootStore.child('bareMerger')
       })
 const documentHashMap = {
-        "2a6ff8061aef02d9fa649c19a9cedfc3fc65a1afed1396d6502ad2ccdd939f3b": VaultQueryDocument,
+        "7ab60ad48262795107c5394f1b43e24215612784d33cb88eeb338b6aebf941e7": VaultQueryDocument,
 "17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36": GetUserApePositionsDocument,
 "d0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce": GetUserTeaPositionsDocument
       }
@@ -1158,7 +1180,7 @@ additionalEnvelopPlugins.push(usePersistedOperations({
           return printWithCache(VaultQueryDocument);
         },
         location: 'VaultQueryDocument.graphql',
-        sha256Hash: '2a6ff8061aef02d9fa649c19a9cedfc3fc65a1afed1396d6502ad2ccdd939f3b'
+        sha256Hash: '7ab60ad48262795107c5394f1b43e24215612784d33cb88eeb338b6aebf941e7'
       },{
         document: GetUserApePositionsDocument,
         get rawSDL() {
@@ -1227,12 +1249,12 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
   const sdkRequester$ = getBuiltGraphClient().then(({ sdkRequesterFactory }) => sdkRequesterFactory(globalContext));
   return getSdk<TOperationContext, TGlobalContext>((...args) => sdkRequester$.then(sdkRequester => sdkRequester(...args)));
 }
-export type VaultFieldsFragment = Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalValueLocked' | 'lockedLiquidity'>;
+export type VaultFieldsFragment = Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalApeLocked' | 'totalTeaLocked' | 'lockedLiquidity'>;
 
 export type VaultQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type VaultQueryQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalValueLocked' | 'lockedLiquidity'>> };
+export type VaultQueryQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalApeLocked' | 'totalTeaLocked' | 'lockedLiquidity'>> };
 
 export type getUserApePositionsQueryVariables = Exact<{
   user?: InputMaybe<Scalars['Bytes']['input']>;
@@ -1256,7 +1278,8 @@ export const VaultFieldsFragmentDoc = gql`
   collateralSymbol
   vaultId
   leverageTier
-  totalValueLocked
+  totalApeLocked
+  totalTeaLocked
   lockedLiquidity
 }
     ` as unknown as DocumentNode<VaultFieldsFragment, unknown>;

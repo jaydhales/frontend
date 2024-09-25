@@ -570,8 +570,10 @@ export type Vault = {
   collateralSymbol: Scalars['String']['output'];
   debtSymbol: Scalars['String']['output'];
   leverageTier: Scalars['Int']['output'];
-  totalValueLocked: Scalars['BigInt']['output'];
+  totalApeLocked: Scalars['BigInt']['output'];
+  totalTeaLocked: Scalars['BigInt']['output'];
   lockedLiquidity: Scalars['BigInt']['output'];
+  taxAmount: Scalars['BigInt']['output'];
 };
 
 export type Vault_filter = {
@@ -703,14 +705,22 @@ export type Vault_filter = {
   leverageTier_lte?: InputMaybe<Scalars['Int']['input']>;
   leverageTier_in?: InputMaybe<Array<Scalars['Int']['input']>>;
   leverageTier_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  totalValueLocked?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalValueLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  totalValueLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalApeLocked?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApeLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalApeLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalTeaLocked?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalTeaLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalTeaLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   lockedLiquidity?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_not?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -719,6 +729,14 @@ export type Vault_filter = {
   lockedLiquidity_lte?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   lockedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  taxAmount?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  taxAmount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  taxAmount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Vault_filter>>>;
@@ -733,8 +751,10 @@ export type Vault_orderBy =
   | 'collateralSymbol'
   | 'debtSymbol'
   | 'leverageTier'
-  | 'totalValueLocked'
-  | 'lockedLiquidity';
+  | 'totalApeLocked'
+  | 'totalTeaLocked'
+  | 'lockedLiquidity'
+  | 'taxAmount';
 
 export type _Block_ = {
   /** The hash of the block */
