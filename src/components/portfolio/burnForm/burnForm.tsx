@@ -42,8 +42,10 @@ export default function BurnForm({
   isApe,
   close,
   levTier,
+  teaRewardBalance,
 }: {
   balance: bigint | undefined;
+  teaRewardBalance: bigint | undefined;
   isApe: boolean;
   row: TUserPosition;
   close: () => void;
@@ -66,12 +68,7 @@ export default function BurnForm({
       enabled: Boolean(formData.deposit),
     },
   );
-  const { address } = useAccount();
 
-  const { data: teaRewards } = api.user.getTeaRewards.useQuery(
-    { userAddress: address ?? "0x", vaultId: row.vaultId },
-    { enabled: Boolean(address) && !isApe },
-  );
   const {
     writeContract,
     reset,
@@ -120,7 +117,7 @@ export default function BurnForm({
       form.setValue("deposit", "");
     }
   }, [form, isConfirmed]);
-  const reward = teaRewards ?? 0n;
+  const reward = teaRewardBalance ?? 0n;
   const isClaimingRewards = Boolean(!isApe && reward > 0n);
 
   const { isValid, error } = useCheckValidityBurn(
@@ -250,7 +247,7 @@ export default function BurnForm({
               collateralToken: row.collateralToken,
               debtToken: row.debtToken,
             }}
-            amount={isClaimingRewards ? teaRewards : quoteBurn}
+            amount={isClaimingRewards ? reward : quoteBurn}
             collateralSymbol={row.collateralSymbol}
             bg=""
           />

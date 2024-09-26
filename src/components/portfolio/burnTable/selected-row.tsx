@@ -6,6 +6,8 @@ import BurnForm from "../burnForm/burnForm";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
 import { formatEther } from "viem";
+import { api } from "@/trpc/react";
+import { useAccount } from "wagmi";
 
 export default function SelectedRow({
   params,
@@ -23,6 +25,11 @@ export default function SelectedRow({
     apeAddress,
     isApe,
   });
+  const { address } = useAccount();
+  const { data: teaRewards } = api.user.getTeaRewards.useQuery(
+    { userAddress: address ?? "0x", vaultId: params.vaultId },
+    { enabled: Boolean(address) && !isApe },
+  );
   const data = isApe ? apeBal : teaBal;
   if (!params) {
     <div>
@@ -60,6 +67,7 @@ export default function SelectedRow({
           className="justify-between bg-secondary-700 p-4 rounded-lg"
         >
           <BurnForm
+            teaRewardBalance={teaRewards}
             levTier={params.leverageTier}
             close={close}
             isApe={isApe}
