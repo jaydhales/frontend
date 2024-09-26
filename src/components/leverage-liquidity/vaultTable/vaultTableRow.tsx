@@ -13,10 +13,11 @@ import type { VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
 import { useMemo } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
+import useCalculateVaultHealth from "./hooks/useCalculateVaultHealth";
 
 export function VaultTableRow({
-  badgeVariant,
   pool,
+  isApe,
 }: {
   badgeVariant: VariantProps<typeof badgeVariants>;
   number: string;
@@ -45,6 +46,12 @@ export function VaultTableRow({
       ? parseFloat(formatUnits(teaTvl, 18)) /
         parseFloat(formatUnits(apeTvl, 18))
       : 0;
+  const variant = useCalculateVaultHealth({
+    apeTvl,
+    teaTvl,
+    isApe,
+    leverageTier: pool.leverageTier,
+  });
   return (
     <tr
       onClick={() => {
@@ -85,7 +92,7 @@ export function VaultTableRow({
       </th>
       <th className="pl-2">
         <Badge
-          {...badgeVariant}
+          {...variant}
           className="text-[10px]"
         >{`${getLeverageRatio(pool.leverageTier)}x(${formatNumber(tvlPercent, 2)}x)`}</Badge>
       </th>
