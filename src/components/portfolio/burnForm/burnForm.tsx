@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
-import { parseUnits } from "viem";
+import { SimulateContractReturnType, parseUnits } from "viem";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { Section } from "./section";
 import {
@@ -66,8 +66,9 @@ export default function BurnForm({
     },
   );
   const { address } = useAccount();
+
   const { data: teaRewards } = api.user.getTeaRewards.useQuery(
-    { userAddress: address ?? "0x" },
+    { userAddress: address ?? "0x", vaultId: row.vaultId },
     { enabled: Boolean(address) && !isApe },
   );
   const {
@@ -109,19 +110,28 @@ export default function BurnForm({
     },
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
-  const { claimRewardRequest } = useClaimTeaRewards();
+  const { claimRewardRequest } = useClaimTeaRewards({
+    vaultId: parseUnits(row.vaultId, 0),
+  });
 
   useEffect(() => {
     if (isConfirmed) {
       form.setValue("deposit", "");
     }
   }, [form, isConfirmed]);
+  const reward = teaRewards ?? 0n;
+  const isClaimingRewards = Boolean(!isApe && reward > 0n);
 
-  const { isValid, error } = useCheckValidityBurn(formData, balance);
+  console.log(teaRewards, isClaimingRewards, claimRewardRequest, "tt");
+  const { isValid, error } = useCheckValidityBurn(
+    formData,
+    balance,
+    isClaimingRewards,
+    claimRewardRequest as unknown as SimulateContractReturnType["request"],
+  );
 
   const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
 
-  const isClaimingRewards = !isApe && (teaRewards ?? 0n > 0n);
   const onSubmit = () => {
     if (isConfirmed) {
       return setOpen(false);
@@ -211,9 +221,16 @@ export default function BurnForm({
       <form>
         <div className="space-y-2 w-[320px] md:w-full">
           <div className="flex justify-between">
-            <label htmlFor="a" className="">
-              Burn Amount
-            </label>
+            {!isClaimingRewards && (
+              <label htmlFor="a" className="">
+                Burn Amount
+              </label>
+            )}
+            {isClaimingRewards && (
+              <h2 className="text-[24px] pl-[24px] text-center w-full font-lora">
+                Claim
+              </h2>
+            )}
 
             <button
               type="button"
@@ -223,17 +240,19 @@ export default function BurnForm({
               <X />
             </button>
           </div>
-          <Section
-            balance={balance}
-            bg="bg-primary"
-            form={form}
-            vaultId={row.vaultId}
-            isApe={isApe}
-          />
+          {!isClaimingRewards && (
+            <Section
+              balance={balance}
+              bg="bg-primary"
+              form={form}
+              vaultId={row.vaultId}
+              isApe={isApe}
+            />
+          )}
           <div className="pt-2"></div>
           <div>
             <label htmlFor="a" className="">
-              Into
+              {isClaimingRewards ? "Amount" : "Into"}
             </label>
           </div>
 
@@ -258,8 +277,9 @@ export default function BurnForm({
           <Button
             disabled={
               !isValid ||
-              !Boolean(burnData?.request) ||
-              !Boolean(formData.deposit)
+              !Boolean(
+                isClaimingRewards ? claimRewardRequest : burnData?.request,
+              )
             }
             variant="submit"
             onClick={() => setOpen(true)}
