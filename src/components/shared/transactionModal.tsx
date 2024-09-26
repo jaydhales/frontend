@@ -20,7 +20,7 @@ function Root({ open, setOpen, children }: Props) {
         className="bg-transparent z-[400]"
       >
         <div
-          className={`rounded-xl relative transition-all duration-700  bg-secondary-100 text-white`}
+          className={`rounded-xl relative transition-all duration-700  bg-secondary-300 text-white`}
         >
           {children}
         </div>
