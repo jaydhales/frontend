@@ -38,7 +38,7 @@ export default function SelectedRow({
   if (!atBal) {
     return;
   }
-  const balance = (teaRewards ?? 0n) > 0n ? teaRewards : atBal;
+  const balance = (teaRewards ?? 0n) > 0n && !isApe ? teaRewards : atBal;
   return (
     <div>
       <div className="md:flex hidden flex-col gap-y-4 pb-4">
