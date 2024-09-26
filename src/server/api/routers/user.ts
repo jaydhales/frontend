@@ -15,14 +15,19 @@ export const userRouter = createTRPCRouter({
   getTeaRewards: publicProcedure
     .input(
       z.object({
+        vaultId: z.string(),
         userAddress: z.string().startsWith("0x"),
       }),
     )
     .query(async ({ input }) => {
+      console.log(input);
       const rewards = await readContract({
-        ...SirContract,
-        functionName: "contributorUnclaimedSIR",
-        args: [input.userAddress as TAddressString],
+        ...VaultContract,
+        functionName: "unclaimedRewards",
+        args: [
+          parseUnits(input.vaultId, 0),
+          input.userAddress as TAddressString,
+        ],
       });
       return rewards;
     }),
