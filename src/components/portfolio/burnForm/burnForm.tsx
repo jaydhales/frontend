@@ -1,11 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { UseFormReturn } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
-import { SimulateContractReturnType, parseUnits } from "viem";
+import type { SimulateContractReturnType } from "viem";
+import { parseUnits } from "viem";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { Section } from "./section";
 import {
@@ -23,7 +24,7 @@ import { useGetTxTokens } from "./hooks/useGetTxTokens";
 import { X } from "lucide-react";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 import { useClaimTeaRewards } from "./hooks/useClaimTeaRewards";
-import { calculateApeVaultFee, formatNumber } from "@/lib/utils";
+import useGetFee from "./hooks/useGetFee";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -122,7 +123,6 @@ export default function BurnForm({
   const reward = teaRewards ?? 0n;
   const isClaimingRewards = Boolean(!isApe && reward > 0n);
 
-  console.log(teaRewards, isClaimingRewards, claimRewardRequest, "tt");
   const { isValid, error } = useCheckValidityBurn(
     formData,
     balance,
@@ -156,7 +156,6 @@ export default function BurnForm({
   if (isPending || isConfirming) {
     submitButtonText = "Pending...";
   }
-
   if (isConfirmed) {
     submitButtonText = "Close";
   }
@@ -262,7 +261,7 @@ export default function BurnForm({
               collateralToken: row.collateralToken,
               debtToken: row.debtToken,
             }}
-            amount={quoteBurn}
+            amount={isClaimingRewards ? teaRewards : quoteBurn}
             collateralSymbol={row.collateralSymbol}
             bg=""
           />
