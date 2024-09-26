@@ -1,6 +1,9 @@
+import useGetChainId from "@/components/shared/hooks/useGetChainId";
+import { env } from "@/env";
 import { useMemo } from "react";
 import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
+import { useChainId } from "wagmi";
 
 interface Props {
   deposit: string | undefined;
@@ -40,7 +43,15 @@ export const useCheckSubmitValid = ({
   useEth,
   decimals,
 }: Props) => {
+  const chainId = useGetChainId();
   const { isValid, errorMessage, submitType } = useMemo(() => {
+    if (chainId?.toString() !== env.NEXT_PUBLIC_CHAIN_ID && Boolean(chainId)) {
+      return {
+        isValid: false,
+        errorMessage: "Wrong network!",
+        submitType: ESubmitType.mint,
+      };
+    }
     if (parseUnits(deposit ?? "0", decimals) <= 0n) {
       return {
         isValid: false,
@@ -126,6 +137,7 @@ export const useCheckSubmitValid = ({
       }
     }
   }, [
+    chainId,
     deposit,
     decimals,
     useEth,
