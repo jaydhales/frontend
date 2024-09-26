@@ -6,14 +6,10 @@ import { z } from "zod";
 import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
 import type { SimulateContractReturnType } from "viem";
-import { parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { Section } from "./section";
-import {
-  useAccount,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
 import { SectionTwo } from "./sectionTwo";
@@ -25,6 +21,7 @@ import { X } from "lucide-react";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 import { useClaimTeaRewards } from "./hooks/useClaimTeaRewards";
 import useGetFee from "./hooks/useGetFee";
+import { formatNumber } from "@/lib/utils";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -133,6 +130,7 @@ export default function BurnForm({
     if (isConfirmed) {
       return setOpen(false);
     }
+    console.log(claimRewardRequest && isClaimingRewards);
     if (isClaimingRewards && claimRewardRequest) {
       writeContract(claimRewardRequest);
       return;
@@ -149,7 +147,7 @@ export default function BurnForm({
     }
   }, [isConfirmed, reset, open]);
 
-  let submitButtonText = "Confirm Burn";
+  let submitButtonText = isClaimingRewards ? "Confirm Claim" : "Confirm Burn";
   if (isPending || isConfirming) {
     submitButtonText = "Pending...";
   }
@@ -167,16 +165,21 @@ export default function BurnForm({
           {!isConfirmed && (
             <>
               <TransactionStatus
-                action="Burn"
+                action={isClaimingRewards ? "Claim Rewards" : "Burn"}
                 waitForSign={isPending}
                 isTxPending={isConfirming}
               />
-              <TransactionEstimates
-                inAssetName={isApe ? "APE" : "TEA"}
-                outAssetName={row.collateralSymbol}
-                collateralEstimate={quoteBurn}
-                usingEth={false}
-              />
+              {isClaimingRewards && (
+                <div>{formatNumber(formatUnits(reward, 18), 9)} weth</div>
+              )}
+              {!isClaimingRewards && (
+                <TransactionEstimates
+                  inAssetName={isApe ? "APE" : "TEA"}
+                  outAssetName={row.collateralSymbol}
+                  collateralEstimate={quoteBurn}
+                  usingEth={false}
+                />
+              )}
             </>
           )}
           {isConfirmed && (
