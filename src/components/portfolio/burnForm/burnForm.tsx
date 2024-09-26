@@ -160,18 +160,7 @@ export default function BurnForm({
     submitButtonText = "Close";
   }
 
-  const fee = useMemo(() => {
-    const lev = parseFloat(levTier);
-
-    if (!isApe) {
-      return "19";
-    }
-    if (isFinite(lev)) {
-      return formatNumber(calculateApeVaultFee(lev) * 100, 2);
-    } else {
-      return undefined;
-    }
-  }, [isApe, levTier]);
+  const fee = useGetFee({ isApe, levTier });
 
   return (
     <FormProvider {...form}>
