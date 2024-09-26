@@ -1,7 +1,7 @@
 import Link from "next/link";
 import NavItem from "./navItem";
 import SideNav from "./sideNav";
-import { CustomConnectButton } from "./connectButton";
+import { CustomConnectButton } from "./customConnectButton";
 export function Header() {
   return (
     <div className="z-10 grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
