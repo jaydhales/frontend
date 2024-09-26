@@ -5,6 +5,7 @@ import SelectedRow from "./selected-row";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import { BurnTableRow, BurnTableRowMobile } from "./burnTableRow";
+import useCheckUserHasPositions from "./hooks/useCheckUserHasPositions";
 
 export default function BurnTable({
   filter,
@@ -37,33 +38,14 @@ export default function BurnTable({
       (r) => r.vaultId === selectedRow?.vaultId && !selectedRow.isApe,
     );
   }, [selectedRow, tea.data?.userPositionTeas]);
-  const hasPositions = useMemo(() => {
-    const apeLength = ape?.data?.userPositions?.length ?? 0;
-    const teaLength = tea?.data?.userPositionTeas?.length ?? 0;
-    if (filter === "ape") {
-      if (apeLength > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    } else if (filter === "tea") {
-      if (teaLength > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      if (apeLength > 0 || teaLength > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }, [
-    ape?.data?.userPositions?.length,
+
+  const apeLength = ape?.data?.userPositions?.length ?? 0;
+  const teaLength = tea?.data?.userPositionTeas?.length ?? 0;
+  const hasPositions = useCheckUserHasPositions({
+    apeLength,
+    teaLength,
     filter,
-    tea?.data?.userPositionTeas?.length,
-  ]);
+  });
   const loading = ape.isLoading || tea.isLoading;
   const apePosition = ape.data?.userPositions.map((r) => (
     <>
