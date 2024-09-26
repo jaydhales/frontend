@@ -37,14 +37,6 @@ export default function SelectedRow({
       <div className="md:flex hidden flex-col gap-y-4 pb-4">
         <BurnTableHeaders />
         <tr className="grid h-8 gap-x-4 relative grid-cols-5 items-center text-left text-white">
-          {/* <button */}
-          {/*   type="button" */}
-          {/*   onClick={() => close()} */}
-          {/*   className="absolute top-1 right-2   cursor-pointer text-white/80 transition-transform hover:scale-105 hover:text-white" */}
-          {/* > */}
-          {/*   <X /> */}
-          {/* </button> */}
-
           <th className="flex font-normal items-center gap-x-1 ">
             <span className="">{isApe ? "APE" : "TEA"}</span>
             <span className="text-gray-500">-</span>
@@ -63,7 +55,10 @@ export default function SelectedRow({
         </tr>
       </div>
       <div className="flex justify-center pt-4">
-        <div className="justify-between bg-secondary-700 p-4 rounded-lg">
+        <div
+          id="burn-form"
+          className="justify-between bg-secondary-700 p-4 rounded-lg"
+        >
           <BurnForm
             levTier={params.leverageTier}
             close={close}

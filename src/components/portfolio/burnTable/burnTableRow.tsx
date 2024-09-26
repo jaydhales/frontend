@@ -26,10 +26,10 @@ export function BurnTableRow({
   });
   const { address } = useAccount();
   const { data: teaRewards } = api.user.getTeaRewards.useQuery(
-    { userAddress: address ?? "0x" },
-    { enabled: Boolean(address) },
+    { userAddress: address ?? "0x", vaultId: row.vaultId },
+    { enabled: Boolean(address) && !isApe },
   );
-  const hasUnclaimedSir = teaRewards ?? 0n > 0n;
+  const hasUnclaimedSir = isApe ? false : teaRewards ?? 0n > 0n;
   const teaBalance = hasUnclaimedSir ? teaRewards : teaBal;
   return (
     <>
@@ -57,7 +57,7 @@ export function BurnTableRow({
             <Button
               onClick={() => setSelectedRow(row.vaultId)}
               type="button"
-              className="h-8 py-2 px-5 rounded-full text-[14px] "
+              className="h-8 py-2 px-5 w-[65px] rounded-full text-[14px] "
             >
               {hasUnclaimedSir ? "Claim" : "Burn"}
             </Button>
