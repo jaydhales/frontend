@@ -38,6 +38,7 @@ export default function SelectedRow({
   if (!atBal) {
     return;
   }
+
   const balance = (teaRewards ?? 0n) > 0n && !isApe ? teaRewards : atBal;
   return (
     <div>
