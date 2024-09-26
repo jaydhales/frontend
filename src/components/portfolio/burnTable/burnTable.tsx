@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import BurnTableHeaders from "./burnTableHeader";
 import SelectedRow from "./selected-row";
 import { api } from "@/trpc/react";
@@ -18,7 +18,11 @@ export default function BurnTable({
       }
     | undefined
   >();
-
+  useEffect(() => {
+    if (selectedRow?.vaultId) {
+      window.document.getElementById("burn-form")?.scrollIntoView();
+    }
+  }, [selectedRow]);
   const { address } = useAccount();
   const ape = api.user.getApePositions.useQuery({ address });
   const tea = api.user.getTeaPositions.useQuery({ address });
