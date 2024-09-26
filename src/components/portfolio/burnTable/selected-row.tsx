@@ -1,4 +1,3 @@
-import { X } from "lucide-react";
 import BurnTableHeaders from "./burnTableHeader";
 import type { TAddressString } from "@/lib/types";
 import { formatNumber, getLeverageRatio } from "@/lib/utils";
@@ -30,15 +29,16 @@ export default function SelectedRow({
     { userAddress: address ?? "0x", vaultId: params.vaultId },
     { enabled: Boolean(address) && !isApe },
   );
-  const data = isApe ? apeBal : teaBal;
+  const atBal = isApe ? apeBal : teaBal;
   if (!params) {
     <div>
       <h1>Hello</h1>
     </div>;
   }
-  if (!data) {
+  if (!atBal) {
     return;
   }
+  const balance = (teaRewards ?? 0n) > 0n ? teaRewards : atBal;
   return (
     <div>
       <div className="md:flex hidden flex-col gap-y-4 pb-4">
@@ -56,7 +56,7 @@ export default function SelectedRow({
           </th>
           <th className="font-normal  flex items-center ">
             <h2 className="h-8 flex items-center">
-              <span>{formatNumber(formatEther(data ?? 0n), 6)}</span>
+              <span>{formatNumber(formatEther(balance ?? 0n), 6)}</span>
             </h2>
           </th>
         </tr>
@@ -71,7 +71,7 @@ export default function SelectedRow({
             levTier={params.leverageTier}
             close={close}
             isApe={isApe}
-            balance={data}
+            balance={atBal}
             row={params}
           />
         </div>
