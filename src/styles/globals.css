@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .sir-shadow {
-  text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.5);
+  text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
 }
 .nav-shadow {
   box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
