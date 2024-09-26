@@ -47,7 +47,7 @@ export function BurnTableRow({
           {getLeverageRatio(parseInt(row.leverageTier))}x
         </th>
         <th className="font-normal">
-          <div className="flex lg:gap-x-8 gap-x-4 items-center">
+          <div className="flex justify-between lg:gap-x-8 gap-x-4 items-center">
             {isApe ? (
               <span>{formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}</span>
             ) : (
