@@ -30,6 +30,7 @@ export function VaultTableRow({
     const lockedLiquidity = parseUnits(pool.lockedLiquidity, 0);
     if (lockedLiquidity > 0n && totalLocked > 0n) {
       const percent = (lockedLiquidity * 10000n) / totalLocked;
+      console.log(lockedLiquidity, totalLocked);
       return parseFloat(percent.toString()) / 100;
     } else {
       return 0n;
