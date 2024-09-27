@@ -20,7 +20,7 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-      console.log(input);
+      console.log(input, "INPUT");
       const rewards = await readContract({
         ...VaultContract,
         functionName: "unclaimedRewards",
