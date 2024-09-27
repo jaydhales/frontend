@@ -19,10 +19,10 @@ export default function useCalculateVaultHealth({
   const Gmin = (leverageTier - 1) * ape;
 
   if (Gmin > gentlement) {
-    return isApe ? { variant: "yellow" } : { variant: "green" };
+    return isApe ? { variant: "red" } : { variant: "green" };
   }
   if (gentlement > Gmin) {
-    return isApe ? { variant: "green" } : { variant: "yellow" };
+    return isApe ? { variant: "green" } : { variant: "red" };
   }
   return { variant: "green" };
 }

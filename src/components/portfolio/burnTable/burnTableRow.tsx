@@ -36,7 +36,7 @@ export function BurnTableRow({
     : formatUnits(teaBal ?? 0n, 18);
   return (
     <>
-      <tr className="hidden md:grid gap-x-4 grid-cols-5 items-start text-left  text-white">
+      <tr className="hidden md:grid py-2 gap-x-4 grid-cols-5 items-start text-left  text-white">
         <th className="flex font-normal items-center gap-x-1 ">
           <span className="">{isApe ? "APE" : "TEA"}</span>
           <span className="text-gray-500">-</span>

@@ -125,7 +125,7 @@ const UnstakeForm = ({
 
   return (
     <>
-      <Card className="w-full bg-secondary ">
+      <div className="w-full px-4 py-4">
         <TransactionModal.Root setOpen={setOpen} open={open}>
           <TransactionModal.Close setOpen={setOpen} />
           <TransactionModal.InfoContainer>
@@ -220,7 +220,7 @@ const UnstakeForm = ({
             </div>
           </form>
         </Form>
-      </Card>
+      </div>
     </>
   );
 };
