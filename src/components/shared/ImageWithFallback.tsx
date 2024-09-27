@@ -35,6 +35,7 @@ const ImageWithFallback = (props: Props) => {
     <Image
       {...rest}
       src={imgSrc}
+      className="rounded-full"
       onError={() => {
         setImgSrc(fallbackImageUrl);
       }}
