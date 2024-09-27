@@ -2,6 +2,7 @@ import { userRouter } from "@/server/api/routers/user";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { vaultRouter } from "./routers/vault";
 import { erc20Router } from "./routers/erc20";
+import { tokensRouter } from "./routers/tokens";
 /**
  * This is the primary router for your server.
  *
@@ -9,6 +10,7 @@ import { erc20Router } from "./routers/erc20";
  */
 export const appRouter = createTRPCRouter({
   user: userRouter,
+  tokens: tokensRouter,
   vault: vaultRouter,
   erc20: erc20Router,
 });
