@@ -29,7 +29,7 @@ export default function SearchModal({
     { enabled: searchTokensOpen && Boolean(searchTerm) },
   );
   const { found, match } = useMemo(() => {
-    let match: TRow[] = [];
+    const match: TRow[] = [];
     const found = data.data?.filter((row) => {
       console.log(row);
       if (
@@ -38,15 +38,10 @@ export default function SearchModal({
       ) {
         return true;
       } else {
-        if (!match) {
-          match = [row];
-        } else {
-          match.push(row);
-        }
+        match.push(row);
         return false;
       }
     });
-    console.log({ found, match }, "HELLLO");
     return { found, match: match ?? [] };
   }, [data.data, searchTerm]);
   return (
