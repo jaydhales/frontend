@@ -17,7 +17,7 @@ export default function LeverageLiquidityContent({
 }) {
   return (
     <Container>
-      <div className="grid w-full gap-x-[16px] gap-y-4 lg:grid-cols-2">
+      <div className="grid w-full gap-x-[16px] gap-y-4 xl:grid-cols-2">
         <MintFormProvider>
           <MintForm vaultsQuery={vaultsQuery} isApe={isApe} />
           <Card>

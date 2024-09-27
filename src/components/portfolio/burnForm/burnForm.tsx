@@ -240,27 +240,31 @@ export default function BurnForm({
           )}
           <div className="pt-2"></div>
           <div>
-            <label htmlFor="a" className="">
-              {isClaimingRewards ? "Amount" : "Into"}
-            </label>
-          </div>
+            <div>
+              <label htmlFor="a" className="">
+                {isClaimingRewards ? "Amount" : "Into"}
+              </label>
+            </div>
 
-          <SectionTwo
-            data={{
-              leverageTier: parseFloat(row.leverageTier),
-              collateralToken: isClaimingRewards
-                ? SirContract.address
-                : row.collateralToken,
-              debtToken: row.debtToken,
-            }}
-            amount={
-              isClaimingRewards
-                ? formatUnits(reward, 12)
-                : formatUnits(quoteBurn ?? 0n, 18)
-            }
-            collateralSymbol={isClaimingRewards ? "SIR" : row.collateralSymbol}
-            bg=""
-          />
+            <SectionTwo
+              data={{
+                leverageTier: parseFloat(row.leverageTier),
+                collateralToken: isClaimingRewards
+                  ? SirContract.address
+                  : row.collateralToken,
+                debtToken: row.debtToken,
+              }}
+              amount={
+                isClaimingRewards
+                  ? formatUnits(reward, 12)
+                  : formatUnits(quoteBurn ?? 0n, 18)
+              }
+              collateralSymbol={
+                isClaimingRewards ? "SIR" : row.collateralSymbol
+              }
+              bg=""
+            />
+          </div>
           <div className="pt-2"></div>
           <div className="flex justify-center">
             <h4 className="w-[400px] text-center text-sm italic text-gray-500">

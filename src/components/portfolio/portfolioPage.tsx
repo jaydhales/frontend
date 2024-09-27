@@ -11,7 +11,7 @@ import { SirCard } from "./sirCard";
 export default function PortfolioPage() {
   const [value, setValue] = useState<"ape" | "tea" | "all">("all");
   return (
-    <div className="w-[1200px] ">
+    <div className="w-[1250px] ">
       <div className="pt-[44px]"></div>
       <Container>
         <Card className=" px-4 w-full">

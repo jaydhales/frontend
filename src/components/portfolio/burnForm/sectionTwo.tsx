@@ -18,7 +18,7 @@ export function SectionTwo({
   collateralSymbol: string | undefined;
 }) {
   return (
-    <div className={`w-full  rounded-md ${bg} `}>
+    <div className={`w-full  ${bg} `}>
       <div className="flex items-end justify-between">
         <div>
           <h2 className="text-[28px]">{formatNumber(amount, 4)}</h2>
