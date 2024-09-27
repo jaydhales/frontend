@@ -42,11 +42,20 @@ export default function SearchModal({
             }}
             className="bg-secondary-200 rounded-md"
           />
-          <div className="h-40 overflow-y-auto space-y-3">
+          <div className="pt-3"></div>
+          <div className="h-[600px] overflow-y-auto space-y-3">
             {data?.data?.map((row) => {
               return (
-                <div className="flex  justify-between" key={row.ID}>
-                  <span>{row.Symbol}</span>{" "}
+                <div
+                  className="flex w-[300px] items-center px-2 rounded-md cursor-pointer hover:bg-secondary-300 justify-between"
+                  key={row.ID}
+                >
+                  <div className="space-x-2">
+                    <span className="text-wrap">{row.Name}</span>
+                    <span className="text-[12px] text-gray-400">
+                      {row.Symbol}
+                    </span>
+                  </div>
                   <ImageWithFallback
                     src={getLogoAsset(row.Address as TAddressString)}
                     alt="collateral"
