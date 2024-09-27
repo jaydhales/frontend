@@ -1,10 +1,11 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import BurnTableHeaders from "./burnTableHeader";
 import SelectedRow from "./selected-row";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import { BurnTableRow, BurnTableRowMobile } from "./burnTableRow";
+import useCheckUserHasPositions from "./hooks/useCheckUserHasPositions";
 
 export default function BurnTable({
   filter,
@@ -18,7 +19,11 @@ export default function BurnTable({
       }
     | undefined
   >();
-
+  useEffect(() => {
+    if (selectedRow?.vaultId) {
+      window.document.getElementById("burn-form")?.scrollIntoView();
+    }
+  }, [selectedRow]);
   const { address } = useAccount();
   const ape = api.user.getApePositions.useQuery({ address });
   const tea = api.user.getTeaPositions.useQuery({ address });
@@ -33,58 +38,17 @@ export default function BurnTable({
       (r) => r.vaultId === selectedRow?.vaultId && !selectedRow.isApe,
     );
   }, [selectedRow, tea.data?.userPositionTeas]);
-  const hasPositions = useMemo(() => {
-    const apeLength = ape?.data?.userPositions?.length ?? 0;
-    const teaLength = tea?.data?.userPositionTeas?.length ?? 0;
-    if (filter === "ape") {
-      if (apeLength > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    } else if (filter === "tea") {
-      if (teaLength > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      if (apeLength > 0 || teaLength > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }, [
-    ape?.data?.userPositions?.length,
+
+  const apeLength = ape?.data?.userPositions?.length ?? 0;
+  const teaLength = tea?.data?.userPositionTeas?.length ?? 0;
+  const hasPositions = useCheckUserHasPositions({
+    apeLength,
+    teaLength,
     filter,
-    tea?.data?.userPositionTeas?.length,
-  ]);
+  });
   const loading = ape.isLoading || tea.isLoading;
   const apePosition = ape.data?.userPositions.map((r) => (
     <>
-      <BurnTableRowMobile
-        setSelectedRow={() =>
-          setSelectedRow({
-            vaultId: r.vaultId,
-            isApe: true,
-          })
-        }
-        key={r.vaultId + "apea"}
-        row={{
-          id: r.vaultId,
-          balance: r.balance,
-          user: r.user,
-          collateralSymbol: r.collateralSymbol,
-          debtSymbol: r.debtSymbol,
-          collateralToken: r.collateralToken,
-          debtToken: r.debtToken,
-          leverageTier: r.leverageTier,
-          vaultId: r.vaultId,
-        }}
-        isApe={true}
-        apeAddress={r.APE}
-      />
       <BurnTableRow
         setSelectedRow={() =>
           setSelectedRow({

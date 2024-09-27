@@ -13,10 +13,11 @@ import type { VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
 import { useMemo } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
+import useCalculateVaultHealth from "./hooks/useCalculateVaultHealth";
 
 export function VaultTableRow({
-  badgeVariant,
   pool,
+  isApe,
 }: {
   badgeVariant: VariantProps<typeof badgeVariants>;
   number: string;
@@ -25,17 +26,33 @@ export function VaultTableRow({
 }) {
   const fee = calculateApeVaultFee(pool.leverageTier) * 100;
   const POL = useMemo(() => {
-    const totalLocked = parseUnits(pool.totalApeLocked, 0);
+    const totalLocked = parseUnits(pool.totalTeaLocked, 0);
     const lockedLiquidity = parseUnits(pool.lockedLiquidity, 0);
     if (lockedLiquidity > 0n && totalLocked > 0n) {
       const percent = (lockedLiquidity * 10000n) / totalLocked;
+      console.log(lockedLiquidity, totalLocked);
       return parseFloat(percent.toString()) / 100;
     } else {
       return 0n;
     }
-  }, [pool.lockedLiquidity, pool.totalApeLocked]);
+  }, [pool.lockedLiquidity, pool.totalTeaLocked]);
 
   const { setValue } = useMintFormProviderApi();
+  const teaTvl = parseUnits(pool.totalTeaLocked, 0);
+  const apeTvl = parseUnits(pool.totalApeLocked, 0);
+
+  const tvlPercent =
+    teaTvl > 0
+      ? parseFloat(formatUnits(teaTvl, 18)) /
+        parseFloat(formatUnits(apeTvl, 18))
+      : 0;
+  const showTvlPercent = tvlPercent < pool.leverageTier;
+  const variant = useCalculateVaultHealth({
+    apeTvl,
+    teaTvl,
+    isApe,
+    leverageTier: pool.leverageTier,
+  });
   return (
     <tr
       onClick={() => {
@@ -76,18 +93,13 @@ export function VaultTableRow({
       </th>
       <th className="pl-2">
         <Badge
-          {...badgeVariant}
+          {...variant}
           className="text-[10px]"
-        >{`${getLeverageRatio(pool.leverageTier)}x`}</Badge>
+        >{`${getLeverageRatio(pool.leverageTier)}x${showTvlPercent ? "(" + formatNumber(tvlPercent, 2) + "x)" : ""}`}</Badge>
       </th>
 
       <th className="md:col-span-2 flex justify-end items-center gap-x-1 text-right">
-        <span>
-          {formatNumber(
-            parseFloat(formatUnits(parseUnits(pool.totalApeLocked, 0), 18)),
-            4,
-          )}
-        </span>
+        <span>{formatNumber(formatUnits(teaTvl + apeTvl, 18), 4)}</span>
         <span className=" hidden md:block text-gray-300 font-light">
           {pool.collateralSymbol}
         </span>

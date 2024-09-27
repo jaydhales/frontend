@@ -18,6 +18,20 @@ export const SirContract = {
     },
     {
       type: "function",
+      name: "ISSUANCE_RATE",
+      inputs: [],
+      outputs: [{ name: "", type: "uint72", internalType: "uint72" }],
+      stateMutability: "pure",
+    },
+    {
+      type: "function",
+      name: "LP_ISSUANCE_FIRST_3_YEARS",
+      inputs: [],
+      outputs: [{ name: "", type: "uint72", internalType: "uint72" }],
+      stateMutability: "pure",
+    },
+    {
+      type: "function",
       name: "allowance",
       inputs: [
         { name: "", type: "address", internalType: "address" },
@@ -64,7 +78,10 @@ export const SirContract = {
     {
       type: "function",
       name: "bid",
-      inputs: [{ name: "token", type: "address", internalType: "address" }],
+      inputs: [
+        { name: "token", type: "address", internalType: "address" },
+        { name: "amount", type: "uint96", internalType: "uint96" },
+      ],
       outputs: [],
       stateMutability: "nonpayable",
     },
@@ -194,7 +211,7 @@ export const SirContract = {
           components: [
             { name: "stake", type: "uint80", internalType: "uint80" },
             {
-              name: "cumETHPerSIRx80",
+              name: "cumulativeETHPerSIRx80",
               type: "uint176",
               internalType: "uint176",
             },

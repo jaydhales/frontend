@@ -12,6 +12,25 @@ import { VaultContract } from "@/contracts/vault";
 import { SirContract } from "@/contracts/sir";
 
 export const userRouter = createTRPCRouter({
+  getTeaRewards: publicProcedure
+    .input(
+      z.object({
+        vaultId: z.string(),
+        userAddress: z.string().startsWith("0x"),
+      }),
+    )
+    .query(async ({ input }) => {
+      console.log(input, "INPUT");
+      const rewards = await readContract({
+        ...VaultContract,
+        functionName: "unclaimedRewards",
+        args: [
+          parseUnits(input.vaultId, 0),
+          input.userAddress as TAddressString,
+        ],
+      });
+      return rewards;
+    }),
   getBalance: publicProcedure
     .input(
       z.object({

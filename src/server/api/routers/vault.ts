@@ -79,6 +79,7 @@ export const vaultRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
+      console.log({ input });
       if (
         !input.collateralToken ||
         !input.debtToken ||
@@ -103,9 +104,11 @@ export const vaultRouter = createTRPCRouter({
             parseUnits(input.amount, 18),
           ],
         });
+        console.log(quote, "QUOTE");
         if (!quote) throw new Error("Quote mint failed.");
         return quote;
       } catch (e) {
+        console.log(e);
         // console.log(e);
         return;
       }

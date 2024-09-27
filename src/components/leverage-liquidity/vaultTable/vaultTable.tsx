@@ -53,8 +53,10 @@ function VaultTableRowHeaders() {
       <th className="md:col-span-3 font-medium">Pool</th>
 
       <th className="font-medium flex gap-x-1 items-center">
-        <span>PoL</span>
-        <ToolTip size={15}>Pools locked liquidity.</ToolTip>
+        <span>POL</span>
+        <ToolTip size={15}>
+          Protocol Owned Liquidity is liquidity that will never be withdrawn.
+        </ToolTip>
       </th>
       <th className="flex items-center font-medium gap-x-1">
         Fees

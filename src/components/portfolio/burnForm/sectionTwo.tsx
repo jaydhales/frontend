@@ -1,6 +1,5 @@
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
-import { formatBigInt, getLogoAsset } from "@/lib/utils";
-import Image from "next/image";
+import { formatNumber, getLogoAsset } from "@/lib/utils";
 export function SectionTwo({
   bg,
   data,
@@ -8,7 +7,7 @@ export function SectionTwo({
   collateralSymbol,
 }: {
   bg: string;
-  amount: bigint | undefined;
+  amount: string;
   data:
     | {
         leverageTier: number | undefined;
@@ -19,10 +18,10 @@ export function SectionTwo({
   collateralSymbol: string | undefined;
 }) {
   return (
-    <div className={`w-full  rounded-md ${bg} `}>
+    <div className={`w-full  ${bg} `}>
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="text-[28px]">{formatBigInt(amount, 4)}</h2>
+          <h2 className="text-[28px]">{formatNumber(amount, 4)}</h2>
         </div>
         <div>
           <div className={"flex  gap-x-2 "}>

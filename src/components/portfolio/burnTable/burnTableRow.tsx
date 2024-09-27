@@ -5,6 +5,8 @@ import type { TUserPosition } from "@/server/queries/vaults";
 import { formatUnits } from "viem";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
 import type { ReactNode } from "react";
+import { api } from "@/trpc/react";
+import { useAccount } from "wagmi";
 interface Props {
   row: TUserPosition;
   isApe: boolean;
@@ -22,42 +24,82 @@ export function BurnTableRow({
     vaultId: row.vaultId,
     isApe,
   });
-
+  const { address } = useAccount();
+  const { data: teaRewards } = api.user.getTeaRewards.useQuery(
+    { userAddress: address ?? "0x", vaultId: row.vaultId },
+    { enabled: Boolean(address) && !isApe },
+  );
+  const rewards = teaRewards ?? 0n;
+  const hasUnclaimedSir = isApe ? false : rewards > 0n;
+  const teaBalance = hasUnclaimedSir
+    ? formatUnits(teaRewards ?? 0n, 12)
+    : formatUnits(teaBal ?? 0n, 18);
   return (
-    <tr className="hidden md:grid gap-x-4 grid-cols-5 items-center text-left  text-white">
-      <th className="flex font-normal items-center gap-x-1 ">
-        <span className="">{isApe ? "APE" : "TEA"}</span>
-        <span className="text-gray-500">-</span>
-        <span className="text-accent-100 text-xl ">{row.vaultId} </span>
-      </th>
-      <th className="font-normal  flex items-center text-gray-200">
-        {row.debtSymbol}
-      </th>
-      <th className="font-normal text-gray-200">{row.collateralSymbol}</th>
-      <th className="font-normal text-gray-200">
-        {getLeverageRatio(parseInt(row.leverageTier))}x
-      </th>
-      <th className="font-normal">
-        <div className="flex lg:gap-x-8 gap-x-4 items-center">
-          {isApe ? (
-            <span>{formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}</span>
-          ) : (
-            <span>{formatNumber(formatUnits(teaBal ?? 0n, 18), 4)}</span>
-          )}
+    <>
+      <tr className="hidden md:grid py-2 gap-x-4 grid-cols-5 items-start text-left  text-white">
+        <th className="flex font-normal items-center gap-x-1 ">
+          <span className="">{isApe ? "APE" : "TEA"}</span>
+          <span className="text-gray-500">-</span>
+          <span className="text-accent-100 text-xl ">{row.vaultId} </span>
+        </th>
+        <th className="font-normal  flex items-center text-gray-200">
+          {row.debtSymbol}
+        </th>
+        <th className="font-normal text-gray-200">{row.collateralSymbol}</th>
+        <th className="font-normal text-gray-200">
+          {getLeverageRatio(parseInt(row.leverageTier))}x
+        </th>
+        <th className="font-normal space-y-3">
+          <div className="flex justify-between lg:gap-x-8 gap-x-4 items-start">
+            <span>
+              {formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}
+              <span className="text-[12px] text-gray-400 pl-1">
+                {row.collateralSymbol}
+              </span>
+            </span>
 
-          <Button
-            onClick={() => setSelectedRow(row.vaultId)}
-            type="button"
-            className="h-8 py-2 px-5 rounded-full text-[14px] "
-          >
-            Burn
-          </Button>
-        </div>
-      </th>
-    </tr>
+            <Button
+              onClick={() => setSelectedRow(row.vaultId)}
+              disabled={hasUnclaimedSir}
+              type="button"
+              className="h-7 py-2 px-5 w-[65px] rounded-full text-[14px] "
+            >
+              {"Burn"}
+            </Button>
+          </div>
+
+          {!isApe && (
+            <div className="flex justify-between lg:gap-x-8 gap-x-4 items-center">
+              <span>
+                {formatNumber(teaBalance, 4)}
+
+                <span className="text-[12px] text-gray-400 pl-1">SIR</span>
+              </span>
+
+              <Button
+                onClick={() => setSelectedRow(row.vaultId)}
+                type="button"
+                disabled={teaRewards === 0n}
+                className="h-7 px-5 w-[65px] rounded-full text-[14px] "
+              >
+                Claim
+              </Button>
+            </div>
+          )}
+        </th>
+      </tr>
+      <BurnTableRowMobile
+        row={{
+          ...row,
+        }}
+        apeAddress={apeAddress}
+        isApe={isApe}
+        setSelectedRow={setSelectedRow}
+      />
+    </>
   );
 }
-
+// todo share component
 export function BurnTableRowMobile({
   setSelectedRow,
   isApe,

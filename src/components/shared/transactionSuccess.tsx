@@ -13,7 +13,7 @@ export default function TransactionSuccess({
   return (
     <div className="space-y-2">
       <div className="flex justify-center">
-        <CircleCheck size={40} color="#189a8b" />
+        <CircleCheck size={40} color="#F0C775" />
       </div>
       <h2 className="text-center">Transaction Successful!</h2>
       <h3 className="text-center">

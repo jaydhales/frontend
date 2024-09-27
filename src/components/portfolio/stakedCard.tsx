@@ -19,7 +19,7 @@ export function StakedCard() {
           <span>Staked Sir</span>
         </h2>
         <div className="flex items-center justify-between">
-          <div className="text-3xl">
+          <div className="text-3xl   ">
             <h4>
               <span>{formatNumber(formatUnits(stakedSir ?? 0n, 12))}</span>
               <span className="text-gray-500 text-sm"> SIR</span>
