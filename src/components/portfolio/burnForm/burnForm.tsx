@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { SirContract } from "@/contracts/sir";
 import type { UseFormReturn } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -247,11 +248,17 @@ export default function BurnForm({
           <SectionTwo
             data={{
               leverageTier: parseFloat(row.leverageTier),
-              collateralToken: row.collateralToken,
+              collateralToken: isClaimingRewards
+                ? SirContract.address
+                : row.collateralToken,
               debtToken: row.debtToken,
             }}
-            amount={isClaimingRewards ? reward : quoteBurn}
-            collateralSymbol={row.collateralSymbol}
+            amount={
+              isClaimingRewards
+                ? formatUnits(reward, 12)
+                : formatUnits(quoteBurn ?? 0n, 18)
+            }
+            collateralSymbol={isClaimingRewards ? "SIR" : row.collateralSymbol}
             bg=""
           />
           <div className="pt-2"></div>
@@ -277,9 +284,9 @@ export default function BurnForm({
             {isClaimingRewards && "Claim Rewards"}
             {!isClaimingRewards && `Burn ${isApe ? "APE" : "TEA"}`}
           </Button>
-          <div className="h-5 text-sm text-red-400">
-            {error && <p>{error}</p>}
-          </div>
+          {error && (
+            <div className="h-5 text-sm text-red-400">{<p>{error}</p>}</div>
+          )}
         </div>
       </form>
     </FormProvider>
