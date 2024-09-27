@@ -17,9 +17,12 @@ export default function useCalculateVaultHealth({
   const ape = parseFloat(formatUnits(apeTvl, 18));
   const gentlement = parseFloat(formatUnits(teaTvl, 18));
   const Gmin = (leverageTier - 1) * ape;
-
-  if (Gmin > gentlement) {
+  const mult = Gmin * 1.25;
+  if (mult > gentlement) {
     return isApe ? { variant: "red" } : { variant: "green" };
+  }
+  if (Gmin > gentlement) {
+    return isApe ? { variant: "yellow" } : { variant: "yellow" };
   }
   if (gentlement > Gmin) {
     return isApe ? { variant: "green" } : { variant: "red" };

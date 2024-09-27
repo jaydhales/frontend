@@ -40,12 +40,12 @@ export function VaultTableRow({
   const teaTvl = parseUnits(pool.totalTeaLocked, 0);
   const apeTvl = parseUnits(pool.totalApeLocked, 0);
 
-  console.log(teaTvl, apeTvl);
   const tvlPercent =
     teaTvl > 0
       ? parseFloat(formatUnits(teaTvl, 18)) /
         parseFloat(formatUnits(apeTvl, 18))
       : 0;
+  const showTvlPercent = tvlPercent < pool.leverageTier;
   const variant = useCalculateVaultHealth({
     apeTvl,
     teaTvl,
@@ -94,7 +94,7 @@ export function VaultTableRow({
         <Badge
           {...variant}
           className="text-[10px]"
-        >{`${getLeverageRatio(pool.leverageTier)}x(${formatNumber(tvlPercent, 2)}x)`}</Badge>
+        >{`${getLeverageRatio(pool.leverageTier)}x${showTvlPercent ? "(" + formatNumber(tvlPercent, 2) + "x)" : ""}`}</Badge>
       </th>
 
       <th className="md:col-span-2 flex justify-end items-center gap-x-1 text-right">
