@@ -4,7 +4,7 @@ import { formatNumber, getLeverageRatio } from "@/lib/utils";
 import BurnForm from "../burnForm/burnForm";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
-import { formatEther } from "viem";
+import { formatEther, formatUnits } from "viem";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 
@@ -39,7 +39,10 @@ export default function SelectedRow({
     return;
   }
 
-  const balance = (teaRewards ?? 0n) > 0n && !isApe ? teaRewards : atBal;
+  const balance =
+    (teaRewards ?? 0n) > 0n && !isApe
+      ? formatUnits(teaRewards ?? 0n, 12)
+      : formatEther(atBal);
   return (
     <div>
       <div className="md:flex hidden flex-col gap-y-4 pb-4">
@@ -57,7 +60,7 @@ export default function SelectedRow({
           </th>
           <th className="font-normal  flex items-center ">
             <h2 className="h-8 flex items-center">
-              <span>{formatNumber(formatEther(balance ?? 0n), 6)}</span>
+              <span>{formatNumber(balance, 6)}</span>
             </h2>
           </th>
         </tr>
