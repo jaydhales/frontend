@@ -20,5 +20,5 @@ export function TransactionStatus({
     }
     return { message: action ?? "Mint" };
   }, [waitForSign, isTxPending, action]);
-  return <h2 className="text-left font-lora text-lg">{data.message}</h2>;
+  return <h2 className="text-left text-lg">{data.message}</h2>;
 }
