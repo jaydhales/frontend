@@ -53,7 +53,7 @@ function VaultTableRowHeaders() {
       <th className="md:col-span-3 font-medium">Pool</th>
 
       <th className="font-medium flex gap-x-1 items-center">
-        <span>PoL</span>
+        <span>POL</span>
         <ToolTip size={15}>Pools locked liquidity.</ToolTip>
       </th>
       <th className="flex items-center font-medium gap-x-1">
