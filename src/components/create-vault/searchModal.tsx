@@ -33,7 +33,7 @@ export default function SearchModal({
         className="bg-transparent z-[400]"
       >
         <div
-          className={`rounded-xl p-8 relative transition-all duration-700  bg-secondary text-white`}
+          className={`rounded-xl w-[500px] p-8 relative transition-all duration-700  bg-secondary text-white`}
         >
           <Input
             value={searchTerm}
@@ -47,7 +47,7 @@ export default function SearchModal({
             {data?.data?.map((row) => {
               return (
                 <div
-                  className="flex w-[300px] items-center px-2 rounded-md cursor-pointer hover:bg-secondary-300 justify-between"
+                  className="flex w-full items-center px-2 gap-x-4 rounded-md cursor-pointer hover:bg-secondary-300 justify-between"
                   key={row.ID}
                 >
                   <div className="space-x-2">
