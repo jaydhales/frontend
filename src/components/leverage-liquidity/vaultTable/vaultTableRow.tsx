@@ -26,7 +26,7 @@ export function VaultTableRow({
 }) {
   const fee = calculateApeVaultFee(pool.leverageTier) * 100;
   const POL = useMemo(() => {
-    const totalLocked = parseUnits(pool.totalApeLocked, 0);
+    const totalLocked = parseUnits(pool.totalTeaLocked, 0);
     const lockedLiquidity = parseUnits(pool.lockedLiquidity, 0);
     if (lockedLiquidity > 0n && totalLocked > 0n) {
       const percent = (lockedLiquidity * 10000n) / totalLocked;
@@ -34,7 +34,7 @@ export function VaultTableRow({
     } else {
       return 0n;
     }
-  }, [pool.lockedLiquidity, pool.totalApeLocked]);
+  }, [pool.lockedLiquidity, pool.totalTeaLocked]);
 
   const { setValue } = useMintFormProviderApi();
   const teaTvl = parseUnits(pool.totalTeaLocked, 0);
