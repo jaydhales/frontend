@@ -1,30 +1,8 @@
-"use client";
-import Image, { type StaticImageData } from "next/image";
-import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
-
-import { Button } from "./ui/button";
-import sir_logo from "@/../public/images/sir-logo.svg";
-import { useState, type ReactNode } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import NavItem from "./navItem";
+import SideNav from "./sideNav";
+import { CustomConnectButton } from "./customConnectButton";
 export function Header() {
-  const { openAccountModal } = useAccountModal();
-  const { openConnectModal } = useConnectModal();
-  const { address } = useAccount();
-  const logo = sir_logo as StaticImageData;
-
-  const [openModal, setOpen] = useState(false);
-  const open = () => {
-    if (address) {
-      openAccountModal?.();
-      return;
-    }
-    openConnectModal?.();
-    return;
-  };
   return (
     <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
       <Link href={"/"} className="flex items-center gap-x-2">
@@ -47,74 +25,9 @@ export function Header() {
         </nav>
       </div>
       <div className="flex items-center gap-x-2 justify-end">
-        <Button
-          onClick={open}
-          variant={"outline"}
-          className="rounded-full text-white"
-        >
-          {!address && "Connect Wallet"}
-          {address &&
-            address.slice(0, 5) +
-              "..." +
-              address.slice(address.length - 5, address.length)}
-        </Button>
-        <div className="lg:hidden flex items-center text-white">
-          <Sheet open={openModal} onOpenChange={setOpen}>
-            <SheetTrigger>
-              <Menu className="cursor-pointer" size={30} />
-            </SheetTrigger>
-            <SheetContent>
-              <div className="flex justify-center">
-                <ul className="text-muted-foreground space-y-4 text-center">
-                  <div className="bg-primary/40 rounded-md">
-                    <NavItem onClick={() => setOpen(false)} url={"/"}>
-                      Leverage
-                    </NavItem>
-                    <NavItem onClick={() => setOpen(false)} url={"/liquidity"}>
-                      Liquidity
-                    </NavItem>
-                    <NavItem onClick={() => setOpen(false)} url={"/portfolio"}>
-                      Portfolio
-                    </NavItem>
-                  </div>
-                  <NavItem onClick={() => setOpen(false)} url={"/stake"}>
-                    Stake
-                  </NavItem>
-                  <NavItem onClick={() => setOpen(false)} url={"/create-vault"}>
-                    Create Vault
-                  </NavItem>
-                </ul>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
+        <CustomConnectButton />
+        <SideNav />
       </div>
     </div>
-  );
-}
-
-function NavItem({
-  url,
-  children,
-  main,
-  onClick,
-}: {
-  onClick?: () => void;
-  children: ReactNode;
-  url: string;
-  main?: boolean;
-}) {
-  const path = usePathname();
-  const active = url === path;
-  return (
-    <Link onClick={onClick} href={url}>
-      <li
-        data-active={active ? "true" : "false"}
-        data-main={main ? "true" : "false"}
-        className="cursor-pointer px-2 py-1 rounded-md data-[main=true]:bg-primary data-[active=true]:text-white hover:text-white"
-      >
-        {children}
-      </li>
-    </Link>
   );
 }
