@@ -15,6 +15,8 @@ const vaults = gql`
     totalValue
     lockedLiquidity
     apeAddress
+    apeCollateral
+    teaCollateral
   }
 
   query VaultQuery {

@@ -1264,9 +1264,9 @@ const merger = new(BareMerger as any)({
         store: rootStore.child('bareMerger')
       })
 const documentHashMap = {
-        "d0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce": GetUserTeaPositionsDocument,
-"39c4b6a2c2697837a449ee450bc45492e66f46fbf58cabce356f4cf386684c9f": VaultQueryDocument,
-"17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36": GetUserApePositionsDocument
+        "39c4b6a2c2697837a449ee450bc45492e66f46fbf58cabce356f4cf386684c9f": VaultQueryDocument,
+"17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36": GetUserApePositionsDocument,
+"d0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce": GetUserTeaPositionsDocument
       }
 additionalEnvelopPlugins.push(usePersistedOperations({
         getPersistedOperation(key) {
@@ -1288,13 +1288,6 @@ additionalEnvelopPlugins.push(usePersistedOperations({
     get documents() {
       return [
       {
-        document: GetUserTeaPositionsDocument,
-        get rawSDL() {
-          return printWithCache(GetUserTeaPositionsDocument);
-        },
-        location: 'GetUserTeaPositionsDocument.graphql',
-        sha256Hash: 'd0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce'
-      },{
         document: VaultQueryDocument,
         get rawSDL() {
           return printWithCache(VaultQueryDocument);
@@ -1308,6 +1301,13 @@ additionalEnvelopPlugins.push(usePersistedOperations({
         },
         location: 'GetUserApePositionsDocument.graphql',
         sha256Hash: '17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36'
+      },{
+        document: GetUserTeaPositionsDocument,
+        get rawSDL() {
+          return printWithCache(GetUserTeaPositionsDocument);
+        },
+        location: 'GetUserTeaPositionsDocument.graphql',
+        sha256Hash: 'd0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce'
       }
     ];
     },

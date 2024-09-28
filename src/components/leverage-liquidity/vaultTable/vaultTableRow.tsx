@@ -38,11 +38,17 @@ export function VaultTableRow({
   }, [pool.lockedLiquidity, pool.totalApe]);
 
   const { setValue } = useMintFormProviderApi();
-
+  const teaColl = parseUnits(pool.teaCollateral, 18);
+  const apeColl = parseUnits(pool.apeCollateral, 18);
+  const tvlPercent =
+    parseFloat(formatUnits(apeColl, 18)) / parseFloat(formatUnits(teaColl, 18));
   const showTvlPercent = tvlPercent < pool.leverageTier;
   const variant = useCalculateVaultHealth({
+    tvl: parseUnits(pool.totalValue, 18),
     isApe,
     leverageTier: pool.leverageTier,
+    apeCollateral: parseUnits(pool.apeCollateral, 18),
+    teaCollateral: parseUnits(pool.teaCollateral, 18),
   });
   return (
     <tr
@@ -90,17 +96,12 @@ export function VaultTableRow({
       </th>
 
       <th className="md:col-span-2 flex justify-end items-center gap-x-1 text-right">
-        <span>{formatNumber(formatUnits(teaTvl + apeTvl, 18), 4)}</span>
+        <span>
+          {formatNumber(formatUnits(parseUnits(pool.totalValue, 18), 18), 4)}
+        </span>
         <span className=" hidden md:block text-gray-300 font-light">
           {pool.collateralSymbol}
         </span>
-        {/* <Image */}
-        {/*   className="h-5 w-5 rounded-full " */}
-        {/*   src={getLogoAsset(pool.collateralToken as `0x${string}`)} */}
-        {/*   width={50} */}
-        {/*   height={50} */}
-        {/*   alt="" */}
-        {/* /> */}
       </th>
     </tr>
   );

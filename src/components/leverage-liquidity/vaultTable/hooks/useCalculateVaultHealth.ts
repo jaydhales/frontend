@@ -6,13 +6,17 @@ interface Props {
   tvl: bigint;
   leverageTier: number;
   isApe: boolean;
+  apeCollateral: bigint;
+  teaCollateral: bigint;
 }
 export default function useCalculateVaultHealth({
   leverageTier,
+  teaCollateral,
+  apeCollateral,
   isApe,
 }: Props): VariantProps<typeof badgeVariants> {
-  const ape = parseFloat(formatUnits(apeTvl, 18));
-  const gentlement = parseFloat(formatUnits(teaTvl, 18));
+  const ape = parseFloat(formatUnits(apeCollateral, 18));
+  const gentlement = parseFloat(formatUnits(teaCollateral, 18));
   const Gmin = (leverageTier - 1) * ape;
   const mult = Gmin * 1.25;
   if (mult > gentlement) {
