@@ -47,6 +47,8 @@ export type OrderDirection =
 export type Query = {
   vault?: Maybe<Vault>;
   vaults: Array<Vault>;
+  test?: Maybe<Test>;
+  tests: Array<Test>;
   userPosition?: Maybe<UserPosition>;
   userPositions: Array<UserPosition>;
   userPositionTea?: Maybe<UserPositionTea>;
@@ -69,6 +71,24 @@ export type QueryvaultsArgs = {
   orderBy?: InputMaybe<Vault_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<Vault_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytestArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytestsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Test_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Test_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -117,6 +137,8 @@ export type Query_metaArgs = {
 export type Subscription = {
   vault?: Maybe<Vault>;
   vaults: Array<Vault>;
+  test?: Maybe<Test>;
+  tests: Array<Test>;
   userPosition?: Maybe<UserPosition>;
   userPositions: Array<UserPosition>;
   userPositionTea?: Maybe<UserPositionTea>;
@@ -139,6 +161,24 @@ export type SubscriptionvaultsArgs = {
   orderBy?: InputMaybe<Vault_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<Vault_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontestArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontestsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Test_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Test_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -183,6 +223,50 @@ export type SubscriptionuserPositionTeasArgs = {
 export type Subscription_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
+
+export type Test = {
+  id: Scalars['String']['output'];
+  amount: Scalars['BigInt']['output'];
+};
+
+export type Test_filter = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_gt?: InputMaybe<Scalars['String']['input']>;
+  id_lt?: InputMaybe<Scalars['String']['input']>;
+  id_gte?: InputMaybe<Scalars['String']['input']>;
+  id_lte?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  amount?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  amount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Test_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<Test_filter>>>;
+};
+
+export type Test_orderBy =
+  | 'id'
+  | 'amount';
 
 export type UserPosition = {
   id: Scalars['String']['output'];
@@ -570,9 +654,9 @@ export type Vault = {
   collateralSymbol: Scalars['String']['output'];
   debtSymbol: Scalars['String']['output'];
   leverageTier: Scalars['Int']['output'];
-  totalApeLocked: Scalars['BigInt']['output'];
-  totalTeaLocked: Scalars['BigInt']['output'];
+  totalValue: Scalars['BigInt']['output'];
   lockedLiquidity: Scalars['BigInt']['output'];
+  totalApe: Scalars['BigInt']['output'];
   taxAmount: Scalars['BigInt']['output'];
   apeAddress: Scalars['Bytes']['output'];
 };
@@ -706,22 +790,14 @@ export type Vault_filter = {
   leverageTier_lte?: InputMaybe<Scalars['Int']['input']>;
   leverageTier_in?: InputMaybe<Array<Scalars['Int']['input']>>;
   leverageTier_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  totalApeLocked?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  totalApeLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  totalTeaLocked?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  totalTeaLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalValue?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalValue_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   lockedLiquidity?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_not?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -730,6 +806,14 @@ export type Vault_filter = {
   lockedLiquidity_lte?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   lockedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalApe?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalApe_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   taxAmount?: InputMaybe<Scalars['BigInt']['input']>;
   taxAmount_not?: InputMaybe<Scalars['BigInt']['input']>;
   taxAmount_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -762,9 +846,9 @@ export type Vault_orderBy =
   | 'collateralSymbol'
   | 'debtSymbol'
   | 'leverageTier'
-  | 'totalApeLocked'
-  | 'totalTeaLocked'
+  | 'totalValue'
   | 'lockedLiquidity'
+  | 'totalApe'
   | 'taxAmount'
   | 'apeAddress';
 
@@ -807,6 +891,10 @@ export type _SubgraphErrorPolicy_ =
   /** null **/
   vaults: InContextSdkMethod<Query['vaults'], QueryvaultsArgs, MeshContext>,
   /** null **/
+  test: InContextSdkMethod<Query['test'], QuerytestArgs, MeshContext>,
+  /** null **/
+  tests: InContextSdkMethod<Query['tests'], QuerytestsArgs, MeshContext>,
+  /** null **/
   userPosition: InContextSdkMethod<Query['userPosition'], QueryuserPositionArgs, MeshContext>,
   /** null **/
   userPositions: InContextSdkMethod<Query['userPositions'], QueryuserPositionsArgs, MeshContext>,
@@ -827,6 +915,10 @@ export type _SubgraphErrorPolicy_ =
   vault: InContextSdkMethod<Subscription['vault'], SubscriptionvaultArgs, MeshContext>,
   /** null **/
   vaults: InContextSdkMethod<Subscription['vaults'], SubscriptionvaultsArgs, MeshContext>,
+  /** null **/
+  test: InContextSdkMethod<Subscription['test'], SubscriptiontestArgs, MeshContext>,
+  /** null **/
+  tests: InContextSdkMethod<Subscription['tests'], SubscriptiontestsArgs, MeshContext>,
   /** null **/
   userPosition: InContextSdkMethod<Subscription['userPosition'], SubscriptionuserPositionArgs, MeshContext>,
   /** null **/

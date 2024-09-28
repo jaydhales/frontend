@@ -69,6 +69,8 @@ export type OrderDirection =
 export type Query = {
   vault?: Maybe<Vault>;
   vaults: Array<Vault>;
+  test?: Maybe<Test>;
+  tests: Array<Test>;
   userPosition?: Maybe<UserPosition>;
   userPositions: Array<UserPosition>;
   userPositionTea?: Maybe<UserPositionTea>;
@@ -91,6 +93,24 @@ export type QueryvaultsArgs = {
   orderBy?: InputMaybe<Vault_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<Vault_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytestArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytestsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Test_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Test_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -139,6 +159,8 @@ export type Query_metaArgs = {
 export type Subscription = {
   vault?: Maybe<Vault>;
   vaults: Array<Vault>;
+  test?: Maybe<Test>;
+  tests: Array<Test>;
   userPosition?: Maybe<UserPosition>;
   userPositions: Array<UserPosition>;
   userPositionTea?: Maybe<UserPositionTea>;
@@ -161,6 +183,24 @@ export type SubscriptionvaultsArgs = {
   orderBy?: InputMaybe<Vault_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<Vault_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontestArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontestsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Test_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Test_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -205,6 +245,50 @@ export type SubscriptionuserPositionTeasArgs = {
 export type Subscription_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
+
+export type Test = {
+  id: Scalars['String']['output'];
+  amount: Scalars['BigInt']['output'];
+};
+
+export type Test_filter = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_not?: InputMaybe<Scalars['String']['input']>;
+  id_gt?: InputMaybe<Scalars['String']['input']>;
+  id_lt?: InputMaybe<Scalars['String']['input']>;
+  id_gte?: InputMaybe<Scalars['String']['input']>;
+  id_lte?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  id_contains?: InputMaybe<Scalars['String']['input']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains?: InputMaybe<Scalars['String']['input']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']['input']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']['input']>;
+  amount?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_not?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  amount_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  amount_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Test_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<Test_filter>>>;
+};
+
+export type Test_orderBy =
+  | 'id'
+  | 'amount';
 
 export type UserPosition = {
   id: Scalars['String']['output'];
@@ -592,9 +676,9 @@ export type Vault = {
   collateralSymbol: Scalars['String']['output'];
   debtSymbol: Scalars['String']['output'];
   leverageTier: Scalars['Int']['output'];
-  totalApeLocked: Scalars['BigInt']['output'];
-  totalTeaLocked: Scalars['BigInt']['output'];
+  totalValue: Scalars['BigInt']['output'];
   lockedLiquidity: Scalars['BigInt']['output'];
+  totalApe: Scalars['BigInt']['output'];
   taxAmount: Scalars['BigInt']['output'];
   apeAddress: Scalars['Bytes']['output'];
 };
@@ -728,22 +812,14 @@ export type Vault_filter = {
   leverageTier_lte?: InputMaybe<Scalars['Int']['input']>;
   leverageTier_in?: InputMaybe<Array<Scalars['Int']['input']>>;
   leverageTier_not_in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  totalApeLocked?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalApeLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  totalApeLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  totalTeaLocked?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_not?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  totalTeaLocked_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  totalTeaLocked_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalValue?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValue_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalValue_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   lockedLiquidity?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_not?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -752,6 +828,14 @@ export type Vault_filter = {
   lockedLiquidity_lte?: InputMaybe<Scalars['BigInt']['input']>;
   lockedLiquidity_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   lockedLiquidity_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalApe?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalApe_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalApe_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   taxAmount?: InputMaybe<Scalars['BigInt']['input']>;
   taxAmount_not?: InputMaybe<Scalars['BigInt']['input']>;
   taxAmount_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -784,9 +868,9 @@ export type Vault_orderBy =
   | 'collateralSymbol'
   | 'debtSymbol'
   | 'leverageTier'
-  | 'totalApeLocked'
-  | 'totalTeaLocked'
+  | 'totalValue'
   | 'lockedLiquidity'
+  | 'totalApe'
   | 'taxAmount'
   | 'apeAddress';
 
@@ -924,6 +1008,9 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
+  Test: ResolverTypeWrapper<Test>;
+  Test_filter: Test_filter;
+  Test_orderBy: Test_orderBy;
   Timestamp: ResolverTypeWrapper<Scalars['Timestamp']['output']>;
   UserPosition: ResolverTypeWrapper<UserPosition>;
   UserPositionTea: ResolverTypeWrapper<UserPositionTea>;
@@ -954,6 +1041,8 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   String: Scalars['String']['output'];
   Subscription: {};
+  Test: Test;
+  Test_filter: Test_filter;
   Timestamp: Scalars['Timestamp']['output'];
   UserPosition: UserPosition;
   UserPositionTea: UserPositionTea;
@@ -1000,6 +1089,8 @@ export interface Int8ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type QueryResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   vault?: Resolver<Maybe<ResolversTypes['Vault']>, ParentType, ContextType, RequireFields<QueryvaultArgs, 'id' | 'subgraphError'>>;
   vaults?: Resolver<Array<ResolversTypes['Vault']>, ParentType, ContextType, RequireFields<QueryvaultsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  test?: Resolver<Maybe<ResolversTypes['Test']>, ParentType, ContextType, RequireFields<QuerytestArgs, 'id' | 'subgraphError'>>;
+  tests?: Resolver<Array<ResolversTypes['Test']>, ParentType, ContextType, RequireFields<QuerytestsArgs, 'skip' | 'first' | 'subgraphError'>>;
   userPosition?: Resolver<Maybe<ResolversTypes['UserPosition']>, ParentType, ContextType, RequireFields<QueryuserPositionArgs, 'id' | 'subgraphError'>>;
   userPositions?: Resolver<Array<ResolversTypes['UserPosition']>, ParentType, ContextType, RequireFields<QueryuserPositionsArgs, 'skip' | 'first' | 'subgraphError'>>;
   userPositionTea?: Resolver<Maybe<ResolversTypes['UserPositionTea']>, ParentType, ContextType, RequireFields<QueryuserPositionTeaArgs, 'id' | 'subgraphError'>>;
@@ -1010,11 +1101,19 @@ export type QueryResolvers<ContextType = MeshContext, ParentType extends Resolve
 export type SubscriptionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   vault?: SubscriptionResolver<Maybe<ResolversTypes['Vault']>, "vault", ParentType, ContextType, RequireFields<SubscriptionvaultArgs, 'id' | 'subgraphError'>>;
   vaults?: SubscriptionResolver<Array<ResolversTypes['Vault']>, "vaults", ParentType, ContextType, RequireFields<SubscriptionvaultsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  test?: SubscriptionResolver<Maybe<ResolversTypes['Test']>, "test", ParentType, ContextType, RequireFields<SubscriptiontestArgs, 'id' | 'subgraphError'>>;
+  tests?: SubscriptionResolver<Array<ResolversTypes['Test']>, "tests", ParentType, ContextType, RequireFields<SubscriptiontestsArgs, 'skip' | 'first' | 'subgraphError'>>;
   userPosition?: SubscriptionResolver<Maybe<ResolversTypes['UserPosition']>, "userPosition", ParentType, ContextType, RequireFields<SubscriptionuserPositionArgs, 'id' | 'subgraphError'>>;
   userPositions?: SubscriptionResolver<Array<ResolversTypes['UserPosition']>, "userPositions", ParentType, ContextType, RequireFields<SubscriptionuserPositionsArgs, 'skip' | 'first' | 'subgraphError'>>;
   userPositionTea?: SubscriptionResolver<Maybe<ResolversTypes['UserPositionTea']>, "userPositionTea", ParentType, ContextType, RequireFields<SubscriptionuserPositionTeaArgs, 'id' | 'subgraphError'>>;
   userPositionTeas?: SubscriptionResolver<Array<ResolversTypes['UserPositionTea']>, "userPositionTeas", ParentType, ContextType, RequireFields<SubscriptionuserPositionTeasArgs, 'skip' | 'first' | 'subgraphError'>>;
   _meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "_meta", ParentType, ContextType, Partial<Subscription_metaArgs>>;
+}>;
+
+export type TestResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Test'] = ResolversParentTypes['Test']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  amount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export interface TimestampScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Timestamp'], any> {
@@ -1056,9 +1155,9 @@ export type VaultResolvers<ContextType = MeshContext, ParentType extends Resolve
   collateralSymbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   debtSymbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   leverageTier?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  totalApeLocked?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalTeaLocked?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  totalValue?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   lockedLiquidity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  totalApe?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   taxAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   apeAddress?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1086,6 +1185,7 @@ export type Resolvers<ContextType = MeshContext> = ResolversObject<{
   Int8?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
+  Test?: TestResolvers<ContextType>;
   Timestamp?: GraphQLScalarType;
   UserPosition?: UserPositionResolvers<ContextType>;
   UserPositionTea?: UserPositionTeaResolvers<ContextType>;
@@ -1164,9 +1264,9 @@ const merger = new(BareMerger as any)({
         store: rootStore.child('bareMerger')
       })
 const documentHashMap = {
-        "f8cc4aa516b4c7d9a80305ef4623fa8bc146c8fdc5f1c53bfc67c0d4967cf1aa": VaultQueryDocument,
-"17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36": GetUserApePositionsDocument,
-"d0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce": GetUserTeaPositionsDocument
+        "d0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce": GetUserTeaPositionsDocument,
+"39c4b6a2c2697837a449ee450bc45492e66f46fbf58cabce356f4cf386684c9f": VaultQueryDocument,
+"17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36": GetUserApePositionsDocument
       }
 additionalEnvelopPlugins.push(usePersistedOperations({
         getPersistedOperation(key) {
@@ -1188,12 +1288,19 @@ additionalEnvelopPlugins.push(usePersistedOperations({
     get documents() {
       return [
       {
+        document: GetUserTeaPositionsDocument,
+        get rawSDL() {
+          return printWithCache(GetUserTeaPositionsDocument);
+        },
+        location: 'GetUserTeaPositionsDocument.graphql',
+        sha256Hash: 'd0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce'
+      },{
         document: VaultQueryDocument,
         get rawSDL() {
           return printWithCache(VaultQueryDocument);
         },
         location: 'VaultQueryDocument.graphql',
-        sha256Hash: 'f8cc4aa516b4c7d9a80305ef4623fa8bc146c8fdc5f1c53bfc67c0d4967cf1aa'
+        sha256Hash: '39c4b6a2c2697837a449ee450bc45492e66f46fbf58cabce356f4cf386684c9f'
       },{
         document: GetUserApePositionsDocument,
         get rawSDL() {
@@ -1201,13 +1308,6 @@ additionalEnvelopPlugins.push(usePersistedOperations({
         },
         location: 'GetUserApePositionsDocument.graphql',
         sha256Hash: '17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36'
-      },{
-        document: GetUserTeaPositionsDocument,
-        get rawSDL() {
-          return printWithCache(GetUserTeaPositionsDocument);
-        },
-        location: 'GetUserTeaPositionsDocument.graphql',
-        sha256Hash: 'd0aec4ac399db4bb2b39e600b8b5a5aea885e6f23d67a2c6e9b75c7594102cce'
       }
     ];
     },
@@ -1262,12 +1362,12 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
   const sdkRequester$ = getBuiltGraphClient().then(({ sdkRequesterFactory }) => sdkRequesterFactory(globalContext));
   return getSdk<TOperationContext, TGlobalContext>((...args) => sdkRequester$.then(sdkRequester => sdkRequester(...args)));
 }
-export type VaultFieldsFragment = Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalApeLocked' | 'totalTeaLocked' | 'lockedLiquidity' | 'apeAddress'>;
+export type VaultFieldsFragment = Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalApe' | 'totalValue' | 'lockedLiquidity' | 'apeAddress'>;
 
 export type VaultQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type VaultQueryQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalApeLocked' | 'totalTeaLocked' | 'lockedLiquidity' | 'apeAddress'>> };
+export type VaultQueryQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalApe' | 'totalValue' | 'lockedLiquidity' | 'apeAddress'>> };
 
 export type getUserApePositionsQueryVariables = Exact<{
   user?: InputMaybe<Scalars['Bytes']['input']>;
@@ -1291,8 +1391,8 @@ export const VaultFieldsFragmentDoc = gql`
   collateralSymbol
   vaultId
   leverageTier
-  totalApeLocked
-  totalTeaLocked
+  totalApe
+  totalValue
   lockedLiquidity
   apeAddress
 }

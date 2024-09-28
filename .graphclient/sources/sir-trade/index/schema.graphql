@@ -76,6 +76,32 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Vault!]!
+  test(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Test
+  tests(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Test_orderBy
+    orderDirection: OrderDirection
+    where: Test_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Test!]!
   userPosition(
     id: ID!
     """
@@ -159,6 +185,32 @@ type Subscription {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Vault!]!
+  test(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Test
+  tests(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Test_orderBy
+    orderDirection: OrderDirection
+    where: Test_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Test!]!
   userPosition(
     id: ID!
     """
@@ -213,6 +265,51 @@ type Subscription {
   ): [UserPositionTea!]!
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
+}
+
+type Test {
+  id: String!
+  amount: BigInt!
+}
+
+input Test_filter {
+  id: String
+  id_not: String
+  id_gt: String
+  id_lt: String
+  id_gte: String
+  id_lte: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_contains: String
+  id_contains_nocase: String
+  id_not_contains: String
+  id_not_contains_nocase: String
+  id_starts_with: String
+  id_starts_with_nocase: String
+  id_not_starts_with: String
+  id_not_starts_with_nocase: String
+  id_ends_with: String
+  id_ends_with_nocase: String
+  id_not_ends_with: String
+  id_not_ends_with_nocase: String
+  amount: BigInt
+  amount_not: BigInt
+  amount_gt: BigInt
+  amount_lt: BigInt
+  amount_gte: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  amount_not_in: [BigInt!]
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [Test_filter]
+  or: [Test_filter]
+}
+
+enum Test_orderBy {
+  id
+  amount
 }
 
 """
@@ -609,9 +706,9 @@ type Vault {
   collateralSymbol: String!
   debtSymbol: String!
   leverageTier: Int!
-  totalApeLocked: BigInt!
-  totalTeaLocked: BigInt!
+  totalValue: BigInt!
   lockedLiquidity: BigInt!
+  totalApe: BigInt!
   taxAmount: BigInt!
   apeAddress: Bytes!
 }
@@ -745,22 +842,14 @@ input Vault_filter {
   leverageTier_lte: Int
   leverageTier_in: [Int!]
   leverageTier_not_in: [Int!]
-  totalApeLocked: BigInt
-  totalApeLocked_not: BigInt
-  totalApeLocked_gt: BigInt
-  totalApeLocked_lt: BigInt
-  totalApeLocked_gte: BigInt
-  totalApeLocked_lte: BigInt
-  totalApeLocked_in: [BigInt!]
-  totalApeLocked_not_in: [BigInt!]
-  totalTeaLocked: BigInt
-  totalTeaLocked_not: BigInt
-  totalTeaLocked_gt: BigInt
-  totalTeaLocked_lt: BigInt
-  totalTeaLocked_gte: BigInt
-  totalTeaLocked_lte: BigInt
-  totalTeaLocked_in: [BigInt!]
-  totalTeaLocked_not_in: [BigInt!]
+  totalValue: BigInt
+  totalValue_not: BigInt
+  totalValue_gt: BigInt
+  totalValue_lt: BigInt
+  totalValue_gte: BigInt
+  totalValue_lte: BigInt
+  totalValue_in: [BigInt!]
+  totalValue_not_in: [BigInt!]
   lockedLiquidity: BigInt
   lockedLiquidity_not: BigInt
   lockedLiquidity_gt: BigInt
@@ -769,6 +858,14 @@ input Vault_filter {
   lockedLiquidity_lte: BigInt
   lockedLiquidity_in: [BigInt!]
   lockedLiquidity_not_in: [BigInt!]
+  totalApe: BigInt
+  totalApe_not: BigInt
+  totalApe_gt: BigInt
+  totalApe_lt: BigInt
+  totalApe_gte: BigInt
+  totalApe_lte: BigInt
+  totalApe_in: [BigInt!]
+  totalApe_not_in: [BigInt!]
   taxAmount: BigInt
   taxAmount_not: BigInt
   taxAmount_gt: BigInt
@@ -801,9 +898,9 @@ enum Vault_orderBy {
   collateralSymbol
   debtSymbol
   leverageTier
-  totalApeLocked
-  totalTeaLocked
+  totalValue
   lockedLiquidity
+  totalApe
   taxAmount
   apeAddress
 }
