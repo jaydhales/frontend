@@ -11,7 +11,7 @@ const vaults = gql`
     collateralSymbol
     vaultId
     leverageTier
-    totalApe
+    totalTea
     totalValue
     lockedLiquidity
     apeAddress

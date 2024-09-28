@@ -26,16 +26,16 @@ export function VaultTableRow({
 }) {
   const fee = calculateApeVaultFee(pool.leverageTier) * 100;
   const POL = useMemo(() => {
-    const totalLocked = parseUnits(pool.totalApe, 0);
+    const totalLocked = parseUnits(pool.totalTea, 0);
     const lockedLiquidity = parseUnits(pool.lockedLiquidity, 0);
     if (lockedLiquidity > 0n && totalLocked > 0n) {
       const percent = (lockedLiquidity * 10000n) / totalLocked;
       console.log(lockedLiquidity, totalLocked);
       return parseFloat(percent.toString()) / 100;
     } else {
-      return 0n;
+      return 0;
     }
-  }, [pool.lockedLiquidity, pool.totalApe]);
+  }, [pool.lockedLiquidity, pool.totalTea]);
 
   const { setValue } = useMintFormProviderApi();
   const teaColl = parseUnits(pool.teaCollateral, 18);
@@ -82,8 +82,8 @@ export function VaultTableRow({
           {pool.collateralSymbol}/{pool.debtSymbol}
         </span>
       </th>
-      <th>
-        <h4 className="text-gray-200 font-normal">{POL}%</h4>
+      <th className="flex items-center">
+        <h4 className="text-gray-200 font-normal">{formatNumber(POL, 1)}%</h4>
       </th>
       <th className="flex text-[13px] text-red-400 font-normal gap-x-1 items-center">
         {roundDown(fee, 2)}%{" "}

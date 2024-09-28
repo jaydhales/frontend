@@ -709,6 +709,8 @@ type Vault {
   totalValue: BigInt!
   lockedLiquidity: BigInt!
   totalApe: BigInt!
+  apeCollateral: BigInt!
+  teaCollateral: BigInt!
   taxAmount: BigInt!
   apeAddress: Bytes!
 }
@@ -866,6 +868,22 @@ input Vault_filter {
   totalApe_lte: BigInt
   totalApe_in: [BigInt!]
   totalApe_not_in: [BigInt!]
+  apeCollateral: BigInt
+  apeCollateral_not: BigInt
+  apeCollateral_gt: BigInt
+  apeCollateral_lt: BigInt
+  apeCollateral_gte: BigInt
+  apeCollateral_lte: BigInt
+  apeCollateral_in: [BigInt!]
+  apeCollateral_not_in: [BigInt!]
+  teaCollateral: BigInt
+  teaCollateral_not: BigInt
+  teaCollateral_gt: BigInt
+  teaCollateral_lt: BigInt
+  teaCollateral_gte: BigInt
+  teaCollateral_lte: BigInt
+  teaCollateral_in: [BigInt!]
+  teaCollateral_not_in: [BigInt!]
   taxAmount: BigInt
   taxAmount_not: BigInt
   taxAmount_gt: BigInt
@@ -901,6 +919,8 @@ enum Vault_orderBy {
   totalValue
   lockedLiquidity
   totalApe
+  apeCollateral
+  teaCollateral
   taxAmount
   apeAddress
 }

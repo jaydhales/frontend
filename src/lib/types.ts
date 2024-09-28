@@ -23,7 +23,7 @@ export interface VaultFieldFragment {
   vaultId: string;
   leverageTier: number;
   lockedLiquidity: string;
-  totalApe: string;
+  totalTea: string;
   totalValue: string;
   apeAddress: TAddressString;
   apeCollateral: string;
