@@ -27,6 +27,7 @@ export interface VaultFieldFragment {
   lockedLiquidity: string;
   apeAddress: TAddressString;
 }
+
 export type TVaults =
   | {
       vaults: VaultFieldFragment[];
