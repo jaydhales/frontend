@@ -3,14 +3,11 @@ import type { VariantProps } from "class-variance-authority";
 import { formatUnits } from "viem";
 
 interface Props {
-  apeTvl: bigint;
-  teaTvl: bigint;
+  tvl: bigint;
   leverageTier: number;
   isApe: boolean;
 }
 export default function useCalculateVaultHealth({
-  apeTvl,
-  teaTvl,
   leverageTier,
   isApe,
 }: Props): VariantProps<typeof badgeVariants> {

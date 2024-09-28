@@ -22,9 +22,9 @@ export interface VaultFieldFragment {
   collateralSymbol: string;
   vaultId: string;
   leverageTier: number;
-  totalApeLocked: string;
-  totalTeaLocked: string;
   lockedLiquidity: string;
+  totalApe: string;
+  totalValue: string;
   apeAddress: TAddressString;
 }
 export type TVaults =
