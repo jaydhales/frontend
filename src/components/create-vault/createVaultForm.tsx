@@ -1,6 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
+import { useState } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import type { z } from "zod";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
@@ -13,9 +14,10 @@ import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { Select, SelectItem } from "../ui/select";
 import { SelectContent, SelectTrigger } from "@radix-ui/react-select";
 import { ChevronDown } from "lucide-react";
-import Image from "next/image";
 import { getLogoAsset, mapLeverage } from "@/lib/utils";
 import ImageWithFallback from "../shared/ImageWithFallback";
+import { AlertDialog, AlertDialogContent } from "../ui/alert-dialog";
+import SearchModal from "./searchModal";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -57,9 +59,15 @@ export default function CreateVaultForm() {
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
+  const [searchTokensOpen, setSearchTokensOpen] = useState(false);
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <button onClick={() => setSearchTokensOpen(true)}>Open Modal</button>
+        <SearchModal
+          setSearchTokensOpen={setSearchTokensOpen}
+          searchTokensOpen={searchTokensOpen}
+        />
         <div className="grid  gap-y-2">
           <div className="w-full space-y-2">
             <TokenInput name="longToken" title="Long Token" />
