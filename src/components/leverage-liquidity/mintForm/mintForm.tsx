@@ -16,7 +16,12 @@ import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
 import { Card } from "@/components/ui/card";
-import { calculateApeVaultFee, findVault, formatNumber } from "@/lib/utils";
+import {
+  calculateApeVaultFee,
+  findVault,
+  formatNumber,
+  getApeAddress,
+} from "@/lib/utils";
 import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
