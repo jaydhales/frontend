@@ -97,7 +97,7 @@ export function VaultTableRow({
 
       <th className="md:col-span-2 flex justify-end items-center gap-x-1 text-right">
         <span>
-          {formatNumber(formatUnits(parseUnits(pool.totalValue, 18), 18), 4)}
+          {formatNumber(formatUnits(parseUnits(pool.totalValue, 0), 18), 4)}
         </span>
         <span className=" hidden md:block text-gray-300 font-light">
           {pool.collateralSymbol}
