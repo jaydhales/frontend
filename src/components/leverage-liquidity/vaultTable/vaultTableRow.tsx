@@ -26,32 +26,29 @@ export function VaultTableRow({
 }) {
   const fee = calculateApeVaultFee(pool.leverageTier) * 100;
   const POL = useMemo(() => {
-    const totalLocked = parseUnits(pool.totalTeaLocked, 0);
+    const totalLocked = parseUnits(pool.totalTea, 0);
     const lockedLiquidity = parseUnits(pool.lockedLiquidity, 0);
     if (lockedLiquidity > 0n && totalLocked > 0n) {
       const percent = (lockedLiquidity * 10000n) / totalLocked;
       console.log(lockedLiquidity, totalLocked);
       return parseFloat(percent.toString()) / 100;
     } else {
-      return 0n;
+      return 0;
     }
-  }, [pool.lockedLiquidity, pool.totalTeaLocked]);
+  }, [pool.lockedLiquidity, pool.totalTea]);
 
   const { setValue } = useMintFormProviderApi();
-  const teaTvl = parseUnits(pool.totalTeaLocked, 0);
-  const apeTvl = parseUnits(pool.totalApeLocked, 0);
-
+  const teaColl = parseUnits(pool.teaCollateral, 18);
+  const apeColl = parseUnits(pool.apeCollateral, 18);
   const tvlPercent =
-    teaTvl > 0
-      ? parseFloat(formatUnits(teaTvl, 18)) /
-        parseFloat(formatUnits(apeTvl, 18))
-      : 0;
+    parseFloat(formatUnits(apeColl, 18)) / parseFloat(formatUnits(teaColl, 18));
   const showTvlPercent = tvlPercent < pool.leverageTier;
   const variant = useCalculateVaultHealth({
-    apeTvl,
-    teaTvl,
+    tvl: parseUnits(pool.totalValue, 18),
     isApe,
     leverageTier: pool.leverageTier,
+    apeCollateral: parseUnits(pool.apeCollateral, 18),
+    teaCollateral: parseUnits(pool.teaCollateral, 18),
   });
   return (
     <tr
@@ -85,8 +82,8 @@ export function VaultTableRow({
           {pool.collateralSymbol}/{pool.debtSymbol}
         </span>
       </th>
-      <th>
-        <h4 className="text-gray-200 font-normal">{POL}%</h4>
+      <th className="flex items-center">
+        <h4 className="text-gray-200 font-normal">{formatNumber(POL, 1)}%</h4>
       </th>
       <th className="flex text-[13px] text-red-400 font-normal gap-x-1 items-center">
         {roundDown(fee, 2)}%{" "}
@@ -99,17 +96,12 @@ export function VaultTableRow({
       </th>
 
       <th className="md:col-span-2 flex justify-end items-center gap-x-1 text-right">
-        <span>{formatNumber(formatUnits(teaTvl + apeTvl, 18), 4)}</span>
+        <span>
+          {formatNumber(formatUnits(parseUnits(pool.totalValue, 0), 18), 4)}
+        </span>
         <span className=" hidden md:block text-gray-300 font-light">
           {pool.collateralSymbol}
         </span>
-        {/* <Image */}
-        {/*   className="h-5 w-5 rounded-full " */}
-        {/*   src={getLogoAsset(pool.collateralToken as `0x${string}`)} */}
-        {/*   width={50} */}
-        {/*   height={50} */}
-        {/*   alt="" */}
-        {/* /> */}
       </th>
     </tr>
   );
