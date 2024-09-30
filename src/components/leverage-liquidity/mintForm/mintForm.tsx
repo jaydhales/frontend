@@ -245,7 +245,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             {submitType === ESubmitType.mint && !isConfirmed && (
               <TransactionModal.StatContainer>
                 <TransactionModal.StatRow
-                  info="Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
+                  info={
+                    isApe
+                      ? "Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
+                      : "Gentlemen pay fees when minting and burning liquidity. These fees deter attacks and reward early liquidity providers. It's advantageous to mint TEA early and burn it late."
+                  }
                   title={"Fee Percent"}
                   value={fee ? fee.toString() + "%" : "0%"}
                 />

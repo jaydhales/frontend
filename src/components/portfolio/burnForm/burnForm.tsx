@@ -196,6 +196,7 @@ export default function BurnForm({
             <TransactionModal.StatRow
               title="Fee"
               value={fee ?? ""}
+              info="Gentlemen pay fees when minting and burning liquidity. These fees deter attacks and reward early liquidity providers. It's advantageous to mint TEA early and burn it late."
             ></TransactionModal.StatRow>
           </TransactionModal.StatContainer>
           <TransactionModal.SubmitButton
