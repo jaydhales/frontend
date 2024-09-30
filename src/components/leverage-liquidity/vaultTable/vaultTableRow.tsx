@@ -4,6 +4,7 @@ import {
   formatNumber,
   getLeverageRatio,
   getLogoAsset,
+  mapLeverage,
   roundDown,
 } from "@/lib/utils";
 import unknownImg from "@/../public/IconUnknown.png";
@@ -38,11 +39,17 @@ export function VaultTableRow({
   }, [pool.lockedLiquidity, pool.totalTea]);
 
   const { setValue } = useMintFormProviderApi();
-  const teaColl = parseUnits(pool.teaCollateral, 18);
-  const apeColl = parseUnits(pool.apeCollateral, 18);
-  const tvlPercent =
-    parseFloat(formatUnits(apeColl, 18)) / parseFloat(formatUnits(teaColl, 18));
-  const showTvlPercent = tvlPercent < pool.leverageTier;
+  const teaCollateral = parseFloat(
+    formatUnits(parseUnits(pool.teaCollateral, 18), 18),
+  );
+  const apeCollateral = parseFloat(
+    formatUnits(parseUnits(pool.apeCollateral, 18), 18),
+  );
+  const tvl = apeCollateral + teaCollateral;
+  const tvlPercent = tvl / apeCollateral;
+  const showTvlPercent =
+    tvlPercent < parseFloat(mapLeverage(pool.leverageTier?.toString()) ?? "0");
+  console.log(showTvlPercent, "Show tvl percent", tvlPercent);
   const variant = useCalculateVaultHealth({
     tvl: parseUnits(pool.totalValue, 18),
     isApe,
