@@ -171,7 +171,7 @@ export default function BurnForm({
                 isTxPending={isConfirming}
               />
               {isClaimingRewards && (
-                <div>{formatNumber(formatUnits(reward, 18), 9)} weth</div>
+                <div>{formatNumber(formatUnits(reward, 18), 7)} weth</div>
               )}
               {!isClaimingRewards && (
                 <TransactionEstimates
@@ -196,6 +196,11 @@ export default function BurnForm({
             <TransactionModal.StatRow
               title="Fee"
               value={fee ?? ""}
+              info={
+                isApe
+                  ? "Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
+                  : "Gentlemen pay fees when minting and burning liquidity. These fees deter attacks and reward early liquidity providers. It's advantageous to mint TEA early and burn it late."
+              }
             ></TransactionModal.StatRow>
           </TransactionModal.StatContainer>
           <TransactionModal.SubmitButton
