@@ -36,7 +36,7 @@ export function BurnTableRow({
     : formatUnits(teaBal ?? 0n, 18);
   return (
     <>
-      <tr className="hidden md:grid py-2 gap-x-4 grid-cols-5 items-start text-left  text-white">
+      <tr className="hidden md:grid py-2 gap-x-4 grid-cols-6 items-start text-left  text-white">
         <th className="flex font-normal items-center gap-x-1 ">
           <span className="">{isApe ? "APE" : "TEA"}</span>
           <span className="text-gray-500">-</span>
@@ -49,43 +49,49 @@ export function BurnTableRow({
         <th className="font-normal text-gray-200">
           {getLeverageRatio(parseInt(row.leverageTier))}x
         </th>
-        <th className="font-normal space-y-3">
-          <div className="flex justify-between lg:gap-x-8 gap-x-4 items-start">
+        <th className="font-normal space-y-3 col-span-2">
+          <div className="flex justify-between  items-start">
             <span>
               {formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}
               <span className="text-[12px] text-gray-400 pl-1">
                 {row.collateralSymbol}
               </span>
             </span>
-
-            <Button
-              onClick={() => setSelectedRow(row.vaultId)}
-              disabled={hasUnclaimedSir}
-              type="button"
-              className="h-7 py-2 px-5 w-[65px] rounded-full text-[14px] "
-            >
-              {"Burn"}
-            </Button>
-          </div>
-
-          {!isApe && (
-            <div className="flex justify-between lg:gap-x-8 gap-x-4 items-center">
-              <span>
-                {formatNumber(teaBalance, 4)}
-
-                <span className="text-[12px] text-gray-400 pl-1">SIR</span>
-              </span>
-
+            <div className="space-x-1">
               <Button
                 onClick={() => setSelectedRow(row.vaultId)}
+                disabled={hasUnclaimedSir}
                 type="button"
-                disabled={teaRewards === 0n}
-                className="h-7 px-5 w-[65px] rounded-full text-[14px] "
+                className="h-7 py-2 px-5 w-[65px] rounded-full text-[14px] "
               >
-                Claim
+                {"Burn"}
               </Button>
+
+              {!isApe && (
+                <Button
+                  onClick={() => setSelectedRow(row.vaultId)}
+                  type="button"
+                  disabled={teaRewards === 0n}
+                  className="h-7 px-5 rounded-full text-[14px] "
+                >
+                  Claim{" "}
+                  <span className="text-[14px] pl-1 text-gray-300">
+                    {formatNumber(teaBalance, 3)}
+                  </span>
+                </Button>
+              )}
             </div>
-          )}
+          </div>
+
+          {/* {!isApe && ( */}
+          {/*   <div className="flex justify-between lg:gap-x-8 gap-x-4 items-center"> */}
+          {/*     <span> */}
+          {/*       {formatNumber(teaBalance, 4)} */}
+          {/**/}
+          {/*       <span className="text-[12px] text-gray-400 pl-1">SIR</span> */}
+          {/*     </span> */}
+          {/*   </div> */}
+          {/* )} */}
         </th>
       </tr>
       <BurnTableRowMobile
