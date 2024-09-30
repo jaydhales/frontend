@@ -80,9 +80,10 @@ export default function BurnForm({
   } = useWaitForTransactionReceipt({
     hash: writeData,
   });
-
   const utils = api.useUtils();
 
+  const reward = teaRewardBalance ?? 0n;
+  const isClaimingRewards = Boolean(!isApe && reward > 0n);
   useEffect(() => {
     if (receiptData) {
       if (isApe) {
@@ -90,12 +91,23 @@ export default function BurnForm({
           console.log(e);
         });
       } else {
-        utils.user.getTeaBalance.invalidate().catch((e) => {
-          console.log(e);
-        });
+        if (isClaimingRewards) {
+          utils.user.getTeaRewards.invalidate().catch((e) => console.log(e));
+        } else {
+          utils.user.getTeaBalance.invalidate().catch((e) => {
+            console.log(e);
+          });
+        }
       }
     }
-  }, [receiptData, utils.user.getApeBalance, isApe, utils.user.getTeaBalance]);
+  }, [
+    receiptData,
+    utils.user.getApeBalance,
+    isApe,
+    utils.user.getTeaBalance,
+    utils.user.getTeaRewards,
+    isClaimingRewards,
+  ]);
 
   const { data: burnData } = useBurnApe({
     isApe: isApe,
@@ -115,8 +127,6 @@ export default function BurnForm({
       form.setValue("deposit", "");
     }
   }, [form, isConfirmed]);
-  const reward = teaRewardBalance ?? 0n;
-  const isClaimingRewards = Boolean(!isApe && reward > 0n);
 
   const { isValid, error } = useCheckValidityBurn(
     formData,
@@ -156,8 +166,8 @@ export default function BurnForm({
     submitButtonText = "Close";
   }
 
-  const fee = useGetFee({ isApe, levTier });
-
+  let fee = useGetFee({ isApe, levTier });
+  fee = fee ?? "";
   return (
     <FormProvider {...form}>
       <TransactionModal.Root open={open} setOpen={setOpen}>
@@ -171,7 +181,14 @@ export default function BurnForm({
                 isTxPending={isConfirming}
               />
               {isClaimingRewards && (
-                <div>{formatNumber(formatUnits(reward, 18), 9)} weth</div>
+                <div className=" pt-4 ">
+                  <div className="space-x-1">
+                    <span className="text-lg">
+                      {formatNumber(formatUnits(reward, 12), 8)}
+                    </span>
+                    <span className="text-gray-500 text-[14px]">SIR</span>
+                  </div>
+                </div>
               )}
               {!isClaimingRewards && (
                 <TransactionEstimates
@@ -192,12 +209,14 @@ export default function BurnForm({
         </TransactionModal.InfoContainer>
         {/*----*/}
         <TransactionModal.StatSubmitContainer>
-          <TransactionModal.StatContainer>
-            <TransactionModal.StatRow
-              title="Fee"
-              value={fee ?? ""}
-            ></TransactionModal.StatRow>
-          </TransactionModal.StatContainer>
+          {!isClaimingRewards && (
+            <TransactionModal.StatContainer>
+              <TransactionModal.StatRow
+                title="Fee"
+                value={fee + "%"}
+              ></TransactionModal.StatRow>
+            </TransactionModal.StatContainer>
+          )}
           <TransactionModal.SubmitButton
             disabled={false}
             loading={isConfirming || isPending}
