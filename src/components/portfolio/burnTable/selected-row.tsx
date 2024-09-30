@@ -38,15 +38,21 @@ export default function SelectedRow({
   if (!atBal) {
     return;
   }
-
-  const balance =
-    (teaRewards ?? 0n) > 0n && !isApe
-      ? formatUnits(teaRewards ?? 0n, 12)
-      : formatEther(atBal);
+  const isClaiming = (teaRewards ?? 0n) > 0n && !isApe;
+  const balance = isClaiming
+    ? formatUnits(teaRewards ?? 0n, 12)
+    : formatEther(atBal);
   return (
     <div>
       <div className="md:flex hidden flex-col gap-y-4 pb-4">
-        <BurnTableHeaders />
+        <tr className=" font-thin hidden text-[14px] md:grid gap-x-4 grid-cols-5 text-left text-gray-500 border-b border-white  pb-1 border-opacity-10">
+          <th className="font-normal">Token</th>
+          <th className="font-normal">Long</th>
+          <th className="font-normal">Versus</th>
+          <th className="font-normal">Leverage ratio</th>
+          <th className="font-normal justify-end flex">Balance</th>
+        </tr>
+        {/* <BurnTableHeaders /> */}
         <tr className="grid h-8 gap-x-4 relative grid-cols-5 items-center text-left text-white">
           <th className="flex font-normal items-center gap-x-1 ">
             <span className="">{isApe ? "APE" : "TEA"}</span>
@@ -58,9 +64,12 @@ export default function SelectedRow({
           <th className="font-normal">
             {getLeverageRatio(parseInt(params?.leverageTier ?? "0"))}x
           </th>
-          <th className="font-normal  flex items-center ">
-            <h2 className="h-8 flex items-center">
-              <span>{formatNumber(balance, 6)}</span>
+          <th className="font-normal  flex justify-end items-center ">
+            <h2 className="h-8 flex items-center space-x-1">
+              <span className="text-lg">{formatNumber(balance, 6)}</span>
+              <span className="text-gray-500 text-[14px]">
+                {isClaiming ? "SIR" : "WETH"}
+              </span>
             </h2>
           </th>
         </tr>
