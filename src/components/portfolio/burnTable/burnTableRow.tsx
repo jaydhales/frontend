@@ -58,15 +58,6 @@ export function BurnTableRow({
               </span>
             </span>
             <div className="space-x-1">
-              <Button
-                onClick={() => setSelectedRow(row.vaultId)}
-                disabled={hasUnclaimedSir}
-                type="button"
-                className="h-7 py-2 px-5 w-[65px] rounded-full text-[14px] "
-              >
-                {"Burn"}
-              </Button>
-
               {!isApe && (
                 <Button
                   onClick={() => setSelectedRow(row.vaultId)}
@@ -77,9 +68,18 @@ export function BurnTableRow({
                   Claim{" "}
                   <span className="text-[14px] pl-1 text-gray-300">
                     {formatNumber(teaBalance, 3)}
+                    <span className="pl-[2px] ">SIR</span>
                   </span>
                 </Button>
               )}
+              <Button
+                onClick={() => setSelectedRow(row.vaultId)}
+                disabled={hasUnclaimedSir}
+                type="button"
+                className="h-7 py-2 px-5 w-[65px] rounded-full text-[14px] "
+              >
+                {"Burn"}
+              </Button>
             </div>
           </div>
 
