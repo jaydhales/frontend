@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CircleCheck } from "lucide-react";
 import { SirContract } from "@/contracts/sir";
 import type { UseFormReturn } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
@@ -203,7 +204,15 @@ export default function BurnForm({
               )}
             </>
           )}
-          {isConfirmed && (
+          {isConfirmed && isClaimingRewards && (
+            <div className="space-y-2">
+              <div className="flex justify-center">
+                <CircleCheck size={40} color="#F0C775" />
+              </div>
+              <h2 className="text-center">Transaction Successful!</h2>
+            </div>
+          )}
+          {isConfirmed && !isClaimingRewards && (
             <TransactionSuccess
               assetReceived={row.collateralSymbol}
               amountReceived={tokenReceived}
