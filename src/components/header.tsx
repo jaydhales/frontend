@@ -1,15 +1,20 @@
 import Link from "next/link";
 import NavItem from "./navItem";
+import Image from "next/image";
 import SideNav from "./sideNav";
+import hat from "../../public/images/sir-logo.svg";
 import { CustomConnectButton } from "./customConnectButton";
 export function Header() {
   return (
     <div className=" grid grid-cols-5 items-center justify-between px-[14px] py-[24px] text-white">
       <Link href={"/"} className="flex items-center gap-x-2">
         {/* <Image src={logo} alt="Sir-Trading Logo" className="h-[60px] w-auto" /> */}
-        <h1 className="sir-shadow font-lora drop-shadow-md text-[32px] font-bold text-gold">
-          SIR.TRADING
-        </h1>
+        <div className="flex gap-x-1">
+          <Image height={40} width={40} src={hat} alt="Sir Icon" />
+          <h1 className="sir-shadow font-lora drop-shadow-md text-[32px] font-bold text-white">
+            SIR.TRADING
+          </h1>
+        </div>
       </Link>
       <div className="col-span-3 flex justify-center">
         <nav className="hidden lg:block">
