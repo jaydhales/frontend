@@ -12,10 +12,12 @@ export default function SelectedRow({
   close,
   apeAddress,
   isApe,
+  isClaiming,
 }: {
   params: TUserPosition;
   apeAddress?: TAddressString;
   isApe: boolean;
+  isClaiming: boolean;
   close: () => void;
 }) {
   const { apeBal, teaBal } = useTeaAndApeBals({
@@ -37,10 +39,10 @@ export default function SelectedRow({
   if (!atBal) {
     return;
   }
-  const isClaiming = (teaRewards ?? 0n) > 0n && !isApe;
   const balance = isClaiming
     ? formatUnits(teaRewards ?? 0n, 12)
     : formatEther(atBal);
+
   return (
     <div className="animate-fade-in">
       <div className="md:flex hidden  flex-col gap-y-4 pb-4">
@@ -65,7 +67,7 @@ export default function SelectedRow({
           </th>
           <th className="font-normal  flex justify-end items-center ">
             <h2 className="h-8 flex items-center space-x-1">
-              <span className="text-lg">{formatNumber(balance, 6)}</span>
+              <span className="">{formatNumber(balance, 6)}</span>
               <span className="text-gray-500 text-[14px]">
                 {isClaiming ? "SIR" : ""}
               </span>
@@ -79,6 +81,7 @@ export default function SelectedRow({
           className="justify-between bg-secondary-700 p-4 rounded-lg"
         >
           <BurnForm
+            isClaiming={isClaiming}
             teaRewardBalance={teaRewards}
             levTier={params.leverageTier}
             close={close}

@@ -11,7 +11,7 @@ interface Props {
   row: TUserPosition;
   isApe: boolean;
   apeAddress?: TAddressString;
-  setSelectedRow: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setSelectedRow: (isClaiming: boolean) => void;
 }
 export function BurnTableRow({
   setSelectedRow,
@@ -29,8 +29,8 @@ export function BurnTableRow({
     { userAddress: address ?? "0x", vaultId: row.vaultId },
     { enabled: Boolean(address) && !isApe },
   );
-  const rewards = teaRewards ?? 0n;
-  const hasUnclaimedSir = isApe ? false : rewards > 0n;
+  // const rewards = teaRewards ?? 0n;
+  // const hasUnclaimedSir = isApe ? false : rewards > 0n;
   const teaBalance = formatUnits(teaBal ?? 0n, 18);
   const apeBalance = formatUnits(apeBal ?? 0n, 18);
   return (
@@ -57,7 +57,7 @@ export function BurnTableRow({
             <div className="space-x-1">
               {!isApe && (
                 <Button
-                  onClick={() => setSelectedRow(row.vaultId)}
+                  onClick={() => setSelectedRow(true)}
                   type="button"
                   disabled={teaRewards === 0n}
                   className="h-7 px-5 rounded-full text-[14px] "
@@ -70,8 +70,7 @@ export function BurnTableRow({
                 </Button>
               )}
               <Button
-                onClick={() => setSelectedRow(row.vaultId)}
-                disabled={hasUnclaimedSir}
+                onClick={() => setSelectedRow(false)}
                 type="button"
                 className="h-7 py-2 px-5 w-[65px] rounded-full text-[14px] "
               >
@@ -141,7 +140,7 @@ export function BurnTableRowMobile({
       </MobileTh>
       <th>
         <Button
-          onClick={() => setSelectedRow(row.vaultId)}
+          onClick={() => setSelectedRow(false)}
           type="button"
           className="h-8 py-2 px-5 rounded-full text-[14px] "
         >

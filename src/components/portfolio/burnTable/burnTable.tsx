@@ -4,7 +4,7 @@ import BurnTableHeaders from "./burnTableHeader";
 import SelectedRow from "./selected-row";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
-import { BurnTableRow, BurnTableRowMobile } from "./burnTableRow";
+import { BurnTableRow } from "./burnTableRow";
 import useCheckUserHasPositions from "./hooks/useCheckUserHasPositions";
 
 export default function BurnTable({
@@ -16,6 +16,7 @@ export default function BurnTable({
     | {
         vaultId: string;
         isApe: boolean;
+        isClaiming: boolean;
       }
     | undefined
   >();
@@ -50,10 +51,11 @@ export default function BurnTable({
   const apePosition = ape.data?.userPositions.map((r) => (
     <>
       <BurnTableRow
-        setSelectedRow={() =>
+        setSelectedRow={(isClaiming: boolean) =>
           setSelectedRow({
             vaultId: r.vaultId,
             isApe: true,
+            isClaiming,
           })
         }
         key={r.vaultId + "ape"}
@@ -75,9 +77,10 @@ export default function BurnTable({
   ));
   return (
     <div className="relative">
-      {selectedRowParamsApe && (
+      {selectedRowParamsApe && selectedRow && (
         <>
           <SelectedRow
+            isClaiming={selectedRow?.isClaiming}
             isApe
             params={selectedRowParamsApe}
             apeAddress={selectedRowParamsApe?.APE}
@@ -87,10 +90,11 @@ export default function BurnTable({
           />
         </>
       )}
-      {selectedRowParamsTea && (
+      {selectedRowParamsTea && selectedRow && (
         <>
           <SelectedRow
             isApe={false}
+            isClaiming={selectedRow.isClaiming}
             params={selectedRowParamsTea}
             close={() => {
               setSelectedRow(undefined);
@@ -98,6 +102,7 @@ export default function BurnTable({
           />
         </>
       )}
+
       {!selectedRow && (
         <table className="w-full animate-fade-in">
           <caption className="hidden">Burn Tokens</caption>
@@ -126,21 +131,11 @@ export default function BurnTable({
                                 }}
                                 key={r.id + "teaa"}
                                 isApe={false}
-                                setSelectedRow={() =>
+                                setSelectedRow={(isClaiming: boolean) =>
                                   setSelectedRow({
                                     vaultId: r.vaultId,
                                     isApe: false,
-                                  })
-                                }
-                              />
-                              <BurnTableRowMobile
-                                key={r.id + "tea"}
-                                row={{ ...r }}
-                                isApe={false}
-                                setSelectedRow={() =>
-                                  setSelectedRow({
-                                    vaultId: r.vaultId,
-                                    isApe: false,
+                                    isClaiming,
                                   })
                                 }
                               />

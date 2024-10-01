@@ -41,8 +41,10 @@ export default function BurnForm({
   close,
   levTier,
   teaRewardBalance,
+  isClaiming,
 }: {
   balance: bigint | undefined;
+  isClaiming: boolean;
   teaRewardBalance: bigint | undefined;
   isApe: boolean;
   row: TUserPosition;
@@ -83,7 +85,8 @@ export default function BurnForm({
   const utils = api.useUtils();
 
   const reward = teaRewardBalance ?? 0n;
-  const isClaimingRewards = Boolean(!isApe && reward > 0n);
+
+  const isClaimingRewards = isClaiming;
   useEffect(() => {
     if (receiptData) {
       if (isApe) {
