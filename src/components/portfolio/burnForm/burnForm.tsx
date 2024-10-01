@@ -209,7 +209,7 @@ export default function BurnForm({
         </TransactionModal.InfoContainer>
         {/*----*/}
         <TransactionModal.StatSubmitContainer>
-          {!isClaimingRewards && (
+          {!isClaimingRewards && !isConfirmed && (
             <TransactionModal.StatContainer>
               <TransactionModal.StatRow
                 title="Fee"
