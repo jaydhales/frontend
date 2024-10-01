@@ -31,9 +31,8 @@ export function BurnTableRow({
   );
   const rewards = teaRewards ?? 0n;
   const hasUnclaimedSir = isApe ? false : rewards > 0n;
-  const teaBalance = hasUnclaimedSir
-    ? formatUnits(teaRewards ?? 0n, 12)
-    : formatUnits(teaBal ?? 0n, 18);
+  const teaBalance = formatUnits(teaBal ?? 0n, 18);
+  const apeBalance = formatUnits(apeBal ?? 0n, 18);
   return (
     <>
       <tr className="hidden md:grid py-2 gap-x-4 grid-cols-6 items-start text-left  text-white">
@@ -52,7 +51,7 @@ export function BurnTableRow({
         <th className="font-normal space-y-3 col-span-2">
           <div className="flex justify-between  items-start">
             <span>
-              {formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}
+              {formatNumber(isApe ? apeBalance : teaBalance, 4)}
               <span className="text-[12px] text-gray-400 pl-1"></span>
             </span>
             <div className="space-x-1">
