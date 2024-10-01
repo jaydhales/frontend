@@ -68,7 +68,7 @@ export default function SelectedRow({
             <h2 className="h-8 flex items-center space-x-1">
               <span className="text-lg">{formatNumber(balance, 6)}</span>
               <span className="text-gray-500 text-[14px]">
-                {isClaiming ? "SIR" : "WETH"}
+                {isClaiming ? "SIR" : ""}
               </span>
             </h2>
           </th>

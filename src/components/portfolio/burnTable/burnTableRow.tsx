@@ -53,9 +53,7 @@ export function BurnTableRow({
           <div className="flex justify-between  items-start">
             <span>
               {formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}
-              <span className="text-[12px] text-gray-400 pl-1">
-                {row.collateralSymbol}
-              </span>
+              <span className="text-[12px] text-gray-400 pl-1"></span>
             </span>
             <div className="space-x-1">
               {!isApe && (
