@@ -1,4 +1,3 @@
-import BurnTableHeaders from "./burnTableHeader";
 import type { TAddressString } from "@/lib/types";
 import { formatNumber, getLeverageRatio } from "@/lib/utils";
 import BurnForm from "../burnForm/burnForm";
@@ -43,8 +42,8 @@ export default function SelectedRow({
     ? formatUnits(teaRewards ?? 0n, 12)
     : formatEther(atBal);
   return (
-    <div>
-      <div className="md:flex hidden flex-col gap-y-4 pb-4">
+    <div className="animate-fade-in">
+      <div className="md:flex hidden  flex-col gap-y-4 pb-4">
         <tr className=" font-thin hidden text-[14px] md:grid gap-x-4 grid-cols-5 text-left text-gray-500 border-b border-white  pb-1 border-opacity-10">
           <th className="font-normal">Token</th>
           <th className="font-normal">Long</th>

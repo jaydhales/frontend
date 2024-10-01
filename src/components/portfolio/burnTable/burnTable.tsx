@@ -99,7 +99,7 @@ export default function BurnTable({
         </>
       )}
       {!selectedRow && (
-        <table className="w-full">
+        <table className="w-full animate-fade-in">
           <caption className="hidden">Burn Tokens</caption>
           <tbody className="flex flex-col gap-y-4">
             <BurnTableHeaders />
