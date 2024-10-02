@@ -32,7 +32,7 @@ export const vaultRouter = createTRPCRouter({
           },
         ],
       });
-      a;
+      return a;
     }),
   getApeParams: publicProcedure
     .input(z.object({ address: z.string().startsWith("0x") }))
