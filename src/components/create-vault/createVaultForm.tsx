@@ -1,21 +1,19 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { SyntheticEvent } from "react";
+import { useMemo } from "react";
 import type { z } from "zod";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { useEffect } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { CreateVaultInputValues } from "@/lib/schemas";
 import type { TAddressString, TCreateVaultKeys } from "@/lib/types";
 import { useCreateVault } from "./hooks/useCreateVault";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
-import { getLogoAsset, mapLeverage } from "@/lib/utils";
+import { getLogoAsset } from "@/lib/utils";
 import ImageWithFallback from "../shared/ImageWithFallback";
 import { RadioGroup } from "@radix-ui/react-radio-group";
-import { RadioGroupItem } from "../ui/radio-group";
 import { RadioItem } from "./radioItem";
 const tokens = [
   {
@@ -51,7 +49,7 @@ export default function CreateVaultForm() {
   const data = useCreateVault({ longToken, versusToken, leverageTier });
   const { writeContract, isPending, data: hash } = useWriteContract();
   const onSubmit = () => {
-    if (form.formState.isValid && data?.request) {
+    if (data?.request) {
       writeContract(data?.request);
     }
   };
@@ -61,13 +59,20 @@ export default function CreateVaultForm() {
     },
     [form],
   );
+  const isValid = useMemo(() => {
+    if (data?.request) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [data?.request]);
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid  gap-y-2">
-          <div className="w-full space-y-2">
+          <div className="w-full space-y-2 ">
             <FormField
               control={form.control}
               name="leverageTier"
@@ -123,11 +128,7 @@ export default function CreateVaultForm() {
           </div>
         </div>
         <div className="flex justify-center">
-          <Button
-            disabled={!form.formState.isValid}
-            variant={"submit"}
-            type="submit"
-          >
+          <Button disabled={!isValid} variant={"submit"} type="submit">
             Create
           </Button>
         </div>
