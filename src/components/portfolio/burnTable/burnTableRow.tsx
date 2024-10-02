@@ -72,7 +72,11 @@ export function BurnTableRow({
               )}
               <Button
                 onClick={() => setSelectedRow(false)}
-                disabled={parseFloat(teaBalance) === 0}
+                disabled={
+                  isApe
+                    ? parseFloat(apeBalance) === 0
+                    : parseFloat(teaBalance) === 0
+                }
                 type="button"
                 className="h-7 w-[65px] rounded-full px-5 py-2 text-[14px] "
               >
