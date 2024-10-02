@@ -18,6 +18,7 @@ import { RadioItem } from "./radioItem";
 import TransactionModal from "../shared/transactionModal";
 import { TransactionStatus } from "../leverage-liquidity/mintForm/transactionStatus";
 import TransactionInfoCreateVault from "./transactionInfoCreateVault";
+import { api } from "@/trpc/react";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -62,15 +63,39 @@ export default function CreateVaultForm() {
     },
     [form],
   );
-  const isValid = useMemo(() => {
-    if (data?.request) {
-      return true;
-    } else {
-      return false;
-    }
-  }, [data?.request]);
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
+  const { data: vaultData } = api.vault.getVaultExists.useQuery(
+    {
+      debtToken: formData.versusToken,
+      collateralToken: formData.longToken,
+      leverageTier: parseFloat(formData.leverageTier),
+    },
+    {
+      enabled:
+        Boolean(formData.leverageTier) &&
+        Boolean(formData.longToken) &&
+        Boolean(formData.versusToken),
+    },
+  );
+
+  const isValid = useMemo(() => {
+    if (vaultData === 0) {
+      return { isValid: false, error: "Invalid Vault." };
+    }
+    if (vaultData === 1) {
+      return { isValid: false, error: "No Uniswap Pool." };
+    }
+    if (vaultData === 3) {
+      return { isValid: false, error: "Vault Already Exists" };
+    }
+    if (data?.request) {
+      return { isValid: true, error: undefined };
+    } else {
+      return { isValid: false, error: "" };
+    }
+  }, [data?.request, vaultData]);
+
   const [openModal, setOpenModal] = useState(false);
   return (
     <FormProvider {...form}>
@@ -97,7 +122,7 @@ export default function CreateVaultForm() {
                 onSubmit();
               }}
             >
-              Create
+              {isPending || isConfirming ? "Pending..." : "Create"}
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
@@ -138,37 +163,31 @@ export default function CreateVaultForm() {
           </div>
           <div className="w-full space-y-2">
             <TokenInput name="longToken" title="Long Token" />
-            <p
-              data-active={formData.longToken.length > 0 ? "true" : "false"}
-              className="text-sm text-red-400 data-[active=false]:hidden"
-            >
-              {form.formState.errors.longToken?.message}
-            </p>
             <QuickSelects name="longToken" tokens={tokens} />
           </div>
 
           <div className="w-full space-y-2">
             <TokenInput name="versusToken" title="Versus Token" />
-            <p
-              data-active={formData.versusToken.length > 0 ? "true" : "false"}
-              className="text-sm text-red-400 data-[active=false]:hidden"
-            >
-              {form.formState.errors.versusToken?.message}
-            </p>
             <QuickSelects name="versusToken" tokens={tokens} />
           </div>
         </div>
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center ">
           <Button
             onClick={() => {
               setOpenModal(true);
             }}
             type="button"
-            disabled={!isValid}
+            disabled={!isValid.isValid}
             variant={"submit"}
           >
             Create
           </Button>
+
+          <div className="flex pt-1 md:w-[450px]">
+            <span className="text-[12px] text-red-400">
+              {isValid.error ? isValid.error : ""}
+            </span>
+          </div>
         </div>
       </form>
     </FormProvider>
