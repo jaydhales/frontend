@@ -190,7 +190,7 @@ export default function BurnForm({
                     <span className="text-lg">
                       {formatNumber(formatUnits(reward, 12), 8)}
                     </span>
-                    <span className="text-gray-500 text-[14px]">SIR</span>
+                    <span className="text-[14px] text-gray-500">SIR</span>
                   </div>
                 </div>
               )}
@@ -239,7 +239,7 @@ export default function BurnForm({
         </TransactionModal.StatSubmitContainer>
       </TransactionModal.Root>
       <form>
-        <div className="space-y-2 w-[320px] md:w-full">
+        <div className="w-[320px] space-y-2 md:w-full">
           <div className="flex justify-between">
             {!isClaimingRewards && (
               <label htmlFor="a" className="">
@@ -247,7 +247,7 @@ export default function BurnForm({
               </label>
             )}
             {isClaimingRewards && (
-              <h2 className="text-[24px] pl-[24px] text-center w-full font-lora">
+              <h2 className="w-full pl-[24px] text-center font-lora text-[24px]">
                 Claim
               </h2>
             )}
