@@ -33,7 +33,7 @@ export function BurnTableRow({
   // const hasUnclaimedSir = isApe ? false : rewards > 0n;
   const teaBalance = formatUnits(teaBal ?? 0n, 18);
   const apeBalance = formatUnits(apeBal ?? 0n, 18);
-  const rewards = formatUnits(teaRewards ?? 0n, 18);
+  const rewards = formatUnits(teaRewards ?? 0n, 12);
   return (
     <>
       <tr className="hidden grid-cols-6 items-start gap-x-4 py-2 text-left text-white  md:grid">
