@@ -1,21 +1,22 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { SyntheticEvent } from "react";
 import type { z } from "zod";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import { useEffect } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { CreateVaultInputValues } from "@/lib/schemas";
 import type { TAddressString, TCreateVaultKeys } from "@/lib/types";
 import { useCreateVault } from "./hooks/useCreateVault";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
-import { Select, SelectItem } from "../ui/select";
-import { SelectContent, SelectTrigger } from "@radix-ui/react-select";
-import { ChevronDown } from "lucide-react";
-import Image from "next/image";
 import { getLogoAsset, mapLeverage } from "@/lib/utils";
 import ImageWithFallback from "../shared/ImageWithFallback";
+import { RadioGroup } from "@radix-ui/react-radio-group";
+import { RadioGroupItem } from "../ui/radio-group";
+import { RadioItem } from "./radioItem";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -54,7 +55,12 @@ export default function CreateVaultForm() {
       writeContract(data?.request);
     }
   };
-
+  const setLeverageTier = useCallback(
+    (value: string) => {
+      form.setValue("leverageTier", value);
+    },
+    [form],
+  );
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
   return (
@@ -62,10 +68,43 @@ export default function CreateVaultForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid  gap-y-2">
           <div className="w-full space-y-2">
+            <FormField
+              control={form.control}
+              name="leverageTier"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Leverage</FormLabel>{" "}
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="grid grid-cols-4 gap-4"
+                  >
+                    {["-4", "-3", "-2", "-1", "0", "1", "2"].map((e) => {
+                      return (
+                        <RadioItem
+                          key={e}
+                          setValue={setLeverageTier}
+                          fieldValue={field.value}
+                          value={e}
+                        />
+                      );
+                    })}
+                  </RadioGroup>
+                </FormItem>
+              )}
+            />
+
+            {
+              <p className="text-sm text-red-400">
+                {form.formState.errors.leverageTier?.message}
+              </p>
+            }
+          </div>
+          <div className="w-full space-y-2">
             <TokenInput name="longToken" title="Long Token" />
             <p
               data-active={formData.longToken.length > 0 ? "true" : "false"}
-              className="text-red-400 text-sm data-[active=false]:hidden"
+              className="text-sm text-red-400 data-[active=false]:hidden"
             >
               {form.formState.errors.longToken?.message}
             </p>
@@ -76,48 +115,11 @@ export default function CreateVaultForm() {
             <TokenInput name="versusToken" title="Versus Token" />
             <p
               data-active={formData.versusToken.length > 0 ? "true" : "false"}
-              className="text-red-400 text-sm data-[active=false]:hidden"
+              className="text-sm text-red-400 data-[active=false]:hidden"
             >
               {form.formState.errors.versusToken?.message}
             </p>
             <QuickSelects name="versusToken" tokens={tokens} />
-          </div>
-
-          <div className="w-full space-y-2">
-            <FormField
-              control={form.control}
-              name="leverageTier"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Leverage</FormLabel>{" "}
-                  <Select onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full flex justify-between bg-primary py-2 rounded-md px-2 ">
-                      <h2 className="text-[14px] flex items-center">
-                        {!field.value
-                          ? "Select ratio"
-                          : mapLeverage(field.value)}
-                      </h2>
-                      <ChevronDown />
-                    </SelectTrigger>
-                    <SelectContent className="w-[150px] opacity-100 bg-background">
-                      <SelectItem value="2">5</SelectItem>
-                      <SelectItem value="1">3</SelectItem>
-                      <SelectItem value="0">2</SelectItem>
-                      <SelectItem value="-1">1.5</SelectItem>
-                      <SelectItem value="-2">1.25</SelectItem>
-                      <SelectItem value="-3">1.125</SelectItem>
-                      <SelectItem value="-4">1.0625</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-
-            {
-              <p className="text-red-400 text-sm">
-                {form.formState.errors.leverageTier?.message}
-              </p>
-            }
           </div>
         </div>
         <div className="flex justify-center">
@@ -141,13 +143,13 @@ interface PropsQuick {
 function QuickSelects({ tokens, name }: PropsQuick) {
   const form = useFormContext();
   return (
-    <div className="flex items-center gap-x-2 flex-wrap">
-      <h2 className="text-[12px] pr-2">Quick Selects:</h2>
+    <div className="flex flex-wrap items-center gap-x-2">
+      <h2 className="pr-2 text-[12px]">Quick Selects:</h2>
       {tokens.map((e) => {
         return (
           <div
             key={e.address}
-            className="flex cursor-pointer bg-background hover:bg-background/60 items-center gap-x-2 px-2 py-1 rounded-full"
+            className="flex cursor-pointer items-center gap-x-2 rounded-full bg-background px-2 py-1 hover:bg-background/60"
             onClick={() => {
               form.setValue(name, e.address);
             }}
@@ -156,7 +158,7 @@ function QuickSelects({ tokens, name }: PropsQuick) {
             <ImageWithFallback
               width={20}
               height={20}
-              className="w-6 h-6"
+              className="h-6 w-6"
               src={getLogoAsset(e.address)}
               alt={"Token " + e.label}
             />
@@ -188,7 +190,7 @@ function TokenInput({
                 type="text"
                 placeholder="0x"
                 autoComplete="off"
-                className="w-full px-2 rounded-md"
+                className="w-full rounded-md px-2"
                 background="primary"
                 minLength={1}
                 textSize="sm"
