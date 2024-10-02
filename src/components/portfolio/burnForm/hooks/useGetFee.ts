@@ -8,7 +8,6 @@ interface Props {
 export default function useGetFee({ levTier, isApe }: Props) {
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
-
     if (!isApe) {
       return "19";
     }
