@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CircleCheck } from "lucide-react";
 import { SirContract } from "@/contracts/sir";
 import type { UseFormReturn } from "react-hook-form";
 import { FormProvider, useForm } from "react-hook-form";
@@ -41,8 +42,10 @@ export default function BurnForm({
   close,
   levTier,
   teaRewardBalance,
+  isClaiming,
 }: {
   balance: bigint | undefined;
+  isClaiming: boolean;
   teaRewardBalance: bigint | undefined;
   isApe: boolean;
   row: TUserPosition;
@@ -80,9 +83,11 @@ export default function BurnForm({
   } = useWaitForTransactionReceipt({
     hash: writeData,
   });
-
   const utils = api.useUtils();
 
+  const reward = teaRewardBalance ?? 0n;
+
+  const isClaimingRewards = isClaiming;
   useEffect(() => {
     if (receiptData) {
       if (isApe) {
@@ -90,12 +95,23 @@ export default function BurnForm({
           console.log(e);
         });
       } else {
-        utils.user.getTeaBalance.invalidate().catch((e) => {
-          console.log(e);
-        });
+        if (isClaimingRewards) {
+          utils.user.getTeaRewards.invalidate().catch((e) => console.log(e));
+        } else {
+          utils.user.getTeaBalance.invalidate().catch((e) => {
+            console.log(e);
+          });
+        }
       }
     }
-  }, [receiptData, utils.user.getApeBalance, isApe, utils.user.getTeaBalance]);
+  }, [
+    receiptData,
+    utils.user.getApeBalance,
+    isApe,
+    utils.user.getTeaBalance,
+    utils.user.getTeaRewards,
+    isClaimingRewards,
+  ]);
 
   const { data: burnData } = useBurnApe({
     isApe: isApe,
@@ -115,8 +131,6 @@ export default function BurnForm({
       form.setValue("deposit", "");
     }
   }, [form, isConfirmed]);
-  const reward = teaRewardBalance ?? 0n;
-  const isClaimingRewards = Boolean(!isApe && reward > 0n);
 
   const { isValid, error } = useCheckValidityBurn(
     formData,
@@ -156,8 +170,8 @@ export default function BurnForm({
     submitButtonText = "Close";
   }
 
-  const fee = useGetFee({ isApe, levTier });
-
+  let fee = useGetFee({ isApe, levTier });
+  fee = fee ?? "";
   return (
     <FormProvider {...form}>
       <TransactionModal.Root open={open} setOpen={setOpen}>
@@ -171,7 +185,14 @@ export default function BurnForm({
                 isTxPending={isConfirming}
               />
               {isClaimingRewards && (
-                <div>{formatNumber(formatUnits(reward, 18), 7)} weth</div>
+                <div className=" pt-4 ">
+                  <div className="space-x-1">
+                    <span className="text-lg">
+                      {formatNumber(formatUnits(reward, 12), 8)}
+                    </span>
+                    <span className="text-[14px] text-gray-500">SIR</span>
+                  </div>
+                </div>
               )}
               {!isClaimingRewards && (
                 <TransactionEstimates
@@ -183,7 +204,15 @@ export default function BurnForm({
               )}
             </>
           )}
-          {isConfirmed && (
+          {isConfirmed && isClaimingRewards && (
+            <div className="space-y-2">
+              <div className="flex justify-center">
+                <CircleCheck size={40} color="#F0C775" />
+              </div>
+              <h2 className="text-center">Transaction Successful!</h2>
+            </div>
+          )}
+          {isConfirmed && !isClaimingRewards && (
             <TransactionSuccess
               assetReceived={row.collateralSymbol}
               amountReceived={tokenReceived}
@@ -192,17 +221,14 @@ export default function BurnForm({
         </TransactionModal.InfoContainer>
         {/*----*/}
         <TransactionModal.StatSubmitContainer>
-          <TransactionModal.StatContainer>
-            <TransactionModal.StatRow
-              title="Fee"
-              value={fee ?? ""}
-              info={
-                isApe
-                  ? "Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
-                  : "Gentlemen pay fees when minting and burning liquidity. These fees deter attacks and reward early liquidity providers. It's advantageous to mint TEA early and burn it late."
-              }
-            ></TransactionModal.StatRow>
-          </TransactionModal.StatContainer>
+          {!isClaimingRewards && !isConfirmed && (
+            <TransactionModal.StatContainer>
+              <TransactionModal.StatRow
+                title="Fee"
+                value={fee + "%"}
+              ></TransactionModal.StatRow>
+            </TransactionModal.StatContainer>
+          )}
           <TransactionModal.SubmitButton
             disabled={false}
             loading={isConfirming || isPending}
@@ -213,7 +239,7 @@ export default function BurnForm({
         </TransactionModal.StatSubmitContainer>
       </TransactionModal.Root>
       <form>
-        <div className="space-y-2 w-[320px] md:w-full">
+        <div className="w-[320px] space-y-2 md:w-full">
           <div className="flex justify-between">
             {!isClaimingRewards && (
               <label htmlFor="a" className="">
@@ -221,7 +247,7 @@ export default function BurnForm({
               </label>
             )}
             {isClaimingRewards && (
-              <h2 className="text-[24px] pl-[24px] text-center w-full font-lora">
+              <h2 className="w-full pl-[24px] text-center font-lora text-[24px]">
                 Claim
               </h2>
             )}

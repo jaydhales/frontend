@@ -19,7 +19,7 @@ export function SirCard() {
     <div className=" border-b border-secondary-200 pb-2">
       <div className=" px-2 pb-2 rounded-md text-2xl">
         <div className="flex justify-between pb-2">
-          <h2 className="text-sm text-gray-200">Total Sir</h2>
+          <h2 className="text-sm text-gray-200">Total SIR</h2>
           <Link
             href="/stake"
             className="flex text-blue-400 text-sm  items-center gap-x-1"

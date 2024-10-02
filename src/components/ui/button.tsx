@@ -20,7 +20,7 @@ const buttonVariants = cva(
         submit:
           "md:w-[450px] w-[280px] rounded-md bg-gold py-2 text-xl font-semibold hover:bg-gold/90",
         modal:
-          "md:w-[300px] w-[280px] bg-gold rounded-lg  py-2 text-xl  hover:bg-gold/90",
+          "md:w-[300px] w-[280px] bg-gold rounded-lg font-bold  py-2 text-xl  hover:bg-gold/90",
       },
       state: {
         default: "",
