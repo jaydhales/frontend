@@ -1,5 +1,6 @@
 import Link from "next/link";
 import NavItem from "./navItem";
+import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import SideNav from "./sideNav";
 import hat from "../../public/images/sir-logo.svg";
@@ -10,7 +11,12 @@ export function Header() {
       <Link href={"/"} className="flex items-center gap-x-2">
         {/* <Image src={logo} alt="Sir-Trading Logo" className="h-[60px] w-auto" /> */}
         <div className="flex gap-x-1">
-          <Image height={40} width={40} src={hat} alt="Sir Icon" />
+          <Image
+            height={40}
+            width={40}
+            src={hat as StaticImageData}
+            alt="Sir Icon"
+          />
           <h1 className="sir-shadow font-lora drop-shadow-md text-[32px] font-bold text-white">
             SIR.TRADING
           </h1>
