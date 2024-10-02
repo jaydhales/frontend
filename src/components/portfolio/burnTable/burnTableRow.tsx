@@ -72,6 +72,7 @@ export function BurnTableRow({
               )}
               <Button
                 onClick={() => setSelectedRow(false)}
+                disabled={parseFloat(teaBalance) === 0}
                 type="button"
                 className="h-7 w-[65px] rounded-full px-5 py-2 text-[14px] "
               >
@@ -114,6 +115,7 @@ export function BurnTableRowMobile({
     vaultId: row.vaultId,
     isApe,
   });
+  const teaBalance = teaBal ?? 0n;
   return (
     <tr className="flex w-full flex-col gap-y-4  rounded-md bg-black/60 p-2 py-2 pb-4  text-[14px]   md:hidden">
       <div className=" justify-center pt-1 font-bold">
@@ -143,6 +145,7 @@ export function BurnTableRowMobile({
         <Button
           onClick={() => setSelectedRow(false)}
           type="button"
+          disabled={teaBalance === 0n}
           className="h-8 rounded-full px-5 py-2 text-[14px] "
         >
           Burn

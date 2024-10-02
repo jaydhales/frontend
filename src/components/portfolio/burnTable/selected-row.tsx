@@ -6,6 +6,7 @@ import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
 import { formatEther, formatUnits } from "viem";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
+import { useEffect } from "react";
 
 export default function SelectedRow({
   params,
@@ -36,7 +37,13 @@ export default function SelectedRow({
       <h1>Hello</h1>
     </div>;
   }
-  if (!atBal) {
+  console.log(atBal, "atBal");
+  useEffect(() => {
+    if (atBal === undefined) {
+      close();
+    }
+  }, [atBal]);
+  if (atBal === undefined) {
     return;
   }
   const balance = isClaiming
@@ -45,30 +52,30 @@ export default function SelectedRow({
 
   return (
     <div className="animate-fade-in">
-      <div className="md:flex hidden  flex-col gap-y-4 pb-4">
-        <tr className=" font-thin hidden text-[14px] md:grid gap-x-4 grid-cols-5 text-left text-gray-500 border-b border-white  pb-1 border-opacity-10">
+      <div className="hidden flex-col  gap-y-4 pb-4 md:flex">
+        <tr className=" hidden grid-cols-5 gap-x-4 border-b border-white border-opacity-10 pb-1 text-left text-[14px] font-thin  text-gray-500 md:grid">
           <th className="font-normal">Token</th>
           <th className="font-normal">Long</th>
           <th className="font-normal">Versus</th>
           <th className="font-normal">Leverage ratio</th>
-          <th className="font-normal justify-end flex">Balance</th>
+          <th className="flex justify-end font-normal">Balance</th>
         </tr>
         {/* <BurnTableHeaders /> */}
-        <tr className="grid h-8 gap-x-4 relative grid-cols-5 items-center text-left text-white">
-          <th className="flex font-normal items-center gap-x-1 ">
+        <tr className="relative grid h-8 grid-cols-5 items-center gap-x-4 text-left text-white">
+          <th className="flex items-center gap-x-1 font-normal ">
             <span className="">{isApe ? "APE" : "TEA"}</span>
             <span className="text-gray-500">-</span>
-            <span className="text-accent-100 text-xl ">{params.vaultId} </span>
+            <span className="text-xl text-accent-100 ">{params.vaultId} </span>
           </th>
           <th className="font-normal">{params?.debtSymbol}</th>
           <th className="font-normal">{params?.collateralSymbol}</th>
           <th className="font-normal">
             {getLeverageRatio(parseInt(params?.leverageTier ?? "0"))}x
           </th>
-          <th className="font-normal  flex justify-end items-center ">
-            <h2 className="h-8 flex items-center space-x-1">
+          <th className="flex  items-center justify-end font-normal ">
+            <h2 className="flex h-8 items-center space-x-1">
               <span className="">{formatNumber(balance, 6)}</span>
-              <span className="text-gray-500 text-[14px]">
+              <span className="text-[14px] text-gray-500">
                 {isClaiming ? "SIR" : ""}
               </span>
             </h2>
@@ -78,7 +85,7 @@ export default function SelectedRow({
       <div className="flex justify-center pt-4">
         <div
           id="burn-form"
-          className="justify-between bg-secondary-700 p-4 rounded-lg"
+          className="justify-between rounded-lg bg-secondary-700 p-4"
         >
           <BurnForm
             isClaiming={isClaiming}

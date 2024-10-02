@@ -75,6 +75,21 @@ export default function BurnTable({
       />
     </>
   ));
+  let showTea = undefined;
+  if (selectedRow !== undefined && selectedRowParamsTea !== undefined) {
+    showTea = (
+      <SelectedRow
+        isApe={false}
+        isClaiming={selectedRow.isClaiming}
+        params={selectedRowParamsTea}
+        close={() => {
+          setSelectedRow(undefined);
+        }}
+      />
+    );
+  }
+
+  console.log(showTea, "showTea");
   return (
     <div className="relative">
       {selectedRowParamsApe && selectedRow && (
@@ -90,18 +105,7 @@ export default function BurnTable({
           />
         </>
       )}
-      {selectedRowParamsTea && selectedRow && (
-        <>
-          <SelectedRow
-            isApe={false}
-            isClaiming={selectedRow.isClaiming}
-            params={selectedRowParamsTea}
-            close={() => {
-              setSelectedRow(undefined);
-            }}
-          />
-        </>
-      )}
+      {showTea}
 
       {!selectedRow && (
         <table className="w-full animate-fade-in">
