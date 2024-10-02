@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useCallback } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { z } from "zod";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
@@ -11,10 +11,13 @@ import { CreateVaultInputValues } from "@/lib/schemas";
 import type { TAddressString, TCreateVaultKeys } from "@/lib/types";
 import { useCreateVault } from "./hooks/useCreateVault";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
-import { getLogoAsset } from "@/lib/utils";
+import { getLogoAsset, mapLeverage } from "@/lib/utils";
 import ImageWithFallback from "../shared/ImageWithFallback";
 import { RadioGroup } from "@radix-ui/react-radio-group";
 import { RadioItem } from "./radioItem";
+import TransactionModal from "../shared/transactionModal";
+import { TransactionStatus } from "../leverage-liquidity/mintForm/transactionStatus";
+import TransactionInfoCreateVault from "./transactionInfoCreateVault";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -68,9 +71,37 @@ export default function CreateVaultForm() {
   }, [data?.request]);
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
+  const [openModal, setOpenModal] = useState(false);
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form className="space-y-6">
+        <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
+          <TransactionModal.Close setOpen={setOpenModal} />
+          <TransactionModal.InfoContainer>
+            <TransactionStatus
+              action="Create"
+              waitForSign={isPending}
+              isTxPending={isConfirming}
+            />
+            <TransactionInfoCreateVault
+              leverageTier={formData.leverageTier}
+              longToken={formData.longToken}
+              versusToken={formData.versusToken}
+            />
+          </TransactionModal.InfoContainer>
+          <TransactionModal.StatSubmitContainer>
+            <TransactionModal.SubmitButton
+              disabled={!isValid}
+              loading={isPending || isConfirming}
+              onClick={() => {
+                onSubmit();
+              }}
+            >
+              Create
+            </TransactionModal.SubmitButton>
+          </TransactionModal.StatSubmitContainer>
+        </TransactionModal.Root>
+
         <div className="grid  gap-y-2">
           <div className="w-full space-y-2 ">
             <FormField
@@ -128,7 +159,14 @@ export default function CreateVaultForm() {
           </div>
         </div>
         <div className="flex justify-center">
-          <Button disabled={!isValid} variant={"submit"} type="submit">
+          <Button
+            onClick={() => {
+              setOpenModal(true);
+            }}
+            type="button"
+            disabled={!isValid}
+            variant={"submit"}
+          >
             Create
           </Button>
         </div>
