@@ -65,20 +65,41 @@ export default function CreateVaultForm() {
   );
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
+  const enabled = useMemo(() => {
+    if (
+      formData.longToken &&
+      formData.versusToken &&
+      Boolean(formData.leverageTier)
+    ) {
+      if (
+        formData.longToken.length === 42 &&
+        formData.versusToken.length === 42
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }, [formData.longToken, formData.versusToken, formData.leverageTier]);
   const { data: vaultData } = api.vault.getVaultExists.useQuery(
+    {
+      debtToken: formData.versusToken,
+      collateralToken: formData.longToken,
+      leverageTier: 2,
+    },
+    {
+      enabled,
+    },
+  );
+  console.log(
+    vaultData,
+
     {
       debtToken: formData.versusToken,
       collateralToken: formData.longToken,
       leverageTier: parseFloat(formData.leverageTier),
     },
-    {
-      enabled:
-        Boolean(formData.leverageTier) &&
-        Boolean(formData.longToken) &&
-        Boolean(formData.versusToken),
-    },
+    "VAULTID",
   );
-
   const isValid = useMemo(() => {
     if (vaultData === 0) {
       return { isValid: false, error: "Invalid Vault." };
@@ -95,7 +116,7 @@ export default function CreateVaultForm() {
       return { isValid: false, error: "" };
     }
   }, [data?.request, vaultData]);
-
+  console.log(isValid, "");
   const [openModal, setOpenModal] = useState(false);
   return (
     <FormProvider {...form}>
