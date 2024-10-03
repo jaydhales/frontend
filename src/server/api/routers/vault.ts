@@ -32,6 +32,7 @@ export const vaultRouter = createTRPCRouter({
           },
         ],
       });
+      console.log(a, "A");
       return a;
     }),
   getApeParams: publicProcedure
