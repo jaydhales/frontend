@@ -11,7 +11,7 @@ interface Props {
   row: TUserPosition;
   isApe: boolean;
   apeAddress?: TAddressString;
-  setSelectedRow: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setSelectedRow: (isClaiming: boolean) => void;
 }
 export function BurnTableRow({
   setSelectedRow,
@@ -29,63 +29,71 @@ export function BurnTableRow({
     { userAddress: address ?? "0x", vaultId: row.vaultId },
     { enabled: Boolean(address) && !isApe },
   );
-  const rewards = teaRewards ?? 0n;
-  const hasUnclaimedSir = isApe ? false : rewards > 0n;
-  const teaBalance = hasUnclaimedSir
-    ? formatUnits(teaRewards ?? 0n, 12)
-    : formatUnits(teaBal ?? 0n, 18);
+  // const rewards = teaRewards ?? 0n;
+  // const hasUnclaimedSir = isApe ? false : rewards > 0n;
+  const teaBalance = formatUnits(teaBal ?? 0n, 18);
+  const apeBalance = formatUnits(apeBal ?? 0n, 18);
+  const rewards = formatUnits(teaRewards ?? 0n, 12);
   return (
     <>
-      <tr className="hidden md:grid py-2 gap-x-4 grid-cols-5 items-start text-left  text-white">
-        <th className="flex font-normal items-center gap-x-1 ">
+      <tr className="hidden grid-cols-6 items-start gap-x-4 py-2 text-left text-white  md:grid">
+        <th className="flex items-center gap-x-1 font-normal ">
           <span className="">{isApe ? "APE" : "TEA"}</span>
           <span className="text-gray-500">-</span>
-          <span className="text-accent-100 text-xl ">{row.vaultId} </span>
+          <span className="text-xl text-accent-100 ">{row.vaultId} </span>
         </th>
-        <th className="font-normal  flex items-center text-gray-200">
+        <th className="flex  items-center font-normal text-gray-200">
           {row.debtSymbol}
         </th>
         <th className="font-normal text-gray-200">{row.collateralSymbol}</th>
         <th className="font-normal text-gray-200">
           {getLeverageRatio(parseInt(row.leverageTier))}x
         </th>
-        <th className="font-normal space-y-3">
-          <div className="flex justify-between lg:gap-x-8 gap-x-4 items-start">
+        <th className="col-span-2 space-y-3 font-normal">
+          <div className="flex items-start  justify-between">
             <span>
-              {formatNumber(formatUnits(apeBal ?? 0n, 18), 4)}
-              <span className="text-[12px] text-gray-400 pl-1">
-                {row.collateralSymbol}
-              </span>
+              {formatNumber(isApe ? apeBalance : teaBalance, 4)}
+              <span className="pl-1 text-[12px] text-gray-400"></span>
             </span>
-
-            <Button
-              onClick={() => setSelectedRow(row.vaultId)}
-              disabled={hasUnclaimedSir}
-              type="button"
-              className="h-7 py-2 px-5 w-[65px] rounded-full text-[14px] "
-            >
-              {"Burn"}
-            </Button>
-          </div>
-
-          {!isApe && (
-            <div className="flex justify-between lg:gap-x-8 gap-x-4 items-center">
-              <span>
-                {formatNumber(teaBalance, 4)}
-
-                <span className="text-[12px] text-gray-400 pl-1">SIR</span>
-              </span>
-
+            <div className="space-x-1">
+              {!isApe && (
+                <Button
+                  onClick={() => setSelectedRow(true)}
+                  type="button"
+                  disabled={teaRewards === 0n}
+                  className="h-7 rounded-full px-5 text-[14px] "
+                >
+                  Claim{" "}
+                  <span className="pl-1 text-[14px] text-gray-300">
+                    {formatNumber(rewards, 3)}
+                    <span className="pl-[2px] ">SIR</span>
+                  </span>
+                </Button>
+              )}
               <Button
-                onClick={() => setSelectedRow(row.vaultId)}
+                onClick={() => setSelectedRow(false)}
+                disabled={
+                  isApe
+                    ? parseFloat(apeBalance) === 0
+                    : parseFloat(teaBalance) === 0
+                }
                 type="button"
-                disabled={teaRewards === 0n}
-                className="h-7 px-5 w-[65px] rounded-full text-[14px] "
+                className="h-7 w-[65px] rounded-full px-5 py-2 text-[14px] "
               >
-                Claim
+                {"Burn"}
               </Button>
             </div>
-          )}
+          </div>
+
+          {/* {!isApe && ( */}
+          {/*   <div className="flex justify-between lg:gap-x-8 gap-x-4 items-center"> */}
+          {/*     <span> */}
+          {/*       {formatNumber(teaBalance, 4)} */}
+          {/**/}
+          {/*       <span className="text-[12px] text-gray-400 pl-1">SIR</span> */}
+          {/*     </span> */}
+          {/*   </div> */}
+          {/* )} */}
         </th>
       </tr>
       <BurnTableRowMobile
@@ -111,8 +119,9 @@ export function BurnTableRowMobile({
     vaultId: row.vaultId,
     isApe,
   });
+  const teaBalance = teaBal ?? 0n;
   return (
-    <tr className="md:hidden bg-black/60 p-2 rounded-md  w-full flex flex-col gap-y-4 py-2  text-[14px]   pb-4">
+    <tr className="flex w-full flex-col gap-y-4  rounded-md bg-black/60 p-2 py-2 pb-4  text-[14px]   md:hidden">
       <div className=" justify-center pt-1 font-bold">
         <div className="flex justify-center text-lg">
           <span className="">{isApe ? "APE" : "TEA"}</span>
@@ -138,9 +147,10 @@ export function BurnTableRowMobile({
       </MobileTh>
       <th>
         <Button
-          onClick={() => setSelectedRow(row.vaultId)}
+          onClick={() => setSelectedRow(false)}
           type="button"
-          className="h-8 py-2 px-5 rounded-full text-[14px] "
+          disabled={teaBalance === 0n}
+          className="h-8 rounded-full px-5 py-2 text-[14px] "
         >
           Burn
         </Button>
@@ -152,7 +162,7 @@ export function BurnTableRowMobile({
 function MobileTh({ title, children }: { title: string; children: ReactNode }) {
   return (
     <th className="flex justify-between gap-x-12">
-      <h2 className="text-gray-500 font-light">{title}</h2>
+      <h2 className="font-light text-gray-500">{title}</h2>
       {children}
     </th>
   );

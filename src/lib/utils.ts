@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { encodePacked, formatUnits, getAddress, keccak256, toHex } from "viem";
+import { formatUnits, getAddress } from "viem";
 import type { TAddressString, TMintFormFields, TVaults } from "./types";
 import { assetSchema } from "./schemas";
 import { z } from "zod";

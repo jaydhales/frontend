@@ -227,6 +227,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 )}
               </>
             )}
+
             {isConfirmed && (
               <div className="space-y-2">
                 <div className="flex justify-center">
@@ -245,7 +246,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             {submitType === ESubmitType.mint && !isConfirmed && (
               <TransactionModal.StatContainer>
                 <TransactionModal.StatRow
-                  info="Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
+                  info={
+                    isApe
+                      ? "Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
+                      : "Gentlemen pay fees when minting and burning liquidity. These fees deter attacks and reward early liquidity providers. It's advantageous to mint TEA early and burn it late."
+                  }
                   title={"Fee Percent"}
                   value={fee ? fee.toString() + "%" : "0%"}
                 />
@@ -302,7 +307,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         />
 
         <MintFormSubmit.Root>
-          <p className="md:w-[450px] pb-2 text-center text-sm text-gray-500">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
+          <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
           <MintFormSubmit.OpenTransactionModalButton
             isValid={isValid}
             onClick={() => setOpenTransactionModal(true)}

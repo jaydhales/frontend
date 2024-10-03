@@ -38,7 +38,7 @@ export function SectionTwo({
         </div>
       </div>
       <div className="flex items-end justify-between pt-1">
-        <span className="text-sm font-medium text-gray-500">$22.44</span>
+        {/* <span className="text-sm font-medium text-gray-500">$22.44</span> */}
         {/* <span className="text-sm italic text-gray">Balance $232.23</span> */}
       </div>
     </div>
