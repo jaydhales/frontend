@@ -10,7 +10,7 @@ import {
 import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
-import type { VaultFieldFragment } from "@/lib/types";
+import type { TVault, VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
 import { useMemo } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
@@ -22,7 +22,7 @@ export function VaultTableRow({
 }: {
   badgeVariant: VariantProps<typeof badgeVariants>;
   number: string;
-  pool: VaultFieldFragment;
+  pool: TVault;
   isApe: boolean;
 }) {
   const fee = calculateApeVaultFee(pool.leverageTier) * 100;
@@ -39,24 +39,20 @@ export function VaultTableRow({
   }, [pool.lockedLiquidity, pool.totalTea]);
 
   const { setValue } = useMintFormProviderApi();
-  const teaCollateral = parseFloat(
-    formatUnits(parseUnits(pool.teaCollateral, 18), 18),
-  );
-  const apeCollateral = parseFloat(
-    formatUnits(parseUnits(pool.apeCollateral, 18), 18),
-  );
+  const teaCollateral = parseFloat(formatUnits(pool.teaCollateral, 18));
+  const apeCollateral = parseFloat(formatUnits(pool.apeCollateral, 18));
   const tvl = apeCollateral + teaCollateral;
   const tvlPercent = tvl / apeCollateral;
   const showTvlPercent =
     tvlPercent < parseFloat(mapLeverage(pool.leverageTier?.toString()) ?? "0");
-  console.log(showTvlPercent, "Show tvl percent", tvlPercent);
   const variant = useCalculateVaultHealth({
     tvl: parseUnits(pool.totalValue, 18),
     isApe,
     leverageTier: pool.leverageTier,
-    apeCollateral: parseUnits(pool.apeCollateral, 18),
-    teaCollateral: parseUnits(pool.teaCollateral, 18),
+    apeCollateral: pool.apeCollateral,
+    teaCollateral: pool.teaCollateral,
   });
+  console.log(pool, "POOOL");
   return (
     <tr
       onClick={() => {
@@ -64,10 +60,10 @@ export function VaultTableRow({
         setValue("long", pool.collateralToken + "," + pool.collateralSymbol);
         setValue("leverageTier", pool.leverageTier.toString());
       }}
-      className="grid cursor-pointer text-sm grid-cols-6   md:grid-cols-9 rounded-md px-1 py-1 text-left text-[16px] font-normal transition-colors hover:bg-primary"
+      className="grid cursor-pointer grid-cols-6 rounded-md   px-1 py-1 text-left text-[16px] text-sm font-normal transition-colors hover:bg-primary md:grid-cols-9"
     >
       <th className="">{pool.vaultId}</th>
-      <th className="md:col-span-3 items-center flex">
+      <th className="flex items-center md:col-span-3">
         <ImageWithFallback
           fallbackImageUrl={unknownImg}
           className="h-6 w-6 rounded-full "
@@ -90,9 +86,9 @@ export function VaultTableRow({
         </span>
       </th>
       <th className="flex items-center">
-        <h4 className="text-gray-200 font-normal">{formatNumber(POL, 1)}%</h4>
+        <h4 className="font-normal text-gray-200">{formatNumber(POL, 1)}%</h4>
       </th>
-      <th className="flex text-[13px] text-red-400 font-normal gap-x-1 items-center">
+      <th className="flex items-center gap-x-1 text-[13px] font-normal text-red-400">
         {roundDown(fee, 2)}%{" "}
       </th>
       <th className="pl-2">
@@ -102,11 +98,11 @@ export function VaultTableRow({
         >{`${getLeverageRatio(pool.leverageTier)}x${showTvlPercent ? "(" + formatNumber(tvlPercent, 2) + "x)" : ""}`}</Badge>
       </th>
 
-      <th className="md:col-span-2 flex justify-end items-center gap-x-1 text-right">
+      <th className="flex items-center justify-end gap-x-1 text-right md:col-span-2">
         <span>
           {formatNumber(formatUnits(parseUnits(pool.totalValue, 0), 18), 4)}
         </span>
-        <span className=" hidden md:block text-gray-300 font-light">
+        <span className=" hidden font-light text-gray-300 md:block">
           {pool.collateralSymbol}
         </span>
       </th>
