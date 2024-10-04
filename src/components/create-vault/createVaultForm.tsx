@@ -65,7 +65,7 @@ export default function CreateVaultForm() {
             <TokenInput name="longToken" title="Long Token" />
             <p
               data-active={formData.longToken.length > 0 ? "true" : "false"}
-              className="text-red-400 text-sm data-[active=false]:hidden"
+              className="text-sm text-red-400 data-[active=false]:hidden"
             >
               {form.formState.errors.longToken?.message}
             </p>
@@ -76,7 +76,7 @@ export default function CreateVaultForm() {
             <TokenInput name="versusToken" title="Versus Token" />
             <p
               data-active={formData.versusToken.length > 0 ? "true" : "false"}
-              className="text-red-400 text-sm data-[active=false]:hidden"
+              className="text-sm text-red-400 data-[active=false]:hidden"
             >
               {form.formState.errors.versusToken?.message}
             </p>
@@ -91,15 +91,15 @@ export default function CreateVaultForm() {
                 <FormItem>
                   <FormLabel>Leverage</FormLabel>{" "}
                   <Select onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full flex justify-between bg-primary py-2 rounded-md px-2 ">
-                      <h2 className="text-[14px] flex items-center">
+                    <SelectTrigger className="flex w-full justify-between rounded-md bg-primary px-2 py-2 ">
+                      <h2 className="flex items-center text-[14px]">
                         {!field.value
                           ? "Select ratio"
                           : mapLeverage(field.value)}
                       </h2>
                       <ChevronDown />
                     </SelectTrigger>
-                    <SelectContent className="w-[150px] opacity-100 bg-background">
+                    <SelectContent className="w-[150px] bg-background opacity-100">
                       <SelectItem value="2">5</SelectItem>
                       <SelectItem value="1">3</SelectItem>
                       <SelectItem value="0">2</SelectItem>
@@ -114,7 +114,7 @@ export default function CreateVaultForm() {
             />
 
             {
-              <p className="text-red-400 text-sm">
+              <p className="text-sm text-red-400">
                 {form.formState.errors.leverageTier?.message}
               </p>
             }
@@ -141,13 +141,13 @@ interface PropsQuick {
 function QuickSelects({ tokens, name }: PropsQuick) {
   const form = useFormContext();
   return (
-    <div className="flex items-center gap-x-2 flex-wrap">
-      <h2 className="text-[12px] pr-2">Quick Selects:</h2>
+    <div className="flex flex-wrap items-center gap-x-2">
+      <h2 className="pr-2 text-[12px]">Quick Selects:</h2>
       {tokens.map((e) => {
         return (
           <div
             key={e.address}
-            className="flex cursor-pointer bg-background hover:bg-background/60 items-center gap-x-2 px-2 py-1 rounded-full"
+            className="flex cursor-pointer items-center gap-x-2 rounded-full bg-background px-2 py-1 hover:bg-background/60"
             onClick={() => {
               form.setValue(name, e.address);
             }}
@@ -156,7 +156,7 @@ function QuickSelects({ tokens, name }: PropsQuick) {
             <ImageWithFallback
               width={20}
               height={20}
-              className="w-6 h-6"
+              className="h-6 w-6"
               src={getLogoAsset(e.address)}
               alt={"Token " + e.label}
             />
@@ -188,7 +188,7 @@ function TokenInput({
                 type="text"
                 placeholder="0x"
                 autoComplete="off"
-                className="w-full px-2 rounded-md"
+                className="w-full rounded-md px-2"
                 background="primary"
                 minLength={1}
                 textSize="sm"
