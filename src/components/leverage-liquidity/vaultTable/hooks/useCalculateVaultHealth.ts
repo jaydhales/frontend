@@ -21,7 +21,6 @@ export default function useCalculateVaultHealth({
   const leverageRatio = mapLeverage(leverageTier.toString());
   const Gmin = (parseFloat(leverageRatio ?? "0") - 1) * ape;
   const mult = Gmin * 1.2;
-  console.log({ mult, Gmin, gentlement, ape, leverageRatio });
   if (mult > gentlement) {
     return isApe ? { variant: "red" } : { variant: "green" };
   }
