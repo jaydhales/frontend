@@ -13,6 +13,7 @@ import { kv } from "@vercel/kv";
 import { randomInt, createHash } from "crypto";
 import { AssistantContract } from "@/contracts/assistant";
 import { parseUnits } from "viem";
+import { off } from "process";
 
 // import { unstable_cache } from "next/cache";
 export const revalidate = 10;
@@ -29,7 +30,9 @@ const getCollateralAmounts = async (vaultIds: number[]) => {
   });
   return result;
 };
-export default async function Home() {
+export default async function Home({ params }: { params: { slug: string } }) {
+  console.log(params);
+  const offset = parseInt(params.slug);
   let vaultQuery;
   const vaults = await kv.get("vaults");
   if (!vaults) {
@@ -42,7 +45,13 @@ export default async function Home() {
   } else {
     vaultQuery = vaults as { vaults: VaultFieldFragment[] };
   }
-  const vaultIds = vaultQuery?.vaults.map((v) => parseInt(v.vaultId));
+  let pageVaults: VaultFieldFragment[] | undefined;
+  if (isFinite(offset)) {
+    pageVaults = vaultQuery?.vaults.slice(offset, offset + 10);
+  } else {
+    pageVaults = vaultQuery?.vaults;
+  }
+  const vaultIds = pageVaults?.map((v) => parseInt(v.vaultId));
   const vaultIdHash = createHash("md5")
     .update(JSON.stringify(vaultIds))
     .digest("hex");
