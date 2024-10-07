@@ -7,13 +7,21 @@ import {
   mapLeverage,
   roundDown,
 } from "@/lib/utils";
+
+import {
+  HoverCardArrow,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@radix-ui/react-hover-card";
 import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
+import type { TVault } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
 import { useMemo } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import useCalculateVaultHealth from "./hooks/useCalculateVaultHealth";
+import { HoverCard } from "@/components/ui/hover-card";
 
 export function VaultTableRow({
   pool,
@@ -98,6 +106,30 @@ export function VaultTableRow({
         {roundDown(fee, 2)}%{" "}
       </th>
       <th className="pl-2">
+        <HoverCard openDelay={0} closeDelay={20}>
+          <HoverCardTrigger asChild>
+            <div>
+              <Badge {...variant} className="text-nowrap text-[9px]">
+                {`${getLeverageRatio(pool.leverageTier)}x${showPercent() ? " (" + formatNumber(tvlPercent, 2) + "x)" : ""}`}
+              </Badge>
+            </div>
+          </HoverCardTrigger>
+          <HoverCardContent side="bottom" alignOffset={10}>
+            <div className="mt-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
+              {variant.variant === "green" && (
+                <span>Healthy, more than enough liquidity.</span>
+              )}
+              {variant.variant === "yellow" && (
+                <span>Borderline, just enough liquidity.</span>
+              )}
+              {variant.variant === "red" && (
+                <span>
+                  Degraded, insufficient liquidity for constant leverage.
+                </span>
+              )}
+            </div>
+          </HoverCardContent>
+        </HoverCard>
       </th>
 
       <th className="flex items-center justify-end gap-x-1 text-right md:col-span-2">
