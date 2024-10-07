@@ -11,6 +11,30 @@ export const vaultRouter = createTRPCRouter({
     const vaults = await executeVaultsQuery();
     return vaults;
   }),
+
+  getVaultExists: publicProcedure
+    .input(
+      z.object({
+        debtToken: z.string().startsWith("0x"),
+        collateralToken: z.string().startsWith("0x"),
+        leverageTier: z.number(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const a = await readContract({
+        ...AssistantContract,
+        functionName: "getVaultStatus",
+        args: [
+          {
+            debtToken: input.debtToken as TAddressString,
+            collateralToken: input.collateralToken as TAddressString,
+            leverageTier: input.leverageTier,
+          },
+        ],
+      });
+      console.log(a, "A");
+      return a;
+    }),
   getApeParams: publicProcedure
     .input(z.object({ address: z.string().startsWith("0x") }))
     .query(async ({ input }) => {

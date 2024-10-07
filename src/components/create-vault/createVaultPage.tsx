@@ -6,9 +6,9 @@ export default function CreateVaultPage() {
   return (
     <div>
       <PageHeader> Create Vault</PageHeader>
-      <div className="w-[600px] flex flex-col items-center">
+      <div className="flex w-[600px] flex-col items-center">
         <br />
-        <Card className="md:w-[450px]">
+        <Card className="md:w-[600px]">
           <CreateVaultForm />
         </Card>
       </div>
