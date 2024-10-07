@@ -11,7 +11,7 @@ import { CreateVaultInputValues } from "@/lib/schemas";
 import type { TAddressString, TCreateVaultKeys } from "@/lib/types";
 import { useCreateVault } from "./hooks/useCreateVault";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
-import { getLogoAsset, mapLeverage } from "@/lib/utils";
+import { getLogoAsset } from "@/lib/utils";
 import ImageWithFallback from "../shared/ImageWithFallback";
 import { RadioGroup } from "@radix-ui/react-radio-group";
 import { RadioItem } from "./radioItem";
@@ -101,6 +101,33 @@ export default function CreateVaultForm() {
     "VAULTID",
   );
   const isValid = useMemo(() => {
+    if (formData.longToken.length !== 42 && formData.longToken.length > 0) {
+      return { isValid: false, error: "Invalid Long Token Address!" };
+    }
+    if (formData.versusToken.length !== 42 && formData.versusToken.length > 0) {
+      return { isValid: false, error: "Invalid Versus Token Address!" };
+    }
+    if (formData.longToken.length === 42) {
+      if (!formData.longToken.startsWith("0x")) {
+        return {
+          isValid: false,
+          error: "Long Token has an Invalid Address Format.",
+        };
+      }
+    }
+
+    if (formData.versusToken.length === 42) {
+      if (!formData.versusToken.startsWith("0x")) {
+        return {
+          isValid: false,
+          error: "Long Token has an Invalid Address Format.",
+        };
+      }
+    }
+    if (formData.versusToken.length !== 42 && formData.versusToken.length > 0) {
+      return { isValid: false, error: "Invalid Versus Token Address!" };
+    }
+
     if (vaultData === 0) {
       return { isValid: false, error: "Invalid Vault." };
     }
@@ -115,7 +142,7 @@ export default function CreateVaultForm() {
     } else {
       return { isValid: false, error: "" };
     }
-  }, [data?.request, vaultData]);
+  }, [data?.request, vaultData, formData.longToken, formData.versusToken]);
   console.log(isValid, "");
   const [openModal, setOpenModal] = useState(false);
   return (
