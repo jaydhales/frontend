@@ -63,7 +63,7 @@ export function VaultTableRow({
       }
     }
   };
-  const parsedTaxAmount = parseUnits(pool.taxAmount, 18);
+  const parsedTaxAmount = parseUnits(pool.taxAmount, 0);
   return (
     <tr
       onClick={() => {
@@ -88,9 +88,11 @@ export function VaultTableRow({
                   />
                 </div>
               </HoverCardTrigger>
-              <HoverCardContent side="bottom" alignOffset={10}>
+              <HoverCardContent side="top" alignOffset={10}>
                 <div className="mt-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
-                  <span>{formatUnits(parsedTaxAmount, 18)}</span>
+                  <span>
+                    {formatNumber(formatUnits(parsedTaxAmount, 18), 10)}
+                  </span>
                 </div>
               </HoverCardContent>
             </HoverCard>
