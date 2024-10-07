@@ -19,6 +19,7 @@ const test = unstable_cache(async () => {
   const randomI = randomInt(1000);
   return randomI;
 });
+
 export default async function Home() {
   const { vaults: vaultQuery, randomI } = await getVaults();
   const testR = await test();
