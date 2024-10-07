@@ -116,16 +116,24 @@ export function VaultTableRow({
           </HoverCardTrigger>
           <HoverCardContent side="bottom" alignOffset={10}>
             <div className="mt-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
-              {variant.variant === "green" && (
-                <span>Healthy, more than enough liquidity.</span>
-              )}
-              {variant.variant === "yellow" && (
-                <span>Borderline, just enough liquidity.</span>
-              )}
-              {variant.variant === "red" && (
+              {variant.variant === "green" &&
+                (isApe ? (
+                  <span>Healthy, more than enough liquidity.</span>
+                ) : (
+                  <span>Highly profitable</span>
+                ))}
+              {variant.variant === "yellow" &&
+                (isApe ? (
+                  <span>Borderline, just enough liquidity.</span>
+                ) : (
+                  <span>Moderately profitable</span>
+                ))}
+              {variant.variant === "red" && isApe ? (
                 <span>
                   Degraded, insufficient liquidity for constant leverage.
                 </span>
+              ) : (
+                <span>Minimally profitable</span>
               )}
             </div>
           </HoverCardContent>
