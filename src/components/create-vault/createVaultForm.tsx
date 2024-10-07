@@ -232,8 +232,8 @@ export default function CreateVaultForm() {
             Create
           </Button>
 
-          <div className="flex pt-1 md:w-[450px]">
-            <span className="text-[12px] text-red-400">
+          <div className="flex pt-2 md:w-[450px]">
+            <span className="text-[13px] text-red-400">
               {isValid.error ? isValid.error : ""}
             </span>
           </div>
@@ -303,6 +303,12 @@ function TokenInput({
                 textSize="sm"
                 step="any"
                 {...field}
+                onChange={(e) => {
+                  // const pattern = /^[0-9]*[.,]?[0-9]*$/;
+                  const pattern = /^[0-9A-Fa-f]+$/;
+                  if (pattern.test(e.target.value))
+                    return field.onChange(e.target.value);
+                }}
               ></Input>
             </FormControl>
           </FormItem>
