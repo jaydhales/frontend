@@ -42,7 +42,7 @@ export default function CreateVaultForm() {
     resolver: zodResolver(CreateVaultInputValues),
     mode: "all",
     defaultValues: {
-      leverageTier: "2",
+      leverageTier: "-1",
       longToken: "",
       versusToken: "",
     },
@@ -120,7 +120,7 @@ export default function CreateVaultForm() {
   const [openModal, setOpenModal] = useState(false);
   return (
     <FormProvider {...form}>
-      <form className="space-y-6">
+      <form className="space-y-4">
         <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
           <TransactionModal.Close setOpen={setOpenModal} />
           <TransactionModal.InfoContainer>
@@ -148,40 +148,7 @@ export default function CreateVaultForm() {
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
 
-        <div className="grid  gap-y-2">
-          <div className="w-full space-y-2 ">
-            <FormField
-              control={form.control}
-              name="leverageTier"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Leverage</FormLabel>{" "}
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="grid grid-cols-4 gap-4"
-                  >
-                    {["-4", "-3", "-2", "-1", "0", "1", "2"].map((e) => {
-                      return (
-                        <RadioItem
-                          key={e}
-                          setValue={setLeverageTier}
-                          fieldValue={field.value}
-                          value={e}
-                        />
-                      );
-                    })}
-                  </RadioGroup>
-                </FormItem>
-              )}
-            />
-
-            {
-              <p className="text-sm text-red-400">
-                {form.formState.errors.leverageTier?.message}
-              </p>
-            }
-          </div>
+        <div className="grid  gap-y-4">
           <div className="w-full space-y-2">
             <TokenInput name="longToken" title="Long Token" />
             <QuickSelects name="longToken" tokens={tokens} />
@@ -192,7 +159,41 @@ export default function CreateVaultForm() {
             <QuickSelects name="versusToken" tokens={tokens} />
           </div>
         </div>
-        <div className="flex flex-col items-center ">
+
+        <div className="w-full ">
+          <FormField
+            control={form.control}
+            name="leverageTier"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Leverage</FormLabel>{" "}
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="grid grid-cols-4 gap-4"
+                >
+                  {["-4", "-3", "-2", "-1", "0", "1", "2"].map((e) => {
+                    return (
+                      <RadioItem
+                        key={e}
+                        setValue={setLeverageTier}
+                        fieldValue={field.value}
+                        value={e}
+                      />
+                    );
+                  })}
+                </RadioGroup>
+              </FormItem>
+            )}
+          />
+
+          {
+            <p className="text-sm text-red-400">
+              {form.formState.errors.leverageTier?.message}
+            </p>
+          }
+        </div>
+        <div className="flex flex-col items-center pt-4">
           <Button
             onClick={() => {
               setOpenModal(true);
