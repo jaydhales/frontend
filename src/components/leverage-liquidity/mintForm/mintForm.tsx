@@ -16,12 +16,7 @@ import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
 import { Card } from "@/components/ui/card";
-import {
-  calculateApeVaultFee,
-  findVault,
-  formatNumber,
-  getApeAddress,
-} from "@/lib/utils";
+import { calculateApeVaultFee, findVault, formatNumber } from "@/lib/utils";
 import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
@@ -234,10 +229,12 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                   <CircleCheck size={40} color="#F0C775" />
                 </div>
                 <h2 className="text-center">Transaction Successful!</h2>
-                <h3 className="text-center">
-                  {isApe ? "APE" : "TEA"} received:{" "}
-                  {formatNumber(formatUnits(tokenReceived ?? 0n, 18), 6)}
-                </h3>
+                {Boolean(tokenReceived) && (
+                  <h3 className="text-center">
+                    {isApe ? "APE" : "TEA"} received:{" "}
+                    {formatNumber(formatUnits(tokenReceived ?? 0n, 18), 6)}
+                  </h3>
+                )}
               </div>
             )}
           </TransactionModal.InfoContainer>

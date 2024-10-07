@@ -1,6 +1,7 @@
 import { useApproveErc20 } from "@/components/shared/hooks/useApproveErc20";
 import { useMintApeOrTea } from "@/components/shared/hooks/useMintApeOrTea";
 import { AssistantContract } from "@/contracts/assistant";
+import { VaultContract } from "@/contracts/vault";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import { formatDataInput, findVault } from "@/lib/utils";
 import { api } from "@/trpc/react";
@@ -30,7 +31,7 @@ export function useTransactions({
     {
       userAddress: address,
       tokenAddress: formatDataInput(formData.long),
-      spender: AssistantContract.address,
+      spender: VaultContract.address,
     },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
@@ -49,7 +50,7 @@ export function useTransactions({
 
   const { approveSimulate } = useApproveErc20({
     tokenAddr: formatDataInput(formData.long),
-    approveContract: AssistantContract.address,
+    approveContract: VaultContract.address,
   });
 
   return {
