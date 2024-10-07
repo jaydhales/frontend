@@ -4,15 +4,11 @@ import {
   formatNumber,
   getLeverageRatio,
   getLogoAsset,
-  mapLeverage,
   roundDown,
 } from "@/lib/utils";
-
-import {
-  HoverCardArrow,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@radix-ui/react-hover-card";
+import Image, { StaticImageData } from "next/image";
+import boostIcon from "@/../public/boost_icon.svg";
+import { HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
 import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
@@ -67,6 +63,7 @@ export function VaultTableRow({
       }
     }
   };
+  const parsedTaxAmount = parseUnits(pool.taxAmount, 18);
   return (
     <tr
       onClick={() => {
@@ -77,8 +74,27 @@ export function VaultTableRow({
       className="grid cursor-pointer grid-cols-6 rounded-md   px-1 py-1 text-left text-[16px] text-sm font-normal transition-colors hover:bg-primary md:grid-cols-9"
     >
       <th className="">
-        <div className="flex">
+        <div className="flex items-center gap-x-1">
           <span>{pool.vaultId}</span>
+          {parsedTaxAmount > 0n && (
+            <HoverCard openDelay={0} closeDelay={20}>
+              <HoverCardTrigger asChild>
+                <div>
+                  <Image
+                    src={boostIcon as StaticImageData}
+                    height={22}
+                    width={22}
+                    alt="Boost Icon"
+                  />
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent side="bottom" alignOffset={10}>
+                <div className="mt-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
+                  <span>{formatUnits(parsedTaxAmount, 18)}</span>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          )}
         </div>
       </th>
       <th className="flex items-center md:col-span-3">
