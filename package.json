@@ -33,6 +33,7 @@
     "@trpc/react-query": "next",
     "@trpc/server": "next",
     "@types/numeral": "^2.0.5",
+    "@vercel/kv": "^3.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
