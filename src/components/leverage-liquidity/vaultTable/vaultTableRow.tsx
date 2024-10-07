@@ -10,7 +10,6 @@ import {
 import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
-import type { TVault, VaultFieldFragment } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
 import { useMemo } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
@@ -43,8 +42,6 @@ export function VaultTableRow({
   const apeCollateral = parseFloat(formatUnits(pool.apeCollateral, 18));
   const tvl = apeCollateral + teaCollateral;
   const tvlPercent = tvl / apeCollateral;
-  const showTvlPercent =
-    tvlPercent < parseFloat(mapLeverage(pool.leverageTier?.toString()) ?? "0");
   const variant = useCalculateVaultHealth({
     tvl: parseUnits(pool.totalValue, 18),
     isApe,
@@ -52,7 +49,16 @@ export function VaultTableRow({
     apeCollateral: pool.apeCollateral,
     teaCollateral: pool.teaCollateral,
   });
-  console.log(pool, "POOOL");
+  const showPercent = () => {
+    if (!isFinite(tvlPercent)) {
+      return false;
+    }
+    if (isApe) {
+      if (variant.variant === "red") {
+        return true;
+      }
+    }
+  };
   return (
     <tr
       onClick={() => {
@@ -92,10 +98,6 @@ export function VaultTableRow({
         {roundDown(fee, 2)}%{" "}
       </th>
       <th className="pl-2">
-        <Badge
-          {...variant}
-          className="text-[10px]"
-        >{`${getLeverageRatio(pool.leverageTier)}x${showTvlPercent ? "(" + formatNumber(tvlPercent, 2) + "x)" : ""}`}</Badge>
       </th>
 
       <th className="flex items-center justify-end gap-x-1 text-right md:col-span-2">
