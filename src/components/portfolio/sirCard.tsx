@@ -5,6 +5,8 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
+import { useEffect } from "react";
+import { CircleCheck } from "lucide-react";
 import { SirContract } from "@/contracts/sir";
 import type { StaticImageData } from "next/image";
 import { useState } from "react";
@@ -36,16 +38,30 @@ export function SirCard() {
     ...SirContract,
     functionName: "contributorMint",
   });
-  const { writeContract, isPending, data: hash } = useWriteContract();
+  const { writeContract, reset, isPending, data: hash } = useWriteContract();
   console.log(hash, "HASH");
-  const { isLoading: isConfirming, data: transactionData } =
-    useWaitForTransactionReceipt({ hash });
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
   const onSubmit = () => {
+    if (isSuccess) {
+      setOpen(false);
+      return;
+    }
     if (data?.request) {
       writeContract(data?.request);
     }
   };
-  console.log(isConfirming, isPending, "IS PENDING !!!");
+  const utils = api.useUtils();
+  useEffect(() => {
+    if (isSuccess && !open) {
+      utils.user.getUnclaimedContributorRewards
+        .invalidate()
+        .catch((e) => console.log(e));
+      reset();
+    }
+  }, [isSuccess, reset, open, utils.user.getUnclaimedContributorRewards]);
+  const unclaimedRewards = unclaimedData ?? 0n;
   return (
     <div className=" border-b border-secondary-200 pb-2">
       <div className=" rounded-md px-2 pb-2 text-2xl">
@@ -62,11 +78,30 @@ export function SirCard() {
         <TransactionModal.Root setOpen={setOpen} open={open}>
           <TransactionModal.Close setOpen={setOpen} />
           <TransactionModal.InfoContainer>
-            <TransactionStatus
-              action="Claim"
-              waitForSign={isPending}
-              isTxPending={isConfirming}
-            />
+            {!isSuccess && (
+              <TransactionStatus
+                action="Claim"
+                waitForSign={isPending}
+                isTxPending={isConfirming}
+              />
+            )}
+
+            {!isSuccess && (
+              <div className="space-x-1">
+                <span>
+                  {formatNumber(formatUnits(unclaimedData ?? 0n, 12), 8)}
+                </span>
+                <span className="text-gray-400">Sir</span>
+              </div>
+            )}
+            {isSuccess && (
+              <div>
+                <div className="flex justify-center">
+                  <CircleCheck size={40} color="#F0C775" />
+                </div>
+                <h2 className="text-center">Transaction Successful!</h2>
+              </div>
+            )}
           </TransactionModal.InfoContainer>
 
           <TransactionModal.StatSubmitContainer>
@@ -75,7 +110,15 @@ export function SirCard() {
               disabled={isPending || isConfirming}
               onClick={() => onSubmit()}
             >
-              Claim
+              {isPending || isConfirming ? (
+                "Pending..."
+              ) : (
+                <>
+                  {!isSuccess && "Claim"}
+
+                  {isSuccess && "Close"}
+                </>
+              )}
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
@@ -86,7 +129,7 @@ export function SirCard() {
               <h2 className="text-sm font-light text-gray-400">SIR</h2>
             </div>
           </div>
-          {data?.request && (
+          {data?.request && unclaimedRewards > 0n && (
             <div>
               <h4 className="px-4 text-center text-[14px] text-gray-300">
                 Claim Contributor Rewards
