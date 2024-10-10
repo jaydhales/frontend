@@ -260,7 +260,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 {Boolean(tokenReceived) && (
                   <h3 className="text-center">
                     {isApe ? "APE" : "TEA"} received:{" "}
-                    {formatNumber(formatUnits(tokenReceived ?? 0n, 18), 6)}
+                    {formatNumber(
+                      formatUnits(tokenReceived ?? 0n, decimals),
+                      6,
+                    )}
                   </h3>
                 )}
               </div>
