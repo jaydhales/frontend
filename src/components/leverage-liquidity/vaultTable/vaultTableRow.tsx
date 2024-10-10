@@ -129,6 +129,7 @@ export function VaultTableRow({
                 ) : (
                   <span>Moderately profitable</span>
                 ))}
+              
               {variant.variant === "red" &&
                 (isApe ? (
                   <span>
@@ -156,3 +157,4 @@ export function VaultTableRow({
     </tr>
   );
 }
+// a
