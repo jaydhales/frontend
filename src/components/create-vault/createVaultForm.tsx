@@ -313,12 +313,6 @@ function TokenInput({
                 textSize="sm"
                 step="any"
                 {...field}
-                onChange={(e) => {
-                  // const pattern = /^[0-9]*[.,]?[0-9]*$/;
-                  const pattern = /^[0-9A-Fa-f]+$/;
-                  if (pattern.test(e.target.value))
-                    return field.onChange(e.target.value);
-                }}
               ></Input>
             </FormControl>
           </FormItem>
