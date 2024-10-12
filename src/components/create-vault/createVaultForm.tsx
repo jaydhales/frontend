@@ -19,6 +19,7 @@ import TransactionModal from "../shared/transactionModal";
 import { TransactionStatus } from "../leverage-liquidity/mintForm/transactionStatus";
 import TransactionInfoCreateVault from "./transactionInfoCreateVault";
 import { api } from "@/trpc/react";
+import TransactionSuccess from "../shared/transactionSuccess";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -151,11 +152,19 @@ export default function CreateVaultForm() {
         <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
           <TransactionModal.Close setOpen={setOpenModal} />
           <TransactionModal.InfoContainer>
-            <TransactionStatus
-              action="Create"
-              waitForSign={isPending}
-              isTxPending={isConfirming}
-            />
+            {!isConfirmed && (
+              <TransactionStatus
+                action="Create"
+                waitForSign={isPending}
+                isTxPending={isConfirming}
+              />
+            )}
+            {isConfirmed && (
+              <div>
+                <h1>Succesfully Created Vault.</h1>
+              </div>
+            )}
+
             <TransactionInfoCreateVault
               leverageTier={formData.leverageTier}
               longToken={formData.longToken}
@@ -167,10 +176,18 @@ export default function CreateVaultForm() {
               disabled={!isValid}
               loading={isPending || isConfirming}
               onClick={() => {
-                onSubmit();
+                if (isConfirmed) {
+                  setOpenModal(false);
+                } else {
+                  onSubmit();
+                }
               }}
             >
-              {isPending || isConfirming ? "Pending..." : "Create"}
+              {isConfirmed
+                ? "Close"
+                : isPending || isConfirming
+                  ? "Pending..."
+                  : "Create"}
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
