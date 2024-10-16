@@ -1308,9 +1308,9 @@ const merger = new(BareMerger as any)({
         store: rootStore.child('bareMerger')
       })
 const documentHashMap = {
-        "e00e929a2641a17dad7c77c23989c1402948d3bd875c8c2baefffb93e3e54349": VaultQueryDocument,
+        "b7729c02f4c672122e0f879579d395efced25012f1243b993bc22ab5d94b0acf": GetUserTeaPositionsDocument,
 "17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36": GetUserApePositionsDocument,
-"4c9268c276738396b4624928133352803df8282680725af8d467a99745278b67": GetUserTeaPositionsDocument
+"b1cd4056197c70b9bed47c3ced285b58862db2b163c7cc4820c346c82ce30f3c": VaultQueryDocument
       }
 additionalEnvelopPlugins.push(usePersistedOperations({
         getPersistedOperation(key) {
@@ -1332,12 +1332,12 @@ additionalEnvelopPlugins.push(usePersistedOperations({
     get documents() {
       return [
       {
-        document: VaultQueryDocument,
+        document: GetUserTeaPositionsDocument,
         get rawSDL() {
-          return printWithCache(VaultQueryDocument);
+          return printWithCache(GetUserTeaPositionsDocument);
         },
-        location: 'VaultQueryDocument.graphql',
-        sha256Hash: 'e00e929a2641a17dad7c77c23989c1402948d3bd875c8c2baefffb93e3e54349'
+        location: 'GetUserTeaPositionsDocument.graphql',
+        sha256Hash: 'b7729c02f4c672122e0f879579d395efced25012f1243b993bc22ab5d94b0acf'
       },{
         document: GetUserApePositionsDocument,
         get rawSDL() {
@@ -1346,12 +1346,12 @@ additionalEnvelopPlugins.push(usePersistedOperations({
         location: 'GetUserApePositionsDocument.graphql',
         sha256Hash: '17d1986900925b455c3170e3e408bc980a6ef8a6153382cfcdfe93392316dc36'
       },{
-        document: GetUserTeaPositionsDocument,
+        document: VaultQueryDocument,
         get rawSDL() {
-          return printWithCache(GetUserTeaPositionsDocument);
+          return printWithCache(VaultQueryDocument);
         },
-        location: 'GetUserTeaPositionsDocument.graphql',
-        sha256Hash: '4c9268c276738396b4624928133352803df8282680725af8d467a99745278b67'
+        location: 'VaultQueryDocument.graphql',
+        sha256Hash: 'b1cd4056197c70b9bed47c3ced285b58862db2b163c7cc4820c346c82ce30f3c'
       }
     ];
     },
@@ -1406,12 +1406,12 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
   const sdkRequester$ = getBuiltGraphClient().then(({ sdkRequesterFactory }) => sdkRequesterFactory(globalContext));
   return getSdk<TOperationContext, TGlobalContext>((...args) => sdkRequester$.then(sdkRequester => sdkRequester(...args)));
 }
-export type VaultFieldsFragment = Pick<Vault, 'debtToken' | 'apeDecimals' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalTea' | 'totalValue' | 'lockedLiquidity' | 'apeAddress' | 'apeCollateral' | 'teaCollateral'>;
+export type VaultFieldsFragment = Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalTea' | 'totalValue' | 'lockedLiquidity' | 'apeAddress' | 'apeCollateral' | 'teaCollateral'>;
 
 export type VaultQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type VaultQueryQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'apeDecimals' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalTea' | 'totalValue' | 'lockedLiquidity' | 'apeAddress' | 'apeCollateral' | 'teaCollateral'>> };
+export type VaultQueryQuery = { vaults: Array<Pick<Vault, 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'vaultId' | 'leverageTier' | 'totalTea' | 'totalValue' | 'lockedLiquidity' | 'apeAddress' | 'apeCollateral' | 'teaCollateral'>> };
 
 export type getUserApePositionsQueryVariables = Exact<{
   user?: InputMaybe<Scalars['Bytes']['input']>;
@@ -1425,12 +1425,11 @@ export type getUserTeaPositionsQueryVariables = Exact<{
 }>;
 
 
-export type getUserTeaPositionsQuery = { userPositionTeas: Array<Pick<UserPositionTea, 'user' | 'vaultId' | 'balance' | 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'teaDecimals' | 'leverageTier'>> };
+export type getUserTeaPositionsQuery = { userPositionTeas: Array<Pick<UserPositionTea, 'user' | 'vaultId' | 'balance' | 'teaDecimals' | 'debtToken' | 'debtSymbol' | 'collateralToken' | 'collateralSymbol' | 'leverageTier'>> };
 
 export const VaultFieldsFragmentDoc = gql`
     fragment VaultFields on Vault {
   debtToken
-  apeDecimals
   debtSymbol
   collateralToken
   collateralSymbol
@@ -1440,7 +1439,6 @@ export const VaultFieldsFragmentDoc = gql`
   totalValue
   lockedLiquidity
   apeAddress
-  apeDecimals
   apeCollateral
   teaCollateral
 }
@@ -1473,11 +1471,11 @@ export const getUserTeaPositionsDocument = gql`
     user
     vaultId
     balance
+    teaDecimals
     debtToken
     debtSymbol
     collateralToken
     collateralSymbol
-    teaDecimals
     leverageTier
   }
 }
