@@ -67,7 +67,7 @@ export function VaultTableRow({
       }
     }
   };
-
+  console.log(pool.totalValue, "TOTAL VALUE", pool.apeDecimals, "APE DECIMALS");
   return (
     <tr
       onClick={() => {
@@ -129,7 +129,7 @@ export function VaultTableRow({
                 ) : (
                   <span>Moderately profitable</span>
                 ))}
-              
+
               {variant.variant === "red" &&
                 (isApe ? (
                   <span>
