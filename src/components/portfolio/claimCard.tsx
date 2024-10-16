@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { api } from "@/trpc/react";
-import { useAccount, useWriteContract, useWaitForTransactionHash } from "wagmi";
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
 import { formatEther, formatUnits } from "viem";
 import { useClaim } from "../stake/hooks/useClaim";
 import TransactionModal from "../shared/transactionModal";
@@ -27,16 +31,23 @@ export default function ClaimCard() {
       enabled: isConnected,
     },
   );
-  const isValid = false;
 
   const { writeContract, data: hash, isPending, reset } = useWriteContract();
-  const {} = useWaitForTransactionHash({ hash });
+  const { isSuccess: isConfirmed, isLoading: isConfirming } =
+    useWaitForTransactionReceipt({ hash });
   const onSubmit = () => {
     console.log("e");
     if (claimData?.request) {
       writeContract(claimData.request);
     }
   };
+  useEffect(() => {
+    if (openModal && isConfirmed) {
+      //invalidate
+      reset();
+    }
+  }, [isConfirmed, openModal, reset]);
+  const isLoading = isPending || isConfirming;
   return (
     <div className=" border-secondary-300">
       <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
@@ -46,11 +57,17 @@ export default function ClaimCard() {
         <TransactionModal.Close setOpen={setOpenModal} />
         <TransactionModal.StatSubmitContainer>
           <TransactionModal.SubmitButton
-            disabled={isPending}
-            loading={false}
-            onClick={() => onSubmit()}
+            disabled={isLoading}
+            loading={isLoading}
+            onClick={() => {
+              if (!isConfirmed) onSubmit();
+              else setOpenModal(false);
+            }}
           >
-            claimData
+            <>
+              {isConfirmed && "Close"}
+              {!isConfirmed && "Claim"}
+            </>
           </TransactionModal.SubmitButton>
         </TransactionModal.StatSubmitContainer>
       </TransactionModal.Root>
