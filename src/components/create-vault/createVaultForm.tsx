@@ -152,19 +152,11 @@ export default function CreateVaultForm() {
         <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
           <TransactionModal.Close setOpen={setOpenModal} />
           <TransactionModal.InfoContainer>
-            {!isConfirmed && (
-              <TransactionStatus
-                action="Create"
-                waitForSign={isPending}
-                isTxPending={isConfirming}
-              />
-            )}
-            {isConfirmed && (
-              <div>
-                <h1>Succesfully Created Vault.</h1>
-              </div>
-            )}
-
+            <TransactionStatus
+              action="Create"
+              waitForSign={isPending}
+              showLoading={isConfirming}
+            />
             <TransactionInfoCreateVault
               leverageTier={formData.leverageTier}
               longToken={formData.longToken}

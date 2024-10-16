@@ -37,6 +37,7 @@ const userApePositionsQuery = gql`
       balance
       debtToken
       debtSymbol
+      positionDecimals
       collateralToken
       collateralSymbol
       leverageTier
@@ -50,6 +51,7 @@ const userTeaPositionsQuery = gql`
       user
       vaultId
       balance
+      positionDecimals
       debtToken
       debtSymbol
       collateralToken
@@ -85,6 +87,7 @@ export const executeVaultsQuery = async () => {
 export type TUserPosition = {
   id: string;
   balance: bigint;
+  positionDecimals: number;
   user: TAddressString;
   collateralSymbol: string;
   debtSymbol: string;
