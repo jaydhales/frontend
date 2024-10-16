@@ -49,14 +49,8 @@ const UnstakeForm = ({
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const safeAmount = useMemo(() => {
-    return z.coerce.number().safeParse(formData.amount);
-  }, [formData.amount]);
-
   const { Unstake, isFetching: unstakeFetching } = useUnstake({
-    amount: safeAmount.success
-      ? parseUnits(safeAmount.data.toString() ?? "0", 12)
-      : undefined,
+    amount: parseUnits(formData.amount ?? "0", 12),
   });
 
   const { writeContract, reset, data: hash, isPending } = useWriteContract();
@@ -73,7 +67,7 @@ const UnstakeForm = ({
     }
   }, [form, isConfirmed, utils.user.getUnstakedSirBalance]);
   const { isValid, errorMessage } = useCheckSubmitValid({
-    deposit: safeAmount.success ? safeAmount.data.toString() : "0",
+    deposit: formData.amount ?? "0",
     depositToken: SirContract.address,
     requests: {
       mintRequest: Unstake?.request as SimulateReq,
