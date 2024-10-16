@@ -85,7 +85,7 @@ export default function CreateVaultForm() {
     {
       debtToken: formData.versusToken,
       collateralToken: formData.longToken,
-      leverageTier: 2,
+      leverageTier: parseInt(formData.leverageTier),
     },
     {
       enabled,
