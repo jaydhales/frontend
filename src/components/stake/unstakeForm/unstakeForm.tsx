@@ -1,6 +1,5 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
@@ -11,10 +10,9 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import UnstakeInput from "./unstakeInput";
 import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
-import { z } from "zod";
 import { useUnstake } from "../hooks/useUnstake";
 
 import { useWriteContract } from "wagmi";
@@ -42,7 +40,6 @@ const UnstakeForm = ({
   claimResult,
   claimFetching,
 }: Props) => {
-  console.log({ balance });
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
