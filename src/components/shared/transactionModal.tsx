@@ -108,9 +108,22 @@ function SubmitButton({
       state={loading ? "loading" : "default"}
       type="submit"
     >
-      {children}
+      <CheckPending isLoading={loading}>{children}</CheckPending>
     </Button>
   );
+}
+function CheckPending({
+  children,
+  isLoading,
+}: {
+  children: ReactNode;
+  isLoading: boolean;
+}) {
+  if (isLoading) {
+    return "Pending..";
+  } else {
+    return <>{children}</>;
+  }
 }
 const TransactionModal = {
   Root,
