@@ -37,6 +37,7 @@ export interface VaultFieldFragment {
   lockedLiquidity: string;
   totalTea: string;
   totalValue: string;
+  apeDecimals: number;
   apeAddress: TAddressString;
 }
 export type TVault = VaultFieldFragment & {
