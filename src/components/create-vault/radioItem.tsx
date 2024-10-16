@@ -14,6 +14,15 @@ const leverageOptions = [
   "Very large leverage. High upfront fees.",
   "Extreme leverage. Very high upfront fees.",
 ];
+const leverageDescriptions = [
+  "Minimal liquidity needed.",
+  "Little liquidity needed.",
+  "Recommended.",
+  "Recommended.",
+  "Recommended.",
+  "Large minting fee.",
+  "Extreme minting fee.",
+];
 const leverageOptionsTitle = [
   "For extremely volatile pairs.",
   "For very volatile pairs.",
@@ -64,7 +73,7 @@ export function RadioItem({
           <span className="text-[14px]">{mapLeverage(value)}x</span>
           <span className="flex h-[28px] items-center gap-x-1 text-[10px] text-gray-500">
             {/* <ToolTip>{leverageOptions[index]}</ToolTip> */}
-            {leverageOptionsTitle[index]}
+            {leverageDescriptions[index]}
           </span>
         </div>
 
