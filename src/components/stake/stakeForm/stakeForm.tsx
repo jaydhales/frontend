@@ -100,7 +100,7 @@ const StakeForm = ({ balance, allowance }: Props) => {
 
   return (
     <>
-      <Card className="mx-auto w-[800px]">
+      <Card className="mx-auto w-[600px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormLabel htmlFor="stake">Stake:</FormLabel>
