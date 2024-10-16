@@ -82,7 +82,7 @@ export function SirCard() {
               <TransactionStatus
                 action="Claim"
                 waitForSign={isPending}
-                isTxPending={isConfirming}
+                showLoading={isConfirming}
               />
             )}
 
