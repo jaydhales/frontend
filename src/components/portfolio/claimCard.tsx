@@ -1,35 +1,71 @@
 import React, { useState } from "react";
-import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { api } from "@/trpc/react";
-import { useAccount } from "wagmi";
-import { ClaimModal } from "./claimModal";
-import { formatEther } from "viem";
+import { useAccount, useWriteContract, useWaitForTransactionHash } from "wagmi";
+import { formatEther, formatUnits } from "viem";
+import { useClaim } from "../stake/hooks/useClaim";
+import TransactionModal from "../shared/transactionModal";
 
 export default function ClaimCard() {
-  const { isConnected, address } = useAccount();
   const [openModal, setOpenModal] = useState(false);
 
-  const { data: dividends } = api.user.getDividends.useQuery(
+  const { claimData, isFetching: claimFetching } = useClaim();
+
+  const { isConnected, address } = useAccount();
+  const { data: ethBalance } = api.user.getEthBalance.useQuery(
     {
-      staker: address,
+      userAddress: address,
     },
-    { enabled: isConnected },
+    {
+      enabled: isConnected,
+    },
   );
+
+  const { data: dividends } = api.user.getDividends.useQuery(
+    { staker: address },
+    {
+      enabled: isConnected,
+    },
+  );
+  const isValid = false;
+
+  const { writeContract, data: hash, isPending, reset } = useWriteContract();
+  const {} = useWaitForTransactionHash({ hash });
+  const onSubmit = () => {
+    console.log("e");
+    if (claimData?.request) {
+      writeContract(claimData.request);
+    }
+  };
   return (
     <div className=" border-secondary-300">
-      <ClaimModal open={openModal} setOpen={setOpenModal} />
-      <div className="bg-secondary-400 px-2 py-2 rounded-md text-2xl">
-        <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
-          <span>Claimable Dividends</span>
+      <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
+        <TransactionModal.InfoContainer>
+          {formatUnits(dividends ?? 0n, 18)} Eth
+        </TransactionModal.InfoContainer>
+        <TransactionModal.Close setOpen={setOpenModal} />
+        <TransactionModal.StatSubmitContainer>
+          <TransactionModal.SubmitButton
+            disabled={isPending}
+            loading={false}
+            onClick={() => onSubmit()}
+          >
+            claimData
+          </TransactionModal.SubmitButton>
+        </TransactionModal.StatSubmitContainer>
+      </TransactionModal.Root>
+      {/* <claimDataModal open={openModal} setOpen={setOpenModal} /> */}
+      <div className="rounded-md bg-secondary-400 px-2 py-2 text-2xl">
+        <h2 className="flex items-center gap-x-1 pb-1 text-sm text-gray-200 ">
+          <span>claimDataable Dividends</span>
         </h2>
         <div className="flex items-center justify-between">
           <h3 className="text-3xl">
             {formatEther(dividends ?? 0n)}
-            <span className="text-gray-500 text-sm"> ETH</span>
+            <span className="text-sm text-gray-500"> ETH</span>
           </h3>
           <Button onClick={() => setOpenModal(true)} className="py-2">
-            Claim
+            claimData
           </Button>
         </div>
       </div>
