@@ -16,6 +16,7 @@ const vaults = gql`
     totalValue
     lockedLiquidity
     apeAddress
+    apeDecimals
     apeCollateral
     teaCollateral
   }
@@ -77,6 +78,7 @@ export const executeGetUserApePositions = async ({
 
 export const executeVaultsQuery = async () => {
   const result = await graphqlClient.request(vaults);
+  console.log(result, "RESULT");
   return result as TVaults;
 };
 
