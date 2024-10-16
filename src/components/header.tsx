@@ -24,7 +24,7 @@ export function Header() {
       </Link>
       <div className="col-span-3 flex justify-center">
         <nav className="hidden lg:block">
-          <ul className="nav-shadow flex gap-x-[16px] rounded-md bg-[#0A0A0F] px-[12px] py-[12px] font-semibold text-muted-foreground">
+          <ul className="nav-shadow flex gap-x-[16px] rounded-md bg-secondary px-[12px] py-[12px] font-semibold text-muted-foreground">
             <div className="flex gap-x-[16px]   rounded-md">
               <NavItem url={"/"}>Leverage</NavItem>
               <NavItem url={"/liquidity"}>Liquidity</NavItem>
