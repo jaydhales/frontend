@@ -106,13 +106,6 @@ const UnstakeForm = ({
       reset();
     }
   }, [isConfirmed, open, reset]);
-  let submitButtonText = "Confirm Unstake";
-  if (isPending || isConfirming) {
-    submitButtonText = "Pending...";
-  }
-  if (isConfirmed) {
-    submitButtonText = "Close";
-  }
 
   return (
     <>
@@ -144,6 +137,7 @@ const UnstakeForm = ({
           </TransactionModal.InfoContainer>
           <TransactionModal.StatSubmitContainer>
             <TransactionModal.SubmitButton
+              isConfirmed={isConfirmed}
               onClick={() => {
                 if (isConfirmed) {
                   setOpen(false);
@@ -154,7 +148,7 @@ const UnstakeForm = ({
               loading={isPending || isConfirming}
               disabled={!isValid && !isConfirmed}
             >
-              {submitButtonText}
+              Confirm Unstake
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
