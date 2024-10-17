@@ -6,7 +6,8 @@ import {
   getLogoAsset,
   roundDown,
 } from "@/lib/utils";
-import Image, { StaticImageData } from "next/image";
+import type { StaticImageData } from "next/image";
+import Image from "next/image";
 import boostIcon from "@/../public/boost_icon.svg";
 import { HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
 import unknownImg from "@/../public/IconUnknown.png";
