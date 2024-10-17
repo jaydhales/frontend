@@ -43,10 +43,10 @@ export default function ClaimCard() {
     }
   };
   useEffect(() => {
-    if (isConfirming && !openModal) {
+    if (isConfirmed && !openModal) {
       reset();
     }
-  }, [isConfirming, reset, openModal]);
+  }, [isConfirmed, reset, openModal]);
 
   return (
     <div className=" border-secondary-300">
@@ -63,9 +63,16 @@ export default function ClaimCard() {
         <TransactionModal.Close setOpen={setOpenModal} />
         <TransactionModal.StatSubmitContainer>
           <TransactionModal.SubmitButton
+            isConfirmed={isConfirmed}
             disabled={isPending || isConfirming}
             loading={isPending || isConfirming}
-            onClick={() => onSubmit()}
+            onClick={() => {
+              if (isConfirmed) {
+                setOpenModal(false);
+              } else {
+                onSubmit();
+              }
+            }}
           >
             Claim
           </TransactionModal.SubmitButton>
@@ -74,7 +81,7 @@ export default function ClaimCard() {
       {/* <claimDataModal open={openModal} setOpen={setOpenModal} /> */}
       <div className="rounded-md bg-secondary-400 px-2 py-2 text-2xl">
         <h2 className="flex items-center gap-x-1 pb-1 text-sm text-gray-200 ">
-          <span>claimDataable Dividends</span>
+          <span>Dividends</span>
         </h2>
         <div className="flex items-center justify-between">
           <h3 className="text-3xl">
