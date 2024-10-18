@@ -22,7 +22,7 @@ const vaults = gql`
   }
 
   query VaultQuery {
-    vaults {
+    vaults(orderDirection: desc, orderBy: totalValue) {
       ...VaultFields
     }
   }
