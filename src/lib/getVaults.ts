@@ -27,18 +27,18 @@ const getCollateralAmounts = async (vaultIds: number[]) => {
 };
 export const getVaultData = async (offset: number) => {
   let vaultQuery;
-  const vaults = await kv.get("vaults");
 
-  if (!vaults) {
-    const v = await getVaults();
-    vaultQuery = v.vaults;
-    // Don't block with await only need for next cache
-    kv.set("vaults", JSON.stringify(vaultQuery), { ex: 60 * 4 }).catch((e) => {
-      console.log(e, "Failed to store in KV");
-    });
-  } else {
-    vaultQuery = vaults as { vaults: VaultFieldFragment[] };
-  }
+  const v = await getVaults();
+
+  vaultQuery = v.vaults;
+  // if (!vaults) {
+  //   // Don't block with await only need for next cache
+  //   kv.set("vaults", JSON.stringify(vaultQuery), { ex: 60 * 4 }).catch((e) => {
+  //     console.log(e, "Failed to store in KV");
+  //   });
+  // } else {
+  //   vaultQuery = vaults as { vaults: VaultFieldFragment[] };
+  // }
   let pageVaults: VaultFieldFragment[] | undefined;
   if (isFinite(offset)) {
     pageVaults = vaultQuery?.vaults.slice(offset, offset + 10);
