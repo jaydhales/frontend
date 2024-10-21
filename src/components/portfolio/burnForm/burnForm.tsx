@@ -24,6 +24,7 @@ import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/tran
 import { useClaimTeaRewards } from "./hooks/useClaimTeaRewards";
 import useGetFee from "./hooks/useGetFee";
 import { formatNumber } from "@/lib/utils";
+import ClaimAndStakeToggle from "./claimAndStakeToggle";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -172,6 +173,8 @@ export default function BurnForm({
 
   let fee = useGetFee({ isApe, levTier });
   fee = fee ?? "";
+  const [claimAndStake, setClaimAndStake] = useState(false);
+
   return (
     <FormProvider {...form}>
       <TransactionModal.Root open={open} setOpen={setOpen}>
@@ -304,6 +307,15 @@ export default function BurnForm({
             </h4>
           </div>
           <div className="pt-1"></div>
+          {isClaimingRewards && (
+            <div className="flex items-center justify-between py-2">
+              <h3>Claim and Stake</h3>
+              <ClaimAndStakeToggle
+                onChange={setClaimAndStake}
+                value={claimAndStake}
+              />
+            </div>
+          )}
           <Button
             disabled={
               !isValid ||
