@@ -5,11 +5,13 @@ interface StatusProps {
   waitForSign: boolean;
   showLoading: boolean;
   action?: string;
+  isConfirmed?: boolean;
 }
 export function TransactionStatus({
   action,
   showLoading,
   waitForSign,
+  isConfirmed,
 }: StatusProps) {
   const data = useMemo(() => {
     if (waitForSign) {
@@ -20,5 +22,8 @@ export function TransactionStatus({
     }
     return { message: action ?? "Mint" };
   }, [waitForSign, showLoading, action]);
+  if (isConfirmed) {
+    return undefined;
+  }
   return <h2 className="text-left text-lg">{data.message}</h2>;
 }
