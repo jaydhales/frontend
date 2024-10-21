@@ -1,7 +1,7 @@
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import ToolTip from "@/components/ui/tooltip";
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import type { ReactNode } from "react";
 interface Props {
   setOpen: (b: boolean) => void;
@@ -93,11 +93,13 @@ function SubmitButton({
   disabled,
   children,
   loading,
+  isConfirmed,
 }: {
   onClick: () => void;
   disabled: boolean;
   children: ReactNode;
   loading: boolean;
+  isConfirmed: boolean;
 }) {
   return (
     <Button
