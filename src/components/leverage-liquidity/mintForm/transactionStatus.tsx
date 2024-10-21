@@ -25,5 +25,5 @@ export function TransactionStatus({
   if (isConfirmed) {
     return undefined;
   }
-  return <h2 className="text-left text-lg">{data.message}</h2>;
+  return <h2 className="h-[20px] text-left text-lg">{data.message}</h2>;
 }
