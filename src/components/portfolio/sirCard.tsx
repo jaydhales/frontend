@@ -79,13 +79,12 @@ export function SirCard() {
         <TransactionModal.Root setOpen={setOpen} open={open}>
           <TransactionModal.Close setOpen={setOpen} />
           <TransactionModal.InfoContainer>
-            {!isConfirmed && (
-              <TransactionStatus
-                action="Claim"
-                waitForSign={isPending}
-                showLoading={isConfirming}
-              />
-            )}
+            <TransactionStatus
+              action="Claim"
+              waitForSign={isPending}
+              showLoading={isConfirming}
+              isConfirmed={isConfirmed}
+            />
             {!isConfirmed && (
               <div className="space-x-0.5 py-2">
                 <span className="text-lg">
