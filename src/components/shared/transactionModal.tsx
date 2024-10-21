@@ -1,7 +1,7 @@
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import ToolTip from "@/components/ui/tooltip";
-import { Check, X } from "lucide-react";
+import { X } from "lucide-react";
 import type { ReactNode } from "react";
 interface Props {
   setOpen: (b: boolean) => void;
@@ -110,19 +110,25 @@ function SubmitButton({
       state={loading ? "loading" : "default"}
       type="submit"
     >
-      <Pending isLoading={loading}>{children}</Pending>
+      <Pending isConfirmed={isConfirmed} isLoading={loading}>
+        {children}
+      </Pending>
     </Button>
   );
 }
 function Pending({
   children,
   isLoading,
+  isConfirmed,
 }: {
   children: ReactNode;
   isLoading: boolean;
+  isConfirmed: boolean;
 }) {
   if (isLoading) {
     return "Pending...";
+  } else if (isConfirmed) {
+    return "Close";
   } else {
     return <>{children}</>;
   }
