@@ -61,7 +61,12 @@ export default function ClaimCard() {
           />
           {!isConfirmed && (
             <div>
-              <span>{formatUnits(dividends ?? 0n, 18)} Eth</span>
+              <h3 className=" space-x-0.5 py-2">
+                <span className="text-xl">
+                  {formatUnits(dividends ?? 0n, 18)}
+                </span>
+                <span className="text-gray-400">Eth</span>
+              </h3>
             </div>
           )}
           {isConfirmed && <TransactionSuccess />}
