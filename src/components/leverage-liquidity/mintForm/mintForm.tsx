@@ -333,6 +333,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <MintFormSubmit.FeeInfo
             feeValue={form.getValues("long").split(",")[1]}
             isApe={isApe}
+            isValid={isValid}
             fee={fee}
             deposit={form.getValues("deposit")}
           />
