@@ -1,61 +1,37 @@
 "use client";
 
-import { useMemo } from "react";
-import { z } from "zod";
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 import { Container } from "@/components/ui/container";
 
 import StakeFormProvider from "@/components/providers/stakeFormProvider";
-import StakeForm from "@/components/stake/stakeForm/stakeForm";
 
-// import UnstakeForm from "@/components/stake/unstakeForm/unstakeForm";
-// import UnstakeFormProvider from "@/components/providers/unstakeFormProvider";
-
-import ClaimFees from "@/components/stake/claimFees/claimFees";
-
-import { useEffect } from "react";
-import { useAccount } from "wagmi";
-import { type SimulateContractReturnType, formatEther } from "viem";
-import { api } from "@/trpc/react";
-
-import { SirContract } from "@/contracts/sir";
-import { useClaim } from "@/components/stake/hooks/useClaim";
-
-type SimulateReq = SimulateContractReturnType["request"] | undefined;
+import { StakeModal } from "../shared/stakeModal";
+import { Card } from "../ui/card";
+import ClaimCard from "../shared/claimCard";
 
 const StakeTabs = () => {
-  const { address, isConnected } = useAccount();
-
-  const { data: balance } = api.user.getBalance.useQuery(
-    {
-      userAddress: address,
-      tokenAddress: SirContract.address,
-      spender: SirContract.address,
-    },
-    { enabled: isConnected },
-  );
-
-  const { data: ethBalance } = api.user.getEthBalance.useQuery(
-    {
-      userAddress: address,
-    },
-    {
-      enabled: isConnected,
-    },
-  );
-
+  const [stakeModal, setStakeModal] = useState(false);
   return (
     <div>
       <br />
       <Container>
-        <StakeFormProvider>
-          <StakeForm
-            balance={balance?.tokenBalance?.result}
-            allowance={balance?.tokenAllowance?.result}
-            ethBalance={ethBalance}
-          ></StakeForm>
-        </StakeFormProvider>
+        <Card className="flex w-[600px] justify-between">
+          <div>
+            <StakeFormProvider>
+              <button
+                onClick={() => {
+                  setStakeModal(true);
+                }}
+              >
+                Open stake
+              </button>
+              <StakeModal open={stakeModal} setOpen={setStakeModal} />
+            </StakeFormProvider>
+          </div>
+          <div>
+            <ClaimCard />
+          </div>
+        </Card>
       </Container>
     </div>
   );
