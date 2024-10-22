@@ -35,8 +35,10 @@ const UnstakeForm = () => {
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
+  const [unstakeAndClaimFees, setUnstakeAndClaimFees] = useState(false);
   const { Unstake, isFetching: unstakeFetching } = useUnstake({
     amount: parseUnits(formData.amount ?? "0", 12),
+    unstakeAndClaimFees,
   });
 
   const { writeContract, reset, data: hash, isPending } = useWriteContract();
@@ -64,18 +66,9 @@ const UnstakeForm = () => {
     decimals: 12,
   });
 
-  const [claimFees, setClaimFees] = useState(false);
   const onSubmit = () => {
     if (Unstake) {
-      if (claimFees) {
-        writeContract(Unstake?.request);
-        return;
-      } else {
-        console.log("here");
-        writeContract(Unstake?.request);
-
-        return;
-      }
+      writeContract(Unstake?.request);
     }
   };
 
@@ -158,9 +151,9 @@ const UnstakeForm = () => {
               balance={formatUnits(balance ?? 0n, 12)}
             ></UnstakeInput>
             <ClaimFeesCheckbox
-              value={claimFees}
+              value={unstakeAndClaimFees}
               dividends={dividends}
-              onChange={setClaimFees}
+              onChange={setUnstakeAndClaimFees}
             ></ClaimFeesCheckbox>
 
             <div className=" mt-[20px] flex flex-col items-center justify-center">
