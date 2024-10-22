@@ -207,7 +207,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
   }, [isPending, isConfirming, isConfirmed]);
   return (
-    <Card>
+    <Card className="min-h-[550px]">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <TransactionModal.Root
           setOpen={setOpenTransactionModal}
