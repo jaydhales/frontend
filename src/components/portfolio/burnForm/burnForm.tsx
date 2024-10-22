@@ -123,8 +123,11 @@ export default function BurnForm({
     },
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
+
+  const [claimAndStake, setClaimAndStake] = useState(false);
   const { claimRewardRequest } = useClaimTeaRewards({
     vaultId: parseUnits(row.vaultId, 0),
+    claimAndStake,
   });
 
   useEffect(() => {
@@ -173,7 +176,6 @@ export default function BurnForm({
 
   let fee = useGetFee({ isApe, levTier });
   fee = fee ?? "";
-  const [claimAndStake, setClaimAndStake] = useState(false);
 
   return (
     <FormProvider {...form}>
