@@ -1,50 +1,29 @@
-import {
-  FormField,
-  FormItem,
-  FormControl,
-  FormLabel,
-} from "@/components/ui/form";
-import type { TUnstakeForm } from "@/lib/types";
+import { FormLabel } from "@/components/ui/form";
 
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface Props {
-  form: TUnstakeForm;
   dividends?: string;
-  disabled?: boolean;
+  value: boolean;
   onChange: (value: boolean) => void; // Add onChange prop
 }
 
-const ClaimFeesCheckbox = ({ form, dividends, disabled, onChange }: Props) => {
+const ClaimFeesCheckbox = ({ dividends, value, onChange }: Props) => {
   return (
-    <FormField
-      control={form.control}
-      name="claimFees"
-      render={({ field }) => (
-        <FormItem className="mt-[20px]">
-          <FormControl>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-x-4">
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={(value) => {
-                    field.onChange(Boolean(value));
-                    onChange(Boolean(value)); // Call onChange to update the state in UnstakeForm
-                  }}
-                  disabled={disabled}
-                ></Checkbox>
-                <FormLabel className="text-lg font-medium">
-                  Claim my fees
-                </FormLabel>
-              </div>
-              <div className="text-[#B6B6C9] text-sm">
-                Amount to claim: {dividends} ETH
-              </div>
-            </div>
-          </FormControl>
-        </FormItem>
-      )}
-    ></FormField>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-x-4">
+        <Checkbox
+          checked={value}
+          onCheckedChange={(value) => {
+            onChange(Boolean(value)); // Call onChange to update the state in UnstakeForm
+          }}
+        ></Checkbox>
+        <FormLabel className="text-lg font-medium">Claim my fees</FormLabel>
+      </div>
+      <div className="text-sm text-[#B6B6C9]">
+        Amount to claim: {dividends} ETH
+      </div>
+    </div>
   );
 };
 
