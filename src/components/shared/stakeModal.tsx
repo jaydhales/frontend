@@ -1,19 +1,11 @@
-import { formatUnits, type SimulateContractReturnType } from "viem";
-import { useClaim } from "../stake/hooks/useClaim";
-import UnstakeForm from "../stake/unstakeForm/unstakeForm";
 import { AlertDialog, AlertDialogContent } from "../ui/alert-dialog";
 import TransactionModal from "./transactionModal";
-import { useGetStakedSir } from "./hooks/useGetStakedSir";
 import StakeForm from "../stake/stakeForm/stakeForm";
 interface Props {
   open: boolean;
   setOpen: (b: boolean) => void;
 }
 export function StakeModal({ open, setOpen }: Props) {
-  type SimulateReq = SimulateContractReturnType["request"] | undefined;
-  const { Claim, isFetching: claimFetching } = useClaim();
-
-  const stakedSir = useGetStakedSir();
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent
