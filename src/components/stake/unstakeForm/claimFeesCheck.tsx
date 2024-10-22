@@ -9,8 +9,12 @@ interface Props {
 }
 
 const ClaimFeesCheckbox = ({ dividends, value, onChange }: Props) => {
+  console.log(dividends, "DIVIDENDS");
+  if (!dividends) {
+    return;
+  }
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between pt-2">
       <div className="flex items-center gap-x-4">
         <Checkbox
           checked={value}
@@ -18,7 +22,9 @@ const ClaimFeesCheckbox = ({ dividends, value, onChange }: Props) => {
             onChange(Boolean(value)); // Call onChange to update the state in UnstakeForm
           }}
         ></Checkbox>
-        <FormLabel className="text-lg font-medium">Claim my fees</FormLabel>
+        <FormLabel className="pt-2 text-lg font-medium">
+          Claim my fees
+        </FormLabel>
       </div>
       <div className="text-sm text-[#B6B6C9]">
         Amount to claim: {dividends} ETH
