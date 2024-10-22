@@ -15,7 +15,7 @@ const StakeTabs = () => {
     <div>
       <br />
       <Container>
-        <Card className="flex w-[600px] justify-between">
+        <Card className="mx-auto grid w-[600px] grid-cols-2">
           <div>
             <StakeFormProvider>
               <button
