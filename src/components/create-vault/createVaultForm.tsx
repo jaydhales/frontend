@@ -10,7 +10,11 @@ import { Button } from "../ui/button";
 import { CreateVaultInputValues } from "@/lib/schemas";
 import type { TAddressString, TCreateVaultKeys } from "@/lib/types";
 import { useCreateVault } from "./hooks/useCreateVault";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import { getLogoAsset } from "@/lib/utils";
 import ImageWithFallback from "../shared/ImageWithFallback";
 import { RadioGroup } from "@radix-ui/react-radio-group";
@@ -19,7 +23,7 @@ import TransactionModal from "../shared/transactionModal";
 import { TransactionStatus } from "../leverage-liquidity/mintForm/transactionStatus";
 import TransactionInfoCreateVault from "./transactionInfoCreateVault";
 import { api } from "@/trpc/react";
-import TransactionSuccess from "../shared/transactionSuccess";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -39,6 +43,8 @@ const tokens = [
   },
 ];
 export default function CreateVaultForm() {
+  const { openConnectModal } = useConnectModal();
+  const { isConnected } = useAccount();
   const form = useForm<z.infer<typeof CreateVaultInputValues>>({
     resolver: zodResolver(CreateVaultInputValues),
     mode: "all",
@@ -145,7 +151,7 @@ export default function CreateVaultForm() {
     } else {
       return { isValid: false, error: "" };
     }
-  }, [data?.request, vaultData, formData.longToken, formData.versusToken]);
+  }, [data?.request, vaultData]);
   console.log(isValid, "");
   const [openModal, setOpenModal] = useState(false);
   return (
@@ -244,17 +250,32 @@ export default function CreateVaultForm() {
           }
         </div>
         <div className="flex flex-col items-center pt-4">
-          <Button
-            onClick={() => {
-              setOpenModal(true);
-            }}
-            type="button"
-            disabled={!isValid.isValid}
-            variant={"submit"}
-          >
-            Create
-          </Button>
-
+          {isConnected && (
+            <Button
+              onClick={() => {
+                if (isConnected) {
+                  setOpenModal(true);
+                } else {
+                }
+              }}
+              type="button"
+              disabled={!isValid.isValid}
+              variant={"submit"}
+            >
+              Create
+            </Button>
+          )}
+          {!isConnected && (
+            <Button
+              type="button"
+              variant={"submit"}
+              onClick={() => {
+                openConnectModal?.();
+              }}
+            >
+              Connect Wallet
+            </Button>
+          )}
           <div className="flex pt-2 md:w-[450px]">
             <span className="text-[13px] text-red-400">
               {isValid.error ? isValid.error : ""}
