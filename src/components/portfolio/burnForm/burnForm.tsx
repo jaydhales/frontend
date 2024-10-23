@@ -162,7 +162,7 @@ export default function BurnForm({
     }
   }, [isConfirmed, reset, open]);
 
-  let submitButtonText = isClaimingRewards ? "Confirm Claim" : "Confirm Burn";
+  const submitButtonText = isClaimingRewards ? "Confirm Claim" : "Confirm Burn";
 
   let fee = useGetFee({ isApe, levTier });
   fee = fee ?? "";

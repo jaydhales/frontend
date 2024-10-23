@@ -2,7 +2,6 @@ import LeverageLiquidityContent from "@/components/leverage-liquidity/leverageLi
 import LeverageLiquidityPage from "@/components/leverage-liquidity/leverageLiquidityPage";
 import MintForm from "@/components/leverage-liquidity/mintForm/mintForm";
 import { getVaultData } from "@/lib/getVaults";
-export const revalidate = 60;
 export default async function Home() {
   const { vaultQuery } = await getVaultData(0);
   return (
