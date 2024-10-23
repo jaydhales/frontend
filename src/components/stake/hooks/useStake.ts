@@ -10,7 +10,7 @@ interface Props {
 
 export const useStake = ({ amount }: Props) => {
   const {
-    data: Stake,
+    data: stake,
     error,
     refetch,
     isFetching,
@@ -24,5 +24,5 @@ export const useStake = ({ amount }: Props) => {
     refetch().catch((e) => console.log(e));
   }, [refetch]);
 
-  return { Stake, isFetching, error };
+  return { stake, isFetching, error };
 };
