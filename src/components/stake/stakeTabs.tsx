@@ -1,32 +1,17 @@
 "use client";
-
-import { useState } from "react";
 import { Container } from "@/components/ui/container";
-
-import StakeFormProvider from "@/components/providers/stakeFormProvider";
-
 import { Card } from "../ui/card";
 import ClaimCard from "../shared/claimCard";
-import { StakeModal } from "../shared/stake/stakeModal";
+import StakeCard from "./stakeCard";
 
 const StakeTabs = () => {
-  const [stakeModal, setStakeModal] = useState(false);
   return (
     <div>
       <br />
       <Container>
-        <Card className="mx-auto grid w-[600px] grid-cols-2">
+        <Card className="mx-auto grid w-[600px] grid-cols-2 gap-x-4">
           <div>
-            <StakeFormProvider>
-              <button
-                onClick={() => {
-                  setStakeModal(true);
-                }}
-              >
-                Open stake
-              </button>
-              <StakeModal open={stakeModal} setOpen={setStakeModal} />
-            </StakeFormProvider>
+            <StakeCard />
           </div>
           <div>
             <ClaimCard />
