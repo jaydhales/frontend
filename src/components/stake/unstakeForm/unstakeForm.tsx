@@ -1,29 +1,24 @@
 "use client";
-
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { useFormContext } from "react-hook-form";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-
-import UnstakeInput from "./unstakeInput";
 import type { TUnstakeFormFields } from "@/lib/types";
 import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
 import { useEffect, useState } from "react";
-
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
 import { useUnstake } from "../hooks/useUnstake";
-
 import { useWriteContract } from "wagmi";
 import { SirContract } from "@/contracts/sir";
-
 import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
 import TransactionModal from "@/components/shared/transactionModal";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 import TransactionSuccess from "@/components/shared/transactionSuccess";
 import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
+import StakeInput from "@/components/shared/stake/stakeInput";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
@@ -140,10 +135,10 @@ const UnstakeForm = () => {
               setOpen(true);
             }}
           >
-            <UnstakeInput
+            <StakeInput
               form={form}
               balance={formatUnits(balance ?? 0n, 12)}
-            ></UnstakeInput>
+            ></StakeInput>
             <ClaimFeesCheckbox
               value={unstakeAndClaimFees}
               dividends={dividends}
