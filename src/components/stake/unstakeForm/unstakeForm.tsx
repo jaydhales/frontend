@@ -23,31 +23,22 @@ import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/ho
 import TransactionModal from "@/components/shared/transactionModal";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 import TransactionSuccess from "@/components/shared/transactionSuccess";
+import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
-interface Props {
-  balance: bigint | undefined;
-  dividends?: string;
-  claimSimulate: SimulateReq;
-  claimResult: bigint | undefined;
-  claimFetching: boolean;
-}
 
-const UnstakeForm = ({
-  balance,
-  dividends,
-  claimSimulate,
-  claimResult,
-  claimFetching,
-}: Props) => {
+const UnstakeForm = () => {
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
+  const balance = useGetStakedSir();
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
+  const [unstakeAndClaimFees, setUnstakeAndClaimFees] = useState(false);
   const { Unstake, isFetching: unstakeFetching } = useUnstake({
     amount: parseUnits(formData.amount ?? "0", 12),
+    unstakeAndClaimFees,
   });
 
   const { writeContract, reset, data: hash, isPending } = useWriteContract();
@@ -63,32 +54,21 @@ const UnstakeForm = ({
         .catch((e) => console.log(e));
     }
   }, [form, isConfirmed, utils.user.getUnstakedSirBalance]);
+  const dividends = "";
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: formData.amount ?? "0",
     depositToken: SirContract.address,
     requests: {
       mintRequest: Unstake?.request as SimulateReq,
-      approveWriteRequest: claimSimulate,
     },
     tokenBalance: balance,
     mintFetching: unstakeFetching,
-    approveFetching: claimFetching,
     decimals: 12,
   });
 
-  const [claimFees, setClaimFees] = useState(false);
   const onSubmit = () => {
-    if (Unstake && claimSimulate) {
-      if (Boolean(claimResult) && claimFees) {
-        writeContract(Unstake?.request);
-        writeContract(claimSimulate);
-        return;
-      } else {
-        console.log("here");
-        writeContract(Unstake?.request);
-
-        return;
-      }
+    if (Unstake) {
+      writeContract(Unstake?.request);
     }
   };
 
@@ -165,10 +145,9 @@ const UnstakeForm = ({
               balance={formatUnits(balance ?? 0n, 12)}
             ></UnstakeInput>
             <ClaimFeesCheckbox
-              form={form}
+              value={unstakeAndClaimFees}
               dividends={dividends}
-              disabled={!Boolean(claimResult)}
-              onChange={setClaimFees}
+              onChange={setUnstakeAndClaimFees}
             ></ClaimFeesCheckbox>
 
             <div className=" mt-[20px] flex flex-col items-center justify-center">
