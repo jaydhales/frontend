@@ -5,9 +5,9 @@ import { Container } from "@/components/ui/container";
 
 import StakeFormProvider from "@/components/providers/stakeFormProvider";
 
-import { StakeModal } from "../shared/stakeModal";
 import { Card } from "../ui/card";
 import ClaimCard from "../shared/claimCard";
+import { StakeModal } from "../shared/stake/stakeModal";
 
 const StakeTabs = () => {
   const [stakeModal, setStakeModal] = useState(false);
