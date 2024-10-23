@@ -1,120 +1,155 @@
 "use client";
-
-import { useMemo, useEffect } from "react";
-
-import { Card } from "@/components/ui/card";
-import { Form, FormLabel } from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-
+import { api } from "@/trpc/react";
 import { useFormContext } from "react-hook-form";
-import { useAccount } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-
-// import GasFeeEstimation from "@/components/shared/gasFeeEstimation";
-import StakeInput from "@/components/stake/stakeForm/stakeInput";
-import type { TStakeFormFields } from "@/lib/types";
-
-import { z } from "zod";
+import type { TUnstakeFormFields } from "@/lib/types";
+import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
+import { useEffect, useState } from "react";
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
-
-import { useStake } from "@/components/stake/hooks/useStake";
+import { useUnstake } from "../hooks/useUnstake";
+import { useWriteContract } from "wagmi";
 import { SirContract } from "@/contracts/sir";
-
-import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-
-import useStakeError from "@/components/stake/hooks/useStakeError";
+import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
-import { useApproveErc20 } from "@/components/shared/hooks/useApproveErc20";
+import TransactionModal from "@/components/shared/transactionModal";
+import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
+import TransactionSuccess from "@/components/shared/transactionSuccess";
+import StakeInput from "@/components/shared/stakeInput";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
-interface Props {
-  balance?: bigint;
-  allowance?: bigint;
-  ethBalance?: bigint;
-}
 
-import { api } from "@/trpc/react";
-
-const StakeForm = ({ balance, allowance }: Props) => {
-  const utils = api.useUtils();
-  const form = useFormContext<TStakeFormFields>();
+const StakeForm = () => {
+  const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
   const { address } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const { Stake, isFetching } = useStake({
-    amount: parseUnits(formData.stake ?? "0", 12),
+  const { Unstake, isFetching: unstakeFetching } = useUnstake({
+    amount: parseUnits(formData.amount ?? "0", 12),
   });
 
-  const { approveSimulate } = useApproveErc20({
-    tokenAddr: SirContract.address,
-    approveContract: SirContract.address,
-  });
-
-  const { writeContract, data: hash } = useWriteContract();
+  const { writeContract, reset, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
-
+  const utils = api.useUtils();
+  // REFACTOR THIS INTO REUSABLE HOOK
   useEffect(() => {
-    if (isConfirmed) {
-      utils.user.getBalance.invalidate().catch((e) => console.log(e));
-      utils.user.getSirTotalSupply.invalidate().catch((e) => console.log(e));
-      utils.user.getSirSupply.invalidate().catch((e) => console.log(e));
+    if (isConfirmed && form.getValues("amount")) {
+      form.resetField("amount");
+      utils.user.getUnstakedSirBalance
+        .invalidate()
+        .catch((e) => console.log(e));
     }
-  }, [
-    isConfirming,
-    isConfirmed,
-    utils.user.getBalance,
-    utils.user.getSirTotalSupply,
-    utils.user.getSirSupply,
-  ]);
-
+  }, [form, isConfirmed, utils.user.getUnstakedSirBalance]);
   const { isValid, errorMessage } = useCheckSubmitValid({
-    decimals: 12,
-    deposit: formData.stake ?? "0",
+    deposit: formData.amount ?? "0",
     depositToken: SirContract.address,
     requests: {
-      approveWriteRequest: approveSimulate?.data?.request as SimulateReq,
-      mintRequest: Stake?.request as SimulateReq,
+      mintRequest: Unstake?.request as SimulateReq,
     },
-    tokenAllowance: allowance,
-    tokenBalance: balance,
-    mintFetching: isFetching,
-    approveFetching: approveSimulate.isFetching,
+    mintFetching: unstakeFetching,
+    decimals: 12,
   });
 
+  const [claimFees, setClaimFees] = useState(false);
   const onSubmit = () => {
-    if (Stake) {
-      writeContract(Stake?.request);
+    if (Unstake) {
+      writeContract(Unstake?.request);
+
       return;
     }
   };
 
-  useStakeError({
+  useUnstakeError({
     formData,
     setError: form.setError,
     errorMessage,
     rootErrorMessage: form.formState.errors.root?.message,
   });
 
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (isConfirmed && !open) {
+      reset();
+    }
+  }, [isConfirmed, open, reset]);
+
   return (
     <>
-      <Card className="mx-auto w-[600px]">
+      <div className="w-full px-4 py-4">
+        <TransactionModal.Root setOpen={setOpen} open={open}>
+          <TransactionModal.Close setOpen={setOpen} />
+          <TransactionModal.InfoContainer>
+            {!isConfirmed && (
+              <>
+                <TransactionStatus
+                  action="Unstake"
+                  waitForSign={isPending}
+                  showLoading={isConfirming}
+                />
+                <div className="flex items-center justify-between py-2">
+                  <h2 className="text-sm text-gray-400">Amount</h2>
+                  <h3 className="text-xl">
+                    {form.getValues("amount")}
+                    <span className="pl-[2px] text-[12px] text-gray-400">
+                      SIR
+                    </span>
+                  </h3>
+                </div>
+              </>
+            )}
+            {isConfirmed && (
+              <TransactionSuccess amountReceived={100n} assetReceived="SIR" />
+            )}
+          </TransactionModal.InfoContainer>
+          <TransactionModal.StatSubmitContainer>
+            <TransactionModal.SubmitButton
+              isConfirmed={isConfirmed}
+              onClick={() => {
+                if (isConfirmed) {
+                  setOpen(false);
+                } else {
+                  onSubmit();
+                }
+              }}
+              loading={isPending || isConfirming}
+              disabled={!isValid && !isConfirmed}
+            >
+              Confirm Unstake
+            </TransactionModal.SubmitButton>
+          </TransactionModal.StatSubmitContainer>
+        </TransactionModal.Root>
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormLabel htmlFor="stake">Stake:</FormLabel>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setOpen(true);
+            }}
+          >
             <StakeInput
               form={form}
               balance={formatUnits(balance ?? 0n, 12)}
             ></StakeInput>
 
-            <div className=" flex flex-col items-center justify-center pt-[20px]">
+            <div className=" mt-[20px] flex flex-col items-center justify-center">
               {address && (
-                <Button variant={"submit"} type="submit" disabled={!isValid}>
-                  {form.formState.errors.root?.message
-                    ? form.formState.errors.root?.message.toString()
-                    : "Stake"}
+                <Button
+                  variant={"submit"}
+                  onClick={() => {
+                    if (isValid) {
+                      setOpen(true);
+                    }
+                  }}
+                  type="button"
+                  disabled={!isValid}
+                >
+                  Unstake
                 </Button>
               )}
               {!address && (
@@ -126,19 +161,17 @@ const StakeForm = ({ balance, allowance }: Props) => {
                   Connect Wallet
                 </Button>
               )}
-              {/* {form.formState.errors.root?.message && (
-              <div className="w-[450px] pt-[20px] flex justify-center items-center">
-                <p className="h-[20px] text-center text-sm text-red-400">
-                  {address && <>{form.formState.errors.root?.message}</>}
-                </p>
-              </div>
-            )} */}
+              {form.formState.errors.root?.message && (
+                <div className="flex w-[450px] items-center justify-center pt-[20px]">
+                  <p className="h-[20px] text-center text-sm text-red-400">
+                    {address && <>{form.formState.errors.root?.message}</>}
+                  </p>
+                </div>
+              )}
             </div>
-
-            {/* <GasFeeEstimation></GasFeeEstimation>*/}
           </form>
         </Form>
-      </Card>
+      </div>
     </>
   );
 };
