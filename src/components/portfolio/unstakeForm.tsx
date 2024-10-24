@@ -49,7 +49,7 @@ const UnstakeForm = () => {
         .catch((e) => console.log(e));
     }
   }, [form, isConfirmed, utils.user.getUnstakedSirBalance]);
-  const dividends = "";
+
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: formData.amount ?? "0",
     depositToken: SirContract.address,
@@ -141,7 +141,7 @@ const UnstakeForm = () => {
             ></StakeInput>
             <ClaimFeesCheckbox
               value={unstakeAndClaimFees}
-              dividends={dividends}
+              dividends={""}
               onChange={setUnstakeAndClaimFees}
             ></ClaimFeesCheckbox>
 
