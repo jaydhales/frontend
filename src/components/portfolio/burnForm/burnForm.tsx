@@ -57,7 +57,7 @@ export default function BurnForm({
     resolver: zodResolver(BurnSchema),
   });
   const formData = form.watch();
-
+  const [claimAndStake, setClaimAndStake] = useState(false);
   const { data: quoteBurn } = api.vault.quoteBurn.useQuery(
     {
       amount: formData.deposit ?? "0",
@@ -133,7 +133,6 @@ export default function BurnForm({
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
 
-  const [claimAndStake, setClaimAndStake] = useState(false);
   const { claimRewardRequest } = useClaimTeaRewards({
     vaultId: parseUnits(row.vaultId, 0),
     claimAndStake,
