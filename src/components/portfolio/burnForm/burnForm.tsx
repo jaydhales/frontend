@@ -120,6 +120,7 @@ export default function BurnForm({
     utils.user.getTotalSirBalance,
     utils.user.getSirTotalSupply,
     utils.user.getUnstakedSirBalance,
+    claimAndStake,
     isApe,
     utils.user.getTeaBalance,
     utils.user.getTeaRewards,
