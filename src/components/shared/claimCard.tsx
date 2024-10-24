@@ -21,8 +21,8 @@ export default function ClaimCard() {
 
   const { isConnected, address } = useAccount();
 
-  const { data: dividends } = api.user.getDividends.useQuery(
-    { staker: address },
+  const { data: dividends } = api.user.getUserSirDividends.useQuery(
+    { user: address },
     {
       enabled: isConnected,
     },
