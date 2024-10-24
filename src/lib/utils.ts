@@ -32,7 +32,7 @@ export function getLogoAsset(address: `0x${string}` | undefined) {
   };
 
   const chainName = getChainName();
-  return `https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/${chainName}/assets/${getAddress(address)}/logo.png`;
+  return `https://raw.githubusercontent.com/SIR-trading/assets/master/blockchains/${chainName}/assets/${getAddress(address)}/logo.png`;
 }
 
 export function getLogoJson(address: `0x${string}` | undefined) {

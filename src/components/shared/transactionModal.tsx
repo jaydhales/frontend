@@ -110,13 +110,13 @@ function SubmitButton({
       state={loading ? "loading" : "default"}
       type="submit"
     >
-      <CheckPending isConfirmed={isConfirmed} isLoading={loading}>
+      <Pending isConfirmed={isConfirmed} isLoading={loading}>
         {children}
-      </CheckPending>
+      </Pending>
     </Button>
   );
 }
-function CheckPending({
+function Pending({
   children,
   isLoading,
   isConfirmed,
@@ -126,7 +126,7 @@ function CheckPending({
   isConfirmed: boolean;
 }) {
   if (isLoading) {
-    return "Pending..";
+    return "Pending...";
   } else if (isConfirmed) {
     return "Close";
   } else {

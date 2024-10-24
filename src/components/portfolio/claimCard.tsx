@@ -11,7 +11,7 @@ import { formatEther, formatUnits } from "viem";
 import { useClaim } from "../stake/hooks/useClaim";
 import TransactionModal from "../shared/transactionModal";
 import TransactionSuccess from "../shared/transactionSuccess";
-
+import { TransactionStatus } from "../leverage-liquidity/mintForm/transactionStatus";
 export default function ClaimCard() {
   const [openModal, setOpenModal] = useState(false);
 
@@ -42,6 +42,7 @@ export default function ClaimCard() {
       writeContract(claimData?.request);
     }
   };
+
   useEffect(() => {
     if (isConfirmed && !openModal) {
       reset();
@@ -52,10 +53,20 @@ export default function ClaimCard() {
     <div className=" border-secondary-300">
       <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
         <TransactionModal.InfoContainer>
+          <TransactionStatus
+            waitForSign={isPending}
+            action="Claim"
+            showLoading={isConfirming}
+            isConfirmed={isConfirmed}
+          />
           {!isConfirmed && (
             <div>
-              <h2>Claim</h2>
-              <span>{formatUnits(dividends ?? 0n, 18)} Eth</span>
+              <h3 className=" space-x-0.5 py-2">
+                <span className="text-xl">
+                  {formatUnits(dividends ?? 0n, 18)}
+                </span>
+                <span className="text-gray-400">Eth</span>
+              </h3>
             </div>
           )}
           {isConfirmed && <TransactionSuccess />}

@@ -6,6 +6,10 @@ interface Props {
   setOpen: (b: boolean) => void;
 }
 export function UnstakeModal({ open, setOpen }: Props) {
+  type SimulateReq = SimulateContractReturnType["request"] | undefined;
+  const { claimData, isFetching: claimFetching } = useClaim();
+
+  const stakedSir = useGetStakedSir();
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent
@@ -20,7 +24,12 @@ export function UnstakeModal({ open, setOpen }: Props) {
         >
           <TransactionModal.Close setOpen={setOpen} />
           <h1 className="pt-4 text-center font-lora text-2xl">Unstake</h1>
-          <UnstakeForm></UnstakeForm>
+          <UnstakeForm
+            balance={stakedSir}
+            claimSimulate={claimData?.request as SimulateReq}
+            claimResult={claimData?.result}
+            claimFetching={claimFetching}
+          ></UnstakeForm>
         </div>
       </AlertDialogContent>
     </AlertDialog>
