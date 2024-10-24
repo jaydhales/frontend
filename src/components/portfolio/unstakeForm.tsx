@@ -27,7 +27,7 @@ const UnstakeForm = () => {
   const formData = form.watch();
 
   const balance = useGetStakedSir();
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
 
   const [unstakeAndClaimFees, setUnstakeAndClaimFees] = useState(false);
@@ -66,6 +66,12 @@ const UnstakeForm = () => {
       writeContract(Unstake?.request);
     }
   };
+  const { data: dividends } = api.user.getUserSirDividends.useQuery(
+    {
+      user: address,
+    },
+    { enabled: isConnected },
+  );
 
   useUnstakeError({
     formData,
@@ -81,7 +87,7 @@ const UnstakeForm = () => {
       reset();
     }
   }, [isConfirmed, open, reset]);
-
+  console.log(dividends, "DIVIDENDS");
   return (
     <>
       <div className="w-full px-4 py-4">
@@ -141,7 +147,9 @@ const UnstakeForm = () => {
             ></StakeInput>
             <ClaimFeesCheckbox
               value={unstakeAndClaimFees}
-              dividends={""}
+              dividends={
+                Boolean(dividends) ? formatUnits(dividends ?? 0n, 18) : ""
+              }
               onChange={setUnstakeAndClaimFees}
             ></ClaimFeesCheckbox>
 
