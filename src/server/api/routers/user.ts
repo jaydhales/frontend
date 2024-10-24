@@ -205,6 +205,17 @@ export const userRouter = createTRPCRouter({
     });
     return result;
   }),
+  getUserSirDividends: publicProcedure
+    .input(z.object({ userAddress: z.string().startsWith("0x").length(42) }))
+    .query(async ({ input }) => {
+      const result = await readContract({
+        abi: SirContract.abi,
+        address: SirContract.address,
+        functionName: "dividends",
+        args: [input.userAddress as TAddressString],
+      });
+      return result;
+    }),
   getSirTotalSupply: publicProcedure.query(async () => {
     const result = await readContract({
       abi: SirContract.abi,
