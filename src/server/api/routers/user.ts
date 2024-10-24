@@ -230,21 +230,6 @@ export const userRouter = createTRPCRouter({
     });
     return result;
   }),
-  getDividends: publicProcedure
-    .input(
-      z.object({
-        staker: z.string().startsWith("0x").length(42).optional(),
-      }),
-    )
-    .query(async ({ input }) => {
-      const result = await readContract({
-        abi: SirContract.abi,
-        address: SirContract.address,
-        functionName: "dividends",
-        args: [input.staker as TAddressString],
-      });
-      return result;
-    }),
 });
 //todo use ZOD
 
