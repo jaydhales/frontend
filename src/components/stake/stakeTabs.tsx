@@ -9,7 +9,7 @@ const StakeTabs = () => {
     <div>
       <br />
       <Container>
-        <Card className="mx-auto grid w-[600px] grid-cols-2 gap-x-4">
+        <Card className="mx-auto grid w-[600px]  gap-y-4">
           <div>
             <StakeCard />
           </div>
