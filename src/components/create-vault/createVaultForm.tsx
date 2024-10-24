@@ -175,6 +175,7 @@ export default function CreateVaultForm() {
             <TransactionModal.SubmitButton
               disabled={!isValid}
               loading={isPending || isConfirming}
+              isConfirmed={isConfirmed}
               onClick={() => {
                 if (isConfirmed) {
                   setOpenModal(false);
@@ -183,11 +184,7 @@ export default function CreateVaultForm() {
                 }
               }}
             >
-              {isConfirmed
-                ? "Close"
-                : isPending || isConfirming
-                  ? "Pending..."
-                  : "Create"}
+              Create
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>

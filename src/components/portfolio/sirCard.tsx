@@ -40,11 +40,12 @@ export function SirCard() {
   });
   const { writeContract, reset, isPending, data: hash } = useWriteContract();
   console.log(hash, "HASH");
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
-    hash,
-  });
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
   const onSubmit = () => {
-    if (isSuccess) {
+    if (isConfirmed) {
       setOpen(false);
       return;
     }
@@ -54,13 +55,13 @@ export function SirCard() {
   };
   const utils = api.useUtils();
   useEffect(() => {
-    if (isSuccess && !open) {
+    if (isConfirmed && !open) {
       utils.user.getUnclaimedContributorRewards
         .invalidate()
         .catch((e) => console.log(e));
       reset();
     }
-  }, [isSuccess, reset, open, utils.user.getUnclaimedContributorRewards]);
+  }, [isConfirmed, reset, open, utils.user.getUnclaimedContributorRewards]);
   const unclaimedRewards = unclaimedData ?? 0n;
   return (
     <div className=" border-b border-secondary-200 pb-2">
@@ -78,23 +79,21 @@ export function SirCard() {
         <TransactionModal.Root setOpen={setOpen} open={open}>
           <TransactionModal.Close setOpen={setOpen} />
           <TransactionModal.InfoContainer>
-            {!isSuccess && (
-              <TransactionStatus
-                action="Claim"
-                waitForSign={isPending}
-                showLoading={isConfirming}
-              />
-            )}
-
-            {!isSuccess && (
-              <div className="space-x-1">
-                <span>
+            <TransactionStatus
+              action="Claim"
+              waitForSign={isPending}
+              showLoading={isConfirming}
+              isConfirmed={isConfirmed}
+            />
+            {!isConfirmed && (
+              <div className="space-x-0.5 py-2">
+                <span className="text-lg">
                   {formatNumber(formatUnits(unclaimedData ?? 0n, 12), 8)}
                 </span>
-                <span className="text-gray-400">Sir</span>
+                <span className="text-gray-400">SIR</span>
               </div>
             )}
-            {isSuccess && (
+            {isConfirmed && (
               <div>
                 <div className="flex justify-center">
                   <CircleCheck size={40} color="#F0C775" />
@@ -106,19 +105,12 @@ export function SirCard() {
 
           <TransactionModal.StatSubmitContainer>
             <TransactionModal.SubmitButton
+              isConfirmed={isConfirmed}
               loading={isPending || isConfirming}
               disabled={isPending || isConfirming}
               onClick={() => onSubmit()}
             >
-              {isPending || isConfirming ? (
-                "Pending..."
-              ) : (
-                <>
-                  {!isSuccess && "Claim"}
-
-                  {isSuccess && "Close"}
-                </>
-              )}
+              Claim
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>

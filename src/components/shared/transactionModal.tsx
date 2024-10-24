@@ -93,11 +93,13 @@ function SubmitButton({
   disabled,
   children,
   loading,
+  isConfirmed,
 }: {
   onClick: () => void;
   disabled: boolean;
   children: ReactNode;
   loading: boolean;
+  isConfirmed: boolean;
 }) {
   return (
     <Button
@@ -108,9 +110,28 @@ function SubmitButton({
       state={loading ? "loading" : "default"}
       type="submit"
     >
-      {children}
+      <Pending isConfirmed={isConfirmed} isLoading={loading}>
+        {children}
+      </Pending>
     </Button>
   );
+}
+function Pending({
+  children,
+  isLoading,
+  isConfirmed,
+}: {
+  children: ReactNode;
+  isLoading: boolean;
+  isConfirmed: boolean;
+}) {
+  if (isLoading) {
+    return "Pending...";
+  } else if (isConfirmed) {
+    return "Close";
+  } else {
+    return <>{children}</>;
+  }
 }
 const TransactionModal = {
   Root,
