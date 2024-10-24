@@ -20,13 +20,6 @@ export function ClaimModal({ open, setOpen }: Props) {
           className={`relative w-[500px] rounded-xl  bg-secondary-700 text-white  transition-all duration-700`}
         >
           <TransactionModal.Close setOpen={setOpen} />
-          {/* <ClaimFees */}
-          {/*   ethBalance={formatEther(ethBalance ?? 0n)} */}
-          {/*   claimAmount={formatEther(dividends ?? 0n)} */}
-          {/*   claimSimulate={Claim?.request as SimulateReq} */}
-          {/*   claimResult={Claim?.result} */}
-          {/*   claimFetching={claimFetching} */}
-          {/* ></ClaimFees> */}
         </div>
       </AlertDialogContent>
     </AlertDialog>
