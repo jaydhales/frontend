@@ -98,6 +98,12 @@ export default function BurnForm({
       } else {
         if (isClaimingRewards) {
           utils.user.getTeaRewards.invalidate().catch((e) => console.log(e));
+          utils.user.getUnstakedSirBalance
+            .invalidate()
+            .catch((e) => console.log(e));
+          utils.user.getTotalSirBalance.invalidate().catch((e) => {
+            console.log(e);
+          });
         } else {
           utils.user.getTeaBalance.invalidate().catch((e) => {
             console.log(e);
@@ -108,6 +114,9 @@ export default function BurnForm({
   }, [
     receiptData,
     utils.user.getApeBalance,
+    utils.user.getTotalSirBalance,
+    utils.user.getSirTotalSupply,
+    utils.user.getUnstakedSirBalance,
     isApe,
     utils.user.getTeaBalance,
     utils.user.getTeaRewards,
@@ -144,7 +153,6 @@ export default function BurnForm({
   );
 
   const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
-  console.log(claimRewardRequest, "REQUEST");
   const onSubmit = () => {
     if (isConfirmed) {
       return setOpen(false);
