@@ -144,7 +144,7 @@ export default function BurnForm({
   );
 
   const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
-
+  console.log(claimRewardRequest, "REQUEST");
   const onSubmit = () => {
     if (isConfirmed) {
       return setOpen(false);
@@ -262,6 +262,7 @@ export default function BurnForm({
           </div>
           {!isClaimingRewards && (
             <Section
+              positionDecimals={row.positionDecimals}
               balance={balance}
               bg="bg-primary"
               form={form}
