@@ -24,6 +24,7 @@ import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/tran
 import { useClaimTeaRewards } from "./hooks/useClaimTeaRewards";
 import useGetFee from "./hooks/useGetFee";
 import { formatNumber } from "@/lib/utils";
+import ClaimAndStakeToggle from "./claimAndStakeToggle";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -122,8 +123,11 @@ export default function BurnForm({
     },
     amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
   });
+
+  const [claimAndStake, setClaimAndStake] = useState(false);
   const { claimRewardRequest } = useClaimTeaRewards({
     vaultId: parseUnits(row.vaultId, 0),
+    claimAndStake,
   });
 
   useEffect(() => {
@@ -166,6 +170,7 @@ export default function BurnForm({
 
   let fee = useGetFee({ isApe, levTier });
   fee = fee ?? "";
+
   return (
     <FormProvider {...form}>
       <TransactionModal.Root open={open} setOpen={setOpen}>
@@ -291,6 +296,17 @@ export default function BurnForm({
               bg=""
             />
           </div>
+
+          {isClaimingRewards && (
+            <div className="flex items-center justify-end gap-x-2 py-2">
+              <h3 className="text-[14px] text-gray-200">Claim and Stake</h3>
+
+              <ClaimAndStakeToggle
+                onChange={setClaimAndStake}
+                value={claimAndStake}
+              />
+            </div>
+          )}
           <div className="pt-2"></div>
           <div className="flex justify-center">
             <h4 className="w-[400px] text-center text-sm italic text-gray-500">
@@ -314,6 +330,7 @@ export default function BurnForm({
             {isClaimingRewards && "Claim Rewards"}
             {!isClaimingRewards && `Burn ${isApe ? "APE" : "TEA"}`}
           </Button>
+
           {error && (
             <div className="h-5 text-sm text-red-400">{<p>{error}</p>}</div>
           )}
