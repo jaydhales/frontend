@@ -22,6 +22,7 @@ import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
 import StakeInput from "../stakeInput";
 import { useStake } from "@/components/stake/hooks/useStake";
 import type { TUnstakeFormFields } from "@/lib/types";
+import { api } from "@/trpc/react";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
@@ -29,11 +30,13 @@ const StakeForm = () => {
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
-  const balance = useGetStakedSir();
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const [unstakeAndClaimFees, setstakeAndClaimFees] = useState(false);
+  const { data: balance } = api.user.getUnstakedSirBalance.useQuery(
+    { user: address },
+    { enabled: isConnected },
+  );
   const { stake, isFetching: unstakeFetching } = useStake({
     amount: parseUnits(formData.amount ?? "0", 12),
   });
@@ -42,7 +45,6 @@ const StakeForm = () => {
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({ hash });
   // REFACTOR THIS INTO REUSABLE HOOK
-  const dividends = "";
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: formData.amount ?? "0",
     depositToken: SirContract.address,
