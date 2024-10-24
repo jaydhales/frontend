@@ -60,7 +60,7 @@ const StakeInput = ({ form, balance }: Props) => {
             className={`flex items-center justify-center gap-x-2 rounded-md py-1`}
           >
             <Image src={logo} alt="sir-logo" width={25} height={25} />
-            <span className="font-medium">Staked SIR</span>
+            <span className="font-medium">Unstaked SIR</span>
           </div>
           <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
             Balance {formatNumber(balance ?? "0", 8)}
