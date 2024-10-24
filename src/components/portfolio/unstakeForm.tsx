@@ -19,6 +19,7 @@ import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
 import StakeInput from "@/components/shared/stake/stakeInput";
 import { useUnstake } from "../stake/hooks/useUnstake";
 import ClaimFeesCheckbox from "./claimFeesCheck";
+import { useGetReceivedSir } from "./hooks/useGetReceivedSir";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
@@ -37,8 +38,11 @@ const UnstakeForm = () => {
   });
 
   const { writeContract, reset, data: hash, isPending } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({ hash });
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    data: transactionData,
+  } = useWaitForTransactionReceipt({ hash });
   const utils = api.useUtils();
   // REFACTOR THIS INTO REUSABLE HOOK
   useEffect(() => {
@@ -87,7 +91,11 @@ const UnstakeForm = () => {
       reset();
     }
   }, [isConfirmed, open, reset]);
-  console.log(dividends, "DIVIDENDS");
+  const { tokenReceived } = useGetReceivedSir({
+    logs: transactionData?.logs,
+    staking: false,
+  });
+  console.log(tokenReceived, "tokenReceived");
   return (
     <>
       <div className="w-full px-4 py-4">
@@ -113,7 +121,11 @@ const UnstakeForm = () => {
               </>
             )}
             {isConfirmed && (
-              <TransactionSuccess amountReceived={100n} assetReceived="SIR" />
+              <TransactionSuccess
+                amountReceived={tokenReceived}
+                assetReceived="SIR"
+                decimals={12}
+              />
             )}
           </TransactionModal.InfoContainer>
           <TransactionModal.StatSubmitContainer>
