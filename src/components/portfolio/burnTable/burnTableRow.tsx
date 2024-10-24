@@ -64,11 +64,13 @@ export function BurnTableRow({
                   disabled={teaRewards === 0n}
                   className="h-7 rounded-full px-5 text-[14px] "
                 >
-                  Claim{" "}
-                  <span className="pl-1 text-[14px] text-gray-300">
-                    {formatNumber(rewards, 3)}
-                    <span className="pl-[2px] ">SIR</span>
-                  </span>
+                  <div>
+                    <span>Claim</span>
+                    <span className="pl-1 text-[12px] text-gray-300">
+                      <span>{formatNumber(rewards, 2)}</span>
+                      <span className="pl-[2px] ">SIR</span>
+                    </span>
+                  </div>
                 </Button>
               )}
               <Button
