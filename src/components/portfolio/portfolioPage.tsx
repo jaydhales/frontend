@@ -25,7 +25,7 @@ export default function PortfolioPage() {
           </div>
         </Card>
         <Card className="py-4">
-          <div className="rounded-md bg-secondary-400 px-4 py-2">
+          <div className="rounded-md bg-secondary-600 px-4 py-2">
             <div className="flex  items-center justify-between pb-4 lg:pb-8 ">
               <h2 className="flex items-center gap-x-1 pb-1 text-sm text-gray-200 ">
                 <span>My Tokens</span>
@@ -50,7 +50,7 @@ function Slider({
 }) {
   return (
     <div>
-      <div className="flex items-center gap-x-1  rounded-full border border-secondary-100">
+      <div className="flex items-center gap-x-1  rounded-full border-2 border-secondary-800">
         <Slide active={value === "all"} onClick={() => setValue("all")}>
           All
         </Slide>
@@ -78,7 +78,7 @@ function Slide({
     <div
       onClick={onClick}
       data-active={active ? "true" : ""}
-      className=" w-12 cursor-pointer rounded-full px-3 py-1 text-center text-sm data-[active=true]:bg-secondary-100"
+      className=" w-12 cursor-pointer rounded-full px-3 py-1 text-center text-sm data-[active=true]:bg-secondary-700"
     >
       {children}
     </div>
