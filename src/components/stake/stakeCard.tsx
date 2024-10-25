@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { formatEther } from "viem";
+import { formatUnits } from "viem";
 import { StakeModal } from "../shared/stake/stakeModal";
 import StakeFormProvider from "../providers/stakeFormProvider";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
+import { formatNumber } from "@/lib/utils";
 
 export default function StakeCard() {
   const [openModal, setOpenModal] = useState(false);
@@ -23,7 +24,7 @@ export default function StakeCard() {
       </h2>
       <div className="flex items-center justify-between gap-x-2">
         <h3 className="overflow-hidden text-xl">
-          {formatEther(userUnstakedSir ?? 0n)}
+          {formatNumber(formatUnits(userUnstakedSir ?? 0n, 12), 6)}
           <span className="text-sm text-gray-500"> SIR</span>
         </h3>
         <Button
