@@ -41,6 +41,7 @@ const UnstakeForm = () => {
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
+
     data: transactionData,
   } = useWaitForTransactionReceipt({ hash });
   const utils = api.useUtils();
@@ -51,8 +52,19 @@ const UnstakeForm = () => {
       utils.user.getUnstakedSirBalance
         .invalidate()
         .catch((e) => console.log(e));
+      if (unstakeAndClaimFees) {
+        utils.user.getUserSirDividends
+          .invalidate()
+          .catch((e) => console.log(e));
+      }
     }
-  }, [form, isConfirmed, utils.user.getUnstakedSirBalance]);
+  }, [
+    form,
+    isConfirmed,
+    unstakeAndClaimFees,
+    utils.user.getUnstakedSirBalance,
+    utils.user.getUserSirDividends,
+  ]);
 
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: formData.amount ?? "0",
@@ -85,7 +97,6 @@ const UnstakeForm = () => {
   });
 
   const [open, setOpen] = useState(false);
-
   useEffect(() => {
     if (isConfirmed && !open) {
       reset();
