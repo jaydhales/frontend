@@ -66,20 +66,19 @@ export function SirCard() {
   const [stakeModal, setStakeModal] = useState(false);
   return (
     <div className=" border-b border-secondary-200 pb-2">
-      <div className=" rounded-md px-2 pb-2 text-2xl">
-        <div className="flex justify-between pb-2">
-          <h2 className="text-sm text-gray-200">Total SIR</h2>
-          <Button
-            onClick={() => setStakeModal(true)}
-            type="button"
-            className="p-2"
-          >
-            Stake
-          </Button>
-          <StakeFormProvider>
-            <StakeModal setOpen={setStakeModal} open={stakeModal}></StakeModal>
-          </StakeFormProvider>
+      <div className="flex justify-between rounded-md px-2 pb-2 text-2xl">
+        <div className="flex gap-x-2 ">
+          <div>
+            <h2 className="text-sm text-gray-200">Total SIR</h2>
+            <div className="flex justify-between text-3xl   ">
+              <div className="flex items-end gap-x-1">
+                <span>{formatNumber(formatUnits(totalBalance ?? 0n, 12))}</span>
+                <h2 className="text-sm font-light text-gray-400">SIR</h2>
+              </div>
+            </div>
+          </div>
         </div>
+
         <TransactionModal.Root setOpen={setOpen} open={open}>
           <TransactionModal.Close setOpen={setOpen} />
           <TransactionModal.InfoContainer>
@@ -118,12 +117,22 @@ export function SirCard() {
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
-        <div className="items-center justify-between md:flex">
-          <div className="flex justify-between text-3xl   ">
-            <div className="flex items-end gap-x-1">
-              <span>{formatNumber(formatUnits(totalBalance ?? 0n, 12))}</span>
-              <h2 className="text-sm font-light text-gray-400">SIR</h2>
-            </div>
+
+        <div className="items-center justify-between ">
+          <div className="flex justify-end">
+            <Button
+              onClick={() => setStakeModal(true)}
+              type="button"
+              className="p-2"
+            >
+              Stake
+            </Button>
+            <StakeFormProvider>
+              <StakeModal
+                setOpen={setStakeModal}
+                open={stakeModal}
+              ></StakeModal>
+            </StakeFormProvider>
           </div>
           {data?.request && unclaimedRewards > 0n && (
             <div>
