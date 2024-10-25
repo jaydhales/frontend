@@ -18,7 +18,6 @@ import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/ho
 import TransactionModal from "@/components/shared/transactionModal";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 import TransactionSuccess from "@/components/shared/transactionSuccess";
-import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
 import StakeInput from "../stakeInput";
 import { useStake } from "@/components/stake/hooks/useStake";
 import type { TUnstakeFormFields } from "@/lib/types";
