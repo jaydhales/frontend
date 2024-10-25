@@ -2,97 +2,70 @@
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { api } from "@/trpc/react";
 import { useFormContext } from "react-hook-form";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
-import UnstakeInput from "./unstakeInput";
-import type { TUnstakeFormFields } from "@/lib/types";
-import ClaimFeesCheckbox from "@/components/stake/unstakeForm/claimFeesCheck";
 import { useEffect, useState } from "react";
 
 import { type SimulateContractReturnType, parseUnits, formatUnits } from "viem";
-import { useUnstake } from "../hooks/useUnstake";
 
 import { useWriteContract } from "wagmi";
 import { SirContract } from "@/contracts/sir";
 
-import useUnstakeError from "@/components/stake/hooks/useUnstakeError";
+import usestakeError from "@/components/stake/hooks/useUnstakeError";
 import { useCheckSubmitValid } from "@/components/leverage-liquidity/mintForm/hooks/useCheckSubmitValid";
 import TransactionModal from "@/components/shared/transactionModal";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 import TransactionSuccess from "@/components/shared/transactionSuccess";
+import StakeInput from "../stakeInput";
+import { useStake } from "@/components/stake/hooks/useStake";
+import type { TUnstakeFormFields } from "@/lib/types";
+import { api } from "@/trpc/react";
+import { useGetReceivedSir } from "@/components/portfolio/hooks/useGetReceivedSir";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
-interface Props {
-  balance: bigint | undefined;
-  dividends?: string;
-  claimSimulate: SimulateReq;
-  claimResult: bigint | undefined;
-  claimFetching: boolean;
-}
 
-const UnstakeForm = ({
-  balance,
-  dividends,
-  claimSimulate,
-  claimResult,
-  claimFetching,
-}: Props) => {
+const StakeForm = () => {
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
 
-  const { Unstake, isFetching: unstakeFetching } = useUnstake({
+  const { data: balance } = api.user.getUnstakedSirBalance.useQuery(
+    { user: address },
+    { enabled: isConnected },
+  );
+  const { stake, isFetching: unstakeFetching } = useStake({
     amount: parseUnits(formData.amount ?? "0", 12),
   });
 
   const { writeContract, reset, data: hash, isPending } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({ hash });
-  const utils = api.useUtils();
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    data: transactionData,
+  } = useWaitForTransactionReceipt({ hash });
   // REFACTOR THIS INTO REUSABLE HOOK
-  useEffect(() => {
-    if (isConfirmed && form.getValues("amount")) {
-      form.resetField("amount");
-      utils.user.getUnstakedSirBalance
-        .invalidate()
-        .catch((e) => console.log(e));
-    }
-  }, [form, isConfirmed, utils.user.getUnstakedSirBalance]);
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: formData.amount ?? "0",
     depositToken: SirContract.address,
     requests: {
-      mintRequest: Unstake?.request as SimulateReq,
-      approveWriteRequest: claimSimulate,
+      mintRequest: stake?.request as SimulateReq,
     },
     tokenBalance: balance,
     mintFetching: unstakeFetching,
-    approveFetching: claimFetching,
     decimals: 12,
   });
 
-  const [claimFees, setClaimFees] = useState(false);
   const onSubmit = () => {
-    if (Unstake && claimSimulate) {
-      if (Boolean(claimResult) && claimFees) {
-        writeContract(Unstake?.request);
-        writeContract(claimSimulate);
-        return;
-      } else {
-        console.log("here");
-        writeContract(Unstake?.request);
-
-        return;
-      }
+    if (stake) {
+      writeContract(stake?.request);
     }
   };
 
-  useUnstakeError({
+  usestakeError({
     formData,
     setError: form.setError,
     errorMessage,
@@ -100,7 +73,10 @@ const UnstakeForm = ({
   });
 
   const [open, setOpen] = useState(false);
-
+  const { tokenReceived } = useGetReceivedSir({
+    logs: transactionData?.logs,
+    staking: true,
+  });
   useEffect(() => {
     if (isConfirmed && !open) {
       reset();
@@ -116,7 +92,7 @@ const UnstakeForm = ({
             {!isConfirmed && (
               <>
                 <TransactionStatus
-                  action="Unstake"
+                  action="Stake"
                   waitForSign={isPending}
                   showLoading={isConfirming}
                 />
@@ -132,7 +108,11 @@ const UnstakeForm = ({
               </>
             )}
             {isConfirmed && (
-              <TransactionSuccess amountReceived={100n} assetReceived="SIR" />
+              <TransactionSuccess
+                decimals={12}
+                amountReceived={tokenReceived}
+                assetReceived="SIR"
+              />
             )}
           </TransactionModal.InfoContainer>
           <TransactionModal.StatSubmitContainer>
@@ -148,7 +128,7 @@ const UnstakeForm = ({
               loading={isPending || isConfirming}
               disabled={!isValid && !isConfirmed}
             >
-              Confirm Unstake
+              Confirm stake
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
@@ -160,16 +140,10 @@ const UnstakeForm = ({
               setOpen(true);
             }}
           >
-            <UnstakeInput
+            <StakeInput
               form={form}
               balance={formatUnits(balance ?? 0n, 12)}
-            ></UnstakeInput>
-            <ClaimFeesCheckbox
-              form={form}
-              dividends={dividends}
-              disabled={!Boolean(claimResult)}
-              onChange={setClaimFees}
-            ></ClaimFeesCheckbox>
+            ></StakeInput>
 
             <div className=" mt-[20px] flex flex-col items-center justify-center">
               {address && (
@@ -183,7 +157,7 @@ const UnstakeForm = ({
                   type="button"
                   disabled={!isValid}
                 >
-                  Unstake
+                  Stake
                 </Button>
               )}
               {!address && (
@@ -210,4 +184,4 @@ const UnstakeForm = ({
   );
 };
 
-export default UnstakeForm;
+export default StakeForm;
