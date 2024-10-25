@@ -83,8 +83,9 @@ export function VaultTableRow({
                 <div>
                   <Image
                     src={boostIcon as StaticImageData}
-                    height={22}
-                    width={22}
+                    height={24}
+                    width={24}
+                    className="rounded-full border border-gold"
                     alt="Boost Icon"
                   />
                 </div>
