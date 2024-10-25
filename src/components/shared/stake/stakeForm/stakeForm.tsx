@@ -23,6 +23,7 @@ import StakeInput from "../stakeInput";
 import { useStake } from "@/components/stake/hooks/useStake";
 import type { TUnstakeFormFields } from "@/lib/types";
 import { api } from "@/trpc/react";
+import { useGetReceivedSir } from "@/components/portfolio/hooks/useGetReceivedSir";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
@@ -42,8 +43,11 @@ const StakeForm = () => {
   });
 
   const { writeContract, reset, data: hash, isPending } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({ hash });
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    data: transactionData,
+  } = useWaitForTransactionReceipt({ hash });
   // REFACTOR THIS INTO REUSABLE HOOK
   const { isValid, errorMessage } = useCheckSubmitValid({
     deposit: formData.amount ?? "0",
@@ -70,7 +74,10 @@ const StakeForm = () => {
   });
 
   const [open, setOpen] = useState(false);
-
+  const { tokenReceived } = useGetReceivedSir({
+    logs: transactionData?.logs,
+    staking: true,
+  });
   useEffect(() => {
     if (isConfirmed && !open) {
       reset();
@@ -86,7 +93,7 @@ const StakeForm = () => {
             {!isConfirmed && (
               <>
                 <TransactionStatus
-                  action="stake"
+                  action="Stake"
                   waitForSign={isPending}
                   showLoading={isConfirming}
                 />
@@ -102,7 +109,11 @@ const StakeForm = () => {
               </>
             )}
             {isConfirmed && (
-              <TransactionSuccess amountReceived={100n} assetReceived="SIR" />
+              <TransactionSuccess
+                decimals={12}
+                amountReceived={tokenReceived}
+                assetReceived="SIR"
+              />
             )}
           </TransactionModal.InfoContainer>
           <TransactionModal.StatSubmitContainer>
