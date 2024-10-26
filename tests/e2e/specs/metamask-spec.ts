@@ -3,7 +3,7 @@ describe('Check All Wallet Pages Work', () => {
     cy.visit('http://localhost:3000/');
   });
   it('should connect wallet with success', () => {
-    cy.xpath('/html/body/div[2]/div/div[1]/div[2]/div[1]/div/div/button').click()
+    cy.xpath('//*[@id="connectButton"]/div/button').click()
     cy.acceptMetamaskAccess();
     cy.get('#connectButton').should(
       'have.text',
