@@ -14,9 +14,8 @@ import { formatNumber } from "@/lib/utils";
 import { CircleCheck } from "lucide-react";
 import { formatUnits } from "viem";
 import { Button } from "../ui/button";
-
-import sirIcon from "../../../public/images/sir-logo.svg";
-import type { StaticImageData } from "next/image";
+// import sirIcon from "../../../public/images/sir-logo.svg";
+// import type { StaticImageData } from "next/image";
 
 export default function ContributorClaim() {
   const { isConnected, address } = useAccount();
