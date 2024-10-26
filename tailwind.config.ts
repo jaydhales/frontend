@@ -71,6 +71,7 @@ const config = {
           600: "hsl(var(--secondary-600), <alpha-value>)",
           700: "hsl(var(--secondary-700), <alpha-value>)",
           800: "hsl(var(--secondary-800), <alpha-value>)",
+          900: "hsl(var(--secondary-900), <alpha-value>)",
           foreground: "hsl(var(--secondary-foreground), <alpha-value>)",
         },
         tertiary: {

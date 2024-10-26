@@ -35,8 +35,9 @@ html {
     --secondary-400: 240, 15%, 30%;
     --secondary-500: 240, 15%, 28%;
     --secondary-600: 240, 15%, 26%;
-    --secondary-700: 240, 15%, 20%;
-    --secondary-800: 240, 15%, 16%;
+    --secondary-700: 240, 20%, 20%;
+    --secondary-800: 240, 22%, 16%;
+    --secondary-900: 240, 20%, 14%;
     --secondary-foreground: 0, 0%, 100%;
 
     --tertiary: 33, 91%, 59%;
