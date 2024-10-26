@@ -14,7 +14,7 @@ export default function StakeCard() {
     { enabled: isConnected },
   );
   return (
-    <div className="rounded-md bg-secondary-400 bg-opacity-40 px-2 py-2 text-2xl">
+    <div className="rounded-md bg-secondary-400 px-2 py-2 text-2xl">
       <StakeFormProvider>
         <StakeModal open={openModal} setOpen={setOpenModal} />
       </StakeFormProvider>

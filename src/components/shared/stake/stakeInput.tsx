@@ -21,7 +21,7 @@ const StakeInput = ({ form, balance }: Props) => {
   const logo = sir_logo as StaticImageData;
 
   return (
-    <div className="rounded-md bg-secondary-300 px-3 py-2">
+    <div className="rounded-md bg-secondary-500 px-3 py-2">
       <FormLabel htmlFor="stake">Amount</FormLabel>
       <div className="flex justify-between  ">
         <FormField
@@ -33,7 +33,7 @@ const StakeInput = ({ form, balance }: Props) => {
                 <FormControl>
                   <Input
                     type="text"
-                    className="bg-secondary-300"
+                    className="bg-transparent"
                     inputMode="decimal"
                     autoComplete="off"
                     pattern="^[0-9]*[.,]?[0-9]*$"
