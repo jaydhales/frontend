@@ -200,6 +200,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
   }, [isApproving, reset, isConfirmed, utils.user.getBalance]);
   const deposit = form.getValues("deposit");
+  useEffect(() => {
+    if (!isPending && !isConfirming && !isConfirmed) {
+      setOpenTransactionModal(false);
+    }
+  }, [isPending, isConfirmed, isConfirming]);
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -326,7 +331,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
           <MintFormSubmit.OpenTransactionModalButton
             isValid={isValid}
-            onClick={() => setOpenTransactionModal(true)}
+            onClick={() => {
+              setOpenTransactionModal(true);
+              onSubmit();
+            }}
             submitType={submitType}
           />
           <MintFormSubmit.ConnectButton />
