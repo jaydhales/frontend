@@ -22,11 +22,12 @@ import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
 import { TransactionStatus } from "./transactionStatus";
-import { ChevronDown, CircleCheck } from "lucide-react";
+import { CircleCheck, Plus } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { TransactionEstimates } from "./transactionEstimates";
+import { TokenDisplay } from "@/components/ui/token-display";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -249,17 +250,21 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             )}
             {isConfirmed && !isApproving && (
               <div className="space-y-2">
-                <div className="flex justify-center">
+                <div className="flex animate-fade-in justify-center">
                   <CircleCheck size={40} color="#F0C775" />
                 </div>
-                <h2 className="text-center">Transaction Successful!</h2>
+                <h2 className="text-center text-gray-300">
+                  Transaction Successful!
+                </h2>
                 {Boolean(tokenReceived) && (
-                  <h3 className="text-center">
-                    {isApe ? "APE" : "TEA"} received:{" "}
-                    {formatNumber(
-                      formatUnits(tokenReceived ?? 0n, decimals),
-                      6,
-                    )}
+                  <h3 className="flex items-center justify-center gap-x-1 ">
+                    <span className="text-xl font-bold ">
+                      {isApe ? "APE" : "TEA"}{" "}
+                      {formatNumber(
+                        formatUnits(tokenReceived ?? 0n, decimals),
+                        4,
+                      )}
+                    </span>
                   </h3>
                 )}
               </div>
