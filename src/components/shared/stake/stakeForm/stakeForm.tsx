@@ -87,7 +87,7 @@ const StakeForm = () => {
     }
   }, [
     isConfirmed,
-    utils.user.getUnstakedSirBalance,
+    utils.user.getTotalSirBalance,
     utils.user.getUnstakedSirBalance,
   ]);
   useEffect(() => {
