@@ -13,6 +13,7 @@ import { formatEther, formatUnits } from "viem";
 import { useClaim } from "../stake/hooks/useClaim";
 import TransactionModal from "../shared/transactionModal";
 import TransactionSuccess from "../shared/transactionSuccess";
+import { TokenDisplay } from "../ui/token-display";
 
 export default function ClaimCard() {
   const [openModal, setOpenModal] = useState(false);
@@ -86,10 +87,7 @@ export default function ClaimCard() {
           <span>Dividends</span>
         </h2>
         <div className="flex items-center justify-between">
-          <h3 className="text-3xl">
-            {formatEther(dividends ?? 0n)}
-            <span className="text-sm text-gray-500"> ETH</span>
-          </h3>
+          <TokenDisplay amount={dividends} unitLabel={"ETH"} />
           <Button
             onClick={() => {
               if (isValid.isValid) setOpenModal(true);
