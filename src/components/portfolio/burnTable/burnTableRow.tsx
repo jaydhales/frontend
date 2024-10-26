@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 import type { TAddressString } from "@/lib/types";
-import { getLeverageRatio, formatNumber } from "@/lib/utils";
+import { getLeverageRatio, formatNumber, getLogoAsset } from "@/lib/utils";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { formatUnits } from "viem";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
 import type { ReactNode } from "react";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
+import ImageWithFallback from "@/components/shared/ImageWithFallback";
 interface Props {
   row: TUserPosition;
   isApe: boolean;
@@ -43,10 +44,24 @@ export function BurnTableRow({
           <span className="text-gray-500">-</span>
           <span className="text-xl text-accent-100 ">{row.vaultId} </span>
         </th>
-        <th className="flex  items-center font-normal text-gray-200">
-          {row.debtSymbol}
+        <th className="flex  items-center gap-x-1 font-normal text-gray-200">
+          <ImageWithFallback
+            alt={row.debtSymbol}
+            src={getLogoAsset(row.collateralToken)}
+            width={20}
+            height={20}
+          />
+          <span className="text-[14px]">{row.debtSymbol}</span>
         </th>
-        <th className="font-normal text-gray-200">{row.collateralSymbol}</th>
+        <th className="flex items-center gap-x-1 font-normal text-gray-200">
+          <ImageWithFallback
+            alt={row.debtSymbol}
+            src={getLogoAsset(row.debtToken)}
+            width={20}
+            height={20}
+          />
+          <span className="text-[14px]">{row.collateralSymbol}</span>
+        </th>
         <th className="font-normal text-gray-200">
           {getLeverageRatio(parseInt(row.leverageTier))}x
         </th>
