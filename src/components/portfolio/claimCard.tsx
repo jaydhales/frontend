@@ -90,7 +90,7 @@ export default function ClaimCard() {
         </TransactionModal.StatSubmitContainer>
       </TransactionModal.Root>
       {/* <claimDataModal open={openModal} setOpen={setOpenModal} /> */}
-      <div className="rounded-md bg-secondary-600 px-2 py-2 text-2xl">
+      <div className="rounded-md bg-secondary-600 bg-opacity-40 px-2 py-2 text-2xl">
         <h2 className="flex items-center gap-x-1 pb-1 text-sm text-gray-200 ">
           <span>Dividends</span>
         </h2>
