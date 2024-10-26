@@ -29,6 +29,7 @@ export function Header() {
               <NavItem url={"/"}>Leverage</NavItem>
               <NavItem url={"/liquidity"}>Liquidity</NavItem>
               <NavItem url={"/portfolio"}>Portfolio</NavItem>
+              <NavItem url={"/sepolia"}>Sepolia</NavItem>
             </div>
             <NavItem url={"/stake"}>Stake</NavItem>
             <NavItem url={"/create-vault"}>Create Vault</NavItem>
