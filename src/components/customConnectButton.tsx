@@ -4,7 +4,9 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 export const CustomConnectButton = () => {
   return (
-    <ConnectButton.Custom>
+    <div id='connectButton'>
+
+    <ConnectButton.Custom >
       {({
         account,
         chain,
@@ -78,5 +80,6 @@ export const CustomConnectButton = () => {
         );
       }}
     </ConnectButton.Custom>
+    </div>
   );
 };

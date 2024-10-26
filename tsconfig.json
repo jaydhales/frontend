@@ -1,59 +1,32 @@
+
+
+
 {
   "compilerOptions": {
-    /* Base Options: */
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2022",
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
-    /* Strictness */
+    "skipLibCheck": true,
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "checkJs": true,
-    /* Bundled projects */
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "ES2022"
-    ],
+    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "jsx": "preserve",
+    "incremental": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "incremental": true,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    }
-    /* Path Aliases */
-    // "baseUrl": ".",
-    // "paths": {
-    //   "@/*": [
-    //     "./src/*"
-    //   ]
-    // }
+      "@/*": ["./src/*"]
+    },
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": [
-    ".eslintrc.cjs",
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.cjs",
-    "**/*.js",
-    ".next/types/**/*.ts",
-    "prettier.config.mjs",
-    "next.config.mjs"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", ".next", "generated", "tests"]
 }
