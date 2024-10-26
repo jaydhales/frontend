@@ -68,7 +68,7 @@ function Slider({
 }) {
   return (
     <div>
-      <div className="flex items-center gap-x-1  rounded-full border-2 border-secondary-400">
+      <div className="flex select-none items-center gap-x-1  rounded-full border-2 border-secondary-400">
         <Slide active={value === "all"} onClick={() => setValue("all")}>
           All
         </Slide>
