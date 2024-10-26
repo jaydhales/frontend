@@ -143,7 +143,7 @@ export function VaultTableRow({
             <div className="mt-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
               <DisplayBadgeInfo
                 variant={variant}
-                isApe={false}
+                isApe={isApe}
               ></DisplayBadgeInfo>
             </div>
           </HoverCardContent>
