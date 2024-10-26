@@ -9,17 +9,17 @@ import { TokenDisplay } from "../ui/token-display";
 export default function StakeCard() {
   const [openModal, setOpenModal] = useState(false);
   const { address, isConnected } = useAccount();
-  const { data: userUnstakedSir } = api.user.getTotalSirBalance.useQuery(
+  const { data: userUnstakedSir } = api.user.getUnstakedSirBalance.useQuery(
     { user: address },
     { enabled: isConnected },
   );
   return (
-    <div className="rounded-md bg-secondary-400 px-2 py-2 text-2xl">
+    <div className="rounded-md bg-secondary-400 bg-opacity-40 px-2 py-2 text-2xl">
       <StakeFormProvider>
         <StakeModal open={openModal} setOpen={setOpenModal} />
       </StakeFormProvider>
       <h2 className="flex items-center gap-x-1 pb-1 text-sm text-gray-200 ">
-        <span>Your Staked SIR</span>
+        <span>Your Unstaked SIR</span>
       </h2>
       <div className="flex items-center justify-between gap-x-2">
         <TokenDisplay
