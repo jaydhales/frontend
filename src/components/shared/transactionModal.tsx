@@ -41,7 +41,7 @@ function StatSubmitContainer({ children }: { children: ReactNode }) {
 
 function InfoContainer({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-tl-xl rounded-tr-xl bg-secondary-600 px-6 pb-6 pt-5">
+    <div className="rounded-tl-xl rounded-tr-xl bg-secondary-700 px-6 pb-6 pt-5">
       {children}
     </div>
   );

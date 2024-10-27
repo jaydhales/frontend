@@ -77,6 +77,19 @@ const StakeForm = () => {
     logs: transactionData?.logs,
     staking: true,
   });
+  const utils = api.useUtils();
+  useEffect(() => {
+    if (isConfirmed) {
+      utils.user.getTotalSirBalance.invalidate().catch((e) => console.log(e));
+      utils.user.getUnstakedSirBalance
+        .invalidate()
+        .catch((e) => console.log(e));
+    }
+  }, [
+    isConfirmed,
+    utils.user.getTotalSirBalance,
+    utils.user.getUnstakedSirBalance,
+  ]);
   useEffect(() => {
     if (isConfirmed && !open) {
       reset();
