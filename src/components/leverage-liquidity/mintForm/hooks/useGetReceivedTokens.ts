@@ -46,9 +46,9 @@ export function useGetReceivedTokens({ logs, apeAddress, isApe }: Props) {
             topics: log.topics,
           });
           console.log(parse);
-          if (parse.eventName === "Mint") {
+          if (parse.eventName === "TransferSingle") {
             console.log(parse.args);
-            setTokenReceived(parse.args.collateralIn);
+            setTokenReceived(parse.args.amount);
             return;
           }
         });
