@@ -24,6 +24,7 @@ import { TransactionStatus } from "../leverage-liquidity/mintForm/transactionSta
 import TransactionInfoCreateVault from "./transactionInfoCreateVault";
 import { api } from "@/trpc/react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useCheckValidityCreactVault } from "./hooks/useCheckValidityCreateVault";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -136,22 +137,10 @@ export default function CreateVaultForm() {
     }
     return { isValid: true, error: null };
   }, [formData.versusToken]);
-  const isValid = useMemo(() => {
-    if (vaultData === 0) {
-      return { isValid: false, error: "Invalid Vault." };
-    }
-    if (vaultData === 1) {
-      return { isValid: false, error: "No Uniswap Pool." };
-    }
-    if (vaultData === 3) {
-      return { isValid: false, error: "Vault Already Exists" };
-    }
-    if (data?.request) {
-      return { isValid: true, error: undefined };
-    } else {
-      return { isValid: false, error: "" };
-    }
-  }, [data?.request, vaultData]);
+  const isValid = useCheckValidityCreactVault({
+    vaultSimulation: Boolean(data?.request),
+    vaultData,
+  });
   console.log(isValid, "");
   const [openModal, setOpenModal] = useState(false);
   return (
