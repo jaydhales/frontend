@@ -10,7 +10,7 @@ export function useCheckValidityCreactVault({
 }: Props) {
   const isValid = useMemo(() => {
     if (vaultData === 0) {
-      return { isValid: false, error: "Invalid Vault." };
+      return { isValid: false, error: "Invalid token address(es)" };
     }
     if (vaultData === 1) {
       return { isValid: false, error: "No Uniswap Pool." };

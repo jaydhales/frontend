@@ -98,25 +98,15 @@ export default function CreateVaultForm() {
       enabled,
     },
   );
-  console.log(
-    vaultData,
-
-    {
-      debtToken: formData.versusToken,
-      collateralToken: formData.longToken,
-      leverageTier: parseFloat(formData.leverageTier),
-    },
-    "VAULTID",
-  );
   const longTokenValid = useMemo(() => {
     if (formData.longToken.length !== 42 && formData.longToken.length > 0) {
-      return { isValid: false, error: "Invalid Long Token Address!" };
+      return { isValid: false, error: "Invalid Token Address!" };
     }
     if (formData.longToken.length === 42) {
       if (!formData.longToken.startsWith("0x")) {
         return {
           isValid: false,
-          error: "Long Token has an Invalid Address.",
+          error: "Invalid Token Address!",
         };
       }
     }
@@ -124,14 +114,14 @@ export default function CreateVaultForm() {
   }, [formData.longToken]);
   const versusTokenValid = useMemo(() => {
     if (formData.versusToken.length !== 42 && formData.versusToken.length > 0) {
-      return { isValid: false, error: "Invalid Versus Token Address!" };
+      return { isValid: false, error: "Invalid Token Address!" };
     }
 
     if (formData.versusToken.length === 42) {
       if (!formData.versusToken.startsWith("0x")) {
         return {
           isValid: false,
-          error: "Versus Token has an Invalid Address.",
+          error: "Invalid Token Address!",
         };
       }
     }
