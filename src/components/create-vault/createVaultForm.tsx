@@ -173,7 +173,7 @@ export default function CreateVaultForm() {
             <TokenInput name="longToken" title="Long Token" />
             {!longTokenValid.isValid && (
               <span className="text-sm text-red-400">
-                {versusTokenValid.error}
+                {longTokenValid.error}
               </span>
             )}
             <QuickSelects name="longToken" tokens={tokens} />
