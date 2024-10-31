@@ -24,7 +24,7 @@ export default function FeedBackForm() {
   return (
     <div
       data-state={openForm ? "opened" : "closed"}
-      className="w-[300px]  rounded-md bg-secondary px-3 py-2 text-white transition-all data-[state=opened]:w-[500px]"
+      className="hidden w-[300px] rounded-md bg-secondary px-3 py-2 text-white transition-all duration-300 data-[state=opened]:w-[500px] md:block"
     >
       <div
         onClick={() => setOpenForm(!openForm)}
@@ -32,7 +32,7 @@ export default function FeedBackForm() {
       >
         <h3 className=" text-gray-100">Send Feedback</h3>
         <ChevronDown
-          className=" data-[state=opened]:rotate-180"
+          className=" transition-transform data-[state=opened]:rotate-180"
           data-state={openForm ? "opened" : "closed"}
         />
       </div>
