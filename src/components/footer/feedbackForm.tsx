@@ -2,6 +2,7 @@
 import { postFeedBack } from "@/lib/db/actions";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
+import { ChevronDown } from "lucide-react";
 
 export default function FeedBackForm() {
   const [feedback, setFeedback] = useState("");
@@ -15,36 +16,53 @@ export default function FeedBackForm() {
       })
       .catch((e) => console.log(e));
   };
+
+  const [openForm, setOpenForm] = useState(false);
   if (successSubmit) {
-    return <h2>Thanks for submitting feedback!</h2>;
+    return <h2 className="text-white">Thanks for submitting feedback!</h2>;
   }
   return (
-    <form
-      className="rounded-md bg-secondary p-2 text-white"
-      onSubmit={(e) => {
-        e.preventDefault();
-        submit();
-      }}
+    <div
+      data-state={openForm ? "opened" : "closed"}
+      className="w-[300px]  rounded-md bg-secondary px-3 py-2 text-white transition-all data-[state=opened]:w-[500px]"
     >
-      <h1>Send Feedback</h1>
-      <div>
-        <div>
-          <label htmlFor="feedback">Feedback</label>
-        </div>
-        <input
-          type="text"
-          className="text-black"
-          value={feedback}
-          onChange={(e) => setFeedback(e.target.value)}
-          id="feedback"
-          name="feedback"
+      <div
+        onClick={() => setOpenForm(!openForm)}
+        className="flex cursor-pointer justify-between"
+      >
+        <h3 className="">Send Feedback</h3>
+        <ChevronDown
+          className=" data-[state=opened]:rotate-180"
+          data-state={openForm ? "opened" : "closed"}
         />
       </div>
-      <div className="py-2">
-        <Button aria-label="Submit" variant={"modal"}>
-          Submit
-        </Button>
-      </div>
-    </form>
+      {openForm && (
+        <form
+          className="py-2 text-white"
+          onSubmit={(e) => {
+            e.preventDefault();
+            submit();
+          }}
+        >
+          <div>
+            <div>
+              <label htmlFor="feedback">Feedback</label>
+            </div>
+            <textarea
+              className="w-full rounded-md border border-secondary-100 bg-secondary-400  text-white"
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              id="feedback"
+              name="feedback"
+            />
+          </div>
+          <div className="py-2">
+            <Button aria-label="Submit" className="w-full py-2">
+              Submit
+            </Button>
+          </div>
+        </form>
+      )}
+    </div>
   );
 }
