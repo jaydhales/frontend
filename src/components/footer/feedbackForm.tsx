@@ -30,7 +30,7 @@ export default function FeedBackForm() {
         onClick={() => setOpenForm(!openForm)}
         className="flex cursor-pointer justify-between"
       >
-        <h3 className="">Send Feedback</h3>
+        <h3 className=" text-gray-100">Send Feedback</h3>
         <ChevronDown
           className=" data-[state=opened]:rotate-180"
           data-state={openForm ? "opened" : "closed"}
@@ -45,8 +45,10 @@ export default function FeedBackForm() {
           }}
         >
           <div>
-            <div>
-              <label htmlFor="feedback">Feedback</label>
+            <div className="pb-1">
+              <label className="text-gray-300" htmlFor="feedback">
+                Feedback
+              </label>
             </div>
             <textarea
               className="w-full rounded-md border border-secondary-100 bg-secondary-400  text-white"
