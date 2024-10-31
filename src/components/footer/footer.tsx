@@ -2,9 +2,8 @@ import FeedBackForm from "./feedbackForm";
 
 export default function Footer() {
   return (
-    <div className="flex  flex-grow items-end px-[16px] py-[24px]">
-      <div>
-        <FeedBackForm />
+    <div className="flex  flex-grow items-end px-[16px] py-[32px]">
+      <div className="flex w-full items-end justify-between">
         <nav className="flex gap-x-4 text-[14px] text-muted-foreground ">
           <a className="hover:text-white" href="">
             About
@@ -16,6 +15,8 @@ export default function Footer() {
             Whitepaper
           </a>
         </nav>
+
+        <FeedBackForm />
       </div>
     </div>
   );
