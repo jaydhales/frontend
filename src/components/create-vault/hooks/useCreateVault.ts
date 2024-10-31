@@ -14,8 +14,15 @@ export function useCreateVault({
     lt = 0;
   }
   console.log(lt, "LT");
-  const { data, error } = useSimulateContract({
+  const enabled = Boolean(versusToken !== "" && longToken !== "");
+
+  const vault = {
     ...VaultContract,
+    address: enabled ? VaultContract.address : undefined,
+  };
+  // return undefined address to avoid simulation
+  const { data } = useSimulateContract({
+    ...vault,
     functionName: "initialize",
     args: [
       {
@@ -25,6 +32,5 @@ export function useCreateVault({
       },
     ],
   });
-  console.log(data, error, "ERROR");
   return data;
 }

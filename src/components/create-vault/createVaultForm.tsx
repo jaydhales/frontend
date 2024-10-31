@@ -24,6 +24,7 @@ import { TransactionStatus } from "../leverage-liquidity/mintForm/transactionSta
 import TransactionInfoCreateVault from "./transactionInfoCreateVault";
 import { api } from "@/trpc/react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useCheckValidityCreactVault } from "./hooks/useCheckValidityCreateVault";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -97,25 +98,15 @@ export default function CreateVaultForm() {
       enabled,
     },
   );
-  console.log(
-    vaultData,
-
-    {
-      debtToken: formData.versusToken,
-      collateralToken: formData.longToken,
-      leverageTier: parseFloat(formData.leverageTier),
-    },
-    "VAULTID",
-  );
   const longTokenValid = useMemo(() => {
     if (formData.longToken.length !== 42 && formData.longToken.length > 0) {
-      return { isValid: false, error: "Invalid Long Token Address!" };
+      return { isValid: false, error: "Invalid Token Address!" };
     }
     if (formData.longToken.length === 42) {
       if (!formData.longToken.startsWith("0x")) {
         return {
           isValid: false,
-          error: "Long Token has an Invalid Address.",
+          error: "Invalid Token Address!",
         };
       }
     }
@@ -123,35 +114,23 @@ export default function CreateVaultForm() {
   }, [formData.longToken]);
   const versusTokenValid = useMemo(() => {
     if (formData.versusToken.length !== 42 && formData.versusToken.length > 0) {
-      return { isValid: false, error: "Invalid Versus Token Address!" };
+      return { isValid: false, error: "Invalid Token Address!" };
     }
 
     if (formData.versusToken.length === 42) {
       if (!formData.versusToken.startsWith("0x")) {
         return {
           isValid: false,
-          error: "Versus Token has an Invalid Address.",
+          error: "Invalid Token Address!",
         };
       }
     }
     return { isValid: true, error: null };
   }, [formData.versusToken]);
-  const isValid = useMemo(() => {
-    if (vaultData === 0) {
-      return { isValid: false, error: "Invalid Vault." };
-    }
-    if (vaultData === 1) {
-      return { isValid: false, error: "No Uniswap Pool." };
-    }
-    if (vaultData === 3) {
-      return { isValid: false, error: "Vault Already Exists" };
-    }
-    if (data?.request) {
-      return { isValid: true, error: undefined };
-    } else {
-      return { isValid: false, error: "" };
-    }
-  }, [data?.request, vaultData]);
+  const isValid = useCheckValidityCreactVault({
+    vaultSimulation: Boolean(data?.request),
+    vaultData,
+  });
   console.log(isValid, "");
   const [openModal, setOpenModal] = useState(false);
   return (
@@ -194,7 +173,7 @@ export default function CreateVaultForm() {
             <TokenInput name="longToken" title="Long Token" />
             {!longTokenValid.isValid && (
               <span className="text-sm text-red-400">
-                {versusTokenValid.error}
+                {longTokenValid.error}
               </span>
             )}
             <QuickSelects name="longToken" tokens={tokens} />
