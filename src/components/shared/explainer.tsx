@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Card } from "../ui/card";
 import { z } from "zod";
 import { EPage } from "@/lib/types";
-import TransactionModal from "../shared/transactionModal";
 import CloseModalButton from "../shared/closeModalButton";
 import { Explainers } from "@/data/copy";
 const sirExplainerLocalStorageSchema = z.object({
@@ -59,7 +58,7 @@ export default function Explainer({ page }: Props) {
     setShowExplainer(false);
     try {
       const rawSir = window.localStorage.getItem("sir_explainers");
-      const explainerJson = JSON.parse(rawSir ?? "");
+      const explainerJson = JSON.parse(rawSir ?? "") as unknown;
       const parsedObject =
         sirExplainerLocalStorageSchema.safeParse(explainerJson);
       if (parsedObject.success) {
