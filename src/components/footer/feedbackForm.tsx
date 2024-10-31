@@ -51,7 +51,7 @@ export default function FeedBackForm() {
               </label>
             </div>
             <textarea
-              className="w-full rounded-md border border-secondary-100 bg-secondary-400  text-white"
+              className="w-full rounded-md border border-secondary-100 bg-secondary-400 p-1  text-white"
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
               id="feedback"
