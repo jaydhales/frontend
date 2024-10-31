@@ -6,6 +6,7 @@ import type { TVaults } from "@/lib/types";
 import { Container } from "@/components/ui/container";
 import VaultTable from "./vaultTable/vaultTable";
 import MintForm from "./mintForm/mintForm";
+import Explainer from "./explainer";
 
 export default function LeverageLiquidityContent({
   vaultsQuery,
@@ -17,6 +18,7 @@ export default function LeverageLiquidityContent({
 }) {
   return (
     <Container>
+      <Explainer />
       <div className="grid w-full gap-x-[16px] gap-y-4 xl:grid-cols-2">
         <MintFormProvider>
           <MintForm vaultsQuery={vaultsQuery} isApe={isApe} />
