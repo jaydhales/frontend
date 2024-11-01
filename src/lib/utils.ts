@@ -7,6 +7,7 @@ import { z } from "zod";
 import numeral from "numeral";
 import { BASE_FEE, L_FEE } from "@/data/constants";
 import { env } from "@/env";
+import { X509Certificate } from "crypto";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -123,16 +124,6 @@ export function getApeAddress({
   vaultAddress: TAddressString;
   apeHash: TAddressString;
 }) {
-  // if (vaultId === undefined) {
-  //   return "0xff" as TAddressString;
-  // }
-  // const packed = encodePacked(
-  //   ["bytes1", "bytes20", "bytes32", "bytes32"],
-  //   ["0xff", vaultAddress, toHex(vaultId, { size: 32 }), apeHash],
-  // );
-  // const raw = keccak256(packed);
-  // const result = ("0x" + raw.slice(-40)) as TAddressString;
-
   return vaultId;
 }
 
@@ -182,6 +173,20 @@ export function formatBigInt(b: bigint | undefined, fixed: number) {
     Math.floor(parseFloat(formatUnits(b ?? 0n, 18)) * 10 ** fixed) /
     10 ** fixed;
   return parseFloat(parsed.toFixed(fixed));
+}
+
+export function calculateStakingAPR(
+  stakedSir: bigint,
+  amountEth: bigint,
+  rounding: bigint,
+) {
+  const totalValue = 500n / 3n;
+  const sirPrice = totalValue / 20000000n;
+  const ethPrice = 2000n;
+  // need rounding because bigint doesn't go below 0, too keep decimals places
+  const result =
+    (12n * 100n * amountEth * ethPrice * rounding) / (sirPrice * stakedSir);
+  return result / rounding;
 }
 
 /**
