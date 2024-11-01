@@ -259,11 +259,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 {Boolean(tokenReceived) && (
                   <h3 className="flex items-center justify-center gap-x-1 ">
                     <span className="text-xl font-bold ">
-                      {isApe ? "APE" : "TEA"}{" "}
-                      {formatNumber(
-                        formatUnits(tokenReceived ?? 0n, decimals),
-                        4,
-                      )}
+                      <TokenDisplay
+                        amount={tokenReceived}
+                        unitLabel={isApe ? "APE" : "TEA"}
+                      />
                     </span>
                   </h3>
                 )}
