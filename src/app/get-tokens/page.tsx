@@ -31,7 +31,7 @@ export default function Page() {
   };
   return (
     <Container className="pt-[44px]">
-      <Card className="flex flex-col items-center justify-center bg-secondary-700 p-4 text-white">
+      <Card className="flex  flex-col items-center justify-center bg-secondary-700 p-4 text-white">
         <h1 className="mb-6 text-2xl  ">Sepolia Utilities</h1>
 
         <div className="flex gap-x-3 text-accent-100">
@@ -58,7 +58,7 @@ export default function Page() {
           </a>
         </div>
 
-        <div className="mt-8 w-full max-w-md rounded-lg bg-secondary-400 bg-opacity-40 p-6 shadow-md ">
+        <div className="mt-8 rounded-lg bg-secondary-400 bg-opacity-40 p-6 shadow-md ">
           <h2 className="mb-4 text-lg text-gray-200">Mock Tokens</h2>
           <div className="flex justify-between ">
             <div className="">
@@ -89,7 +89,7 @@ export default function Page() {
             <h3 className="py-2 text-center text-lg text-gray-200">
               Token Info
             </h3>
-            <div className="flex gap-x-6">
+            <div className=" ">
               <div>
                 <h3 className="pb-2 text-lg text-gray-200">METH</h3>
                 <div className="">
@@ -138,10 +138,11 @@ function Row({
   value: string;
 }) {
   return (
-    <div className="flex justify-between gap-x-4">
+    <div className="flex  justify-between gap-x-4">
       <h3 className="text-gray-400">{title}</h3>
       <div className="flex items-center gap-x-1">
-        <h4>{value}</h4>
+        <h4 className="text-sm">{value}</h4>
+
         {copy && (
           <Copy
             size={16}
