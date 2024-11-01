@@ -1,7 +1,14 @@
 import type { UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
 import type { CreateVaultInputValues } from "./schemas";
-
+export enum EPage {
+  "LEVERAGE",
+  "LIQUIDITY",
+  "PORTFOLIO",
+  "STAKE",
+  "AUCTIONS",
+  "CREATE_VAULT",
+}
 export type TCollateral = readonly {
   reserveApes: bigint;
   reserveLPers: bigint;

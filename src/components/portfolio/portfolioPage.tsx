@@ -7,11 +7,14 @@ import { UnstakeCard } from "./unstakeCard";
 import ClaimCard from "./claimCard";
 import { SirCard } from "./sirCard";
 import ContributorClaim from "./contributorClaim";
+import Explainer from "../shared/explainer";
+import { EPage } from "@/lib/types";
 export default function PortfolioPage() {
   const [value, setValue] = useState<"ape" | "tea" | "all">("all");
   return (
     <div className="lg:w-[900px] ">
-      <div className="pt-[44px]"></div>
+      <div className="pt-[44px]" />
+      <Explainer page={EPage.PORTFOLIO} />
       <Container className="space-y-4">
         <div className="grid grid-cols-2 gap-x-4">
           <Card>
@@ -29,7 +32,7 @@ export default function PortfolioPage() {
               <SirCard />
             </div>
 
-            <div className="pt-2"></div>
+            <div className="pt-2" />
             {/* <ContributorClaim /> */}
           </Card>
           <Card className=" w-full px-4 py-4">

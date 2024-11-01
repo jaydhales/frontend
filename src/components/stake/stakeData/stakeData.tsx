@@ -24,7 +24,7 @@ const StakeData = () => {
   const userStakedSir = useGetStakedSir();
 
   return (
-    <div className="mx-auto grid w-[600px] grid-cols-3 gap-x-4 py-[24px] ">
+    <div className="mx-auto grid w-[600px] grid-cols-3 gap-x-4  ">
       <div className="flex flex-col  items-center justify-center gap-2 rounded-md bg-secondary py-2">
         <div className="text-sm font-medium text-gray-300">
           Total Staked SIR

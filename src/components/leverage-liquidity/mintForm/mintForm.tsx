@@ -187,7 +187,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     if (submitType === ESubmitType.approve) {
       setIsApproving(true);
     }
-  }, [isConfirming, submitType]);
+  }, [submitType]);
   const utils = api.useUtils();
   useEffect(() => {
     if (isConfirmed && isApproving) {
@@ -205,7 +205,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     if (!isPending && !isConfirming && !isConfirmed) {
       setOpenTransactionModal(false);
     }
-  }, [isPending, isConfirmed, isConfirming]);
+  }, [isPending, isConfirming, isConfirmed]);
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -289,7 +289,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                     " " +
                     form.getValues("long").split(",")[1]
                   }
-                ></TransactionModal.StatRow>
+                />
               </TransactionModal.StatContainer>
             )}
             {
