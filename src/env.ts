@@ -28,6 +28,8 @@ export const env = createEnv({
     NEXT_PUBLIC_SIR_ADDRESS: z.string(),
     NEXT_PUBLIC_VAULT_ADDRESS: z.string(),
     NEXT_PUBLIC_CHAIN_ID: z.string(),
+    NEXT_PUBLIC_BASE_FEE: z.string(),
+    NEXT_PUBLIC_MINTING_FEE: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
