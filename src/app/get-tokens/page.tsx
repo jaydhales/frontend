@@ -94,7 +94,11 @@ export default function Page() {
                 <h3 className="pb-2 text-lg text-gray-200">METH</h3>
                 <div className="">
                   <Row title="Symbol" value="METH" />
-                  <Row title="Address" value="0x123232" />
+                  <Row
+                    copy
+                    title="Address"
+                    value="0x7Aef48AdbFDc1262161e71Baf205b47316430067"
+                  />
                 </div>
               </div>
 
@@ -102,7 +106,11 @@ export default function Page() {
                 <h3 className="pb-2 text-lg  text-gray-200">TARP</h3>
                 <div className="">
                   <Row title="Symbol" value="TARP" />
-                  <Row title="Address" value="0x123232" />
+                  <Row
+                    copy
+                    title="Address"
+                    value="0x7Aef48AdbFDc1262161e71Baf205b47316430067"
+                  />
                 </div>
               </div>
             </div>
@@ -120,21 +128,31 @@ export default function Page() {
     </Container>
   );
 }
-function Row({ title, value }: { title: string; value: string }) {
+function Row({
+  title,
+  value,
+  copy,
+}: {
+  copy?: boolean;
+  title: string;
+  value: string;
+}) {
   return (
     <div className="flex justify-between gap-x-4">
       <h3 className="text-gray-400">{title}</h3>
       <div className="flex items-center gap-x-1">
         <h4>{value}</h4>
-        <Copy
-          size={16}
-          onClick={async () => {
-            try {
-              await navigator.clipboard.writeText(value);
-            } catch {} //let it fail silently
-          }}
-          className="cursor-pointer text-gray-400"
-        />
+        {copy && (
+          <Copy
+            size={16}
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(value);
+              } catch {} //let it fail silently
+            }}
+            className="cursor-pointer text-gray-400"
+          />
+        )}
       </div>
     </div>
   );
