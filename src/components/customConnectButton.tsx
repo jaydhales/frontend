@@ -67,9 +67,9 @@ export const CustomConnectButton = () => {
                     type="button"
                   >
                     {account.displayName}
-                    {account.displayBalance
-                      ? ` (${account.displayBalance})`
-                      : ""}
+                    {/* {account.displayBalance */}
+                    {/*   ? ` (${account.displayBalance})` */}
+                    {/*   : ""} */}
                   </Button>
                 </div>
               );
