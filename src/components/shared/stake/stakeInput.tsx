@@ -10,7 +10,7 @@ import { BalancePercent } from "@/components/shared/balancePercent";
 
 import sir_logo from "@/../public/images/sir-logo.svg";
 import Image, { type StaticImageData } from "next/image";
-import { formatNumber } from "@/lib/utils";
+import { formatNumber, inputPatternMatch } from "@/lib/utils";
 
 interface Props {
   form: TUnstakeForm;
@@ -44,9 +44,9 @@ const StakeInput = ({ form, balance }: Props) => {
                     step="any"
                     {...field}
                     onChange={(e) => {
-                      const pattern = /^[0-9]*[.,]?[0-9]*$/;
-                      if (pattern.test(e.target.value))
-                        return field.onChange(e.target.value);
+                      if (inputPatternMatch(e.target.value)) {
+                        field.onChange(e.target.value);
+                      }
                     }}
                   ></Input>
                 </FormControl>
