@@ -9,10 +9,12 @@ import { SirCard } from "./sirCard";
 import ContributorClaim from "./contributorClaim";
 import Explainer from "../shared/explainer";
 import { EPage } from "@/lib/types";
+import PageHeadingSpace from "../shared/pageHeadingSpace";
 export default function PortfolioPage() {
   const [value, setValue] = useState<"ape" | "tea" | "all">("all");
   return (
     <div className="lg:w-[900px] ">
+      <PageHeadingSpace />
       {/* <div className="pt-[44px]" /> */}
       <Container className="space-y-4">
         <Explainer page={EPage.PORTFOLIO} />
