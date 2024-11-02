@@ -7,7 +7,7 @@ import StakeCard from "./stakeCard";
 const StakeTabs = () => {
   return (
     <div className="pt-6">
-        <Card className="mx-auto grid w-[600px]  gap-y-4">
+      <Card className="mx-auto grid gap-y-4  md:w-[600px]">
         <div>
           <StakeCard />
         </div>
