@@ -34,12 +34,10 @@ export function useGetReceivedTokens({ logs, apeAddress, isApe }: Props) {
           }
         });
       } else {
-        console.log(logs, VaultContract.address);
         const foundLogs = logs.filter(
           (l) =>
             l.address.toLowerCase() === VaultContract.address.toLowerCase(),
         );
-        console.log(foundLogs);
         if (!foundLogs) return;
         foundLogs.forEach((log) => {
           const parse = decodeEventLog({
@@ -48,9 +46,9 @@ export function useGetReceivedTokens({ logs, apeAddress, isApe }: Props) {
             topics: log.topics,
           });
           console.log(parse);
-          if (parse.eventName === "Mint") {
+          if (parse.eventName === "TransferSingle") {
             console.log(parse.args);
-            setTokenReceived(parse.args.collateralIn);
+            setTokenReceived(parse.args.amount);
             return;
           }
         });

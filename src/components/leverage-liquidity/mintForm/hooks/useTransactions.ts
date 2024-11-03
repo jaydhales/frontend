@@ -1,6 +1,5 @@
 import { useApproveErc20 } from "@/components/shared/hooks/useApproveErc20";
 import { useMintApeOrTea } from "@/components/shared/hooks/useMintApeOrTea";
-import { AssistantContract } from "@/contracts/assistant";
 import { VaultContract } from "@/contracts/vault";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import { formatDataInput, findVault } from "@/lib/utils";
@@ -27,7 +26,7 @@ export function useTransactions({
   const formData = form.watch();
 
   const { address } = useAccount();
-  const { data: userBalance } = api.user.getBalance.useQuery(
+  const { data: userBalance, isFetching } = api.user.getBalance.useQuery(
     {
       userAddress: address,
       tokenAddress: formatDataInput(formData.long),
@@ -61,6 +60,7 @@ export function useTransactions({
     isApproveFetching: approveSimulate.isFetching,
     isMintFetching: mintFetching,
     userBalance,
+    userBalanceFetching: isFetching,
   };
 }
 

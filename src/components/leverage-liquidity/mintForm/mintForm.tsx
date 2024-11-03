@@ -22,11 +22,12 @@ import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
 import { TransactionStatus } from "./transactionStatus";
-import { CircleCheck } from "lucide-react";
+import { CircleCheck, Plus } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { TransactionEstimates } from "./transactionEstimates";
+import { TokenDisplay } from "@/components/ui/token-display";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -36,8 +37,14 @@ interface Props {
  * Contains form actions and validity.
  */
 export default function MintForm({ vaultsQuery, isApe }: Props) {
+  const [useEthRaw, setUseEth] = useState(false);
+  const { address } = useAccount();
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
+  const { data: userEthBalance } = api.user.getEthBalance.useQuery(
+    { userAddress: address },
+    { enabled: Boolean(address) && Boolean(formData.long) },
+  );
 
   const { data: decimalData } = api.erc20.getErc20Decimals.useQuery(
     {
@@ -49,7 +56,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   );
 
   let decimals = decimalData ?? 18;
-  const [useEthRaw, setUseEth] = useState(false);
   const useEth = useMemo(() => {
     // Ensure use eth toggle is not used on non-weth tokens
     if (
@@ -61,13 +67,18 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
   }, [useEthRaw, formData.long]);
 
-  const { requests, isApproveFetching, isMintFetching, userBalance } =
-    useTransactions({
-      useEth,
-      isApe,
-      vaultsQuery,
-      decimals,
-    });
+  const {
+    requests,
+    userBalanceFetching,
+    isApproveFetching,
+    isMintFetching,
+    userBalance,
+  } = useTransactions({
+    useEth,
+    isApe,
+    vaultsQuery,
+    decimals,
+  });
   if (useEth) {
     decimals = 18;
   }
@@ -75,12 +86,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     formData,
     vaultsQuery,
   });
-  const { address } = useAccount();
-
-  const { data: userEthBalance } = api.user.getEthBalance.useQuery(
-    { userAddress: address },
-    { enabled: Boolean(address) && Boolean(formData.long) },
-  );
 
   const { writeContract, data: hash, isPending, reset } = useWriteContract();
   const {
@@ -176,15 +181,31 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       setOpenTransactionModal(false);
     }
   };
-  let submitButtonText =
-    submitType === ESubmitType.mint ? "Confirm Mint" : "Confirm Approve";
-  if (isConfirmed) {
-    submitButtonText = "Close";
-  }
-  if (isPending || isConfirming) {
-    submitButtonText = "Pending...";
-  }
+  const [isApproving, setIsApproving] = useState(false);
+  // Below is logic to prevent a Approval transaction from showing "Transaction Successful" in modal.
+  useEffect(() => {
+    if (submitType === ESubmitType.approve) {
+      setIsApproving(true);
+    }
+  }, [submitType]);
+  const utils = api.useUtils();
+  useEffect(() => {
+    if (isConfirmed && isApproving) {
+      utils.user.getBalance
+        .invalidate()
+        .then(() => {
+          reset();
+          setIsApproving(false);
+        })
+        .catch((e) => console.log(e));
+    }
+  }, [isApproving, reset, isConfirmed, utils.user.getBalance]);
   const deposit = form.getValues("deposit");
+  useEffect(() => {
+    if (!isPending && !isConfirming && !isConfirmed) {
+      setOpenTransactionModal(false);
+    }
+  }, [isPending, isConfirming, isConfirmed]);
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -197,7 +218,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             {!isConfirmed && (
               <>
                 <TransactionStatus
-                  isTxPending={isConfirming}
+                  showLoading={isConfirming || userBalanceFetching}
                   waitForSign={isPending}
                   action={submitType === ESubmitType.mint ? "Mint" : "Approve"}
                 />
@@ -222,17 +243,28 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 )}
               </>
             )}
-
-            {isConfirmed && (
+            {isConfirming && isApproving && (
+              <div>
+                <h1>Loading...</h1>
+              </div>
+            )}
+            {isConfirmed && !isApproving && (
               <div className="space-y-2">
-                <div className="flex justify-center">
+                <div className="flex animate-fade-in justify-center">
                   <CircleCheck size={40} color="#F0C775" />
                 </div>
-                <h2 className="text-center">Transaction Successful!</h2>
+                <h2 className="text-center text-gray-300">
+                  Transaction Successful!
+                </h2>
                 {Boolean(tokenReceived) && (
-                  <h3 className="text-center">
-                    {isApe ? "APE" : "TEA"} received:{" "}
-                    {formatNumber(formatUnits(tokenReceived ?? 0n, 18), 6)}
+                  <h3 className="flex items-center justify-center gap-x-1 ">
+                    <span className="text-xl font-bold ">
+                      {isApe ? "APE" : "TEA"}{" "}
+                      {formatNumber(
+                        formatUnits(tokenReceived ?? 0n, decimals),
+                        4,
+                      )}
+                    </span>
                   </h3>
                 )}
               </div>
@@ -243,17 +275,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             {submitType === ESubmitType.mint && !isConfirmed && (
               <TransactionModal.StatContainer>
                 <TransactionModal.StatRow
-                  info={
-                    isApe
-                      ? "Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
-                      : "Gentlemen pay fees when minting and burning liquidity. These fees deter attacks and reward early liquidity providers. It's advantageous to mint TEA early and burn it late."
-                  }
                   title={"Fee Percent"}
                   value={fee ? fee.toString() + "%" : "0%"}
                 />
 
                 <TransactionModal.StatRow
-                  info=""
                   title="Fee Amount"
                   value={
                     formatNumber(
@@ -263,7 +289,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                     " " +
                     form.getValues("long").split(",")[1]
                   }
-                ></TransactionModal.StatRow>
+                />
               </TransactionModal.StatContainer>
             )}
             {
@@ -271,8 +297,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 onClick={modalSubmit}
                 disabled={(!isValid && !isConfirmed) || isPending}
                 loading={isPending || isConfirming}
+                isConfirmed={isConfirmed}
               >
-                {submitButtonText}
+                {submitType === ESubmitType.mint
+                  ? "Confirm Mint"
+                  : "Confirm Approve"}
               </TransactionModal.SubmitButton>
             }
           </TransactionModal.StatSubmitContainer>
@@ -300,17 +329,27 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <Estimations
           isApe={isApe}
           disabled={!Boolean(quoteData)}
-          ape={formatNumber(formatUnits(quoteData ?? 0n, decimals))}
+          ape={formatNumber(formatUnits(quoteData ?? 0n, 18))}
         />
 
         <MintFormSubmit.Root>
           <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
           <MintFormSubmit.OpenTransactionModalButton
             isValid={isValid}
-            onClick={() => setOpenTransactionModal(true)}
+            onClick={() => {
+              setOpenTransactionModal(true);
+              onSubmit();
+            }}
             submitType={submitType}
           />
           <MintFormSubmit.ConnectButton />
+          <MintFormSubmit.FeeInfo
+            feeValue={form.getValues("long").split(",")[1]}
+            isApe={isApe}
+            isValid={isValid}
+            fee={fee}
+            deposit={form.getValues("deposit")}
+          />
           <MintFormSubmit.Errors>
             <>{form.formState.errors.root?.message}</>
           </MintFormSubmit.Errors>

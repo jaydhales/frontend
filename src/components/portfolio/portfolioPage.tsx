@@ -3,30 +3,52 @@ import React, { useState } from "react";
 import BurnTable from "./burnTable/burnTable";
 import { Card } from "../ui/card";
 import { Container } from "../ui/container";
-// import PageHeader from "../shared/pageHeader";
-import { StakedCard } from "./stakedCard";
+import { UnstakeCard } from "./unstakeCard";
 import ClaimCard from "./claimCard";
 import { SirCard } from "./sirCard";
-
+import ContributorClaim from "./contributorClaim";
+import Explainer from "../shared/explainer";
+import { EPage } from "@/lib/types";
 export default function PortfolioPage() {
   const [value, setValue] = useState<"ape" | "tea" | "all">("all");
   return (
-    <div className="xl:w-[1250px] lg:w-[1000px]">
-      <div className="pt-[44px]"></div>
-      <Container>
-        <Card className=" px-4 w-full">
-          <div className="space-y-3 ">
-            <SirCard />
-            <div className="grid grid-cols-2 pt-2  gap-x-3">
-              {/* <SirCard /> */}
-              <StakedCard />
-              <ClaimCard />
+    <div className="lg:w-[900px] ">
+      <div className="pt-[44px]" />
+      <Explainer page={EPage.PORTFOLIO} />
+      <Container className="space-y-4">
+        <div className="grid grid-cols-2 gap-x-4">
+          <Card>
+            <div className="flex h-full flex-col justify-between">
+              <div className="flex justify-between">
+                <div>
+                  <h1 className="text-xl">SIR Staking</h1>
+                  <h2 className="text-[14px] text-gray-400">
+                    Staking sir results in...
+                  </h2>
+                </div>
+                <ContributorClaim />
+              </div>
+
+              <SirCard />
             </div>
-          </div>
-          <div className="pt-8"></div>
-          <div className="bg-secondary-400 px-4 py-2 rounded-md">
-            <div className="flex  justify-between items-center pb-4 lg:pb-8 ">
-              <h2 className="flex text-gray-200 gap-x-1 pb-1 items-center text-sm ">
+
+            <div className="pt-2" />
+            {/* <ContributorClaim /> */}
+          </Card>
+          <Card className=" w-full px-4 py-4">
+            <div className="space-y-3 ">
+              <div className="grid  gap-y-3">
+                {/* <SirCard /> */}
+                <UnstakeCard />
+                <ClaimCard />
+              </div>
+            </div>
+          </Card>
+        </div>
+        <Card className="py-4">
+          <div className="rounded-md bg-secondary-600 bg-opacity-40 px-4 py-2">
+            <div className="flex  items-center justify-between pb-4 lg:pb-8 ">
+              <h2 className="flex items-center gap-x-1 pb-1 text-sm text-gray-200 ">
                 <span>My Tokens</span>
               </h2>
               <Slider value={value} setValue={setValue} />
@@ -49,7 +71,7 @@ function Slider({
 }) {
   return (
     <div>
-      <div className="rounded-full flex gap-x-1  items-center border border-secondary-100">
+      <div className="flex select-none items-center gap-x-1  rounded-full border-2 border-secondary-400">
         <Slide active={value === "all"} onClick={() => setValue("all")}>
           All
         </Slide>
@@ -77,7 +99,7 @@ function Slide({
     <div
       onClick={onClick}
       data-active={active ? "true" : ""}
-      className=" w-12 text-center data-[active=true]:bg-secondary-100 rounded-full px-3 text-sm py-1 cursor-pointer"
+      className=" w-12 cursor-pointer rounded-full px-3 py-1 text-center text-sm data-[active=true]:bg-secondary-400"
     >
       {children}
     </div>

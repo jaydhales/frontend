@@ -17,11 +17,11 @@ interface Props {
   balance?: string;
 }
 
-const UnstakeInput = ({ form, balance }: Props) => {
+const StakeInput = ({ form, balance }: Props) => {
   const logo = sir_logo as StaticImageData;
 
   return (
-    <div className="rounded-md bg-secondary-300 px-3 py-2">
+    <div className="rounded-md bg-secondary-500 px-3 py-2">
       <FormLabel htmlFor="stake">Amount</FormLabel>
       <div className="flex justify-between  ">
         <FormField
@@ -33,7 +33,7 @@ const UnstakeInput = ({ form, balance }: Props) => {
                 <FormControl>
                   <Input
                     type="text"
-                    className="bg-secondary-300"
+                    className="bg-transparent"
                     inputMode="decimal"
                     autoComplete="off"
                     pattern="^[0-9]*[.,]?[0-9]*$"
@@ -60,7 +60,7 @@ const UnstakeInput = ({ form, balance }: Props) => {
             className={`flex items-center justify-center gap-x-2 rounded-md py-1`}
           >
             <Image src={logo} alt="sir-logo" width={25} height={25} />
-            <span className="font-medium">Staked SIR</span>
+            <span className="font-medium">Unstaked SIR</span>
           </div>
           <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
             Balance {formatNumber(balance ?? "0", 8)}
@@ -78,4 +78,4 @@ const UnstakeInput = ({ form, balance }: Props) => {
   );
 };
 
-export default UnstakeInput;
+export default StakeInput;

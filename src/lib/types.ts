@@ -1,7 +1,14 @@
 import type { UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
 import type { CreateVaultInputValues } from "./schemas";
-
+export enum EPage {
+  "LEVERAGE",
+  "LIQUIDITY",
+  "PORTFOLIO",
+  "STAKE",
+  "AUCTIONS",
+  "CREATE_VAULT",
+}
 export type TCollateral = readonly {
   reserveApes: bigint;
   reserveLPers: bigint;
@@ -31,11 +38,13 @@ export interface VaultFieldFragment {
   debtSymbol: string;
   collateralToken: string;
   collateralSymbol: string;
+  taxAmount: string;
   vaultId: string;
   leverageTier: number;
   lockedLiquidity: string;
   totalTea: string;
   totalValue: string;
+  apeDecimals: number;
   apeAddress: TAddressString;
 }
 export type TVault = VaultFieldFragment & {

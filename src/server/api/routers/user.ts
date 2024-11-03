@@ -150,6 +150,22 @@ export const userRouter = createTRPCRouter({
 
       return result;
     }),
+
+  getUnclaimedContributorRewards: publicProcedure
+    .input(
+      z.object({
+        user: z.string().startsWith("0x").length(42).optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const result = await readContract({
+        abi: SirContract.abi,
+        address: SirContract.address,
+        functionName: "contributorUnclaimedSIR",
+        args: [input.user as TAddressString],
+      });
+      return result;
+    }),
   getUnstakedSirBalance: publicProcedure
     .input(
       z.object({
@@ -163,6 +179,22 @@ export const userRouter = createTRPCRouter({
         functionName: "balanceOf",
         args: [input.user as TAddressString],
       });
+      return result;
+    }),
+  getUserSirDividends: publicProcedure
+    .input(
+      z.object({
+        user: z.string().startsWith("0x").length(42).optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const result = await readContract({
+        abi: SirContract.abi,
+        address: SirContract.address,
+        functionName: "dividends",
+        args: [input.user as TAddressString],
+      });
+      console.log(result, "RESULT");
       return result;
     }),
   getTotalSirBalance: publicProcedure
@@ -198,21 +230,6 @@ export const userRouter = createTRPCRouter({
     });
     return result;
   }),
-  getDividends: publicProcedure
-    .input(
-      z.object({
-        staker: z.string().startsWith("0x").length(42).optional(),
-      }),
-    )
-    .query(async ({ input }) => {
-      const result = await readContract({
-        abi: SirContract.abi,
-        address: SirContract.address,
-        functionName: "dividends",
-        args: [input.staker as TAddressString],
-      });
-      return result;
-    }),
 });
 //todo use ZOD
 

@@ -85,7 +85,7 @@ export default function SelectedRow({
       <div className="flex justify-center pt-4">
         <div
           id="burn-form"
-          className="justify-between rounded-lg bg-secondary-700 p-4"
+          className="justify-between rounded-lg border border-secondary-700 bg-secondary p-4"
         >
           <BurnForm
             isClaiming={isClaiming}

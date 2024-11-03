@@ -4,15 +4,12 @@ import {
   formatNumber,
   getLeverageRatio,
   getLogoAsset,
-  mapLeverage,
   roundDown,
 } from "@/lib/utils";
-
-import {
-  HoverCardArrow,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@radix-ui/react-hover-card";
+import type { StaticImageData } from "next/image";
+import Image from "next/image";
+import boostIcon from "@/../public/boost_icon.svg";
+import { HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
 import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
@@ -67,6 +64,7 @@ export function VaultTableRow({
       }
     }
   };
+  const parsedTaxAmount = parseUnits(pool.taxAmount, 0);
   return (
     <tr
       onClick={() => {
@@ -76,7 +74,35 @@ export function VaultTableRow({
       }}
       className="grid cursor-pointer grid-cols-6 rounded-md   px-1 py-1 text-left text-[16px] text-sm font-normal transition-colors hover:bg-primary md:grid-cols-9"
     >
-      <th className="">{pool.vaultId}</th>
+      <th className="">
+        <div className="flex items-center gap-x-1">
+          <span>{pool.vaultId}</span>
+          {parsedTaxAmount > 0n && (
+            <HoverCard openDelay={0} closeDelay={20}>
+              <HoverCardTrigger asChild>
+                <div>
+                  <Image
+                    src={boostIcon as StaticImageData}
+                    height={24}
+                    width={24}
+                    className="rounded-full border border-gold"
+                    alt="Boost Icon"
+                  />
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent side="top" alignOffset={10}>
+                <div className="mt-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
+                  <span>
+                    {`LPers of this vault are rewarded with
+                    ${formatNumber(formatUnits(parsedTaxAmount * 24n * 60n * 60n, 12), 10)}
+                    SIR/day.`}
+                  </span>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          )}
+        </div>
+      </th>
       <th className="flex items-center md:col-span-3">
         <ImageWithFallback
           fallbackImageUrl={unknownImg}
@@ -116,25 +142,10 @@ export function VaultTableRow({
           </HoverCardTrigger>
           <HoverCardContent side="bottom" alignOffset={10}>
             <div className="mt-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
-              {variant.variant === "green" &&
-                (isApe ? (
-                  <span>Healthy, more than enough liquidity.</span>
-                ) : (
-                  <span>Highly profitable</span>
-                ))}
-              {variant.variant === "yellow" &&
-                (isApe ? (
-                  <span>Borderline, just enough liquidity.</span>
-                ) : (
-                  <span>Moderately profitable</span>
-                ))}
-              {variant.variant === "red" && isApe ? (
-                <span>
-                  Degraded, insufficient liquidity for constant leverage.
-                </span>
-              ) : (
-                <span>Minimally profitable</span>
-              )}
+              <DisplayBadgeInfo
+                variant={variant}
+                isApe={isApe}
+              ></DisplayBadgeInfo>
             </div>
           </HoverCardContent>
         </HoverCard>
@@ -142,7 +153,10 @@ export function VaultTableRow({
 
       <th className="flex items-center justify-end gap-x-1 text-right md:col-span-2">
         <span>
-          {formatNumber(formatUnits(parseUnits(pool.totalValue, 0), 18), 4)}
+          {formatNumber(
+            formatUnits(parseUnits(pool.totalValue, 0), pool.apeDecimals),
+            4,
+          )}
         </span>
         <span className=" hidden font-light text-gray-300 md:block">
           {pool.collateralSymbol}
@@ -150,4 +164,32 @@ export function VaultTableRow({
       </th>
     </tr>
   );
+}
+
+function DisplayBadgeInfo({
+  variant,
+  isApe,
+}: {
+  variant: VariantProps<typeof badgeVariants>;
+  isApe: boolean;
+}) {
+  if (variant.variant === "green") {
+    return isApe ? (
+      <span>Healthy, more than enough liquidity.</span>
+    ) : (
+      <span>Highly profitable</span>
+    );
+  } else if (variant.variant === "yellow") {
+    isApe ? (
+      <span>Borderline, just enough liquidity.</span>
+    ) : (
+      <span>Moderately profitable</span>
+    );
+  } else if (variant.variant === "red") {
+    return isApe ? (
+      <span>Degraded, insufficient liquidity for constant leverage.</span>
+    ) : (
+      <span>Minimally profitable</span>
+    );
+  }
 }

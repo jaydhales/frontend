@@ -5,7 +5,7 @@ import type { TAddressString, TMintFormFields, TVaults } from "./types";
 import { assetSchema } from "./schemas";
 import { z } from "zod";
 import numeral from "numeral";
-import { BASE_FEE, L_FEE } from "@/data/constants";
+import { ASSET_REPO, BASE_FEE, L_FEE } from "@/data/constants";
 import { env } from "@/env";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -32,14 +32,35 @@ export function getLogoAsset(address: `0x${string}` | undefined) {
   };
 
   const chainName = getChainName();
-  return `https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/${chainName}/assets/${getAddress(address)}/logo.png`;
+  return `${ASSET_REPO}/blockchains/${chainName}/assets/${getAddress(address)}/logo.png`;
+}
+
+export function getLogoJson(address: `0x${string}` | undefined) {
+  if (!address) {
+    return "";
+  }
+  const getChainName = () => {
+    const chainId = env.NEXT_PUBLIC_CHAIN_ID;
+    if (chainId === "1") {
+      return "ethereum";
+    }
+    if (chainId === "11155111") {
+      return "sepolia";
+    }
+    if (chainId === "17000") {
+      return "holesky";
+    }
+  };
+
+  const chainName = getChainName();
+  return `${ASSET_REPO}/blockchains/${chainName}/assets/${getAddress(address)}/info.json`;
 }
 export async function getAssetInfo(address: TAddressString | undefined) {
   if (!address) {
     throw Error("No address provided.");
   }
   const result: unknown = await fetch(
-    `https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/assets/${getAddress(address)}/info.json`,
+    `${ASSET_REPO}/blockchains/ethereum/assets/${getAddress(address)}/info.json`,
   ).then((r) => r.json());
   return assetSchema.safeParse(result);
 }
@@ -148,7 +169,7 @@ export function formatNumber(
   }
   if (n > 9999) {
     const num = numeral(n);
-    return num.format("0.0a");
+    return num.format("0.0a").toUpperCase();
   }
   if (decimals) {
     n = roundDown(n, decimals);

@@ -14,8 +14,8 @@ import { parseUnits } from "viem";
 // export const revalidate = 6000;
 const getVaults = async () => {
   const vaults = await executeVaultsQuery();
-  const randomI = randomInt(1000);
-  return { vaults, randomI };
+  console.log(vaults, "VAULTS");
+  return { vaults };
 };
 const getCollateralAmounts = async (vaultIds: number[]) => {
   const result = await readContract({
@@ -27,18 +27,19 @@ const getCollateralAmounts = async (vaultIds: number[]) => {
 };
 export const getVaultData = async (offset: number) => {
   let vaultQuery;
-  const vaults = await kv.get("vaults");
 
-  if (!vaults) {
-    const v = await getVaults();
-    vaultQuery = v.vaults;
-    // Don't block with await only need for next cache
-    kv.set("vaults", JSON.stringify(vaultQuery), { ex: 60 * 4 }).catch((e) => {
-      console.log(e, "Failed to store in KV");
-    });
-  } else {
-    vaultQuery = vaults as { vaults: VaultFieldFragment[] };
-  }
+  const v = await getVaults();
+
+  vaultQuery = v.vaults;
+  console.log(vaultQuery, "Vault Query");
+  // if (!vaults) {
+  //   // Don't block with await only need for next cache
+  //   kv.set("vaults", JSON.stringify(vaultQuery), { ex: 60 * 4 }).catch((e) => {
+  //     console.log(e, "Failed to store in KV");
+  //   });
+  // } else {
+  //   vaultQuery = vaults as { vaults: VaultFieldFragment[] };
+  // }
   let pageVaults: VaultFieldFragment[] | undefined;
   if (isFinite(offset)) {
     pageVaults = vaultQuery?.vaults.slice(offset, offset + 10);
@@ -61,7 +62,12 @@ export const getVaultData = async (offset: number) => {
       };
     });
   } else {
-    collateral = await getCollateralAmounts(vaultIds ?? []);
+    try {
+      collateral = await getCollateralAmounts(vaultIds ?? []);
+    } catch (e) {
+      collateral = [];
+      console.log(e);
+    }
   }
 
   kv.set(
