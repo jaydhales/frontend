@@ -1,12 +1,11 @@
 import MintFormProvider from "@/components/providers/mintFormProvider";
 import Pagination from "@/components/shared/pagination";
 import { Card } from "@/components/ui/card";
-import React from "react";
 import { EPage, type TVaults } from "@/lib/types";
 import { Container } from "@/components/ui/container";
 import VaultTable from "./vaultTable/vaultTable";
 import MintForm from "./mintForm/mintForm";
-import Explainer from "./explainer";
+import Explainer from "../shared/explainer";
 
 export default function LeverageLiquidityContent({
   vaultsQuery,
