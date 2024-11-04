@@ -13,6 +13,8 @@ export const env = createEnv({
     KV_REST_API_TOKEN: z.string(),
     KV_REST_API_URL: z.string(),
     KV_URL: z.string(),
+    TURSO_DATABASE_URL: z.string(),
+    TURSO_AUTH_TOKEN: z.string(),
   },
 
   /**
@@ -34,6 +36,8 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
+    TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
     NEXT_PUBLIC_CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
     NEXT_PUBLIC_VAULT_ADDRESS: process.env.NEXT_PUBLIC_VAULT_ADDRESS,
     NEXT_PUBLIC_APE_HASH: process.env.NEXT_PUBLIC_APE_HASH,
