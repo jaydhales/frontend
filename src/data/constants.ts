@@ -20,7 +20,4 @@ export const LeverageTiers = {
   [LeverageTier.four]: -4,
 };
 
-export const ASSET_URL =
-  "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/";
-export const APE_HASH = env.NEXT_PUBLIC_APE_HASH as TAddressString;
 //redeploy
