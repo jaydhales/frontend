@@ -6,8 +6,8 @@ import EvmProvider from "@/components/providers/evmProvider";
 import { headers } from "next/headers";
 import { Header } from "@/components/header";
 import { Inter, Bebas_Neue } from "next/font/google";
-import Footer from "@/components/footer";
 import Bg from "../../public/background.png";
+import Footer from "@/components/footer/footer";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
