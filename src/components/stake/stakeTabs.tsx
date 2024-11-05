@@ -7,16 +7,14 @@ import StakeCard from "./stakeCard";
 const StakeTabs = () => {
   return (
     <div className="pt-6">
-      <Container>
-        <Card className="mx-auto grid w-[600px]  gap-y-4">
-          <div>
-            <StakeCard />
-          </div>
-          <div>
-            <ClaimCard />
-          </div>
-        </Card>
-      </Container>
+      <Card className="mx-auto grid gap-y-4  md:w-[600px]">
+        <div>
+          <StakeCard />
+        </div>
+        <div>
+          <ClaimCard />
+        </div>
+      </Card>
     </div>
   );
 };
