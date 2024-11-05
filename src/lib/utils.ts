@@ -7,6 +7,8 @@ import { z } from "zod";
 import numeral from "numeral";
 import { ASSET_REPO, BASE_FEE, L_FEE } from "@/data/constants";
 import { env } from "@/env";
+import sirIcon from "../../public/images/sir-logo.svg";
+import type { StaticImageData } from "next/image";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
