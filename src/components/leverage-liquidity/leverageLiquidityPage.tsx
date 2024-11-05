@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import PageHeader from "../shared/pageHeader";
+import PageHeadingSpace from "../shared/pageHeadingSpace";
 
 export default function LeverageLiquidityPage({
   children,
@@ -11,7 +12,8 @@ export default function LeverageLiquidityPage({
   return (
     <div className="xl:w-[1300px]">
       {/* <PageHeader>{title}</PageHeader> */}
-      <div className="pt-[44px]"></div>
+      <PageHeadingSpace />
+      {/* <div className="pt-[44px]"></div> */}
       <div className="w-full">{children}</div>
     </div>
   );
