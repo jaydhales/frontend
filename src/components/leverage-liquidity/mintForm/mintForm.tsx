@@ -333,7 +333,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         />
 
         <MintFormSubmit.Root>
-          <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
+          {isApe && (
+            <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
+          )}
           <MintFormSubmit.OpenTransactionModalButton
             isValid={isValid}
             onClick={() => {

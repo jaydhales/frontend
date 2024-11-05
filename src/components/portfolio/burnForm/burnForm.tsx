@@ -321,10 +321,10 @@ export default function BurnForm({
           )}
           <div className="pt-2"></div>
           <div className="flex justify-center">
-            <h4 className="w-[400px] text-center text-sm italic text-gray-400">
-              With leveraging you risk losing up to 100% of your deposit, you
-              can not lose more than your deposit.
-            </h4>
+            {/* <h4 className="w-[400px] text-center text-sm italic text-gray-400"> */}
+            {/*   With leveraging you risk losing up to 100% of your deposit, you */}
+            {/*   can not lose more than your deposit. */}
+            {/* </h4> */}
           </div>
           <div className="pt-1"></div>
           <Button

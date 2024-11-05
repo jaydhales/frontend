@@ -9,14 +9,16 @@ import { SirCard } from "./sirCard";
 import ContributorClaim from "./contributorClaim";
 import Explainer from "../shared/explainer";
 import { EPage } from "@/lib/types";
+import PageHeadingSpace from "../shared/pageHeadingSpace";
 export default function PortfolioPage() {
   const [value, setValue] = useState<"ape" | "tea" | "all">("all");
   return (
     <div className="lg:w-[900px] ">
-      <div className="pt-[44px]" />
-      <Explainer page={EPage.PORTFOLIO} />
+      <PageHeadingSpace />
+      {/* <div className="pt-[44px]" /> */}
       <Container className="space-y-4">
-        <div className="grid grid-cols-2 gap-x-4">
+        <Explainer page={EPage.PORTFOLIO} />
+        <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <div className="flex h-full flex-col justify-between">
               <div className="flex justify-between">
