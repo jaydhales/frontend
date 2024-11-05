@@ -42,6 +42,7 @@ export function Header() {
               <div className="flex items-center">|</div>
               <NavItem url={"/stake"}>Stake</NavItem>
               <NavItem url={"/create-vault"}>Create Vault</NavItem>
+              <NavItem url={"/get-tokens"}>Get Tokens</NavItem>
             </ul>
           </nav>
         </div>
