@@ -14,7 +14,6 @@ import { Section } from "./section";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
-import { SectionTwo } from "./sectionTwo";
 import TransactionModal from "@/components/shared/transactionModal";
 import { TransactionEstimates } from "@/components/shared/transactionEstimates";
 import TransactionSuccess from "@/components/shared/transactionSuccess";
@@ -25,6 +24,7 @@ import { useClaimTeaRewards } from "./hooks/useClaimTeaRewards";
 import useGetFee from "./hooks/useGetFee";
 import { formatNumber } from "@/lib/utils";
 import ClaimAndStakeToggle from "./claimAndStakeToggle";
+import { DisplayCollateral } from "./displayCollateral";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -289,7 +289,7 @@ export default function BurnForm({
               </label>
             </div>
 
-            <SectionTwo
+            <DisplayCollateral
               data={{
                 leverageTier: parseFloat(row.leverageTier),
                 collateralToken: isClaimingRewards
