@@ -23,11 +23,12 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_APE_HASH: z.string(),
     NEXT_PUBLIC_ASSISTANT_ADDRESS: z.string(),
     NEXT_PUBLIC_SIR_ADDRESS: z.string(),
     NEXT_PUBLIC_VAULT_ADDRESS: z.string(),
     NEXT_PUBLIC_CHAIN_ID: z.string(),
+    NEXT_PUBLIC_BASE_FEE: z.string(),
+    NEXT_PUBLIC_MINTING_FEE: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
@@ -36,11 +37,12 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    NEXT_PUBLIC_BASE_FEE: process.env.NEXT_PUBLIC_BASE_FEE,
+    NEXT_PUBLIC_MINTING_FEE: process.env.NEXT_PUBLIC_MINTING_FEE,
     TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
     TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
     NEXT_PUBLIC_CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
     NEXT_PUBLIC_VAULT_ADDRESS: process.env.NEXT_PUBLIC_VAULT_ADDRESS,
-    NEXT_PUBLIC_APE_HASH: process.env.NEXT_PUBLIC_APE_HASH,
     RPC_URL: process.env.RPC_URL,
     SUBGRAPH_URL: process.env.SUBGRAPH_URL,
     NEXT_PUBLIC_ASSISTANT_ADDRESS: process.env.NEXT_PUBLIC_ASSISTANT_ADDRESS,
