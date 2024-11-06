@@ -64,7 +64,7 @@ export function Section({
           }}
         />
 
-        <span className="text-sm italic text-gray-500">
+        <span className="text-sm italic text-gray-300">
           Balance{" "}
           {formatNumber(formatUnits(balance ?? 0n, positionDecimals), 8)}
         </span>
