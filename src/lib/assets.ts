@@ -1,6 +1,6 @@
 import { ASSET_REPO } from "@/data/constants";
 import { env } from "@/env";
-import sirIcon from "../../../public/images/sir-logo.svg";
+import sirIcon from "../../public/images/sir-logo.svg";
 import type { StaticImageData } from "next/image";
 import { getAddress } from "viem";
 import { TAddressString } from "./types";

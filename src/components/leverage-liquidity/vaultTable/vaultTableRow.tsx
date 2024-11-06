@@ -1,5 +1,5 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
-import { formatNumber, getLogoAsset, roundDown } from "@/lib/utils";
+import { formatNumber, roundDown } from "@/lib/utils";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import boostIcon from "@/../public/boost_icon.svg";
@@ -17,6 +17,7 @@ import {
   calculateApeVaultFee,
   getLeverageRatio,
 } from "@/lib/utils/calculations";
+import { getLogoAsset } from "@/lib/assets";
 
 export function VaultTableRow({
   pool,

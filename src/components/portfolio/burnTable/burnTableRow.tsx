@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import type { TAddressString } from "@/lib/types";
-import { formatNumber, getLogoAsset } from "@/lib/utils";
+import { formatNumber } from "@/lib/utils";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { formatUnits } from "viem";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
@@ -9,6 +9,7 @@ import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import { getLeverageRatio } from "@/lib/utils/calculations";
+import { getLogoAsset } from "@/lib/assets";
 interface Props {
   row: TUserPosition;
   isApe: boolean;
