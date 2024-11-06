@@ -7,15 +7,18 @@ import NavItem from "./navItem";
 export default function SideNav() {
   const [openModal, setOpen] = useState(false);
   return (
-    <div className="lg:hidden flex items-center text-white">
+    <div className="flex items-center text-white lg:hidden">
       <Sheet open={openModal} onOpenChange={setOpen}>
         <SheetTrigger>
           <Menu className="cursor-pointer" size={30} />
         </SheetTrigger>
         <SheetContent>
           <div className="flex justify-center">
-            <ul className="text-muted-foreground space-y-4 text-center">
-              <div className="bg-primary/40 rounded-md">
+            <nav className="space-y-4 text-center text-muted-foreground">
+              <ul
+                aria-label="Core Navigation"
+                className="rounded-md bg-primary/40"
+              >
                 <NavItem onClick={() => setOpen(false)} url={"/"}>
                   Leverage
                 </NavItem>
@@ -25,14 +28,16 @@ export default function SideNav() {
                 <NavItem onClick={() => setOpen(false)} url={"/portfolio"}>
                   Portfolio
                 </NavItem>
-              </div>
-              <NavItem onClick={() => setOpen(false)} url={"/stake"}>
-                Stake
-              </NavItem>
-              <NavItem onClick={() => setOpen(false)} url={"/create-vault"}>
-                Create Vault
-              </NavItem>
-            </ul>
+              </ul>
+              <ul aria-label="Secondary Navigation">
+                <NavItem onClick={() => setOpen(false)} url={"/stake"}>
+                  Stake
+                </NavItem>
+                <NavItem onClick={() => setOpen(false)} url={"/create-vault"}>
+                  Create Vault
+                </NavItem>
+              </ul>
+            </nav>
           </div>
         </SheetContent>
       </Sheet>

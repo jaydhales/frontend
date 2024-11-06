@@ -165,6 +165,7 @@ const UnstakeForm = () => {
             }}
           >
             <StakeInput
+              isStaking={false}
               form={form}
               balance={formatUnits(balance ?? 0n, 12)}
             ></StakeInput>

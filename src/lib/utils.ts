@@ -32,7 +32,9 @@ export function getLogoAsset(address: `0x${string}` | undefined) {
       return "holesky";
     }
   };
-
+  if (address === env.NEXT_PUBLIC_SIR_ADDRESS) {
+    return sirIcon as StaticImageData;
+  }
   const chainName = getChainName();
   return `${ASSET_REPO}/blockchains/${chainName}/assets/${getAddress(address)}/logo.png`;
 }
@@ -143,9 +145,12 @@ export function roundDown(float: number, decimals: number) {
   const roundedDown = Math.floor(float * factor) / factor;
   return roundedDown;
 }
-export function inputPatternMatch(s: string) {
+export function inputPatternMatch(s: string, decimals = 18) {
   const pattern = /^[0-9]*[.,]?[0-9]*$/;
-  const decimalPattern = /^\d+(\.\d{0,18})?$/;
+  const decimalPattern = RegExp(`^\\d+(\\.\\d{0,${decimals}})?$`);
+  if (s === "") {
+    return true;
+  }
   if (pattern.test(s) && decimalPattern.test(s)) return true;
   return false;
 }

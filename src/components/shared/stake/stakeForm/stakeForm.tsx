@@ -154,6 +154,7 @@ const StakeForm = () => {
             }}
           >
             <StakeInput
+              isStaking={true}
               form={form}
               balance={formatUnits(balance ?? 0n, 12)}
             ></StakeInput>

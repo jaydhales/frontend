@@ -36,6 +36,7 @@ export default function RootLayout({
   // const country = headerList.get("x-country");
   return (
     <html lang="en">
+      <title>SIR App</title>
       <body
         style={{
           backgroundImage: `url(${Bg.src})`,

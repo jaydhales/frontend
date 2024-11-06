@@ -19,6 +19,7 @@ interface Props {
   balance?: string;
   useEth: boolean;
   setUseEth: (b: boolean) => void;
+  decimals: number;
 }
 
 function Root({ children }: { children: React.ReactNode }) {
@@ -30,7 +31,14 @@ function Root({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-function Inputs({ form, depositAsset, balance, useEth, setUseEth }: Props) {
+function Inputs({
+  form,
+  decimals,
+  depositAsset,
+  balance,
+  useEth,
+  setUseEth,
+}: Props) {
   return (
     <div className="flex justify-between rounded-md bg-primary p-3">
       <div>
@@ -52,7 +60,7 @@ function Inputs({ form, depositAsset, balance, useEth, setUseEth }: Props) {
                   step="any"
                   {...field}
                   onChange={(e) => {
-                    if (inputPatternMatch(e.target.value)) {
+                    if (inputPatternMatch(e.target.value, decimals)) {
                       return field.onChange(e.target.value);
                     }
                   }}

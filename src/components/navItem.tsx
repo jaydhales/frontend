@@ -15,7 +15,7 @@ const navItemVariants = cva(
     variants: {
       theme: {
         light: "text-white hover:text-gold data-[active=true]:text-gold",
-        dark: "",
+        dark: "hover:text-white",
       },
     },
     defaultVariants: {
@@ -41,14 +41,14 @@ export default function NavItem({
   const path = usePathname();
   const active = url === path;
   return (
-    <Link onClick={onClick} href={url}>
-      <li
-        data-active={active ? "true" : "false"}
-        data-main={main ? "true" : "false"}
-        className={cn(navItemVariants({ theme, className }))}
-      >
+    <li
+      data-active={active ? "true" : "false"}
+      data-main={main ? "true" : "false"}
+      className={cn(navItemVariants({ theme, className }))}
+    >
+      <Link className="" onClick={onClick} href={url}>
         {children}
-      </li>
-    </Link>
+      </Link>
+    </li>
   );
 }

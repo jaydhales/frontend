@@ -15,9 +15,10 @@ import { formatNumber, inputPatternMatch } from "@/lib/utils";
 interface Props {
   form: TUnstakeForm;
   balance?: string;
+  isStaking: boolean;
 }
 
-const StakeInput = ({ form, balance }: Props) => {
+const StakeInput = ({ form, balance, isStaking }: Props) => {
   const logo = sir_logo as StaticImageData;
 
   return (
@@ -44,7 +45,7 @@ const StakeInput = ({ form, balance }: Props) => {
                     step="any"
                     {...field}
                     onChange={(e) => {
-                      if (inputPatternMatch(e.target.value)) {
+                      if (inputPatternMatch(e.target.value, 12)) {
                         field.onChange(e.target.value);
                       }
                     }}
@@ -60,7 +61,9 @@ const StakeInput = ({ form, balance }: Props) => {
             className={`flex items-center justify-center gap-x-2 rounded-md py-1`}
           >
             <Image src={logo} alt="sir-logo" width={25} height={25} />
-            <span className="font-medium">Unstaked SIR</span>
+            <span className="font-medium">
+              {isStaking ? "Unstaked SIR" : "Staked SIR"}
+            </span>
           </div>
           <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
             Balance {formatNumber(balance ?? "0", 8)}
