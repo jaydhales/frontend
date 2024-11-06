@@ -143,11 +143,12 @@ export function roundDown(float: number, decimals: number) {
   const roundedDown = Math.floor(float * factor) / factor;
   return roundedDown;
 }
-export function inputPatternMatch(s: string, decimals?: number) {
+export function inputPatternMatch(s: string, decimals = 18) {
   const pattern = /^[0-9]*[.,]?[0-9]*$/;
-  const decimalPattern = new RegExp(
-    String.raw`/^\d+(\.\d{0,${decimals ?? 18}})?$/`,
-  );
+  const decimalPattern = RegExp(`^\\d+(\\.\\d{0,${decimals}})?$`);
+  if (s === "") {
+    return true;
+  }
   if (pattern.test(s) && decimalPattern.test(s)) return true;
   return false;
 }
