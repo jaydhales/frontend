@@ -10,6 +10,7 @@ import { Header } from "@/components/header";
 import { Inter, Bebas_Neue } from "next/font/google";
 import Bg from "../../public/background.png";
 import Warning from "@/components/ui/warning";
+import Footer from "@/components/footer/footer";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
