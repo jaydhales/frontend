@@ -1,5 +1,5 @@
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
-import { formatNumber, getLogoAsset } from "@/lib/utils";
+import { formatNumber } from "@/lib/utils";
 export function SectionTwo({
   bg,
   data,

@@ -4,7 +4,7 @@ import { mapLeverage } from "@/lib/utils";
 import type { TAddressString } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import { tokenSchema } from "@/lib/schemas";
-import { getLogoJson } from "@/lib/assets";
+import { getLogoAsset, getLogoJson } from "@/lib/assets";
 
 export default function TransactionInfoCreateVault({
   leverageTier,
