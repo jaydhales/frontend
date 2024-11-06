@@ -177,6 +177,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.2.1
         version: 4.2.1(vite@5.2.8(@types/node@20.12.7)(terser@5.30.3))
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -1876,7 +1879,6 @@ packages:
 
   '@libsql/linux-x64-gnu@0.4.6':
     resolution: {integrity: sha512-0ggx+5RwEbYabIlDBBAvavdfIJCZ757u6nDZtBeQIhzW99EKbWG3lvkXHM3qudFb/pDWSUY4RFBm6vVtF1cJGA==}
-    cpu: [x64]
     os: [linux]
 
   '@libsql/linux-x64-musl@0.3.19':
