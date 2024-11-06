@@ -30,3 +30,36 @@ export function getLeverageRatio(k: number) {
   const result = 1 + 2 ** k;
   return result;
 }
+
+/**
+ * Calculate maximum amount of ape that can be minted without causing insufficient liquidity.
+ * @param LeverageTier - number
+ *
+ */
+interface Params {
+  leverageRatio: number;
+  baseFee: number;
+  apeReserve: number;
+  gentlemenReserve: number;
+}
+export function calculateMaxApe({
+  leverageRatio,
+  baseFee,
+  apeReserve,
+  gentlemenReserve,
+}: Params) {
+  try {
+    let x_max =
+      ((1 + (leverageRatio - 1) * baseFee) / (leverageRatio - 1)) *
+      (1.25 - baseFee);
+    let result =
+      x_max * (gentlemenReserve - 1.25 * (leverageRatio - 1) * apeReserve);
+    if (!Number.isFinite(result)) {
+      throw Error("Not valid");
+    }
+    return result;
+  } catch {
+    // catch math errors
+    return undefined;
+  }
+}
