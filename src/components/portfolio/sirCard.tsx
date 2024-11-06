@@ -27,32 +27,6 @@ export function SirCard() {
                   <h2 className="text-sm font-light text-gray-400">SIR</h2>
                 </div>
               </div>
-            )}
-          </TransactionModal.InfoContainer>
-
-          <TransactionModal.StatSubmitContainer>
-            <TransactionModal.SubmitButton
-              loading={isPending || isConfirming}
-              disabled={isPending || isConfirming}
-              onClick={() => onSubmit()}
-            >
-              {isPending || isConfirming ? (
-                "Pending..."
-              ) : (
-                <>
-                  {!isSuccess && "Claim"}
-
-                  {isSuccess && "Close"}
-                </>
-              )}
-            </TransactionModal.SubmitButton>
-          </TransactionModal.StatSubmitContainer>
-        </TransactionModal.Root>
-        <div className="h-[69px] items-center justify-between md:flex">
-          <div className="flex justify-between text-3xl   ">
-            <div className="flex items-end gap-x-1">
-              <span>{formatNumber(formatUnits(totalBalance ?? 0n, 12))}</span>
-              <h2 className="text-sm font-light text-gray-400">SIR</h2>
             </div>
           </div>
         </div>
