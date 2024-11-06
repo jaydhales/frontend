@@ -46,12 +46,12 @@ export function BurnTableRow({
         </th>
         <th className="flex  items-center gap-x-1 font-normal text-gray-200">
           <ImageWithFallback
-            alt={row.debtSymbol}
+            alt={row.collateralToken}
             src={getLogoAsset(row.collateralToken)}
             width={20}
             height={20}
           />
-          <span className="text-[14px]">{row.debtSymbol}</span>
+          <span className="text-[14px]">{row.collateralSymbol}</span>
         </th>
         <th className="flex items-center gap-x-1 font-normal text-gray-200">
           <ImageWithFallback
@@ -60,7 +60,7 @@ export function BurnTableRow({
             width={20}
             height={20}
           />
-          <span className="text-[14px]">{row.collateralSymbol}</span>
+          <span className="text-[14px]">{row.debtSymbol}</span>
         </th>
         <th className="font-normal text-gray-200">
           {getLeverageRatio(parseInt(row.leverageTier))}x
