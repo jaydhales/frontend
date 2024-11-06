@@ -316,6 +316,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         />
         <DepositInputs.Root>
           <DepositInputs.Inputs
+            decimals={decimals}
             useEth={useEth}
             setUseEth={(b: boolean) => {
               setUseEth(b);

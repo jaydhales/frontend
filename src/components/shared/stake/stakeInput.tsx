@@ -44,7 +44,7 @@ const StakeInput = ({ form, balance }: Props) => {
                     step="any"
                     {...field}
                     onChange={(e) => {
-                      if (inputPatternMatch(e.target.value)) {
+                      if (inputPatternMatch(e.target.value, 12)) {
                         field.onChange(e.target.value);
                       }
                     }}

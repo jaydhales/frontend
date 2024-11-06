@@ -39,7 +39,7 @@ export function Section({
                   pattern="^[0-9]*[.,]?[0-9]*$"
                   {...field}
                   onChange={(e) => {
-                    if (inputPatternMatch(e.target.value)) {
+                    if (inputPatternMatch(e.target.value, positionDecimals)) {
                       return field.onChange(e.target.value);
                     }
                   }}
