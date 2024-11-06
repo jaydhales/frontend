@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import {
   FormControl,
   FormField,
@@ -27,7 +27,11 @@ import type { TMintForm } from "@/lib/types";
 import ImageWithFallback from "./ImageWithFallback";
 // TODO
 // rm default placeholders
-type TItem = { value: string; label: string; imageUrl?: string };
+type TItem = {
+  value: string;
+  label: string;
+  imageUrl?: string | StaticImageData;
+};
 export default function Select({
   form,
   name,

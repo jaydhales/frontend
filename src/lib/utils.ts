@@ -32,7 +32,9 @@ export function getLogoAsset(address: `0x${string}` | undefined) {
       return "holesky";
     }
   };
-
+  if (address === env.NEXT_PUBLIC_SIR_ADDRESS) {
+    return sirIcon as StaticImageData;
+  }
   const chainName = getChainName();
   return `${ASSET_REPO}/blockchains/${chainName}/assets/${getAddress(address)}/logo.png`;
 }
