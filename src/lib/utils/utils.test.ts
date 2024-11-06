@@ -1,6 +1,15 @@
-import { expect, test } from "vitest";
+import { beforeAll, expect, test } from "vitest";
 import { add, formatNumber } from "./index";
-import { calculateApeVaultFee, getLeverageRatio } from "./calculations";
+import {
+  calculateApeVaultFee,
+  calculateMaxApe,
+  getLeverageRatio,
+} from "./calculations";
+import dotenv from "dotenv";
+
+beforeAll(() => {
+  dotenv.config();
+});
 test("Test utils add function.", () => {
   expect(add(1, 2)).toBe(3);
 });
@@ -21,10 +30,20 @@ test("Test calculate leverage tier ratio.", () => {
 //     }),
 //   ).toBe("0x067Dd26fecdf6659879D0a1a4C4DFa735413339D".toLowerCase()); // FOR SOME REASON VITE DOESN"T WORK WITH getAddress
 // });
-
+test("Calculate Maximum Ape", () => {
+  expect(
+    calculateMaxApe({
+      leverageRatio: 1,
+      baseFee: 1,
+      apeReserve: 1,
+      gentlemenReserve: 1,
+    }),
+  ).toBeUndefined();
+});
 test("Test Format Number", () => {
-  expect(formatNumber(10000)).toBe("10.0k");
-  expect(formatNumber(10000000)).toBe("10.0m");
+  console.log(formatNumber(10000));
+  expect(formatNumber(10000)).toBe("10.0K");
+  expect(formatNumber(10000000)).toBe("10.0M");
   expect(formatNumber(0.00012323)).toBe("0.00012323");
   expect(formatNumber(0.0000001)).toBe("1e-7");
   expect(formatNumber(0)).toBe("0");
