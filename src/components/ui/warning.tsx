@@ -9,7 +9,7 @@ export default function Warning() {
   const { toast } = useToast();
   const chainId = useGetChainId();
   const wagmiChainId = useChainId();
-
+  console.log(wagmiChainId, "WAGMI CHAIN ID");
   useEffect(() => {
     if (wagmiChainId === 11155111) {
       toast({
