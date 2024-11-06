@@ -27,8 +27,11 @@ export function Header() {
         </Link>
         <div className="flex items-center">
           <nav className=" hidden items-center lg:flex">
-            <ul className=" flex gap-x-[16px] rounded-md  px-[12px] py-[12px] font-semibold text-muted-foreground">
-              <div className="flex gap-x-[16px]   rounded-md">
+            <div className=" flex gap-x-[16px] rounded-md  px-[12px] py-[12px] font-semibold text-muted-foreground">
+              <ul
+                aria-label="Core Navigation"
+                className="flex gap-x-[16px]   rounded-md"
+              >
                 <NavItem theme="light" url={"/"}>
                   Leverage
                 </NavItem>
@@ -38,12 +41,14 @@ export function Header() {
                 <NavItem theme="light" url={"/portfolio"}>
                   Portfolio
                 </NavItem>
-              </div>
+              </ul>
               <div className="flex items-center">|</div>
-              <NavItem url={"/stake"}>Stake</NavItem>
-              <NavItem url={"/create-vault"}>Create Vault</NavItem>
-              <NavItem url={"/get-tokens"}>Get Tokens</NavItem>
-            </ul>
+              <ul className="flex" aria-label="Secondary Navigation">
+                <NavItem url={"/stake"}>Stake</NavItem>
+                <NavItem url={"/create-vault"}>Create Vault</NavItem>
+                <NavItem url={"/get-tokens"}>Get Tokens</NavItem>
+              </ul>
+            </div>
           </nav>
         </div>
       </div>
