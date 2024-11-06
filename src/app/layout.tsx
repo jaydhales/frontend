@@ -8,7 +8,6 @@ import EvmProvider from "@/components/providers/evmProvider";
 import { headers } from "next/headers";
 import { Header } from "@/components/header";
 import { Inter, Bebas_Neue } from "next/font/google";
-import Footer from "@/components/footer";
 import Bg from "../../public/background.png";
 import Warning from "@/components/ui/warning";
 const inter = Inter({
@@ -39,6 +38,7 @@ export default function RootLayout({
   // const country = headerList.get("x-country");
   return (
     <html lang="en">
+      <title>SIR App</title>
       <body
         style={{
           backgroundImage: `url(${Bg.src})`,

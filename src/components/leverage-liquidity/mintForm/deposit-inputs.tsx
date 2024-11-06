@@ -9,7 +9,7 @@ import type { TAddressString, TMintForm } from "@/lib/types";
 import { BalancePercent } from "@/components/shared/balancePercent";
 import Image from "next/image";
 
-import { formatNumber, getLogoAsset } from "@/lib/utils";
+import { formatNumber, getLogoAsset, inputPatternMatch } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { WETH_ADDRESS } from "@/data/constants";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
@@ -19,6 +19,7 @@ interface Props {
   balance?: string;
   useEth: boolean;
   setUseEth: (b: boolean) => void;
+  decimals: number;
 }
 
 function Root({ children }: { children: React.ReactNode }) {
@@ -30,7 +31,14 @@ function Root({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-function Inputs({ form, depositAsset, balance, useEth, setUseEth }: Props) {
+function Inputs({
+  form,
+  decimals,
+  depositAsset,
+  balance,
+  useEth,
+  setUseEth,
+}: Props) {
   return (
     <div className="flex justify-between rounded-md bg-primary p-3">
       <div>
@@ -52,9 +60,9 @@ function Inputs({ form, depositAsset, balance, useEth, setUseEth }: Props) {
                   step="any"
                   {...field}
                   onChange={(e) => {
-                    const pattern = /^[0-9]*[.,]?[0-9]*$/;
-                    if (pattern.test(e.target.value))
+                    if (inputPatternMatch(e.target.value, decimals)) {
                       return field.onChange(e.target.value);
+                    }
                   }}
                 ></Input>
               </FormControl>

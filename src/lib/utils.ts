@@ -7,6 +7,8 @@ import { z } from "zod";
 import numeral from "numeral";
 import { ASSET_REPO, BASE_FEE, L_FEE } from "@/data/constants";
 import { env } from "@/env";
+import sirIcon from "../../public/images/sir-logo.svg";
+import type { StaticImageData } from "next/image";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -30,7 +32,9 @@ export function getLogoAsset(address: `0x${string}` | undefined) {
       return "holesky";
     }
   };
-
+  if (address === env.NEXT_PUBLIC_SIR_ADDRESS) {
+    return sirIcon as StaticImageData;
+  }
   const chainName = getChainName();
   return `${ASSET_REPO}/blockchains/${chainName}/assets/${getAddress(address)}/logo.png`;
 }
@@ -141,7 +145,15 @@ export function roundDown(float: number, decimals: number) {
   const roundedDown = Math.floor(float * factor) / factor;
   return roundedDown;
 }
-
+export function inputPatternMatch(s: string, decimals = 18) {
+  const pattern = /^[0-9]*[.,]?[0-9]*$/;
+  const decimalPattern = RegExp(`^\\d+(\\.\\d{0,${decimals}})?$`);
+  if (s === "") {
+    return true;
+  }
+  if (pattern.test(s) && decimalPattern.test(s)) return true;
+  return false;
+}
 /**
  * @returns string | Will round down to 10th decimal
  */
