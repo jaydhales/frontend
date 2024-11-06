@@ -1,11 +1,5 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
-import {
-  calculateApeVaultFee,
-  formatNumber,
-  getLeverageRatio,
-  getLogoAsset,
-  roundDown,
-} from "@/lib/utils";
+import { formatNumber, getLogoAsset, roundDown } from "@/lib/utils";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import boostIcon from "@/../public/boost_icon.svg";
@@ -19,6 +13,10 @@ import { useMemo } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import useCalculateVaultHealth from "./hooks/useCalculateVaultHealth";
 import { HoverCard } from "@/components/ui/hover-card";
+import {
+  calculateApeVaultFee,
+  getLeverageRatio,
+} from "@/lib/utils/calculations";
 
 export function VaultTableRow({
   pool,

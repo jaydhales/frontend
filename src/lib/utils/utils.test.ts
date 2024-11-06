@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { add, formatNumber } from "./index";
-import { calculateApeVaultFee, getLeverageRatio } from "../utils";
+import { calculateApeVaultFee, getLeverageRatio } from "./calculations";
 test("Test utils add function.", () => {
   expect(add(1, 2)).toBe(3);
 });

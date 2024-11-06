@@ -1,4 +1,5 @@
-import { calculateApeVaultFee, formatNumber } from "@/lib/utils";
+import { formatNumber } from "@/lib/utils";
+import { calculateApeVaultFee } from "@/lib/utils/calculations";
 import { useMemo } from "react";
 
 interface Props {
