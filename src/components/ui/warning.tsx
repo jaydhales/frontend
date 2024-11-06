@@ -3,7 +3,6 @@ import React from "react";
 import { useToast } from "../shared/hooks/useToast";
 import { useEffect } from "react";
 import useGetChainId from "../shared/hooks/useGetChainId";
-import { useChainId } from "wagmi";
 
 export default function Warning() {
   const { toast } = useToast();
