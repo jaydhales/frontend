@@ -10,7 +10,6 @@ import { useBurnApe } from "./hooks/useBurnApe";
 import type { SimulateContractReturnType } from "viem";
 import { formatUnits, parseUnits } from "viem";
 import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
-import { Section } from "./section";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
@@ -25,6 +24,7 @@ import useGetFee from "./hooks/useGetFee";
 import { formatNumber } from "@/lib/utils";
 import ClaimAndStakeToggle from "./claimAndStakeToggle";
 import { DisplayCollateral } from "./displayCollateral";
+import { TokenInput } from "./tokenInput";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -272,7 +272,7 @@ export default function BurnForm({
             </button>
           </div>
           {!isClaimingRewards && (
-            <Section
+            <TokenInput
               positionDecimals={row.positionDecimals}
               balance={balance}
               bg="bg-primary"
