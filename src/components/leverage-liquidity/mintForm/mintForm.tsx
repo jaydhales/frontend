@@ -22,7 +22,7 @@ import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
 import { TransactionStatus } from "./transactionStatus";
-import { CircleCheck, Plus } from "lucide-react";
+import { CircleCheck } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
@@ -159,7 +159,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       reset();
     }
   }, [isConfirmed, reset, openTransactionModal]);
-
   const levTier = form.getValues("leverageTier");
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
