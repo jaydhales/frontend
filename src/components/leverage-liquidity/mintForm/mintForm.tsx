@@ -28,6 +28,7 @@ import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { TransactionEstimates } from "./transactionEstimates";
 import { calculateApeVaultFee } from "@/lib/utils/calculations";
+import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -93,9 +94,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     isSuccess: isConfirmed,
     data: transactionData,
   } = useWaitForTransactionReceipt({ hash });
-
+  const selectedVault = useMemo(() => {
+    return findVault(vaultsQuery, formData);
+  }, [formData, vaultsQuery]);
   const { tokenReceived } = useGetReceivedTokens({
-    apeAddress: findVault(vaultsQuery, formData).result?.apeAddress ?? "0x",
+    apeAddress: selectedVault.result?.apeAddress ?? "0x",
     logs: transactionData?.logs,
     isApe,
   });
@@ -199,6 +202,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         .catch((e) => console.log(e));
     }
   }, [isApproving, reset, isConfirmed, utils.user.getBalance]);
+  const data = useCalculateMaxApe({
+    leverageTier: formData.leverageTier,
+    vaultId: parseInt(selectedVault.result?.vaultId ?? "-1"),
+  });
+
   const deposit = form.getValues("deposit");
   useEffect(() => {
     if (!isPending && !isConfirming && !isConfirmed) {

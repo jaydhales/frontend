@@ -1,14 +1,30 @@
 import { BASE_FEE } from "@/data/constants";
 import { calculateMaxApe } from "@/lib/utils/calculations";
-import { useEffect } from "react";
+import { api } from "@/trpc/react";
+import { useMemo } from "react";
+import { formatUnits } from "viem";
 
-export function useCalculateMaxApe({ leverageTier }: { leverageTier: string }) {
-  useEffect(() => {
-    calculateMaxApe({
+export function useCalculateMaxApe({
+  leverageTier,
+  vaultId,
+}: {
+  vaultId: number;
+  leverageTier: string;
+}) {
+  const { data } = api.vault.getReserves.useQuery(
+    { vaultId },
+    { enabled: vaultId !== -1 && isFinite(vaultId) },
+  );
+  const ape = parseFloat(formatUnits(data?.[0]?.reserveApes ?? 0n, 18));
+  const tea = parseFloat(formatUnits(data?.[0]?.reserveLPers ?? 0n, 18));
+  const calc = useMemo(() => {
+    return calculateMaxApe({
       leverageRatio: parseFloat(leverageTier),
       baseFee: BASE_FEE,
-      apeReserve: 0,
-      gentlemenReserve: 0,
+      apeReserve: ape,
+      gentlemenReserve: tea,
     });
-  }, [leverageTier]);
+  }, [ape, leverageTier, tea]);
+  console.log(calc, "CALC");
+  return calc;
 }
