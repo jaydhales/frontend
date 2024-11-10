@@ -31,6 +31,7 @@ import { calculateApeVaultFee } from "@/lib/utils/calculations";
 import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 import { useResetAfterApprove } from "./hooks/useResetAfterApprove";
 import TransactionInfo from "./transactionInfo";
+import Show from "@/components/shared/show";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -223,7 +224,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           </TransactionModal.InfoContainer>
           {/* ---------------------------------- */}
           <TransactionModal.StatSubmitContainer>
-            {submitType === ESubmitType.mint && !isConfirmed && (
+            <Show when={submitType === ESubmitType.mint && !isConfirmed}>
               <TransactionModal.StatContainer>
                 <TransactionModal.StatRow
                   title={"Fee Percent"}
@@ -237,19 +238,21 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                   )} ${form.getValues("long").split(",")[1]}`}
                 />
               </TransactionModal.StatContainer>
-            )}
-            {
-              <TransactionModal.SubmitButton
-                onClick={modalSubmit}
-                disabled={(!isValid && !isConfirmed) || isPending}
-                loading={isPending || isConfirming}
-                isConfirmed={isConfirmed}
+            </Show>
+
+            <TransactionModal.SubmitButton
+              onClick={modalSubmit}
+              disabled={(!isValid && !isConfirmed) || isPending}
+              loading={isPending || isConfirming}
+              isConfirmed={isConfirmed}
+            >
+              <Show
+                when={submitType === ESubmitType.mint}
+                fallback="Confirm Approve"
               >
-                {submitType === ESubmitType.mint
-                  ? "Confirm Mint"
-                  : "Confirm Approve"}
-              </TransactionModal.SubmitButton>
-            }
+                {"Confirm Mint"}
+              </Show>
+            </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
 
