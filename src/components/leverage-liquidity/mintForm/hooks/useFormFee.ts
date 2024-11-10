@@ -6,7 +6,6 @@ interface Props {
   isApe: boolean;
 }
 export default function useFormFee({ levTier, isApe }: Props) {
-  const levTier = form.getValues("leverageTier");
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
     if (!isApe) {
