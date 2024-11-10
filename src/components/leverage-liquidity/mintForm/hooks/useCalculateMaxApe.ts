@@ -1,5 +1,4 @@
 import { BASE_FEE } from "@/data/constants";
-import { mapLeverage } from "@/lib/utils";
 import { calculateMaxApe } from "@/lib/utils/calculations";
 import { api } from "@/trpc/react";
 import { useMemo } from "react";
@@ -20,7 +19,7 @@ export function useCalculateMaxApe({
   const tea = data?.[0]?.reserveLPers ?? 0n;
   const calc = useMemo(() => {
     return calculateMaxApe({
-      leverageRatio: parseUnits(mapLeverage(leverageTier) ?? "0", 2),
+      leverageTier: parseUnits(leverageTier ?? "0", 0),
       baseFee: parseUnits(BASE_FEE.toString(), 2),
       apeReserve: ape,
       gentlemenReserve: tea,

@@ -111,6 +111,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   useFormSuccessReset({ isConfirming, isConfirmed, currentTxType, useEth });
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
     ethBalance: userEthBalance,
+    leverageTier: formData.leverageTier,
+    vaultId: parseInt(selectedVault.result?.vaultId ?? "-1"),
     decimals,
     useEth,
     deposit: formData.deposit ?? "0",
@@ -207,7 +209,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const data = useCalculateMaxApe({
     leverageTier: formData.leverageTier,
     vaultId: parseInt(selectedVault.result?.vaultId ?? "-1"),
-    decimals: selectedVault.result?.apeDecimals ?? 18,
   });
 
   const deposit = form.getValues("deposit");

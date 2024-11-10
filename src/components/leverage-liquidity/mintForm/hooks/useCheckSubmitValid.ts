@@ -3,7 +3,7 @@ import { env } from "@/env";
 import { useMemo } from "react";
 import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
-import { useChainId } from "wagmi";
+import { useCalculateMaxApe } from "./useCalculateMaxApe";
 
 interface Props {
   deposit: string | undefined;
@@ -19,6 +19,8 @@ interface Props {
   approveFetching?: boolean;
   useEth?: boolean;
   decimals: number;
+  vaultId: number;
+  leverageTier: string;
 }
 export enum ESubmitType {
   "mint",
@@ -42,7 +44,11 @@ export const useCheckSubmitValid = ({
   ethBalance,
   useEth,
   decimals,
+  vaultId,
+  leverageTier,
 }: Props) => {
+  const maxApe = useCalculateMaxApe({ vaultId, leverageTier }) ?? 0n;
+  console.log(maxApe, "MAX APE");
   const chainId = useGetChainId();
   const { isValid, errorMessage, submitType } = useMemo(() => {
     if (chainId?.toString() !== env.NEXT_PUBLIC_CHAIN_ID && Boolean(chainId)) {
@@ -52,10 +58,19 @@ export const useCheckSubmitValid = ({
         submitType: ESubmitType.mint,
       };
     }
+
     if (parseUnits(deposit ?? "0", decimals) <= 0n) {
       return {
         isValid: false,
         errorMessage: "Enter amount greater than 0.",
+        submitType: ESubmitType.mint,
+      };
+    }
+
+    if (maxApe < parseUnits(deposit ?? "0", decimals)) {
+      return {
+        isValid: false,
+        errorMessage: "Insufficent liquidity in Vault!",
         submitType: ESubmitType.mint,
       };
     }
@@ -80,6 +95,7 @@ export const useCheckSubmitValid = ({
         submitType: ESubmitType.mint,
       };
     }
+
     if ((tokenBalance ?? 0n) < parseUnits(deposit ?? "0", decimals)) {
       return {
         isValid: false,
@@ -114,7 +130,6 @@ export const useCheckSubmitValid = ({
         }
       }
     }
-
     if (requests.mintRequest)
       return {
         isValid: true,
@@ -138,6 +153,7 @@ export const useCheckSubmitValid = ({
     }
   }, [
     chainId,
+    maxApe,
     deposit,
     decimals,
     useEth,
