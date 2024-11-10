@@ -8,7 +8,7 @@ interface Props {
   versus: VaultFieldFragment[];
   leverageTiers: number[];
 }
-export default function VaultParamsSelects({
+export default function VaultParamsInputSelects({
   form,
   long,
   versus,

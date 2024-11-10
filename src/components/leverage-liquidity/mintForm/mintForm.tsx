@@ -11,7 +11,7 @@ import { formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
-import VaultParamsSelects from "./vaultParamsSelects";
+import VaultParamsInputSelects from "./vaultParamsInputSelects";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
@@ -214,7 +214,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
               tokenReceived={tokenReceived}
             />
           </TransactionModal.InfoContainer>
-          {/* ---------------------------------- */}
           <TransactionModal.StatSubmitContainer>
             <Show when={submitType === ESubmitType.mint && !isConfirmed}>
               <TransactionModal.StatContainer>
@@ -222,7 +221,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                   title={"Fee Percent"}
                   value={fee ? fee.toString() + "%" : "0%"}
                 />
-
                 <TransactionModal.StatRow
                   title="Fee Amount"
                   value={`${formatNumber(
@@ -249,7 +247,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         </TransactionModal.Root>
 
         {/* Versus, Long, and Leverage Dropdowns */}
-        <VaultParamsSelects
+        <VaultParamsInputSelects
           form={form}
           versus={versus}
           leverageTiers={leverageTiers}
