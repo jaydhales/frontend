@@ -11,7 +11,7 @@ import { formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
-import TopSelects from "./topSelects";
+import VaultParamsSelects from "./vaultParamsSelects";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
@@ -29,6 +29,8 @@ import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { TransactionEstimates } from "./transactionEstimates";
 import { calculateApeVaultFee } from "@/lib/utils/calculations";
 import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
+import { useResetAfterApprove } from "./hooks/useResetAfterApprove";
+import TransactionInfo from "./transactionInfo";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -168,7 +170,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const levTier = form.getValues("leverageTier");
   const fee = useMemo(() => {
     const lev = parseFloat(levTier);
-
     if (!isApe) {
       return "19";
     }
@@ -186,31 +187,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       setOpenTransactionModal(false);
     }
   };
-  const [isApproving, setIsApproving] = useState(false);
-  // Below is logic to prevent a Approval transaction from showing "Transaction Successful" in modal.
-  useEffect(() => {
-    if (submitType === ESubmitType.approve) {
-      setIsApproving(true);
-    }
-  }, [submitType]);
-  const utils = api.useUtils();
-  useEffect(() => {
-    if (isConfirmed && isApproving) {
-      utils.user.getBalance
-        .invalidate()
-        .then(() => {
-          reset();
-          setIsApproving(false);
-        })
-        .catch((e) => console.log(e));
-    }
-  }, [isApproving, reset, isConfirmed, utils.user.getBalance]);
-
-  const data = useCalculateMaxApe({
-    leverageTier: formData.leverageTier,
-    vaultId: parseInt(selectedVault.result?.vaultId ?? "-1"),
+  const isApproving = useResetAfterApprove({
+    isConfirmed,
+    reset,
+    submitType,
   });
-
   const deposit = form.getValues("deposit");
   useEffect(() => {
     if (!isPending && !isConfirming && !isConfirmed) {
@@ -226,60 +207,19 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         >
           <TransactionModal.Close setOpen={setOpenTransactionModal} />
           <TransactionModal.InfoContainer>
-            {!isConfirmed && (
-              <>
-                <TransactionStatus
-                  showLoading={isConfirming || userBalanceFetching}
-                  waitForSign={isPending}
-                  action={submitType === ESubmitType.mint ? "Mint" : "Approve"}
-                />
-
-                {submitType === ESubmitType.mint && (
-                  <TransactionEstimates
-                    isApe={isApe}
-                    usingEth={useEth}
-                    collateralEstimate={quoteData}
-                  />
-                )}
-                {submitType === ESubmitType.mint && (
-                  <TransactionModal.Disclaimer>
-                    Output is estimated.
-                  </TransactionModal.Disclaimer>
-                )}
-
-                {submitType === ESubmitType.approve && (
-                  <TransactionModal.Disclaimer>
-                    Approve SIR to send token funds .....
-                  </TransactionModal.Disclaimer>
-                )}
-              </>
-            )}
-            {isConfirming && isApproving && (
-              <div>
-                <h1>Loading...</h1>
-              </div>
-            )}
-            {isConfirmed && !isApproving && (
-              <div className="space-y-2">
-                <div className="flex animate-fade-in justify-center">
-                  <CircleCheck size={40} color="#F0C775" />
-                </div>
-                <h2 className="text-center text-gray-300">
-                  Transaction Successful!
-                </h2>
-                {Boolean(tokenReceived) && (
-                  <h3 className="flex items-center justify-center gap-x-1 ">
-                    <span className="text-xl font-bold ">
-                      {isApe ? "APE" : "TEA"}{" "}
-                      {formatNumber(
-                        formatUnits(tokenReceived ?? 0n, decimals),
-                        4,
-                      )}
-                    </span>
-                  </h3>
-                )}
-              </div>
-            )}
+            <TransactionInfo
+              decimals={decimals}
+              isConfirmed={isConfirmed}
+              isConfirming={isConfirming}
+              userBalanceFetching={userBalanceFetching}
+              isPending={isPending}
+              submitType={submitType}
+              isApe={isApe}
+              useEth={useEth}
+              quoteData={quoteData}
+              isApproving={isApproving}
+              tokenReceived={tokenReceived}
+            />
           </TransactionModal.InfoContainer>
           {/* ---------------------------------- */}
           <TransactionModal.StatSubmitContainer>
@@ -292,14 +232,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
 
                 <TransactionModal.StatRow
                   title="Fee Amount"
-                  value={
-                    formatNumber(
-                      parseFloat(deposit ?? "0") *
-                        (parseFloat(fee ?? "0") / 100),
-                    ) +
-                    " " +
-                    form.getValues("long").split(",")[1]
-                  }
+                  value={`${formatNumber(
+                    parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
+                  )} ${form.getValues("long").split(",")[1]}`}
                 />
               </TransactionModal.StatContainer>
             )}
@@ -319,7 +254,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         </TransactionModal.Root>
 
         {/* Versus, Long, and Leverage Dropdowns */}
-        <TopSelects
+        <VaultParamsSelects
           form={form}
           versus={versus}
           leverageTiers={leverageTiers}
