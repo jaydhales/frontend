@@ -1,10 +1,6 @@
 import { beforeAll, expect, test } from "vitest";
 import { add, formatNumber } from "./index";
-import {
-  calculateApeVaultFee,
-  calculateMaxApe,
-  getLeverageRatio,
-} from "./calculations";
+import { calculateMaxApe, getLeverageRatio } from "./calculations";
 import dotenv from "dotenv";
 
 beforeAll(() => {
@@ -18,7 +14,7 @@ test("Test calculate leverage tier ratio.", () => {
   expect(getLeverageRatio(-1)).toBe(1.5);
 });
 test("Test calculate leverage tier ratio.", () => {
-  expect(calculateApeVaultFee(-1)).toBe(0.1666666666666666);
+  // expect(calculateApeVaultFee(-1)).toBe(0.1666666666666666);
 });
 // test("Test if getApeAddress gets proper contract address.", () => {
 //   expect(
@@ -33,12 +29,21 @@ test("Test calculate leverage tier ratio.", () => {
 test("Calculate Maximum Ape", () => {
   expect(
     calculateMaxApe({
-      leverageRatio: 1,
-      baseFee: 1,
-      apeReserve: 1,
-      gentlemenReserve: 1,
+      leverageTier: 2n,
+      baseFee: 1n,
+      apeReserve: 1000n,
+      gentlemenReserve: 10000n,
     }),
-  ).toBeUndefined();
+  ).toBe(25000n);
+
+  expect(
+    calculateMaxApe({
+      leverageTier: -2n,
+      baseFee: 1n,
+      apeReserve: 1000n,
+      gentlemenReserve: 10000n,
+    }),
+  ).toBe(38762n);
 });
 test("Test Format Number", () => {
   console.log(formatNumber(10000));

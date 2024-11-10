@@ -37,33 +37,43 @@ export function getLeverageRatio(k: number) {
  *
  */
 interface Params {
-  leverageRatio: bigint;
+  leverageTier: bigint;
   baseFee: bigint;
   apeReserve: bigint;
   gentlemenReserve: bigint;
 }
 export function calculateMaxApe({
-  leverageRatio,
+  leverageTier,
   baseFee,
   apeReserve,
   gentlemenReserve,
 }: Params) {
-  console.log(
-    { leverageRatio, baseFee, apeReserve, gentlemenReserve },
-    "Params",
-  );
+  console.log(leverageTier, "LEVERAGE TIER");
   try {
-    const nom =
-      ((100n + (leverageRatio - 100n) * baseFee) / (leverageRatio - 100n)) *
-      (leverageRatio - baseFee);
-    const result =
-      nom * (gentlemenReserve - 125n * (leverageRatio - 100n) * apeReserve);
-    if (!Number.isFinite(result)) {
-      throw Error("Not valid");
+    const base_fee = baseFee * 10000n;
+    if (leverageTier > 0) {
+      const nom =
+        (10n ** 4n + 2n ** leverageTier * base_fee) *
+        (4n * gentlemenReserve - 5n * 2n ** leverageTier * apeReserve);
+      const result = nom / (2n ** (leverageTier + 2n) * (12500n - base_fee));
+      return result;
+    } else {
+      const a = 5n * apeReserve;
+      const b = 2n ** -leverageTier;
+      const nom =
+        (2n ** -leverageTier * 10n ** 4n + base_fee) *
+        (2n ** (2n - leverageTier) * gentlemenReserve - a);
+      const dom = 2n ** (2n - leverageTier) * (12500n - b);
+      console.log(
+        { dom, nom },
+        2n ** (2n - leverageTier),
+        12500n - b * base_fee,
+      );
+      const result = nom / dom;
+      console.log({ result });
+      return result;
     }
-    return result;
   } catch {
-    // catch math errors
     return undefined;
   }
 }
