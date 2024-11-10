@@ -28,6 +28,7 @@ import { calculateApeVaultFee } from "@/lib/utils/calculations";
 import { useResetAfterApprove } from "./hooks/useResetAfterApprove";
 import TransactionInfo from "./transactionInfo";
 import Show from "@/components/shared/show";
+import useFormFee from "./hooks/useFormFee";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -160,19 +161,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       reset();
     }
   }, [isConfirmed, reset, openTransactionModal]);
-  const levTier = form.getValues("leverageTier");
-  const fee = useMemo(() => {
-    const lev = parseFloat(levTier);
-    if (!isApe) {
-      return "19";
-    }
 
-    if (isFinite(lev)) {
-      return formatNumber(calculateApeVaultFee(lev) * 100, 2);
-    } else {
-      return undefined;
-    }
-  }, [isApe, levTier]);
+  const levTier = form.getValues("leverageTier");
+  const fee = useFormFee({ levTier, isApe });
   const modalSubmit = () => {
     if (!isConfirmed) {
       onSubmit();
