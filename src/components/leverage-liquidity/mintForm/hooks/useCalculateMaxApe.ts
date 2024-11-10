@@ -15,8 +15,8 @@ export function useCalculateMaxApe({
     { vaultId },
     { enabled: vaultId !== -1 && isFinite(vaultId) },
   );
-  const ape = parseFloat(formatUnits(data?.[0]?.reserveApes ?? 0n, 18));
-  const tea = parseFloat(formatUnits(data?.[0]?.reserveLPers ?? 0n, 18));
+  const ape = parseFloat(formatUnits(data?.[0]?.reserveApes ?? 0n, 0));
+  const tea = parseFloat(formatUnits(data?.[0]?.reserveLPers ?? 0n, 0));
   const calc = useMemo(() => {
     return calculateMaxApe({
       leverageRatio: parseFloat(leverageTier),
