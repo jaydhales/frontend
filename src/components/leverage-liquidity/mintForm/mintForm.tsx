@@ -24,7 +24,6 @@ import { useTransactions } from "./hooks/useTransactions";
 import TransactionModal from "@/components/shared/transactionModal";
 import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
-import { calculateApeVaultFee } from "@/lib/utils/calculations";
 import { useResetAfterApprove } from "./hooks/useResetAfterApprove";
 import TransactionInfo from "./transactionInfo";
 import Show from "@/components/shared/show";
