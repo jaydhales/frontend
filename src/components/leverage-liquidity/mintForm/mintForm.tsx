@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "@/trpc/react";
 import {
   useAccount,
@@ -129,15 +129,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     errorMessage,
     rootErrorMessage: form.formState.errors.root?.message,
   });
-  const onSubmit = () => {
+
+  const onSubmit = useCallback(() => {
     if (submitType === null) {
       return;
     }
-    // if (useEth && requests.mintWithETHRequest) {
-    //   writeContract(requests.mintWithETHRequest);
-    //   return;
-    // }
-    // CHECK ALLOWANCE
     if (submitType === ESubmitType.mint && requests.mintRequest) {
       setCurrentTxType("mint");
       writeContract?.(requests.mintRequest);
@@ -148,7 +144,12 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       writeContract(requests.approveWriteRequest);
       return;
     }
-  };
+  }, [
+    requests.approveWriteRequest,
+    requests.mintRequest,
+    submitType,
+    writeContract,
+  ]);
 
   let balance = userBalance?.tokenBalance?.result;
   if (useEth) {
