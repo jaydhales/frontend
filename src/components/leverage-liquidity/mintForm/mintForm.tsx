@@ -21,14 +21,10 @@ import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
-import { TransactionStatus } from "./transactionStatus";
-import { CircleCheck } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
-import { TransactionEstimates } from "./transactionEstimates";
 import { calculateApeVaultFee } from "@/lib/utils/calculations";
-import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 import { useResetAfterApprove } from "./hooks/useResetAfterApprove";
 import TransactionInfo from "./transactionInfo";
 import Show from "@/components/shared/show";
@@ -59,17 +55,14 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     },
   );
 
-  let decimals = decimalData ?? 18;
   const useEth = useMemo(() => {
     // Ensure use eth toggle is not used on non-weth tokens
-    if (
-      formData.long.split(",")[0]?.toLowerCase() === WETH_ADDRESS.toLowerCase()
-    ) {
-      return useEthRaw;
-    } else {
-      return false;
-    }
+    const isWeth =
+      formData.long.split(",")[0]?.toLowerCase() === WETH_ADDRESS.toLowerCase();
+    return isWeth ? useEthRaw : false;
   }, [useEthRaw, formData.long]);
+
+  const decimals = useEth ? 18 : decimalData ?? 18;
 
   const {
     requests,
@@ -83,9 +76,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     vaultsQuery,
     decimals,
   });
-  if (useEth) {
-    decimals = 18;
-  }
   const { versus, leverageTiers, long } = useSelectMemo({
     formData,
     vaultsQuery,
@@ -97,9 +87,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     isSuccess: isConfirmed,
     data: transactionData,
   } = useWaitForTransactionReceipt({ hash });
+
   const selectedVault = useMemo(() => {
     return findVault(vaultsQuery, formData);
   }, [formData, vaultsQuery]);
+
   const { tokenReceived } = useGetReceivedTokens({
     apeAddress: selectedVault.result?.apeAddress ?? "0x",
     logs: transactionData?.logs,
