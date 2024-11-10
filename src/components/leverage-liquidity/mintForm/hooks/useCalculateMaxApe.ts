@@ -3,14 +3,12 @@ import { mapLeverage } from "@/lib/utils";
 import { calculateMaxApe } from "@/lib/utils/calculations";
 import { api } from "@/trpc/react";
 import { useMemo } from "react";
-import { formatUnits } from "viem";
+import { parseUnits } from "viem";
 
 export function useCalculateMaxApe({
   leverageTier,
   vaultId,
-  decimals,
 }: {
-  decimals: number;
   vaultId: number;
   leverageTier: string;
 }) {
@@ -18,16 +16,15 @@ export function useCalculateMaxApe({
     { vaultId },
     { enabled: vaultId !== -1 && isFinite(vaultId) },
   );
-  const ape = parseFloat(formatUnits(data?.[0]?.reserveApes ?? 0n, decimals));
-  const tea = parseFloat(formatUnits(data?.[0]?.reserveLPers ?? 0n, decimals));
+  const ape = data?.[0]?.reserveApes ?? 0n;
+  const tea = data?.[0]?.reserveLPers ?? 0n;
   const calc = useMemo(() => {
     return calculateMaxApe({
-      leverageRatio: parseFloat(mapLeverage(leverageTier) ?? "0"),
-      baseFee: BASE_FEE,
+      leverageRatio: parseUnits(mapLeverage(leverageTier) ?? "0", 2),
+      baseFee: parseUnits(BASE_FEE.toString(), 2),
       apeReserve: ape,
       gentlemenReserve: tea,
     });
   }, [ape, leverageTier, tea]);
-  console.log(calc, "CALC");
   return calc;
 }

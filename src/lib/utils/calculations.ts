@@ -37,10 +37,10 @@ export function getLeverageRatio(k: number) {
  *
  */
 interface Params {
-  leverageRatio: number;
-  baseFee: number;
-  apeReserve: number;
-  gentlemenReserve: number;
+  leverageRatio: bigint;
+  baseFee: bigint;
+  apeReserve: bigint;
+  gentlemenReserve: bigint;
 }
 export function calculateMaxApe({
   leverageRatio,
@@ -50,14 +50,14 @@ export function calculateMaxApe({
 }: Params) {
   console.log(
     { leverageRatio, baseFee, apeReserve, gentlemenReserve },
-    "HELLO",
+    "Params",
   );
   try {
-    const x_max =
-      ((1 + (leverageRatio - 1) * baseFee) / (leverageRatio - 1)) *
+    const nom =
+      ((100n + (leverageRatio - 100n) * baseFee) / (leverageRatio - 100n)) *
       (leverageRatio - baseFee);
     const result =
-      x_max * (gentlemenReserve - 1.25 * (leverageRatio - 1) * apeReserve);
+      nom * (gentlemenReserve - 125n * (leverageRatio - 100n) * apeReserve);
     if (!Number.isFinite(result)) {
       throw Error("Not valid");
     }
