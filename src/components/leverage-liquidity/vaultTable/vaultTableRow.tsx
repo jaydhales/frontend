@@ -53,6 +53,7 @@ export function VaultTableRow({
     apeCollateral: pool.apeCollateral,
     teaCollateral: pool.teaCollateral,
   });
+
   const showPercent = () => {
     if (!isFinite(tvlPercent)) {
       return false;
