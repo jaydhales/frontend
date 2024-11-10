@@ -48,11 +48,15 @@ export function calculateMaxApe({
   apeReserve,
   gentlemenReserve,
 }: Params) {
+  console.log(
+    { leverageRatio, baseFee, apeReserve, gentlemenReserve },
+    "HELLO",
+  );
   try {
-    let x_max =
+    const x_max =
       ((1 + (leverageRatio - 1) * baseFee) / (leverageRatio - 1)) *
-      (1.25 - baseFee);
-    let result =
+      (leverageRatio - baseFee);
+    const result =
       x_max * (gentlemenReserve - 1.25 * (leverageRatio - 1) * apeReserve);
     if (!Number.isFinite(result)) {
       throw Error("Not valid");
