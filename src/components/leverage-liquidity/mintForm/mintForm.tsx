@@ -203,9 +203,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         .catch((e) => console.log(e));
     }
   }, [isApproving, reset, isConfirmed, utils.user.getBalance]);
+
   const data = useCalculateMaxApe({
     leverageTier: formData.leverageTier,
     vaultId: parseInt(selectedVault.result?.vaultId ?? "-1"),
+    decimals: selectedVault.result?.apeDecimals ?? 18,
   });
 
   const deposit = form.getValues("deposit");
