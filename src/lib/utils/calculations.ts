@@ -9,7 +9,7 @@ interface AprParams {
 
 /**
  * calculateApr - Returns APR for SIR.
- * @returns number
+ * @returns bigint - Returns 0n if error.
  */
 export function calculateApr({
   ethDividends,
@@ -17,17 +17,22 @@ export function calculateApr({
   sirUsdPrice,
   ethUsdPrice,
 }: AprParams) {
-  // Add zeros to keep decimals;
-  // Since both are sides are multiplied keeps things porportional
-  const sirPriceUsdBigInt = parseUnits(sirUsdPrice, 3);
-  const ethPriceUsdBigInt = parseUnits(ethUsdPrice, 3);
-  const ethDecimals = 10n ** 18n;
-  const sirDecimals = 10n ** 12n;
-  const ethInUsd = (ethDividends * ethPriceUsdBigInt) / ethDecimals;
-  const sirInUsd = (amountOfStakedSir * sirPriceUsdBigInt) / sirDecimals;
-  console.log({ ethInUsd, sirInUsd });
-  const result = (12n * ethInUsd) / sirInUsd;
-  return result * 100n;
+  try {
+    // Add zeros to keep decimals;
+    // Since both are sides are multiplied keeps things porportional
+    const sirPriceUsdBigInt = parseUnits(sirUsdPrice, 12);
+    const ethPriceUsdBigInt = parseUnits(ethUsdPrice, 12);
+    const ethDecimals = 10n ** 18n;
+    const sirDecimals = 10n ** 12n;
+    const ethInUsd = (ethDividends * ethPriceUsdBigInt) / ethDecimals;
+    const sirInUsd = (amountOfStakedSir * sirPriceUsdBigInt) / sirDecimals;
+    console.log(sirInUsd, "SIR in usud");
+    const result = (12n * ethInUsd) / sirInUsd;
+    return result * 100n;
+  } catch (e) {
+    console.log(e);
+    return 0n;
+  }
 }
 /**
  *
