@@ -221,6 +221,7 @@ export const userRouter = createTRPCRouter({
     });
     return result;
   }),
+
   getSirTotalSupply: publicProcedure.query(async () => {
     const result = await readContract({
       abi: SirContract.abi,

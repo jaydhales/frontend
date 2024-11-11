@@ -3,7 +3,7 @@ import { FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { formatUnits } from "viem";
 import type { TBurnForm } from "./burnForm";
-import { formatNumber } from "@/lib/utils";
+import { formatNumber, inputPatternMatch } from "@/lib/utils";
 
 export function Section({
   form,
@@ -39,9 +39,9 @@ export function Section({
                   pattern="^[0-9]*[.,]?[0-9]*$"
                   {...field}
                   onChange={(e) => {
-                    const pattern = /^[0-9]*[.,]?[0-9]*$/;
-                    if (pattern.test(e.target.value))
+                    if (inputPatternMatch(e.target.value, positionDecimals)) {
                       return field.onChange(e.target.value);
+                    }
                   }}
                 ></Input>
               </FormControl>
@@ -64,7 +64,7 @@ export function Section({
           }}
         />
 
-        <span className="text-sm italic text-gray-500">
+        <span className="text-sm italic text-gray-300">
           Balance{" "}
           {formatNumber(formatUnits(balance ?? 0n, positionDecimals), 8)}
         </span>

@@ -201,7 +201,7 @@ export default function CreateVaultForm() {
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="grid grid-cols-3 gap-4"
+                  className="grid grid-cols-2 gap-4 md:grid-cols-3"
                 >
                   {["-4", "-3", "-2", "-1", "0", "1", "2"].map((e, index) => {
                     return (

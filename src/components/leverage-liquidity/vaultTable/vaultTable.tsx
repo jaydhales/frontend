@@ -48,17 +48,17 @@ export default function VaultTable({
 
 function VaultTableRowHeaders() {
   return (
-    <tr className="grid grid-cols-6 px-1 text-left text-[14px] font-normal text-gray-400 md:grid-cols-9">
+    <tr className="grid grid-cols-4 px-1 text-left text-[14px] font-normal text-gray-400 md:grid-cols-9">
       <th className="font-medium">#</th>
       <th className="font-medium md:col-span-3">Vault</th>
 
-      <th className="flex items-center gap-x-1 font-medium">
+      <th className="hidden items-center gap-x-1 font-medium md:flex">
         <span>POL</span>
         <ToolTip size={15}>
           Protocol Owned Liquidity is liquidity that will never be withdrawn.
         </ToolTip>
       </th>
-      <th className="flex items-center gap-x-1 font-medium">
+      <th className="hidden items-center gap-x-1 font-medium md:flex">
         Fees
         <ToolTip size={15}>
           Fee charged to apes when minting or burning.

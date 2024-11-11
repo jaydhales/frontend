@@ -8,8 +8,10 @@ export const WETH_ADDRESS = (
     : "0xfff9976782d46cc05630d1f6ebab18b2324d6b14".toLowerCase()
 ) as TAddressString;
 
-export const BASE_FEE = 0.4;
-export const L_FEE = 0.2345;
+export const ASSET_REPO =
+  "https://raw.githubusercontent.com/SIR-trading/assets/master";
+export const BASE_FEE = parseFloat(env.NEXT_PUBLIC_BASE_FEE);
+export const L_FEE = parseFloat(env.NEXT_PUBLIC_MINTING_FEE);
 
 export const LeverageTiers = {
   [LeverageTier.one]: -1,
@@ -18,7 +20,4 @@ export const LeverageTiers = {
   [LeverageTier.four]: -4,
 };
 
-export const ASSET_URL =
-  "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/arbitrum/assets/";
-export const APE_HASH = env.NEXT_PUBLIC_APE_HASH as TAddressString;
 //redeploy

@@ -46,12 +46,12 @@ export function BurnTableRow({
         </th>
         <th className="flex  items-center gap-x-1 font-normal text-gray-200">
           <ImageWithFallback
-            alt={row.debtSymbol}
+            alt={row.collateralToken}
             src={getLogoAsset(row.collateralToken)}
             width={20}
             height={20}
           />
-          <span className="text-[14px]">{row.debtSymbol}</span>
+          <span className="text-[14px]">{row.collateralSymbol}</span>
         </th>
         <th className="flex items-center gap-x-1 font-normal text-gray-200">
           <ImageWithFallback
@@ -60,7 +60,7 @@ export function BurnTableRow({
             width={20}
             height={20}
           />
-          <span className="text-[14px]">{row.collateralSymbol}</span>
+          <span className="text-[14px]">{row.debtSymbol}</span>
         </th>
         <th className="font-normal text-gray-200">
           {getLeverageRatio(parseInt(row.leverageTier))}x
@@ -102,22 +102,16 @@ export function BurnTableRow({
               </Button>
             </div>
           </div>
-
-          {/* {!isApe && ( */}
-          {/*   <div className="flex justify-between lg:gap-x-8 gap-x-4 items-center"> */}
-          {/*     <span> */}
-          {/*       {formatNumber(teaBalance, 4)} */}
-          {/**/}
-          {/*       <span className="text-[12px] text-gray-400 pl-1">SIR</span> */}
-          {/*     </span> */}
-          {/*   </div> */}
-          {/* )} */}
         </th>
       </tr>
       <BurnTableRowMobile
+        apeBalance={apeBalance}
+        teaBalance={teaBalance}
+        rewards={rewards}
         row={{
           ...row,
         }}
+        teaRewards={teaRewards}
         apeAddress={apeAddress}
         isApe={isApe}
         setSelectedRow={setSelectedRow}
@@ -129,17 +123,19 @@ export function BurnTableRow({
 export function BurnTableRowMobile({
   setSelectedRow,
   isApe,
-  apeAddress,
   row,
-}: Props) {
-  const { apeBal, teaBal } = useTeaAndApeBals({
-    apeAddress,
-    vaultId: row.vaultId,
-    isApe,
-  });
-  const teaBalance = teaBal ?? 0n;
+  teaRewards,
+  rewards,
+  teaBalance,
+  apeBalance,
+}: Props & {
+  teaRewards: bigint | undefined;
+  rewards: string;
+  apeBalance: string;
+  teaBalance: string;
+}) {
   return (
-    <tr className="flex w-full flex-col gap-y-4  rounded-md bg-black/60 p-2 py-2 pb-4  text-[14px]   md:hidden">
+    <tr className="flex w-full flex-col gap-y-4  rounded-md bg-secondary p-2 py-2 pb-4  text-[14px]   md:hidden">
       <div className=" justify-center pt-1 font-bold">
         <div className="flex justify-center text-lg">
           <span className="">{isApe ? "APE" : "TEA"}</span>
@@ -153,25 +149,48 @@ export function BurnTableRowMobile({
         {getLeverageRatio(parseInt(row.leverageTier))}
       </MobileTh>
       <MobileTh title="Balance">
-        {isApe ? (
-          <span>
-            {parseFloat(parseFloat(formatUnits(apeBal ?? 0n, 18)).toFixed(4))}
-          </span>
-        ) : (
-          <span>
-            {parseFloat(parseFloat(formatUnits(teaBal ?? 0n, 18)).toFixed(4))}
-          </span>
-        )}
+        {isApe ? <span>{teaBalance}</span> : <span>{apeBalance}</span>}
       </MobileTh>
       <th>
-        <Button
-          onClick={() => setSelectedRow(false)}
-          type="button"
-          disabled={teaBalance === 0n}
-          className="h-8 rounded-full px-5 py-2 text-[14px] "
-        >
-          Burn
-        </Button>
+        <div className="space-x-1">
+          {!isApe && (
+            <Button
+              onClick={() => setSelectedRow(true)}
+              type="button"
+              disabled={teaRewards === 0n}
+              className="h-7 rounded-full px-5 text-[14px] "
+            >
+              <div>
+                <span>Claim</span>
+                <span className="pl-1 text-[12px] text-gray-300">
+                  <span>{formatNumber(rewards, 2)}</span>
+                  <span className="pl-[2px] ">SIR</span>
+                </span>
+              </div>
+            </Button>
+          )}
+          <Button
+            onClick={() => setSelectedRow(false)}
+            disabled={
+              isApe
+                ? parseFloat(apeBalance) === 0
+                : parseFloat(teaBalance) === 0
+            }
+            type="button"
+            className="h-7 w-[65px] rounded-full px-5 py-2 text-[14px] "
+          >
+            {"Burn"}
+          </Button>
+        </div>
+        {/**/}
+        {/* <Button */}
+        {/*   onClick={() => setSelectedRow(false)} */}
+        {/*   type="button" */}
+        {/*   disabled={teaBalance === 0n} */}
+        {/*   className="h-8 rounded-full px-5 py-2 text-[14px] " */}
+        {/* > */}
+        {/*   Burn */}
+        {/* </Button> */}
       </th>
     </tr>
   );
