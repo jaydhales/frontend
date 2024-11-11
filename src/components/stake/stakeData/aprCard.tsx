@@ -1,3 +1,5 @@
+"use server";
+import Show from "@/components/shared/show";
 import ToolTip from "@/components/ui/tooltip";
 import { SIR_USD_PRICE } from "@/data/constants";
 import { env } from "@/env";
@@ -77,7 +79,9 @@ export default async function AprCard() {
         {/* <AprInfo></AprInfo> */}
       </div>
       <div className="font-lora text-2xl ">
-        <h1>{formatNumber(formatUnits(APR, 0))}%</h1>
+        <Show when={APR > 0n} fallback={<h1>N/A</h1>}>
+          <h1>{formatNumber(formatUnits(APR, 0))}%</h1>
+        </Show>
       </div>
     </div>
   );
