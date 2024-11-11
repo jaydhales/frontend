@@ -69,19 +69,21 @@ export default function TransactionInfo({
     );
   }
   if (isConfirmed && !isApproving) {
-    <div className="space-y-2">
-      <div className="flex animate-fade-in justify-center">
-        <CircleCheck size={40} color="#F0C775" />
+    return (
+      <div className="space-y-2">
+        <div className="flex animate-fade-in justify-center">
+          <CircleCheck size={40} color="#F0C775" />
+        </div>
+        <h2 className="text-center text-gray-300">Transaction Successful!</h2>
+        {Boolean(tokenReceived) && (
+          <h3 className="flex items-center justify-center gap-x-1 ">
+            <span className="text-xl font-bold ">
+              {isApe ? "APE" : "TEA"}{" "}
+              {formatNumber(formatUnits(tokenReceived ?? 0n, decimals), 4)}
+            </span>
+          </h3>
+        )}
       </div>
-      <h2 className="text-center text-gray-300">Transaction Successful!</h2>
-      {Boolean(tokenReceived) && (
-        <h3 className="flex items-center justify-center gap-x-1 ">
-          <span className="text-xl font-bold ">
-            {isApe ? "APE" : "TEA"}{" "}
-            {formatNumber(formatUnits(tokenReceived ?? 0n, decimals), 4)}
-          </span>
-        </h3>
-      )}
-    </div>;
+    );
   }
 }
