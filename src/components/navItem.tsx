@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 
 const navItemVariants = cva(
   "cursor-pointer rounded-md text-gray-400 px-2 py-1 data-[main=true]:bg-primary data-[active=true]:text-white",
-
   {
     variants: {
       theme: {

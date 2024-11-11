@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { formatUnits } from "viem";
 // import ToolTip from "@/components/ui/tooltip";
 import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
+import { formatNumber } from "@/lib/utils";
 
 interface supplyProps {
   data?: bigint;
@@ -30,22 +31,8 @@ const StakeData = ({ children }: { children: ReactNode }) => {
         <div className="text-sm font-medium text-gray-300">
           Total Staked SIR
         </div>
-        {/* <div className="text-2xl font-semibold font-lora">
-          {parseFloat(formatUnits(totalValueLocked ?? 0n, 12)).toFixed(4)}
-        </div> */}
         <div className="font-lora text-2xl font-normal">
-          {(() => {
-            const value = parseFloat(formatUnits(totalValueLocked ?? 0n, 12));
-            if (value >= 1e9) {
-              return (value / 1e9).toFixed(2) + "B";
-            } else if (value >= 1e6) {
-              return (value / 1e6).toFixed(2) + "M";
-            } else if (value >= 1e3) {
-              return Math.floor(value).toLocaleString();
-            } else {
-              return value.toFixed(2);
-            }
-          })()}
+          {formatNumber(formatUnits(totalValueLocked ?? 0n, 12))}
         </div>
       </div>
 
