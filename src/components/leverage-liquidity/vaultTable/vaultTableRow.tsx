@@ -48,6 +48,7 @@ export function VaultTableRow({
   const tvlPercent = tvl / apeCollateral;
   const variant = useCalculateVaultHealth({
     tvl: parseUnits(pool.totalValue, 18),
+    vaultId: pool.vaultId,
     isApe,
     leverageTier: pool.leverageTier,
     apeCollateral: pool.apeCollateral,
@@ -140,8 +141,8 @@ export function VaultTableRow({
               </Badge>
             </div>
           </HoverCardTrigger>
-          <HoverCardContent side="bottom" alignOffset={10}>
-            <div className="mt-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
+          <HoverCardContent side="top" alignOffset={4}>
+            <div className="mb-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
               <DisplayBadgeInfo
                 variant={variant}
                 isApe={isApe}
@@ -173,19 +174,22 @@ function DisplayBadgeInfo({
   variant: VariantProps<typeof badgeVariants>;
   isApe: boolean;
 }) {
+  console.log(variant.variant, "VARIANT");
   if (variant.variant === "green") {
     return isApe ? (
       <span>Healthy, more than enough liquidity.</span>
     ) : (
       <span>Highly profitable</span>
     );
-  } else if (variant.variant === "yellow") {
-    isApe ? (
+  }
+  if (variant.variant === "yellow") {
+    return isApe ? (
       <span>Borderline, just enough liquidity.</span>
     ) : (
       <span>Moderately profitable</span>
     );
-  } else if (variant.variant === "red") {
+  }
+  if (variant.variant === "red") {
     return isApe ? (
       <span>Degraded, insufficient liquidity for constant leverage.</span>
     ) : (
