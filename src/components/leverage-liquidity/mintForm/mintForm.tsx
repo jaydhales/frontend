@@ -28,6 +28,7 @@ import { useResetAfterApprove } from "./hooks/useResetAfterApprove";
 import TransactionInfo from "./transactionInfo";
 import Show from "@/components/shared/show";
 import useFormFee from "./hooks/useFormFee";
+import { useResetTransactionModal } from "./hooks/useResetTransactionModal";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -153,13 +154,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     balance = userEthBalance;
   }
 
-  const [openTransactionModal, setOpenTransactionModal] = useState(false);
-
-  useEffect(() => {
-    if (isConfirmed && !openTransactionModal) {
-      reset();
-    }
-  }, [isConfirmed, reset, openTransactionModal]);
+  const { openTransactionModal, setOpenTransactionModal } =
+    useResetTransactionModal({ reset, isConfirmed });
 
   const levTier = form.getValues("leverageTier");
   const fee = useFormFee({ levTier, isApe });
@@ -180,6 +176,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     if (!isPending && !isConfirming && !isConfirmed) {
       setOpenTransactionModal(false);
     }
+    // - setOpenTransactionModal is const
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPending, isConfirming, isConfirmed]);
   return (
     <Card>
