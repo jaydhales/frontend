@@ -1,16 +1,16 @@
-import type { ReactNode } from "react";
 import StakeData from "@/components/stake/stakeData/stakeData";
 import Explainer from "../shared/explainer";
 import { EPage } from "@/lib/types";
 import { Container } from "../ui/container";
+import StakeTabs from "./stakeTabs";
 
-const stakePage = ({ children }: { children: ReactNode }) => {
+const stakePage = () => {
   return (
     <div className="">
       <Container className="w-[600px] pt-[44px]">
         <Explainer page={EPage.STAKE} />
         <StakeData />
-        {children}
+        <StakeTabs />
       </Container>
     </div>
   );
