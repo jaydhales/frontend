@@ -1,5 +1,34 @@
 import { BASE_FEE, L_FEE } from "@/data/constants";
+import { parseUnits } from "viem";
+interface AprParams {
+  ethDividends: bigint;
+  amountOfStakedSir: bigint;
+  sirUsdPrice: string;
+  ethUsdPrice: string;
+}
 
+/**
+ * calculateApr - Returns APR for SIR.
+ * @returns number
+ */
+export function calculateApr({
+  ethDividends,
+  amountOfStakedSir,
+  sirUsdPrice,
+  ethUsdPrice,
+}: AprParams) {
+  // Add zeros to keep decimals;
+  // Since both are sides are multiplied keeps things porportional
+  const sirPriceUsdBigInt = parseUnits(sirUsdPrice, 3);
+  const ethPriceUsdBigInt = parseUnits(ethUsdPrice, 3);
+  const ethDecimals = 10n ** 18n;
+  const sirDecimals = 10n ** 12n;
+  const ethInUsd = (ethDividends * ethPriceUsdBigInt) / ethDecimals;
+  const sirInUsd = (amountOfStakedSir * sirPriceUsdBigInt) / sirDecimals;
+  console.log({ ethInUsd, sirInUsd });
+  const result = (12n * ethInUsd) / sirInUsd;
+  return result * 100n;
+}
 /**
  *
  * @param k - Leverage Tier should be values -4 to 2
