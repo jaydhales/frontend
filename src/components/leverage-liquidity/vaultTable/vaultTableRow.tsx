@@ -92,7 +92,7 @@ export function VaultTableRow({
                 </div>
               </HoverCardTrigger>
               <HoverCardContent side="top" alignOffset={10}>
-                <div className="mt-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
+                <div className="mb-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
                   <span>
                     {`LPers of this vault are rewarded with
                     ${formatNumber(formatUnits(parsedTaxAmount * 24n * 60n * 60n, 12), 10)}
