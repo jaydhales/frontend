@@ -1,16 +1,17 @@
 "use client";
 
 import { api } from "@/trpc/react";
+import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { formatUnits } from "viem";
-import ToolTip from "@/components/ui/tooltip";
+// import ToolTip from "@/components/ui/tooltip";
 import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
 
 interface supplyProps {
   data?: bigint;
 }
 
-const StakeData = () => {
+const StakeData = ({ children }: { children: ReactNode }) => {
   const { data: unstakedSupply }: supplyProps =
     api.user.getSirSupply.useQuery();
   const { data: totalSupply }: supplyProps =
@@ -57,14 +58,7 @@ const StakeData = () => {
           {formatUnits(userStakedSir, 12)}
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
-        <div className="flex w-full flex-row items-center justify-center">
-          <div className="px-2 text-sm text-gray-300">Staking APR</div>
-          <ToolTip>Tool tip info.</ToolTip>
-          {/* <AprInfo></AprInfo> */}
-        </div>
-        <div className="font-lora text-2xl ">N/A</div>
-      </div>
+      {children}
     </div>
   );
 };
