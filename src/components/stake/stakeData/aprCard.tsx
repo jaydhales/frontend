@@ -1,7 +1,11 @@
 import ToolTip from "@/components/ui/tooltip";
+import { SIR_USD_PRICE } from "@/data/constants";
 import { env } from "@/env";
+import { formatNumber } from "@/lib/utils";
+import { calculateApr } from "@/lib/utils/calculations";
 import { executeGetDividendsPaid } from "@/server/queries/dividendsPaid";
 import React from "react";
+import { formatUnits, parseUnits } from "viem";
 import z from "zod";
 
 const priceSchema = z.object({
@@ -29,28 +33,41 @@ const dividendsPaidSchema = z.object({
     ),
   }),
 });
-export default async function AprCard() {
-  const url =
-    "https://api.g.alchemy.com/prices/v1/tokens/by-symbol?symbols=ETH";
-  const headers = {
-    Accept: "application/json",
-    Authorization: `Bearer ${env.ALCHEMY_BEARER}`,
-  };
 
-  const response = (await fetch(url, {
+const url = "https://api.g.alchemy.com/prices/v1/tokens/by-symbol?symbols=ETH";
+const headers = {
+  Accept: "application/json",
+  Authorization: `Bearer ${env.ALCHEMY_BEARER}`,
+};
+export default async function AprCard() {
+  const ethPriceRequest = fetch(url, {
     method: "GET",
     headers: headers,
-  }).then((response) => response.json())) as unknown;
-  const parsed = priceSchema.safeParse(response);
-  if (!parsed.success) {
-    console.log(parsed.error);
-  }
+  }).then((response) => response.json());
 
-  const result = await executeGetDividendsPaid();
+  const dividendsPaidRequest = await executeGetDividendsPaid();
+  const [ethPriceResponse, dividendsPaidResponse] = await Promise.allSettled([
+    ethPriceRequest,
+    dividendsPaidRequest,
+  ]);
+  const safePrice = priceSchema.safeParse(
+    ethPriceResponse.status === "fulfilled" ? ethPriceResponse.value : null,
+  );
 
-  const parsedDividends = dividendsPaidSchema.safeParse(result);
-  if (parsedDividends.success) {
-    console.log(parsedDividends.data.data, "success");
+  const safeDividends = dividendsPaidSchema.safeParse(
+    dividendsPaidResponse.status === "fulfilled"
+      ? dividendsPaidResponse.value
+      : null,
+  );
+  //APR will be 0 if error occurs
+  let APR = 0n;
+  if (safePrice.success && safeDividends.success) {
+    APR = calculateApr({
+      ethDividends: parseUnits("0.01", 18),
+      sirUsdPrice: SIR_USD_PRICE,
+      ethUsdPrice: safePrice.data.data[0]?.prices[0]?.value ?? "0",
+      amountOfStakedSir: parseUnits("1000000", 12),
+    });
   }
   return (
     <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
@@ -60,7 +77,7 @@ export default async function AprCard() {
         {/* <AprInfo></AprInfo> */}
       </div>
       <div className="font-lora text-2xl ">
-        <h1>${parsed.success ? parsed.data.data[0]?.prices[0]?.value : "0"}</h1>
+        <h1>{formatNumber(formatUnits(APR, 0))}%</h1>
       </div>
     </div>
   );
