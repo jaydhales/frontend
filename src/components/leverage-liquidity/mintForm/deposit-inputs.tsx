@@ -46,7 +46,7 @@ function Inputs({
   return (
     <div
       data-state={disabled ? "disabled" : "active"}
-      className="flex justify-between rounded-md bg-primary p-3 data-[state=disabled]:opacity-50"
+      className="flex justify-between rounded-md bg-primary p-3 data-[state=disabled]:opacity-60"
     >
       <div>
         <FormField
