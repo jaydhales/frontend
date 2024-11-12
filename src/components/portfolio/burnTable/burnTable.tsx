@@ -20,11 +20,6 @@ export default function BurnTable({
       }
     | undefined
   >();
-  useEffect(() => {
-    if (selectedRow?.vaultId) {
-      window.document.getElementById("burn-form")?.scrollIntoView();
-    }
-  }, [selectedRow]);
   const { address } = useAccount();
   const ape = api.user.getApePositions.useQuery({ address });
   const tea = api.user.getTeaPositions.useQuery({ address });
@@ -47,6 +42,11 @@ export default function BurnTable({
     teaLength,
     filter,
   });
+  useEffect(() => {
+    if (selectedRow?.vaultId) {
+      window.document.getElementById("burn-form")?.scrollIntoView();
+    }
+  }, [selectedRow?.vaultId]);
   const loading = ape.isLoading || tea.isLoading;
   const apePosition = ape.data?.userPositions.map((r) => (
     <>
