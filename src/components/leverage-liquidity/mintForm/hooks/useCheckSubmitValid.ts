@@ -18,7 +18,7 @@ interface Props {
   approveFetching?: boolean;
   useEth?: boolean;
   decimals: number;
-  maxCollateralIn: bigint;
+  maxCollateralIn?: bigint;
 }
 export enum ESubmitType {
   "mint",
@@ -61,12 +61,14 @@ export const useCheckSubmitValid = ({
         submitType: ESubmitType.mint,
       };
     }
-    if (parseUnits(deposit ?? "0", decimals) < maxCollateralIn) {
-      return {
-        isValid: false,
-        errorMessage: "Insufficient liquidity in the vault.",
-        submitType: ESubmitType.mint,
-      };
+    if (maxCollateralIn) {
+      if (parseUnits(deposit ?? "0", decimals) < maxCollateralIn) {
+        return {
+          isValid: false,
+          errorMessage: "Insufficient liquidity in the vault.",
+          submitType: ESubmitType.mint,
+        };
+      }
     }
     if (useEth) {
       if ((ethBalance ?? 0n) < parseUnits(deposit ?? "0", decimals)) {
