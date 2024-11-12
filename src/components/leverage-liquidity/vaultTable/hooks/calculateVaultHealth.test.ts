@@ -7,17 +7,16 @@ beforeAll(() => {
 
 test("Testing calculating vault health.", () => {
   const leverageTier = 0,
-    teaCollateral = 100n,
+    teaCollateral = 220n,
     apeCollateral = 100n;
   expect(
     useCalculateVaultHealth({
       leverageTier,
       teaCollateral,
       apeCollateral,
-      isApe: false,
-      vaultId: "0",
+      isApe: true,
     }).variant,
-  ).toBe("green");
+  ).toBe("yellow");
 });
 
 test("Testing calculating tea side.", () => {
@@ -31,7 +30,6 @@ test("Testing calculating tea side.", () => {
       teaCollateral,
       apeCollateral,
       isApe,
-      vaultId: "0",
     }).variant,
-  ).toBe("yellow");
+  ).toBe("red");
 });
