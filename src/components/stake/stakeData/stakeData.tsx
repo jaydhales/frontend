@@ -4,7 +4,6 @@ import { api } from "@/trpc/react";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { formatUnits } from "viem";
-// import ToolTip from "@/components/ui/tooltip";
 import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
 import { formatNumber } from "@/lib/utils";
 
@@ -39,7 +38,6 @@ const StakeData = ({ children }: { children: ReactNode }) => {
       <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
         <div className="flex w-full flex-row items-center justify-center">
           <div className="px-2 text-sm text-gray-300">Your Staked SIR</div>
-          {/* <ToolTip>Tool tip info.</ToolTip> */}
         </div>
         <div className="font-lora text-2xl ">
           {formatUnits(userStakedSir, 12)}
