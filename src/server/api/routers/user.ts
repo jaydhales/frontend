@@ -194,7 +194,6 @@ export const userRouter = createTRPCRouter({
         functionName: "dividends",
         args: [input.user as TAddressString],
       });
-      console.log(result, "RESULT");
       return result;
     }),
   getTotalSirBalance: publicProcedure

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import * as classVarianceAuthority from "class-variance-authority";
 
 const InputVariants = classVarianceAuthority.cva(
-  "flex w-[200px] py-2 text-sm ring-offset-background " +
+  "flex w-full py-2 text-sm ring-offset-background " +
     "file:border-0 file:bg-transparent file:text-sm file:font-medium " +
     "placeholder:text-muted-foreground   focus-visible:outline-none " +
     " disabled:cursor-not-allowed disabled:opacity-50",
