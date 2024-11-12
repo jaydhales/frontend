@@ -243,11 +243,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 )}
               </>
             )}
-            {isConfirming && isApproving && (
-              <div>
-                <h1>Loading...</h1>
-              </div>
-            )}
             {isConfirmed && !isApproving && (
               <div className="space-y-2">
                 <div className="flex animate-fade-in justify-center">
@@ -262,6 +257,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                       <TokenDisplay
                         amount={tokenReceived}
                         unitLabel={isApe ? "APE" : "TEA"}
+                        round={12}
                       />
                     </span>
                   </h3>
