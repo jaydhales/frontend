@@ -14,6 +14,7 @@ import { formatNumber } from "@/lib/utils";
 import { CircleCheck } from "lucide-react";
 import { formatUnits } from "viem";
 import { Button } from "../ui/button";
+import { TokenDisplay } from "../ui/token-display";
 // import sirIcon from "../../../public/images/sir-logo.svg";
 // import type { StaticImageData } from "next/image";
 
@@ -67,10 +68,12 @@ export default function ContributorClaim() {
           />
           {!isConfirmed && (
             <div className="space-x-0.5 py-2">
-              <span className="text-lg">
-                {formatNumber(formatUnits(unclaimedData ?? 0n, 12), 8)}
-              </span>
-              <span className="text-gray-400">SIR</span>
+              <TokenDisplay
+                disableRounding
+                amount={unclaimedData}
+                decimals={12}
+                unitLabel={"SIR"}
+              />
             </div>
           )}
           {isConfirmed && (
