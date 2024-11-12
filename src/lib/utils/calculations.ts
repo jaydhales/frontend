@@ -50,12 +50,11 @@ export function calculateMaxApe({
 }: Params) {
   console.log(leverageTier, "LEVERAGE TIER");
   try {
-    const base_fee = baseFee * 10000n;
     if (leverageTier > 0) {
       const nom =
-        (10n ** 4n + 2n ** leverageTier * base_fee) *
+        (10n ** 4n + 2n ** leverageTier * baseFee) *
         (4n * gentlemenReserve - 5n * 2n ** leverageTier * apeReserve);
-      const result = nom / (2n ** (leverageTier + 2n) * (12500n - base_fee));
+      const result = nom / (2n ** (leverageTier + 2n) * (12500n - baseFee));
       return result;
     } else {
       const a = 5n * apeReserve;
