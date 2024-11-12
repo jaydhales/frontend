@@ -4,19 +4,16 @@ import type { VariantProps } from "class-variance-authority";
 import { formatUnits, parseUnits } from "viem";
 
 interface Props {
-  tvl: bigint;
   leverageTier: number;
   isApe: boolean;
   apeCollateral: bigint;
   teaCollateral: bigint;
-  vaultId: string;
 }
 export default function useCalculateVaultHealth({
   leverageTier,
   teaCollateral,
   apeCollateral,
   isApe,
-  vaultId,
 }: Props): VariantProps<typeof badgeVariants> {
   const ape = apeCollateral;
   const gentlemen = teaCollateral;
@@ -24,14 +21,6 @@ export default function useCalculateVaultHealth({
     parseFloat(mapLeverage(leverageTier.toString()) ?? "0") * 10000;
   const Gmin = (parseUnits(leverageRatio.toString(), 0) * ape) / 10000n;
   const mult = (Gmin * 125n) / 100n;
-  console.log({
-    teaCollateral,
-    apeCollateral,
-    Gmin,
-    mult,
-    leverageTier,
-    vaultId,
-  });
   if (gentlemen > mult) {
     return isApe ? { variant: "green" } : { variant: "yellow" };
   }
