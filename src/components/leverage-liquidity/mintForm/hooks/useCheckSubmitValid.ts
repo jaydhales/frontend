@@ -62,7 +62,7 @@ export const useCheckSubmitValid = ({
       };
     }
     if (maxCollateralIn) {
-      if (parseUnits(deposit ?? "0", decimals) < maxCollateralIn) {
+      if (parseUnits(deposit ?? "0", decimals) > maxCollateralIn) {
         return {
           isValid: false,
           errorMessage: "Insufficient liquidity in the vault.",
