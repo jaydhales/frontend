@@ -29,6 +29,7 @@ export type InputProps = React.HTMLAttributes<HTMLHeadElement> &
     amount: bigint | undefined;
     unitLabel: string;
     round?: number;
+    disableRounding?: boolean;
   };
 const TokenDisplay = React.forwardRef<HTMLInputElement, InputProps>(
   (
@@ -40,17 +41,21 @@ const TokenDisplay = React.forwardRef<HTMLInputElement, InputProps>(
       amountSize,
       labelSize,
       unitLabel,
+      disableRounding,
       ...props
     },
     ref,
   ) => {
+    const tokenAmount = disableRounding
+      ? formatUnits(amount ?? 0n, decimals ?? 18)
+      : formatNumber(formatUnits(amount ?? 0n, decimals ?? 18), round);
     return (
       <h3
         ref={ref}
         className={cn(AmountVariants({ amountSize, className }))}
         {...props}
       >
-        {formatNumber(formatUnits(amount ?? 0n, decimals ?? 18), round)}
+        {tokenAmount}
         <span className={cn(LabelVariants({ labelSize }))}> {unitLabel}</span>
       </h3>
     );
