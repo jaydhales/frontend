@@ -29,6 +29,8 @@ import TransactionInfo from "./transactionInfo";
 import Show from "@/components/shared/show";
 import useFormFee from "./hooks/useFormFee";
 import { useResetTransactionModal } from "./hooks/useResetTransactionModal";
+import ErrorMessage from "@/components/ui/error-message";
+import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -105,10 +107,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     "approve" | "mint" | undefined
   >();
   useFormSuccessReset({ isConfirming, isConfirmed, currentTxType, useEth });
+
+  const maxCollateralIn = useCalculateMaxApe({
+    leverageTier: formData.leverageTier,
+    vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
+  });
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
     ethBalance: userEthBalance,
-    leverageTier: formData.leverageTier,
-    vaultId: parseInt(selectedVault.result?.vaultId ?? "-1"),
     decimals,
     useEth,
     deposit: formData.deposit ?? "0",
@@ -118,6 +123,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     tokenAllowance: userBalance?.tokenAllowance?.result,
     mintFetching: isMintFetching,
     approveFetching: isApproveFetching,
+    maxCollateralIn: isApe ? maxCollateralIn : 0n,
   });
 
   const { quoteData } = useQuoteMint({ formData, isApe });
@@ -166,6 +172,16 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       setOpenTransactionModal(false);
     }
   };
+  const disabledInputs = useMemo(() => {
+    console.log(maxCollateralIn, "MAX COLLAT");
+    if (!isApe) return false;
+    if (!selectedVault.result?.vaultId) {
+      return false;
+    }
+    if ((maxCollateralIn ?? 0n) <= 0n) {
+      return true;
+    }
+  }, [maxCollateralIn, selectedVault.result?.vaultId, isApe]);
   const isApproving = useResetAfterApprove({
     isConfirmed,
     reset,
@@ -176,9 +192,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     if (!isPending && !isConfirming && !isConfirmed) {
       setOpenTransactionModal(false);
     }
-    // - setOpenTransactionModal is const
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPending, isConfirming, isConfirmed]);
+  }, [isPending, setOpenTransactionModal, isConfirming, isConfirmed]);
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -243,6 +257,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         />
         <DepositInputs.Root>
           <DepositInputs.Inputs
+            disabled={Boolean(disabledInputs)}
             decimals={decimals}
             useEth={useEth}
             setUseEth={(b: boolean) => {
@@ -253,7 +268,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             depositAsset={formData.long}
           />
         </DepositInputs.Root>
-
+        <div className="py-3">
+          {disabledInputs && (
+            <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
+          )}
+        </div>
         <Estimations
           isApe={isApe}
           disabled={!Boolean(quoteData)}
