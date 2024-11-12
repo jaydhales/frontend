@@ -12,6 +12,7 @@ import { useClaim } from "../stake/hooks/useClaim";
 import TransactionModal from "../shared/transactionModal";
 import TransactionSuccess from "../shared/transactionSuccess";
 import { TransactionStatus } from "../leverage-liquidity/mintForm/transactionStatus";
+import { TokenDisplay } from "../ui/token-display";
 export default function ClaimCard() {
   const [openModal, setOpenModal] = useState(false);
 
@@ -62,10 +63,7 @@ export default function ClaimCard() {
           {!isConfirmed && (
             <div>
               <h3 className=" space-x-0.5 py-2">
-                <span className="text-xl">
-                  {formatUnits(dividends ?? 0n, 18)}
-                </span>
-                <span className="text-gray-400">Eth</span>
+                <TokenDisplay amount={dividends} unitLabel="ETH" />
               </h3>
             </div>
           )}
@@ -95,10 +93,7 @@ export default function ClaimCard() {
           <span>Your Dividends</span>
         </h2>
         <div className="flex items-center justify-between">
-          <h3 className="text-3xl">
-            {formatEther(dividends ?? 0n)}
-            <span className="text-sm text-gray-500"> ETH</span>
-          </h3>
+          <TokenDisplay amount={dividends ?? 0n} unitLabel="ETH" />
           <Button
             onClick={() => {
               if (isValid.isValid) setOpenModal(true);

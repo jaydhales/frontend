@@ -3,6 +3,7 @@ import { formatNumber } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import StakeCard from "./stakeCard";
+import { TokenDisplay } from "../ui/token-display";
 
 export function SirCard() {
   const { isConnected, address } = useAccount();
@@ -21,10 +22,11 @@ export function SirCard() {
               <h2 className="pb-1 text-sm text-gray-200">Your Unstaked SIR</h2>
               <div className="flex justify-between text-3xl   ">
                 <div className="flex items-end gap-x-1">
-                  <span>
-                    {formatNumber(formatUnits(totalBalance ?? 0n, 12))}
-                  </span>
-                  <h2 className="text-sm font-light text-gray-400">SIR</h2>
+                  <TokenDisplay
+                    amount={totalBalance}
+                    decimals={12}
+                    unitLabel={"SIR"}
+                  />
                 </div>
               </div>
             </div>
