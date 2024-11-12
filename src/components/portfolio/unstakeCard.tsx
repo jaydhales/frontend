@@ -5,6 +5,7 @@ import UnstakeFormProvider from "../providers/unstakeFormProvider";
 import { UnstakeModal } from "./unstakeModal";
 import { useState } from "react";
 import { useGetStakedSir } from "../shared/hooks/useGetStakedSir";
+import { TokenDisplay } from "../ui/token-display";
 
 export function UnstakeCard() {
   const [openModal, setOpenModal] = useState(false);
@@ -20,10 +21,11 @@ export function UnstakeCard() {
         </h2>
         <div className="flex items-center justify-between">
           <div className="text-3xl   ">
-            <h4>
-              <span>{formatNumber(formatUnits(stakedSir ?? 0n, 12))}</span>
-              <span className="text-sm text-gray-500"> SIR</span>
-            </h4>
+            <TokenDisplay amount={stakedSir} decimals={12} unitLabel={"SIR"} />
+            {/* <h4> */}
+            {/*   <span>{formatNumber(formatUnits(stakedSir ?? 0n, 12))}</span> */}
+            {/*   <span className="text-sm text-gray-500"> SIR</span> */}
+            {/* </h4> */}
           </div>
           <Button onClick={() => setOpenModal(true)} className="py-2">
             Unstake
