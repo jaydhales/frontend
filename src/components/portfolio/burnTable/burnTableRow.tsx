@@ -76,7 +76,9 @@ export function BurnTableRow({
             <div className="space-x-1">
               {!isApe && (
                 <Button
-                  onClick={() => setSelectedRow(true)}
+                  onClick={() => {
+                    setSelectedRow(true);
+                  }}
                   type="button"
                   disabled={teaRewards === 0n}
                   className="h-7 rounded-full px-5 text-[14px] "
@@ -91,7 +93,9 @@ export function BurnTableRow({
                 </Button>
               )}
               <Button
-                onClick={() => setSelectedRow(false)}
+                onClick={() => {
+                  setSelectedRow(false);
+                }}
                 disabled={
                   isApe
                     ? parseFloat(apeBalance) === 0

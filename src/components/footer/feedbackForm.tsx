@@ -1,6 +1,6 @@
 "use client";
 import { postFeedBack } from "@/lib/db/actions";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
 
@@ -18,6 +18,11 @@ export default function FeedBackForm() {
   };
 
   const [openForm, setOpenForm] = useState(false);
+
+  useEffect(() => {
+    if (openForm)
+      window.document.getElementById("submit-form")?.scrollIntoView();
+  }, [openForm]);
   if (successSubmit) {
     return <h2 className="text-white">Thanks for submitting feedback!</h2>;
   }
@@ -27,7 +32,9 @@ export default function FeedBackForm() {
       className="hidden w-[300px] rounded-md bg-secondary px-3 py-2 text-white transition-all duration-300 data-[state=opened]:w-[500px] md:block"
     >
       <div
-        onClick={() => setOpenForm(!openForm)}
+        onClick={() => {
+          setOpenForm(!openForm);
+        }}
         className="flex cursor-pointer justify-between"
       >
         <h3 className=" text-gray-100">Send Feedback</h3>
@@ -38,6 +45,7 @@ export default function FeedBackForm() {
       </div>
       {openForm && (
         <form
+          id="submit-form"
           className="py-2 text-white"
           onSubmit={(e) => {
             e.preventDefault();
