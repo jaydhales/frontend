@@ -108,7 +108,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   >();
   useFormSuccessReset({ isConfirming, isConfirmed, currentTxType, useEth });
 
-  const maxCollateralIn = useCalculateMaxApe({
+  const { maxCollateralIn, badHealth } = useCalculateMaxApe({
     leverageTier: formData.leverageTier,
     vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
   });
@@ -173,15 +173,14 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
   };
   const disabledInputs = useMemo(() => {
-    console.log(maxCollateralIn, "MAX COLLAT");
     if (!isApe) return false;
     if (!selectedVault.result?.vaultId) {
       return false;
     }
-    if ((maxCollateralIn ?? 0n) <= 0n) {
+    if (badHealth) {
       return true;
     }
-  }, [maxCollateralIn, selectedVault.result?.vaultId, isApe]);
+  }, [badHealth, selectedVault.result?.vaultId, isApe]);
   const isApproving = useResetAfterApprove({
     isConfirmed,
     reset,
