@@ -24,7 +24,14 @@ export default function useCalculateVaultHealth({
     parseFloat(mapLeverage(leverageTier.toString()) ?? "0") * 10000;
   const Gmin = (parseUnits(leverageRatio.toString(), 0) * ape) / 10000n;
   const mult = (Gmin * 125n) / 100n;
-  console.log({ teaCollateral, apeCollateral, Gmin, leverageTier, vaultId });
+  console.log({
+    teaCollateral,
+    apeCollateral,
+    Gmin,
+    mult,
+    leverageTier,
+    vaultId,
+  });
   if (gentlemen > mult) {
     return isApe ? { variant: "green" } : { variant: "yellow" };
   }
