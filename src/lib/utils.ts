@@ -170,11 +170,10 @@ export function formatNumber(
   // round down
   const factor = Math.pow(10, 10);
   let n = Math.floor(number * factor) / factor;
-
   if (n === 0) {
     return "0";
   }
-  if (n < 0.0001) {
+  if (n < 0.001) {
     const factor = Math.pow(10, 10);
     const roundedDown = Math.floor(n * factor) / factor;
     return roundedDown.toExponential();
