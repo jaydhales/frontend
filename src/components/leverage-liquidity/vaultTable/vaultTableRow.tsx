@@ -47,8 +47,6 @@ export function VaultTableRow({
   const tvl = apeCollateral + teaCollateral;
   const tvlPercent = tvl / apeCollateral;
   const variant = useCalculateVaultHealth({
-    tvl: parseUnits(pool.totalValue, 18),
-    vaultId: pool.vaultId,
     isApe,
     leverageTier: pool.leverageTier,
     apeCollateral: pool.apeCollateral,
