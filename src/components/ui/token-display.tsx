@@ -28,10 +28,20 @@ export type InputProps = React.HTMLAttributes<HTMLHeadElement> &
     decimals?: number;
     amount: bigint | undefined;
     unitLabel: string;
+    round?: number;
   };
 const TokenDisplay = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { className, amount, decimals, amountSize, labelSize, unitLabel, ...props },
+    {
+      className,
+      amount,
+      round = 3,
+      decimals,
+      amountSize,
+      labelSize,
+      unitLabel,
+      ...props
+    },
     ref,
   ) => {
     return (
@@ -40,7 +50,7 @@ const TokenDisplay = React.forwardRef<HTMLInputElement, InputProps>(
         className={cn(AmountVariants({ amountSize, className }))}
         {...props}
       >
-        {formatNumber(formatUnits(amount ?? 0n, decimals ?? 18), 3)}
+        {formatNumber(formatUnits(amount ?? 0n, decimals ?? 18), round)}
         <span className={cn(LabelVariants({ labelSize }))}> {unitLabel}</span>
       </h3>
     );
