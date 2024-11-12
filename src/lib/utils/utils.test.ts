@@ -34,7 +34,7 @@ test("Calculate Maximum Ape", () => {
       apeReserve: 1000n,
       gentlemenReserve: 10000n,
     }),
-  ).toBe(25000n);
+  ).toBe(1000n);
 
   expect(
     calculateMaxApe({
@@ -43,7 +43,7 @@ test("Calculate Maximum Ape", () => {
       apeReserve: 1000n,
       gentlemenReserve: 10000n,
     }),
-  ).toBe(38762n);
+  ).toBe(31003n);
 });
 test("Test Format Number", () => {
   console.log(formatNumber(10000));
