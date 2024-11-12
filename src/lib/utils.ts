@@ -162,8 +162,8 @@ export function formatNumber(
   decimals?: number,
 ): string {
   if (typeof number === "string") {
-    number = parseFloat(number);
-    if (!isFinite(number)) {
+    number = Number.parseFloat(number);
+    if (!Number.isFinite(number)) {
       return "0";
     }
   }
@@ -174,14 +174,15 @@ export function formatNumber(
   if (n === 0) {
     return "0";
   }
-  if (n < 0.000000001) {
+  if (n < 0.0001) {
     const factor = Math.pow(10, 10);
     const roundedDown = Math.floor(n * factor) / factor;
     return roundedDown.toExponential();
   }
-  if (n > 9999) {
+  if (n > 999) {
+    console.log("inside here 2 ");
     const num = numeral(n);
-    return num.format("0.0a").toUpperCase();
+    return num.format("0.00a").toUpperCase();
   }
   if (decimals) {
     n = roundDown(n, decimals);
