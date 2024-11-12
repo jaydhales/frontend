@@ -20,6 +20,7 @@ interface Props {
   useEth: boolean;
   setUseEth: (b: boolean) => void;
   decimals: number;
+  disabled: boolean;
 }
 
 function Root({ children }: { children: React.ReactNode }) {
@@ -38,9 +39,13 @@ function Inputs({
   balance,
   useEth,
   setUseEth,
+  disabled,
 }: Props) {
   return (
-    <div className="flex justify-between rounded-md bg-primary p-3">
+    <div
+      data-state={disabled ? "disabled" : "active"}
+      className="flex justify-between rounded-md bg-primary p-3 data-[state=disabled]:opacity-50"
+    >
       <div>
         <FormField
           control={form.control}
@@ -49,6 +54,7 @@ function Inputs({
             <FormItem>
               <FormControl>
                 <Input
+                  disabled={disabled}
                   type="text"
                   inputMode="decimal"
                   autoComplete="off"
@@ -64,7 +70,7 @@ function Inputs({
                       return field.onChange(e.target.value);
                     }
                   }}
-                ></Input>
+                />
               </FormControl>
             </FormItem>
           )}
