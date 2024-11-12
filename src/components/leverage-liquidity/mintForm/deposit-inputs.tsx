@@ -107,6 +107,7 @@ function Inputs({
           Balance: {formatNumber(balance ?? "0")}
         </h2>
         <BalancePercent
+          disabled={disabled}
           balance={balance}
           setValue={(s: string) => {
             form.setValue("deposit", s);
