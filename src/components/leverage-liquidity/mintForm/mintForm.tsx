@@ -304,7 +304,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             deposit={form.getValues("deposit")}
           />
           <MintFormSubmit.Errors>
-            <>{form.formState.errors.root?.message}</>
+            {form.formState.errors.root?.message}
           </MintFormSubmit.Errors>
         </MintFormSubmit.Root>
       </form>
