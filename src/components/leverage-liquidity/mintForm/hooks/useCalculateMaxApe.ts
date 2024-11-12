@@ -20,7 +20,7 @@ export function useCalculateMaxApe({
   const calc = useMemo(() => {
     return calculateMaxApe({
       leverageTier: parseUnits(leverageTier ?? "0", 0),
-      baseFee: parseUnits(BASE_FEE.toString(), 2),
+      baseFee: parseUnits(BASE_FEE.toString(), 4),
       apeReserve: ape,
       gentlemenReserve: tea,
     });
