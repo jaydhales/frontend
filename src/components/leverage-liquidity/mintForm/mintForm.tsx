@@ -186,6 +186,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     reset,
     submitType,
   });
+  useEffect(() => {
+    if (formData.deposit !== "" && disabledInputs) {
+      form.setValue("deposit", "");
+    }
+  }, [disabledInputs, form.setValue, formData.deposit]);
   const deposit = form.getValues("deposit");
   useEffect(() => {
     if (!isPending && !isConfirming && !isConfirmed) {
