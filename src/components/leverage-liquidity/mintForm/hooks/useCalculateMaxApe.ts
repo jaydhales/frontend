@@ -13,7 +13,7 @@ export function useCalculateMaxApe({
 }) {
   const { data } = api.vault.getReserves.useQuery(
     { vaultId },
-    { enabled: vaultId !== -1 && isFinite(vaultId) },
+    { enabled: vaultId !== -1 && Number.isFinite(vaultId) },
   );
   const ape = data?.[0]?.reserveApes ?? 0n;
   const tea = data?.[0]?.reserveLPers ?? 0n;
