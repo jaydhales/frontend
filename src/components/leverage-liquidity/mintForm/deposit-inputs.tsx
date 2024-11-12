@@ -21,6 +21,7 @@ interface Props {
   setUseEth: (b: boolean) => void;
   decimals: number;
   disabled: boolean;
+  maxCollateralIn?: string | undefined;
 }
 
 function Root({ children }: { children: React.ReactNode }) {
@@ -40,6 +41,7 @@ function Inputs({
   useEth,
   setUseEth,
   disabled,
+  maxCollateralIn,
 }: Props) {
   return (
     <div
@@ -98,18 +100,18 @@ function Inputs({
         <div
           className={`flex w-[104px] items-center justify-center gap-x-2 rounded-md bg-secondary py-1 ${!depositAsset ? "opacity-70" : ""}`}
         >
-          {!depositAsset && <div className="h-[25px] w-[25px]"></div>}
+          {!depositAsset && <div className="h-[25px] w-[25px]" />}
           <AssetInfo depositAsset={depositAsset} useEth={useEth} />
         </div>
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
           Balance: {formatNumber(balance ?? "0")}
         </h2>
-        <div className="flex justify-end"></div>
         <BalancePercent
           balance={balance}
           setValue={(s: string) => {
             form.setValue("deposit", s);
           }}
+          overrideMaxValue={maxCollateralIn}
         />
       </div>
     </div>

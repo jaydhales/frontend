@@ -263,6 +263,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             setUseEth={(b: boolean) => {
               setUseEth(b);
             }}
+            maxCollateralIn={
+              maxCollateralIn
+                ? formatUnits(maxCollateralIn, decimals)
+                : undefined
+            }
             balance={formatUnits(balance ?? 0n, decimals)}
             form={form}
             depositAsset={formData.long}
