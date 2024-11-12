@@ -17,19 +17,12 @@ test("Testing calculating vault health.", () => {
       isApe: true,
     }).variant,
   ).toBe("yellow");
-});
-
-test("Testing calculating tea side.", () => {
-  const leverageTier = -1,
-    apeCollateral = 73381955552671381n,
-    teaCollateral = 49304565809899447n,
-    isApe = true;
   expect(
     useCalculateVaultHealth({
-      leverageTier,
-      teaCollateral,
-      apeCollateral,
-      isApe,
+      leverageTier: -1,
+      teaCollateral: 49304565809899447n,
+      apeCollateral: 73381955552671381n,
+      isApe: true,
     }).variant,
   ).toBe("red");
 });
