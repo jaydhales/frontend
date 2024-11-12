@@ -8,14 +8,12 @@ interface Props {
   isApe: boolean;
   apeCollateral: bigint;
   teaCollateral: bigint;
-  vaultId: string;
 }
 export default function useCalculateVaultHealth({
   leverageTier,
   teaCollateral,
   apeCollateral,
   isApe,
-  vaultId,
 }: Props): VariantProps<typeof badgeVariants> {
   const ape = apeCollateral;
   const gentlemen = teaCollateral;
@@ -24,23 +22,16 @@ export default function useCalculateVaultHealth({
   const gentlemenMinimum =
     (parseUnits(leverageRatio.toString(), 0) * ape) / 10000n;
   const healthyMinimum = (gentlemenMinimum * 125n) / 100n;
-  console.log({
-    leverageTier,
-    healthyMinimum,
-    gentlemenMinimum,
-    apeCollateral,
-    teaCollateral,
-    vaultId,
-  });
-
+  console.log(gentlemen > healthyMinimum);
   if (gentlemen > healthyMinimum) {
     return isApe ? { variant: "green" } : { variant: "yellow" };
   }
-  if (gentlemen > gentlemenMinimum) {
+  if (gentlemen >= gentlemenMinimum) {
     return isApe ? { variant: "yellow" } : { variant: "yellow" };
   }
   if (gentlemenMinimum > gentlemen) {
     return isApe ? { variant: "red" } : { variant: "green" };
   }
+  console.log("ran backup");
   return { variant: "green" };
 }
