@@ -143,6 +143,7 @@ export function getApeAddress({
 export function roundDown(float: number, decimals: number) {
   const factor = Math.pow(10, decimals);
   const roundedDown = Math.floor(float * factor) / factor;
+  console.log(roundedDown, "down");
   return roundedDown;
 }
 export function inputPatternMatch(s: string, decimals = 18) {
@@ -167,11 +168,21 @@ export function formatNumber(
       return "0";
     }
   }
+
+  let n = number;
   // round down
-  const factor = Math.pow(10, 10);
-  let n = Math.floor(number * factor) / factor;
+
+  if (number >= 1) {
+    const factor = Math.pow(10, 10);
+    n = Math.floor(number * factor) / factor;
+  }
+
   if (n === 0) {
     return "0";
+  }
+  if (n < 0 && n <= 0.001) {
+    const parts = n.toString().split(".");
+    return `0.${parts[1]}`;
   }
   if (n < 0.001) {
     const factor = Math.pow(10, 10);
@@ -179,13 +190,14 @@ export function formatNumber(
     return roundedDown.toExponential();
   }
   if (n > 999) {
-    console.log("inside here 2 ");
     const num = numeral(n);
     return num.format("0.00a").toUpperCase();
   }
   if (decimals) {
-    n = roundDown(n, decimals);
+    console.log("round down", decimals);
+    n = roundDown(n, 10);
   }
+
   return n.toString();
 }
 
