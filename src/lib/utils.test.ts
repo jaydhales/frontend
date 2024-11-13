@@ -13,7 +13,7 @@ test("Test calculate leverage tier ratio.", () => {
   expect(getLeverageRatio(-1)).toBe(1.5);
 });
 test("Test calculate leverage tier ratio.", () => {
-  expect(calculateApeVaultFee(-1)).toBe(0.1666666666666666);
+  expect(calculateApeVaultFee(-1)).toBe(0.10494517789214601);
 });
 // test("Test if getApeAddress gets proper contract address.", () => {
 //   expect(
@@ -27,9 +27,10 @@ test("Test calculate leverage tier ratio.", () => {
 // });
 
 test("Test Format Number", () => {
-  expect(formatNumber(10000)).toBe("10.0k");
-  expect(formatNumber(10000000)).toBe("10.0m");
-  expect(formatNumber(0.00012323)).toBe("0.00012323");
+  expect(formatNumber(10000)).toBe("10.00K");
+  expect(formatNumber(10000000)).toBe("10.00M");
+  expect(formatNumber(0.0012)).toBe("0.0012");
+  expect(formatNumber(0.00012323)).toBe("1.2323e-4");
   expect(formatNumber(0.0000001)).toBe("1e-7");
   expect(formatNumber(0)).toBe("0");
 });
