@@ -15,7 +15,6 @@ import TopSelects from "./topSelects";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
-import { Card } from "@/components/ui/card";
 import { calculateApeVaultFee, findVault, formatNumber } from "@/lib/utils";
 import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
@@ -28,6 +27,7 @@ import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { TransactionEstimates } from "./transactionEstimates";
 import { TokenDisplay } from "@/components/ui/token-display";
+import { Card } from "@/components/ui/card";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -325,7 +325,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <Estimations
           isApe={isApe}
           disabled={!Boolean(quoteData)}
-          ape={formatNumber(formatUnits(quoteData ?? 0n, 18))}
+          ape={formatUnits(quoteData ?? 0n, decimals)}
         />
 
         <MintFormSubmit.Root>

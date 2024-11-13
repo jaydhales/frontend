@@ -2,7 +2,6 @@
 
 import { api } from "@/trpc/react";
 import { useMemo } from "react";
-import { formatUnits } from "viem";
 import ToolTip from "@/components/ui/tooltip";
 import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
 import { TokenDisplay } from "@/components/ui/token-display";
@@ -18,7 +17,7 @@ const StakeData = () => {
     api.user.getSirTotalSupply.useQuery();
 
   const totalValueLocked = useMemo(() => {
-    if (totalSupply !== undefined && unstakedSupply != undefined) {
+    if (totalSupply !== undefined && unstakedSupply !== undefined) {
       return totalSupply - unstakedSupply;
     }
   }, [unstakedSupply, totalSupply]);
@@ -34,18 +33,11 @@ const StakeData = () => {
           {parseFloat(formatUnits(totalValueLocked ?? 0n, 12)).toFixed(4)}
         </div> */}
         <div className=" text-2xl font-normal">
-          {(() => {
-            const value = parseFloat(formatUnits(totalValueLocked ?? 0n, 12));
-            if (value >= 1e9) {
-              return (value / 1e9).toFixed(2) + "B";
-            } else if (value >= 1e6) {
-              return (value / 1e6).toFixed(2) + "M";
-            } else if (value >= 1e3) {
-              return Math.floor(value).toLocaleString();
-            } else {
-              return value.toFixed(2);
-            }
-          })()}
+          <TokenDisplay
+            amount={totalValueLocked}
+            decimals={12}
+            unitLabel="SIR"
+          />
         </div>
       </div>
 
@@ -55,7 +47,11 @@ const StakeData = () => {
           {/* <ToolTip>Tool tip info.</ToolTip> */}
         </div>
         <div className=" text-2xl ">
-          <TokenDisplay amount={userStakedSir} unitLabel={"SIR"} />
+          <TokenDisplay
+            amount={userStakedSir}
+            decimals={12}
+            unitLabel={"SIR"}
+          />
           {/* {formatUnits(userStakedSir, 12)} */}
         </div>
       </div>

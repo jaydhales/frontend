@@ -155,7 +155,7 @@ export function VaultTableRow({
         <span>
           {formatNumber(
             formatUnits(parseUnits(pool.totalValue, 0), pool.apeDecimals),
-            4,
+            3,
           )}
         </span>
         <span className=" hidden font-light text-gray-300 md:block">
