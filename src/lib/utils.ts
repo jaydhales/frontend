@@ -162,6 +162,7 @@ export function formatNumber(
   number: number | string,
   decimals?: number,
 ): string {
+  console.log(number, "NUMBER");
   if (typeof number === "string") {
     number = Number.parseFloat(number);
     if (!Number.isFinite(number)) {
@@ -172,17 +173,19 @@ export function formatNumber(
   let n = number;
   // round down
 
-  if (number >= 1) {
-    const factor = Math.pow(10, 10);
-    n = Math.floor(number * factor) / factor;
+  if (number >= 1 && number <= 999) {
+    const parts = n.toString().split(".");
+    console.log(`${parts[0]}.${parts[1]?.slice(0, 3)}`);
+    return Number.parseFloat(`${parts[0]}.${parts[1]?.slice(0, 3)}`).toString();
   }
 
   if (n === 0) {
     return "0";
   }
-  if (n < 0 && n <= 0.001) {
+  if (n < 1 && n >= 0.001) {
+    console.log("ran here");
     const parts = n.toString().split(".");
-    return `0.${parts[1]}`;
+    return Number.parseFloat(`0.${parts[1]?.slice(0, 3)}`).toString();
   }
   if (n < 0.001) {
     const factor = Math.pow(10, 10);
