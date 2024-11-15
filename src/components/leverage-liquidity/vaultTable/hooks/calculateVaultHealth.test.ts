@@ -1,6 +1,6 @@
 import { beforeAll, expect, test } from "vitest";
 import dotenv from "dotenv";
-import useCalculateVaultHealth from "./useCalculateVaultHealth";
+import { calculateVaultHealth } from "./useCalculateVaultHealth";
 beforeAll(() => {
   dotenv.config();
 });
@@ -10,7 +10,7 @@ test("Testing calculating vault health.", () => {
     teaCollateral = 220n,
     apeCollateral = 100n;
   expect(
-    useCalculateVaultHealth({
+    calculateVaultHealth({
       leverageTier,
       teaCollateral,
       apeCollateral,
@@ -18,7 +18,7 @@ test("Testing calculating vault health.", () => {
     }).variant,
   ).toBe("yellow");
   expect(
-    useCalculateVaultHealth({
+    calculateVaultHealth({
       leverageTier: -1,
       teaCollateral: 49304565809899447n,
       apeCollateral: 73381955552671381n,
