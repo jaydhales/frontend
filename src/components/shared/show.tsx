@@ -1,8 +1,8 @@
 import React from "react";
-import { fallback } from "viem";
 export default function Show({
   when,
   children,
+  fallback,
 }: {
   children: React.ReactNode;
   fallback?: React.ReactNode;
