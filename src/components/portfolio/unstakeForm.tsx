@@ -20,6 +20,7 @@ import StakeInput from "@/components/shared/stake/stakeInput";
 import { useUnstake } from "../stake/hooks/useUnstake";
 import ClaimFeesCheckbox from "./claimFeesCheck";
 import { useGetReceivedSir } from "./hooks/useGetReceivedSir";
+import { TokenDisplay } from "../ui/token-display";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
@@ -123,10 +124,12 @@ const UnstakeForm = () => {
                 <div className="flex items-center justify-between py-2">
                   <h2 className="text-sm text-gray-400">Amount</h2>
                   <h3 className="text-xl">
-                    {form.getValues("amount")}
-                    <span className="pl-[2px] text-[12px] text-gray-400">
-                      SIR
-                    </span>
+                    <TokenDisplay
+                      amount={parseUnits(form.getValues("amount") ?? "0", 12)}
+                      unitLabel="SIR"
+                      decimals={12}
+                      disableRounding
+                    />
                   </h3>
                 </div>
               </>

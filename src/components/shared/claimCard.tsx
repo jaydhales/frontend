@@ -58,7 +58,12 @@ export default function ClaimCard() {
           {!isConfirmed && (
             <div>
               <h2>Claim</h2>
-              <span>{formatUnits(dividends ?? 0n, 18)} Eth</span>
+              <TokenDisplay
+                disableRounding
+                amount={dividends}
+                unitLabel="ETH"
+              />
+              {/* <span>{formatUnits(dividends ?? 0n, 18)} Eth</span> */}
             </div>
           )}
           {isConfirmed && <TransactionSuccess />}

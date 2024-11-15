@@ -41,7 +41,7 @@ function Inputs({
 }: Props) {
   return (
     <div className="flex justify-between rounded-md bg-primary p-3">
-      <div>
+      <div className="flex-grow">
         <FormField
           control={form.control}
           name="deposit"

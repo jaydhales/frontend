@@ -15,7 +15,6 @@ import TopSelects from "./topSelects";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
-import { Card } from "@/components/ui/card";
 import { calculateApeVaultFee, findVault, formatNumber } from "@/lib/utils";
 import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
@@ -28,6 +27,7 @@ import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { TransactionEstimates } from "./transactionEstimates";
 import { TokenDisplay } from "@/components/ui/token-display";
+import { Card } from "@/components/ui/card";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -243,11 +243,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 )}
               </>
             )}
-            {isConfirming && isApproving && (
-              <div>
-                <h1>Loading...</h1>
-              </div>
-            )}
             {isConfirmed && !isApproving && (
               <div className="space-y-2">
                 <div className="flex animate-fade-in justify-center">
@@ -258,12 +253,12 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 </h2>
                 {Boolean(tokenReceived) && (
                   <h3 className="flex items-center justify-center gap-x-1 ">
-                    <span className="text-xl font-bold ">
-                      {isApe ? "APE" : "TEA"}{" "}
-                      {formatNumber(
-                        formatUnits(tokenReceived ?? 0n, decimals),
-                        4,
-                      )}
+                    <span className="">
+                      <TokenDisplay
+                        amount={tokenReceived}
+                        unitLabel={isApe ? "APE" : "TEA"}
+                        round={12}
+                      />
                     </span>
                   </h3>
                 )}
@@ -330,7 +325,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <Estimations
           isApe={isApe}
           disabled={!Boolean(quoteData)}
-          ape={formatNumber(formatUnits(quoteData ?? 0n, 18))}
+          ape={formatUnits(quoteData ?? 0n, decimals)}
         />
 
         <MintFormSubmit.Root>

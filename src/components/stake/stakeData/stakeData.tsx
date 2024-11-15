@@ -2,9 +2,9 @@
 
 import { api } from "@/trpc/react";
 import { useMemo } from "react";
-import { formatUnits } from "viem";
 import ToolTip from "@/components/ui/tooltip";
 import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
+import { TokenDisplay } from "@/components/ui/token-display";
 
 interface supplyProps {
   data?: bigint;
@@ -17,34 +17,27 @@ const StakeData = () => {
     api.user.getSirTotalSupply.useQuery();
 
   const totalValueLocked = useMemo(() => {
-    if (totalSupply !== undefined && unstakedSupply != undefined) {
+    if (totalSupply !== undefined && unstakedSupply !== undefined) {
       return totalSupply - unstakedSupply;
     }
   }, [unstakedSupply, totalSupply]);
   const userStakedSir = useGetStakedSir();
 
   return (
-    <div className="mx-auto grid gap-4 md:w-[600px] md:grid-cols-3  ">
+    <div className="mx-auto grid gap-4 font-normal md:w-[600px] md:grid-cols-3  ">
       <div className="flex flex-col  items-center justify-center gap-2 rounded-md bg-secondary py-2">
-        <div className="text-sm font-medium text-gray-300">
+        <div className="text-sm font-normal text-gray-300">
           Total Staked SIR
         </div>
-        {/* <div className="text-2xl font-semibold font-lora">
+        {/* <div className="text-2xl font-semibold ">
           {parseFloat(formatUnits(totalValueLocked ?? 0n, 12)).toFixed(4)}
         </div> */}
-        <div className="font-lora text-2xl font-normal">
-          {(() => {
-            const value = parseFloat(formatUnits(totalValueLocked ?? 0n, 12));
-            if (value >= 1e9) {
-              return (value / 1e9).toFixed(2) + "B";
-            } else if (value >= 1e6) {
-              return (value / 1e6).toFixed(2) + "M";
-            } else if (value >= 1e3) {
-              return Math.floor(value).toLocaleString();
-            } else {
-              return value.toFixed(2);
-            }
-          })()}
+        <div className=" text-2xl font-normal">
+          <TokenDisplay
+            amount={totalValueLocked}
+            decimals={12}
+            unitLabel="SIR"
+          />
         </div>
       </div>
 
@@ -53,8 +46,13 @@ const StakeData = () => {
           <div className="px-2 text-sm text-gray-300">Your Staked SIR</div>
           {/* <ToolTip>Tool tip info.</ToolTip> */}
         </div>
-        <div className="font-lora text-2xl ">
-          {formatUnits(userStakedSir, 12)}
+        <div className=" text-2xl ">
+          <TokenDisplay
+            amount={userStakedSir}
+            decimals={12}
+            unitLabel={"SIR"}
+          />
+          {/* {formatUnits(userStakedSir, 12)} */}
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
@@ -63,7 +61,7 @@ const StakeData = () => {
           <ToolTip>Tool tip info.</ToolTip>
           {/* <AprInfo></AprInfo> */}
         </div>
-        <div className="font-lora text-2xl ">N/A</div>
+        <div className=" text-2xl ">N/A</div>
       </div>
     </div>
   );

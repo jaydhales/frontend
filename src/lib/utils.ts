@@ -143,6 +143,7 @@ export function getApeAddress({
 export function roundDown(float: number, decimals: number) {
   const factor = Math.pow(10, decimals);
   const roundedDown = Math.floor(float * factor) / factor;
+  console.log(roundedDown, "down");
   return roundedDown;
 }
 export function inputPatternMatch(s: string, decimals = 18) {
@@ -161,31 +162,45 @@ export function formatNumber(
   number: number | string,
   decimals?: number,
 ): string {
+  console.log(number, "NUMBER");
   if (typeof number === "string") {
-    number = parseFloat(number);
-    if (!isFinite(number)) {
+    number = Number.parseFloat(number);
+    if (!Number.isFinite(number)) {
       return "0";
     }
   }
+
+  let n = number;
   // round down
-  const factor = Math.pow(10, 10);
-  let n = Math.floor(number * factor) / factor;
+
+  if (number >= 1 && number <= 999) {
+    const parts = n.toString().split(".");
+    console.log(`${parts[0]}.${parts[1]?.slice(0, 3)}`);
+    return Number.parseFloat(`${parts[0]}.${parts[1]?.slice(0, 3)}`).toString();
+  }
 
   if (n === 0) {
     return "0";
   }
-  if (n < 0.000000001) {
+  if (n < 1 && n >= 0.001) {
+    console.log("ran here");
+    const parts = n.toString().split(".");
+    return Number.parseFloat(`0.${parts[1]?.slice(0, 3)}`).toString();
+  }
+  if (n < 0.001) {
     const factor = Math.pow(10, 10);
     const roundedDown = Math.floor(n * factor) / factor;
     return roundedDown.toExponential();
   }
-  if (n > 9999) {
+  if (n > 999) {
     const num = numeral(n);
-    return num.format("0.0a").toUpperCase();
+    return num.format("0.00a").toUpperCase();
   }
   if (decimals) {
-    n = roundDown(n, decimals);
+    console.log("round down", decimals);
+    n = roundDown(n, 10);
   }
+
   return n.toString();
 }
 
