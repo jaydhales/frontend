@@ -108,7 +108,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   >();
   useFormSuccessReset({ isConfirming, isConfirmed, currentTxType, useEth });
 
-  const { maxCollateralIn, badHealth } = useCalculateMaxApe({
+  const { maxCollateralIn, badHealth, isLoading } = useCalculateMaxApe({
     leverageTier: formData.leverageTier,
     vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
   });
@@ -261,7 +261,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         />
         <DepositInputs.Root>
           <DepositInputs.Inputs
-            disabled={Boolean(disabledInputs)}
+            disabled={Boolean(disabledInputs) && !isLoading}
             decimals={decimals}
             useEth={useEth}
             setUseEth={(b: boolean) => {
@@ -278,9 +278,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           />
         </DepositInputs.Root>
         <div className="py-3">
-          {disabledInputs && (
+          <Show when={Boolean(disabledInputs && !isLoading)}>
             <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
-          )}
+          </Show>
         </div>
         <Estimations
           isApe={isApe}

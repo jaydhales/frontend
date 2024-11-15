@@ -12,7 +12,7 @@ export function useCalculateMaxApe({
   vaultId: number;
   leverageTier: string;
 }) {
-  const { data } = api.vault.getReserves.useQuery(
+  const { data, isLoading } = api.vault.getReserves.useQuery(
     { vaultId },
     { enabled: vaultId !== -1 && Number.isFinite(vaultId) },
   );
@@ -25,7 +25,7 @@ export function useCalculateMaxApe({
     teaCollateral: tea,
     isApe: true,
   });
-  const calc = useMemo(() => {
+  const { badHealth, maxCollateralIn } = useMemo(() => {
     const maxCollateralIn = calculateMaxApe({
       leverageTier: parseUnits(leverageTier ?? "0", 0),
       baseFee: parseUnits(BASE_FEE.toString(), 4),
@@ -38,5 +38,5 @@ export function useCalculateMaxApe({
     }
     return { badHealth, maxCollateralIn };
   }, [ape, leverageTier, tea, variant]);
-  return calc;
+  return { badHealth, maxCollateralIn, isLoading };
 }
