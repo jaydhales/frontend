@@ -18,6 +18,13 @@ export function useCalculateMaxApe({
   );
   const ape = data?.[0]?.reserveApes ?? 0n;
   const tea = data?.[0]?.reserveLPers ?? 0n;
+
+  const { variant } = useCalculateVaultHealth({
+    leverageTier: Number.parseInt(leverageTier),
+    apeCollateral: ape,
+    teaCollateral: tea,
+    isApe: true,
+  });
   const calc = useMemo(() => {
     const maxCollateralIn = calculateMaxApe({
       leverageTier: parseUnits(leverageTier ?? "0", 0),
@@ -25,17 +32,11 @@ export function useCalculateMaxApe({
       apeReserve: ape,
       gentlemenReserve: tea,
     });
-    const { variant } = useCalculateVaultHealth({
-      leverageTier: Number.parseInt(leverageTier),
-      apeCollateral: ape,
-      teaCollateral: tea,
-      isApe: true,
-    });
     let badHealth = false;
     if (variant === "red" || variant === "yellow") {
       badHealth = true;
     }
     return { badHealth, maxCollateralIn };
-  }, [ape, leverageTier, tea]);
+  }, [ape, leverageTier, tea, variant]);
   return calc;
 }
