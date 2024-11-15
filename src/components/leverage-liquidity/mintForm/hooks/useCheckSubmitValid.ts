@@ -151,6 +151,7 @@ export const useCheckSubmitValid = ({
     chainId,
     deposit,
     decimals,
+    maxCollateralIn,
     useEth,
     tokenBalance,
     tokenAllowance,
