@@ -135,7 +135,7 @@ export function VaultTableRow({
         <HoverCard openDelay={0} closeDelay={20}>
           <HoverCardTrigger asChild>
             <div>
-              <Badge {...variant} className="text-nowrap text-[9px]">
+              <Badge {...variant} className="text-nowrap text-[11px]">
                 {`${getLeverageRatio(pool.leverageTier)}x${showPercent() ? " (" + formatNumber(tvlPercent, 2) + "x)" : ""}`}
               </Badge>
             </div>
