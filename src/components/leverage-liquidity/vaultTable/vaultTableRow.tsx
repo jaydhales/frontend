@@ -13,11 +13,7 @@ import { useMemo } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import useCalculateVaultHealth from "./hooks/useCalculateVaultHealth";
 import { HoverCard } from "@/components/ui/hover-card";
-import {
-  calculateApeVaultFee,
-  getLeverageRatio,
-} from "@/lib/utils/calculations";
-import { getLogoAsset } from "@/lib/assets";
+import { TokenDisplay } from "@/components/ui/token-display";
 
 export function VaultTableRow({
   pool,
@@ -151,15 +147,13 @@ export function VaultTableRow({
       </th>
 
       <th className="flex items-center justify-end gap-x-1 text-right md:col-span-2">
-        <span>
-          {formatNumber(
-            formatUnits(parseUnits(pool.totalValue, 0), pool.apeDecimals),
-            4,
-          )}
-        </span>
-        <span className=" hidden font-light text-gray-300 md:block">
-          {pool.collateralSymbol}
-        </span>
+        <TokenDisplay
+          labelSize="small"
+          amountSize="small"
+          amount={parseUnits(pool.totalValue, 0)}
+          decimals={pool.apeDecimals}
+          unitLabel={pool.collateralSymbol}
+        />
       </th>
     </tr>
   );

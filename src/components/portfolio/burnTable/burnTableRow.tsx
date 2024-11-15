@@ -36,7 +36,6 @@ export function BurnTableRow({
   // const hasUnclaimedSir = isApe ? false : rewards > 0n;
   const teaBalance = formatUnits(teaBal ?? 0n, row.positionDecimals);
   const apeBalance = formatUnits(apeBal ?? 0n, row.positionDecimals);
-  console.log(row, { isApe }, teaBal, "TEA BAL");
   const rewards = formatUnits(teaRewards ?? 0n, 12);
   return (
     <>
@@ -65,12 +64,12 @@ export function BurnTableRow({
           <span className="text-[14px]">{row.debtSymbol}</span>
         </th>
         <th className="font-normal text-gray-200">
-          {getLeverageRatio(parseInt(row.leverageTier))}x
+          {getLeverageRatio(Number.parseInt(row.leverageTier))}x
         </th>
         <th className="col-span-3 space-y-3 font-normal">
           <div className="flex items-start  justify-between">
             <span>
-              {formatNumber(isApe ? apeBalance : teaBalance, 4)}
+              {formatNumber(isApe ? apeBalance : teaBalance, 3)}
               <span className="pl-1 text-[12px] text-gray-400"></span>
             </span>
             <div className="space-x-1">
