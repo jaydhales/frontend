@@ -58,7 +58,7 @@ function Inputs({
           when={!inputLoading}
           fallback={
             <div className="flex h-[40px] items-center">
-              <div className="h-[24px] w-20 animate-pulse rounded-sm bg-secondary-700"></div>
+              <div className="h-[24px] w-12 animate-pulse rounded-sm bg-secondary-600"></div>
             </div>
           }
         >
