@@ -2,7 +2,7 @@ import useGetChainId from "@/components/shared/hooks/useGetChainId";
 import { env } from "@/env";
 import { useMemo } from "react";
 import type { SimulateContractReturnType } from "viem";
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
 
 interface Props {
   deposit: string | undefined;
@@ -18,7 +18,6 @@ interface Props {
   approveFetching?: boolean;
   useEth?: boolean;
   decimals: number;
-  maxCollateralIn?: bigint;
 }
 export enum ESubmitType {
   "mint",
@@ -32,7 +31,7 @@ export enum ESubmitType {
  * errorMessage -
  * submitType - 'approve' | 'mint'
  */
-export const useCheckSubmitValid = ({
+export const useCheckStakeValidity = ({
   deposit,
   tokenAllowance,
   mintFetching,
@@ -40,7 +39,6 @@ export const useCheckSubmitValid = ({
   approveFetching,
   tokenBalance,
   ethBalance,
-  maxCollateralIn,
   useEth,
   decimals,
 }: Props) => {
@@ -61,15 +59,7 @@ export const useCheckSubmitValid = ({
         submitType: ESubmitType.mint,
       };
     }
-    if (maxCollateralIn) {
-      if (parseUnits(deposit ?? "0", decimals) > maxCollateralIn) {
-        return {
-          isValid: false,
-          errorMessage: "Insufficient liquidity in the vault.",
-          submitType: ESubmitType.mint,
-        };
-      }
-    }
+
     if (useEth) {
       if ((ethBalance ?? 0n) < parseUnits(deposit ?? "0", decimals)) {
         return {
@@ -151,7 +141,6 @@ export const useCheckSubmitValid = ({
     chainId,
     deposit,
     decimals,
-    maxCollateralIn,
     useEth,
     tokenBalance,
     tokenAllowance,

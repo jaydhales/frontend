@@ -44,9 +44,12 @@ export default function NavItem({
     <li
       data-active={active ? "true" : "false"}
       data-main={main ? "true" : "false"}
-      className={cn(navItemVariants({ theme, className }))}
     >
-      <Link className="" onClick={onClick} href={url}>
+      <Link
+        className={cn(navItemVariants({ theme, className }))}
+        onClick={onClick}
+        href={url}
+      >
         {children}
       </Link>
     </li>

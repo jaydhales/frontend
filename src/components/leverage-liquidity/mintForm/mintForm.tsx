@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "@/trpc/react";
 import {
   useAccount,
@@ -11,23 +11,26 @@ import { formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
 import type { TMintFormFields, TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
-import TopSelects from "./topSelects";
+import VaultParamsInputSelects from "./vaultParamsInputSelects";
 import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
-import { calculateApeVaultFee, findVault, formatNumber } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
+import { findVault, formatNumber } from "@/lib/utils";
 import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
-import { TransactionStatus } from "./transactionStatus";
-import { CircleCheck, Plus } from "lucide-react";
 import TransactionModal from "@/components/shared/transactionModal";
 import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
-import { TransactionEstimates } from "./transactionEstimates";
-import { TokenDisplay } from "@/components/ui/token-display";
-import { Card } from "@/components/ui/card";
+import { useResetAfterApprove } from "./hooks/useResetAfterApprove";
+import TransactionInfo from "./transactionInfo";
+import Show from "@/components/shared/show";
+import useFormFee from "./hooks/useFormFee";
+import { useResetTransactionModal } from "./hooks/useResetTransactionModal";
+import ErrorMessage from "@/components/ui/error-message";
+import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -55,17 +58,14 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     },
   );
 
-  let decimals = decimalData ?? 18;
   const useEth = useMemo(() => {
     // Ensure use eth toggle is not used on non-weth tokens
-    if (
-      formData.long.split(",")[0]?.toLowerCase() === WETH_ADDRESS.toLowerCase()
-    ) {
-      return useEthRaw;
-    } else {
-      return false;
-    }
+    const isWeth =
+      formData.long.split(",")[0]?.toLowerCase() === WETH_ADDRESS.toLowerCase();
+    return isWeth ? useEthRaw : false;
   }, [useEthRaw, formData.long]);
+
+  const decimals = useEth ? 18 : decimalData ?? 18;
 
   const {
     requests,
@@ -79,9 +79,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     vaultsQuery,
     decimals,
   });
-  if (useEth) {
-    decimals = 18;
-  }
   const { versus, leverageTiers, long } = useSelectMemo({
     formData,
     vaultsQuery,
@@ -94,8 +91,12 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     data: transactionData,
   } = useWaitForTransactionReceipt({ hash });
 
+  const selectedVault = useMemo(() => {
+    return findVault(vaultsQuery, formData);
+  }, [formData, vaultsQuery]);
+
   const { tokenReceived } = useGetReceivedTokens({
-    apeAddress: findVault(vaultsQuery, formData).result?.apeAddress ?? "0x",
+    apeAddress: selectedVault.result?.apeAddress ?? "0x",
     logs: transactionData?.logs,
     isApe,
   });
@@ -106,6 +107,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     "approve" | "mint" | undefined
   >();
   useFormSuccessReset({ isConfirming, isConfirmed, currentTxType, useEth });
+
+  const { maxCollateralIn, badHealth, isLoading } = useCalculateMaxApe({
+    leverageTier: formData.leverageTier,
+    vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
+  });
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
     ethBalance: userEthBalance,
     decimals,
@@ -117,6 +123,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     tokenAllowance: userBalance?.tokenAllowance?.result,
     mintFetching: isMintFetching,
     approveFetching: isApproveFetching,
+    maxCollateralIn: isApe ? maxCollateralIn : 0n,
   });
 
   const { quoteData } = useQuoteMint({ formData, isApe });
@@ -126,15 +133,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     errorMessage,
     rootErrorMessage: form.formState.errors.root?.message,
   });
-  const onSubmit = () => {
+
+  const onSubmit = useCallback(() => {
     if (submitType === null) {
       return;
     }
-    // if (useEth && requests.mintWithETHRequest) {
-    //   writeContract(requests.mintWithETHRequest);
-    //   return;
-    // }
-    // CHECK ALLOWANCE
     if (submitType === ESubmitType.mint && requests.mintRequest) {
       setCurrentTxType("mint");
       writeContract?.(requests.mintRequest);
@@ -145,35 +148,23 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       writeContract(requests.approveWriteRequest);
       return;
     }
-  };
+  }, [
+    requests.approveWriteRequest,
+    requests.mintRequest,
+    submitType,
+    writeContract,
+  ]);
 
   let balance = userBalance?.tokenBalance?.result;
   if (useEth) {
     balance = userEthBalance;
   }
 
-  const [openTransactionModal, setOpenTransactionModal] = useState(false);
-
-  useEffect(() => {
-    if (isConfirmed && !openTransactionModal) {
-      reset();
-    }
-  }, [isConfirmed, reset, openTransactionModal]);
+  const { openTransactionModal, setOpenTransactionModal } =
+    useResetTransactionModal({ reset, isConfirmed });
 
   const levTier = form.getValues("leverageTier");
-  const fee = useMemo(() => {
-    const lev = parseFloat(levTier);
-
-    if (!isApe) {
-      return "19";
-    }
-
-    if (isFinite(lev)) {
-      return formatNumber(calculateApeVaultFee(lev) * 100, 2);
-    } else {
-      return undefined;
-    }
-  }, [isApe, levTier]);
+  const fee = useFormFee({ levTier, isApe });
   const modalSubmit = () => {
     if (!isConfirmed) {
       onSubmit();
@@ -181,31 +172,31 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       setOpenTransactionModal(false);
     }
   };
-  const [isApproving, setIsApproving] = useState(false);
-  // Below is logic to prevent a Approval transaction from showing "Transaction Successful" in modal.
-  useEffect(() => {
-    if (submitType === ESubmitType.approve) {
-      setIsApproving(true);
+  const disabledInputs = useMemo(() => {
+    if (!isApe) return false;
+    if (!selectedVault.result?.vaultId) {
+      return false;
     }
-  }, [submitType]);
-  const utils = api.useUtils();
-  useEffect(() => {
-    if (isConfirmed && isApproving) {
-      utils.user.getBalance
-        .invalidate()
-        .then(() => {
-          reset();
-          setIsApproving(false);
-        })
-        .catch((e) => console.log(e));
+    if (badHealth) {
+      return true;
     }
-  }, [isApproving, reset, isConfirmed, utils.user.getBalance]);
+  }, [badHealth, selectedVault.result?.vaultId, isApe]);
+  const isApproving = useResetAfterApprove({
+    isConfirmed,
+    reset,
+    submitType,
+  });
+  useEffect(() => {
+    if (formData.deposit !== "" && disabledInputs) {
+      form.setValue("deposit", "");
+    }
+  }, [disabledInputs, form, form.setValue, formData.deposit]);
   const deposit = form.getValues("deposit");
   useEffect(() => {
     if (!isPending && !isConfirming && !isConfirmed) {
       setOpenTransactionModal(false);
     }
-  }, [isPending, isConfirming, isConfirmed]);
+  }, [isPending, setOpenTransactionModal, isConfirming, isConfirmed]);
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -215,95 +206,54 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         >
           <TransactionModal.Close setOpen={setOpenTransactionModal} />
           <TransactionModal.InfoContainer>
-            {!isConfirmed && (
-              <>
-                <TransactionStatus
-                  showLoading={isConfirming || userBalanceFetching}
-                  waitForSign={isPending}
-                  action={submitType === ESubmitType.mint ? "Mint" : "Approve"}
-                />
-
-                {submitType === ESubmitType.mint && (
-                  <TransactionEstimates
-                    isApe={isApe}
-                    usingEth={useEth}
-                    collateralEstimate={quoteData}
-                  />
-                )}
-                {submitType === ESubmitType.mint && (
-                  <TransactionModal.Disclaimer>
-                    Output is estimated.
-                  </TransactionModal.Disclaimer>
-                )}
-
-                {submitType === ESubmitType.approve && (
-                  <TransactionModal.Disclaimer>
-                    Approve SIR to send token funds .....
-                  </TransactionModal.Disclaimer>
-                )}
-              </>
-            )}
-            {isConfirmed && !isApproving && (
-              <div className="space-y-2">
-                <div className="flex animate-fade-in justify-center">
-                  <CircleCheck size={40} color="#F0C775" />
-                </div>
-                <h2 className="text-center text-gray-300">
-                  Transaction Successful!
-                </h2>
-                {Boolean(tokenReceived) && (
-                  <h3 className="flex items-center justify-center gap-x-1 ">
-                    <span className="">
-                      <TokenDisplay
-                        amount={tokenReceived}
-                        unitLabel={isApe ? "APE" : "TEA"}
-                        round={12}
-                      />
-                    </span>
-                  </h3>
-                )}
-              </div>
-            )}
+            <TransactionInfo
+              decimals={decimals}
+              isConfirmed={isConfirmed}
+              isConfirming={isConfirming}
+              userBalanceFetching={userBalanceFetching}
+              isPending={isPending}
+              submitType={submitType}
+              isApe={isApe}
+              useEth={useEth}
+              quoteData={quoteData}
+              isApproving={isApproving}
+              tokenReceived={tokenReceived}
+            />
           </TransactionModal.InfoContainer>
-          {/* ---------------------------------- */}
           <TransactionModal.StatSubmitContainer>
-            {submitType === ESubmitType.mint && !isConfirmed && (
+            <Show when={submitType === ESubmitType.mint && !isConfirmed}>
               <TransactionModal.StatContainer>
                 <TransactionModal.StatRow
                   title={"Fee Percent"}
                   value={fee ? fee.toString() + "%" : "0%"}
                 />
-
                 <TransactionModal.StatRow
                   title="Fee Amount"
-                  value={
-                    formatNumber(
-                      parseFloat(deposit ?? "0") *
-                        (parseFloat(fee ?? "0") / 100),
-                    ) +
-                    " " +
-                    form.getValues("long").split(",")[1]
-                  }
+                  value={`${formatNumber(
+                    parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
+                  )} ${form.getValues("long").split(",")[1]}`}
                 />
               </TransactionModal.StatContainer>
-            )}
-            {
-              <TransactionModal.SubmitButton
-                onClick={modalSubmit}
-                disabled={(!isValid && !isConfirmed) || isPending}
-                loading={isPending || isConfirming}
-                isConfirmed={isConfirmed}
+            </Show>
+
+            <TransactionModal.SubmitButton
+              onClick={modalSubmit}
+              disabled={(!isValid && !isConfirmed) || isPending}
+              loading={isPending || isConfirming}
+              isConfirmed={isConfirmed}
+            >
+              <Show
+                when={submitType === ESubmitType.mint}
+                fallback="Confirm Approve"
               >
-                {submitType === ESubmitType.mint
-                  ? "Confirm Mint"
-                  : "Confirm Approve"}
-              </TransactionModal.SubmitButton>
-            }
+                {"Confirm Mint"}
+              </Show>
+            </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
 
         {/* Versus, Long, and Leverage Dropdowns */}
-        <TopSelects
+        <VaultParamsInputSelects
           form={form}
           versus={versus}
           leverageTiers={leverageTiers}
@@ -311,17 +261,28 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         />
         <DepositInputs.Root>
           <DepositInputs.Inputs
+            inputLoading={isLoading}
+            disabled={Boolean(disabledInputs) && !isLoading}
             decimals={decimals}
             useEth={useEth}
             setUseEth={(b: boolean) => {
               setUseEth(b);
             }}
+            maxCollateralIn={
+              maxCollateralIn
+                ? formatUnits(maxCollateralIn, decimals)
+                : undefined
+            }
             balance={formatUnits(balance ?? 0n, decimals)}
             form={form}
             depositAsset={formData.long}
           />
         </DepositInputs.Root>
-
+        <div className="py-3">
+          <Show when={Boolean(disabledInputs && !isLoading)}>
+            <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
+          </Show>
+        </div>
         <Estimations
           isApe={isApe}
           disabled={!Boolean(quoteData)}
@@ -349,7 +310,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             deposit={form.getValues("deposit")}
           />
           <MintFormSubmit.Errors>
-            <>{form.formState.errors.root?.message}</>
+            {form.formState.errors.root?.message}
           </MintFormSubmit.Errors>
         </MintFormSubmit.Root>
       </form>

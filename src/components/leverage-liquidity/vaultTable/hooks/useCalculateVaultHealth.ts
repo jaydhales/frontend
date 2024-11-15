@@ -1,10 +1,10 @@
 import type { badgeVariants } from "@/components/ui/badge";
 import { mapLeverage } from "@/lib/utils";
 import type { VariantProps } from "class-variance-authority";
-import { formatUnits } from "viem";
+import { useMemo } from "react";
+import { parseUnits } from "viem";
 
 interface Props {
-  tvl: bigint;
   leverageTier: number;
   isApe: boolean;
   apeCollateral: bigint;
@@ -16,19 +16,39 @@ export default function useCalculateVaultHealth({
   apeCollateral,
   isApe,
 }: Props): VariantProps<typeof badgeVariants> {
-  const ape = parseFloat(formatUnits(apeCollateral, 18));
-  const gentlemen = parseFloat(formatUnits(teaCollateral, 18));
-  const leverageRatio = mapLeverage(leverageTier.toString());
-  const Gmin = (parseFloat(leverageRatio ?? "0") - 1) * ape;
-  const mult = Gmin * 1.25;
-  if (gentlemen > mult) {
-    return isApe ? { variant: "green" } : { variant: "red" };
+  return useMemo(() => {
+    return calculateVaultHealth({
+      leverageTier,
+      teaCollateral,
+      apeCollateral,
+      isApe,
+    });
+  }, [apeCollateral, isApe, leverageTier, teaCollateral]);
+}
+
+export function calculateVaultHealth({
+  leverageTier,
+  teaCollateral,
+  apeCollateral,
+  isApe,
+}: Props): VariantProps<typeof badgeVariants> {
+  const ape = apeCollateral;
+  const gentlemen = teaCollateral;
+  const leverageRatio =
+    parseFloat(mapLeverage(leverageTier.toString()) ?? "0") * 10000;
+  const gentlemenMinimum =
+    (parseUnits((leverageRatio - 10000).toString(), 0) * ape) / 10000n;
+  const healthyMinimum = (gentlemenMinimum * 125n) / 100n;
+  console.log(gentlemen > healthyMinimum);
+  if (gentlemen > healthyMinimum) {
+    return isApe ? { variant: "green" } : { variant: "yellow" };
   }
-  if (gentlemen > Gmin) {
+  if (gentlemen >= gentlemenMinimum) {
     return isApe ? { variant: "yellow" } : { variant: "yellow" };
   }
-  if (Gmin > gentlemen) {
+  if (gentlemenMinimum > gentlemen) {
     return isApe ? { variant: "red" } : { variant: "green" };
   }
+  console.log("ran backup");
   return { variant: "green" };
 }

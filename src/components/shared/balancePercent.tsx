@@ -2,37 +2,61 @@ import { roundDown } from "@/lib/utils";
 export function BalancePercent({
   setValue,
   balance,
+  overrideMaxValue,
+  disabled,
 }: {
+  overrideMaxValue?: string;
   setValue: (s: string) => void;
   balance: string | undefined;
+  disabled?: boolean;
 }) {
   return (
     <h2 className="flex justify-end gap-x-2 pt-1 text-right text-sm text-[#26DEC8]">
-      <span
+      <button
         onClick={() =>
-          setValue(roundDown(parseFloat(balance ?? "0") / 4, 4).toString())
+          setValue(
+            roundDown(Number.parseFloat(balance ?? "0") / 4, 4).toString(),
+          )
         }
         aria-label="25% Balance"
-        role="button"
+        type="button"
+        disabled={disabled}
       >
         25%
-      </span>{" "}
-      <span
+      </button>{" "}
+      <button
+        disabled={disabled}
         onClick={() =>
-          setValue(roundDown(parseFloat(balance ?? "0") / 2, 4).toString())
+          setValue(
+            roundDown(Number.parseFloat(balance ?? "0") / 2, 4).toString(),
+          )
         }
         aria-label="50% Balance"
-        role="button"
+        type="button"
       >
         50%
-      </span>{" "}
-      <span
-        onClick={() => setValue(balance ?? "")}
-        role="button"
+      </button>{" "}
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => {
+          if (!overrideMaxValue) {
+            setValue(balance ?? "");
+            return;
+          }
+          if (
+            Number.parseFloat(overrideMaxValue) >
+            Number.parseFloat(balance ?? "0")
+          ) {
+            setValue(balance ?? "");
+            return;
+          }
+          setValue(overrideMaxValue);
+        }}
         aria-label="Max Balance"
       >
         Max
-      </span>
+      </button>
     </h2>
   );
 }
