@@ -14,6 +14,11 @@ import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import useCalculateVaultHealth from "./hooks/useCalculateVaultHealth";
 import { HoverCard } from "@/components/ui/hover-card";
 import { TokenDisplay } from "@/components/ui/token-display";
+import {
+  calculateApeVaultFee,
+  getLeverageRatio,
+} from "@/lib/utils/calculations";
+import { getLogoAsset } from "@/lib/assets";
 
 export function VaultTableRow({
   pool,

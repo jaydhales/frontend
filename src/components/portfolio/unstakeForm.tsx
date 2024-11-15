@@ -20,6 +20,7 @@ import { useUnstake } from "../stake/hooks/useUnstake";
 import ClaimFeesCheckbox from "./claimFeesCheck";
 import { useGetReceivedSir } from "./hooks/useGetReceivedSir";
 import { TokenDisplay } from "../ui/token-display";
+import { useCheckStakeValidity } from "../shared/stake/stakeForm/useCheckStakeValidity";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
