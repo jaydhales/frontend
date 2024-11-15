@@ -13,16 +13,8 @@ import { Switch } from "@/components/ui/switch";
 import { WETH_ADDRESS } from "@/data/constants";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import { getLogoAsset } from "@/lib/assets";
-interface Props {
-  form: TMintForm;
-  depositAsset: string | undefined;
-  balance?: string;
-  useEth: boolean;
-  setUseEth: (b: boolean) => void;
-  decimals: number;
-  disabled: boolean;
-  maxCollateralIn?: string | undefined;
-}
+import Show from "@/components/shared/show";
+import { LoaderCircle } from "lucide-react";
 
 function Root({ children }: { children: React.ReactNode }) {
   return (
@@ -33,6 +25,18 @@ function Root({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
+interface Props {
+  form: TMintForm;
+  depositAsset: string | undefined;
+  balance?: string;
+  useEth: boolean;
+  setUseEth: (b: boolean) => void;
+  decimals: number;
+  disabled: boolean;
+  maxCollateralIn?: string | undefined;
+  inputLoading: boolean;
+}
 function Inputs({
   form,
   decimals,
@@ -42,6 +46,7 @@ function Inputs({
   setUseEth,
   disabled,
   maxCollateralIn,
+  inputLoading,
 }: Props) {
   return (
     <div
@@ -49,34 +54,43 @@ function Inputs({
       className="flex justify-between rounded-md bg-primary p-3 data-[state=disabled]:opacity-60"
     >
       <div>
-        <FormField
-          control={form.control}
-          name="deposit"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  disabled={disabled}
-                  type="text"
-                  inputMode="decimal"
-                  autoComplete="off"
-                  pattern="^[0-9]*[.,]?[0-9]*$"
-                  background="primary"
-                  placeholder="0"
-                  minLength={1}
-                  textSize="xl"
-                  step="any"
-                  {...field}
-                  onChange={(e) => {
-                    if (inputPatternMatch(e.target.value, decimals)) {
-                      return field.onChange(e.target.value);
-                    }
-                  }}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+        <Show
+          when={!inputLoading}
+          fallback={
+            <div className="flex h-[40px] items-center">
+              <div className="h-[24px] w-20 animate-pulse rounded-sm bg-secondary-700"></div>
+            </div>
+          }
+        >
+          <FormField
+            control={form.control}
+            name="deposit"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    disabled={disabled}
+                    type="text"
+                    inputMode="decimal"
+                    autoComplete="off"
+                    pattern="^[0-9]*[.,]?[0-9]*$"
+                    background="primary"
+                    placeholder="0"
+                    minLength={1}
+                    textSize="xl"
+                    step="any"
+                    {...field}
+                    onChange={(e) => {
+                      if (inputPatternMatch(e.target.value, decimals)) {
+                        return field.onChange(e.target.value);
+                      }
+                    }}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </Show>
 
         <div className="">
           {depositAsset?.split(",")[0] === WETH_ADDRESS && (
