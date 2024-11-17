@@ -153,3 +153,11 @@ export default function BurnTable({
     </div>
   );
 }
+
+function IdleContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex justify-center py-6">
+      <h1 className="text-gray-300">{children}</h1>
+    </div>
+  );
+}
