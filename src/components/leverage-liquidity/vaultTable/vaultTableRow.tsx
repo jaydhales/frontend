@@ -4,7 +4,6 @@ import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import boostIcon from "@/../public/boost_icon.svg";
 import { motion } from "motion/react";
-import { HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
 import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
@@ -13,7 +12,11 @@ import { formatUnits, parseUnits } from "viem";
 import { useMemo } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import useCalculateVaultHealth from "./hooks/useCalculateVaultHealth";
-import { HoverCard } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { TokenDisplay } from "@/components/ui/token-display";
 import {
   calculateApeVaultFee,
