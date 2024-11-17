@@ -3,6 +3,7 @@ import { formatNumber, roundDown } from "@/lib/utils";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import boostIcon from "@/../public/boost_icon.svg";
+import { motion } from "motion/react";
 import { HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
 import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
@@ -134,11 +135,11 @@ export function VaultTableRow({
       <th className="pl-2">
         <HoverCard openDelay={0} closeDelay={20}>
           <HoverCardTrigger asChild>
-            <div>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <Badge {...variant} className="text-nowrap text-[10px]">
                 {`${getLeverageRatio(pool.leverageTier)}x${showPercent() ? " (" + formatNumber(tvlPercent, 2) + "x)" : ""}`}
               </Badge>
-            </div>
+            </motion.div>
           </HoverCardTrigger>
           <HoverCardContent side="top" alignOffset={4}>
             <div className="mb-3 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
