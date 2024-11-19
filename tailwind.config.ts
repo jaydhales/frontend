@@ -58,7 +58,7 @@ const config = {
           700: "hsl(var(--gray-700), <alpha-value>)",
           800: "hsl(var(--gray-800), <alpha-value>)",
         },
-        purple: "#b18ce5",
+        purple: "hsl(var(--purple), <alpha-value>)",
         gold: "hsl(var(--gold), <alpha-value>)",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
