@@ -84,7 +84,10 @@ export default function Explainer({ page }: Props) {
     <div className="pb-6">
       <Card
         background="transparent"
-        className="relative rounded-xl border border-white bg-gradient-to-r from-gold to-purple text-black"
+        className="relative rounded-xl border border-white  text-black"
+        style={{
+          background: `linear-gradient(to right, hsl(40, 80%, 70%), hsl(265, 63%, 72%))`,
+        }}
       >
         <CloseModalButton close={close} />
         <h1 className="text-[20px] font-bold">{Explainers[page].title}</h1>
