@@ -1,5 +1,5 @@
 "use client";
-import { postFeedBack } from "@/lib/db/actions";
+import { postFeedBack } from "@/lib/db/action";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
