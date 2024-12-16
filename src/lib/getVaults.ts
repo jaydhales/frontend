@@ -22,7 +22,6 @@ const getCollateralAmounts = async (vaultIds: number[]) => {
     functionName: "getReserves",
     args: [[...vaultIds]],
   });
-  console.log({ result }, "GET RESERVES");
   return result;
 };
 export const getVaultData = async (offset: number) => {
@@ -52,7 +51,7 @@ export const getVaultData = async (offset: number) => {
     .digest("hex");
   let collateral: TCollateral;
   const resp = await kv.get(vaultIdHash + "1");
-  console.log(resp, "RESPONSE");
+  // Grab collteral
   if (resp) {
     collateral = (resp as TCollateralResp).map((c) => {
       return {
