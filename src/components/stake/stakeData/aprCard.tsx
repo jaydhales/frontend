@@ -61,7 +61,14 @@ export default async function AprCard() {
       ? dividendsPaidResponse.value
       : null,
   );
+  console.log(safePrice, safeDividends);
   //APR will be 0 if error occurs
+  if (!safeDividends.success) {
+    console.error("Dividends Error", safeDividends.error);
+  }
+  if (!safePrice.success) {
+    console.log(safePrice.error);
+  }
   let APR = 0n;
   if (safePrice.success && safeDividends.success) {
     APR = calculateApr({
