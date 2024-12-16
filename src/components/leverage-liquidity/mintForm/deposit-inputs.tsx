@@ -13,6 +13,19 @@ import { Switch } from "@/components/ui/switch";
 import { WETH_ADDRESS } from "@/data/constants";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import { getLogoAsset } from "@/lib/assets";
+import Show from "@/components/shared/show";
+import { LoaderCircle } from "lucide-react";
+
+function Root({ children }: { children: React.ReactNode }) {
+  return (
+    <div>
+      <FormLabel htmlFor="deposit">Deposit</FormLabel>
+      <div className="pt-1"></div>
+      {children}
+    </div>
+  );
+}
+
 interface Props {
   form: TMintForm;
   depositAsset: string | undefined;
@@ -20,16 +33,9 @@ interface Props {
   useEth: boolean;
   setUseEth: (b: boolean) => void;
   decimals: number;
-}
-
-function Root({ children }: { children: React.ReactNode }) {
-  return (
-    <div>
-      <FormLabel htmlFor="deposit">Deposit:</FormLabel>
-      <div className="pt-1"></div>
-      {children}
-    </div>
-  );
+  disabled: boolean;
+  maxCollateralIn?: string | undefined;
+  inputLoading: boolean;
 }
 function Inputs({
   form,
@@ -38,37 +44,53 @@ function Inputs({
   balance,
   useEth,
   setUseEth,
+  disabled,
+  maxCollateralIn,
+  inputLoading,
 }: Props) {
   return (
-    <div className="flex justify-between rounded-md bg-primary p-3">
+    <div
+      data-state={disabled ? "disabled" : "active"}
+      className="flex justify-between rounded-md bg-primary p-3 data-[state=disabled]:opacity-60"
+    >
       <div>
-        <FormField
-          control={form.control}
-          name="deposit"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  type="text"
-                  inputMode="decimal"
-                  autoComplete="off"
-                  pattern="^[0-9]*[.,]?[0-9]*$"
-                  background="primary"
-                  placeholder="0"
-                  minLength={1}
-                  textSize="xl"
-                  step="any"
-                  {...field}
-                  onChange={(e) => {
-                    if (inputPatternMatch(e.target.value, decimals)) {
-                      return field.onChange(e.target.value);
-                    }
-                  }}
-                ></Input>
-              </FormControl>
-            </FormItem>
-          )}
-        />
+        <Show
+          when={!inputLoading}
+          fallback={
+            <div className="flex h-[40px] items-center">
+              <div className="h-[24px] w-12 animate-pulse rounded-sm bg-secondary-600"></div>
+            </div>
+          }
+        >
+          <FormField
+            control={form.control}
+            name="deposit"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    disabled={disabled}
+                    type="text"
+                    inputMode="decimal"
+                    autoComplete="off"
+                    pattern="^[0-9]*[.,]?[0-9]*$"
+                    background="primary"
+                    placeholder="0"
+                    minLength={1}
+                    textSize="xl"
+                    step="any"
+                    {...field}
+                    onChange={(e) => {
+                      if (inputPatternMatch(e.target.value, decimals)) {
+                        return field.onChange(e.target.value);
+                      }
+                    }}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </Show>
 
         <div className="">
           {depositAsset?.split(",")[0] === WETH_ADDRESS && (
@@ -92,18 +114,19 @@ function Inputs({
         <div
           className={`flex w-[104px] items-center justify-center gap-x-2 rounded-md bg-secondary py-1 ${!depositAsset ? "opacity-70" : ""}`}
         >
-          {!depositAsset && <div className="h-[25px] w-[25px]"></div>}
+          {!depositAsset && <div className="h-[25px] w-[25px]" />}
           <AssetInfo depositAsset={depositAsset} useEth={useEth} />
         </div>
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
           Balance: {formatNumber(balance ?? "0")}
         </h2>
-        <div className="flex justify-end"></div>
         <BalancePercent
+          disabled={disabled}
           balance={balance}
           setValue={(s: string) => {
             form.setValue("deposit", s);
           }}
+          overrideMaxValue={maxCollateralIn}
         />
       </div>
     </div>

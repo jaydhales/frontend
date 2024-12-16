@@ -14,7 +14,6 @@ import { parseUnits } from "viem";
 // export const revalidate = 6000;
 const getVaults = async () => {
   const vaults = await executeVaultsQuery();
-  console.log(vaults, "VAULTS");
   return { vaults };
 };
 const getCollateralAmounts = async (vaultIds: number[]) => {
@@ -23,6 +22,7 @@ const getCollateralAmounts = async (vaultIds: number[]) => {
     functionName: "getReserves",
     args: [[...vaultIds]],
   });
+  console.log({ result }, "GET RESERVES");
   return result;
 };
 export const getVaultData = async (offset: number) => {
@@ -51,8 +51,8 @@ export const getVaultData = async (offset: number) => {
     .update(JSON.stringify(vaultIds))
     .digest("hex");
   let collateral: TCollateral;
-  const resp = await kv.get(vaultIdHash);
-
+  const resp = await kv.get(vaultIdHash + "1");
+  console.log(resp, "RESPONSE");
   if (resp) {
     collateral = (resp as TCollateralResp).map((c) => {
       return {

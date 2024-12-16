@@ -3,7 +3,7 @@ import { formatNumber, roundDown } from "@/lib/utils";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import boostIcon from "@/../public/boost_icon.svg";
-import { HoverCardContent, HoverCardTrigger } from "@radix-ui/react-hover-card";
+import { motion } from "motion/react";
 import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
@@ -12,7 +12,12 @@ import { formatUnits, parseUnits } from "viem";
 import { useMemo } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import useCalculateVaultHealth from "./hooks/useCalculateVaultHealth";
-import { HoverCard } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { TokenDisplay } from "@/components/ui/token-display";
 import {
   calculateApeVaultFee,
   getLeverageRatio,
@@ -47,8 +52,6 @@ export function VaultTableRow({
   const tvl = apeCollateral + teaCollateral;
   const tvlPercent = tvl / apeCollateral;
   const variant = useCalculateVaultHealth({
-    tvl: parseUnits(pool.totalValue, 18),
-    vaultId: pool.vaultId,
     isApe,
     leverageTier: pool.leverageTier,
     apeCollateral: pool.apeCollateral,
@@ -135,11 +138,11 @@ export function VaultTableRow({
       <th className="pl-2">
         <HoverCard openDelay={0} closeDelay={20}>
           <HoverCardTrigger asChild>
-            <div>
-              <Badge {...variant} className="text-nowrap text-[9px]">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <Badge {...variant} className="text-nowrap text-[10px]">
                 {`${getLeverageRatio(pool.leverageTier)}x${showPercent() ? " (" + formatNumber(tvlPercent, 2) + "x)" : ""}`}
               </Badge>
-            </div>
+            </motion.div>
           </HoverCardTrigger>
           <HoverCardContent side="top" alignOffset={4}>
             <div className="mb-3 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
@@ -153,15 +156,13 @@ export function VaultTableRow({
       </th>
 
       <th className="flex items-center justify-end gap-x-1 text-right md:col-span-2">
-        <span>
-          {formatNumber(
-            formatUnits(parseUnits(pool.totalValue, 0), pool.apeDecimals),
-            4,
-          )}
-        </span>
-        <span className=" hidden font-light text-gray-300 md:block">
-          {pool.collateralSymbol}
-        </span>
+        <TokenDisplay
+          labelSize="small"
+          amountSize="small"
+          amount={parseUnits(pool.totalValue, 0)}
+          decimals={pool.apeDecimals}
+          unitLabel={pool.collateralSymbol}
+        />
       </th>
     </tr>
   );

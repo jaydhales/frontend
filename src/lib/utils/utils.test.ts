@@ -19,7 +19,7 @@ test("Test calculate leverage tier ratio.", () => {
   expect(getLeverageRatio(-1)).toBe(1.5);
 });
 test("Test calculate leverage tier ratio.", () => {
-  // expect(calculateApeVaultFee(-1)).toBe(0.1666666666666666);
+  // expect(calculateApeVaultFee(-1)).toBe(0.10494517789214601);
 });
 // test("Test if getApeAddress gets proper contract address.", () => {
 //   expect(
@@ -50,7 +50,7 @@ test("Calculate Maximum Ape", () => {
       apeReserve: 1000n,
       gentlemenReserve: 10000n,
     }),
-  ).toBe(25000n);
+  ).toBe(1000n);
 
   expect(
     calculateMaxApe({
@@ -59,13 +59,16 @@ test("Calculate Maximum Ape", () => {
       apeReserve: 1000n,
       gentlemenReserve: 10000n,
     }),
-  ).toBe(38762n);
+  ).toBe(31003n);
 });
 test("Test Format Number", () => {
-  console.log(formatNumber(10000));
-  expect(formatNumber(10000)).toBe("10.0K");
-  expect(formatNumber(10000000)).toBe("10.0M");
-  expect(formatNumber(0.00012323)).toBe("0.00012323");
+  expect(formatNumber(10000)).toBe("10.00K");
+  expect(formatNumber(10000000)).toBe("10.00M");
+  expect(formatNumber(0.0012)).toBe("0.001");
+  expect(formatNumber(0.1226865213)).toBe("0.122");
+  expect(formatNumber(1.0001)).toBe("1");
+  expect(formatNumber(1.001)).toBe("1.001");
+  expect(formatNumber(0.00012323)).toBe("1.2323e-4");
   expect(formatNumber(0.0000001)).toBe("1e-7");
   expect(formatNumber(0)).toBe("0");
 });

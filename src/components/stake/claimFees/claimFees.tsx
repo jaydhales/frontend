@@ -64,7 +64,7 @@ const ClaimFees = ({
               showLoading={isConfirming}
             />
             <h2>Amount to Claim</h2>
-            <h3>{formatNumber(claimAmount ?? "0")}</h3>
+            <h3>{claimAmount ?? "0"}</h3>
           </TransactionModal.InfoContainer>
           <TransactionModal.StatSubmitContainer>
             <TransactionModal.SubmitButton
@@ -85,15 +85,13 @@ const ClaimFees = ({
           <div className="flex justify-between">
             <div className="flex flex-col justify-between">
               <div className="h-10 w-40 rounded-md bg-card text-[28px] ring-offset-background">
-                {formatNumber(claimAmount ?? "0")}
+                {formatNumber(claimAmount ?? "0", 3)}
               </div>
               {/* <div className="pt-2 text-sm italic text-gray-500">$66.88</div> */}
             </div>
             <div>
               <div className="flex flex-col justify-between gap-y-3">
-                <div
-                  className={`flex items-center justify-end gap-x-2 rounded-md py-1`}
-                >
+                <div className="flex items-center justify-end gap-x-2 rounded-md py-1">
                   <Image
                     src={
                       "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/info/logo.png"

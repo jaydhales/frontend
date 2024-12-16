@@ -6,6 +6,7 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
+import { motion } from "motion/react";
 import { useSelectMemo } from "./hooks/useSelectMemo";
 import { formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
@@ -29,6 +30,8 @@ import TransactionInfo from "./transactionInfo";
 import Show from "@/components/shared/show";
 import useFormFee from "./hooks/useFormFee";
 import { useResetTransactionModal } from "./hooks/useResetTransactionModal";
+import ErrorMessage from "@/components/ui/error-message";
+import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -105,10 +108,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     "approve" | "mint" | undefined
   >();
   useFormSuccessReset({ isConfirming, isConfirmed, currentTxType, useEth });
+
+  const { maxCollateralIn, badHealth, isLoading } = useCalculateMaxApe({
+    leverageTier: formData.leverageTier,
+    vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
+  });
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
     ethBalance: userEthBalance,
-    leverageTier: formData.leverageTier,
-    vaultId: parseInt(selectedVault.result?.vaultId ?? "-1"),
     decimals,
     useEth,
     deposit: formData.deposit ?? "0",
@@ -118,6 +124,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     tokenAllowance: userBalance?.tokenAllowance?.result,
     mintFetching: isMintFetching,
     approveFetching: isApproveFetching,
+    maxCollateralIn: isApe ? maxCollateralIn : 0n,
   });
 
   const { quoteData } = useQuoteMint({ formData, isApe });
@@ -166,19 +173,31 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       setOpenTransactionModal(false);
     }
   };
+  const disabledInputs = useMemo(() => {
+    if (!isApe) return false;
+    if (!selectedVault.result?.vaultId) {
+      return false;
+    }
+    if (badHealth) {
+      return true;
+    }
+  }, [badHealth, selectedVault.result?.vaultId, isApe]);
   const isApproving = useResetAfterApprove({
     isConfirmed,
     reset,
     submitType,
   });
+  useEffect(() => {
+    if (formData.deposit !== "" && disabledInputs) {
+      form.setValue("deposit", "");
+    }
+  }, [disabledInputs, form, form.setValue, formData.deposit]);
   const deposit = form.getValues("deposit");
   useEffect(() => {
     if (!isPending && !isConfirming && !isConfirmed) {
       setOpenTransactionModal(false);
     }
-    // - setOpenTransactionModal is const
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPending, isConfirming, isConfirmed]);
+  }, [isPending, setOpenTransactionModal, isConfirming, isConfirmed]);
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -243,47 +262,59 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         />
         <DepositInputs.Root>
           <DepositInputs.Inputs
+            inputLoading={isLoading}
+            disabled={Boolean(disabledInputs) && !isLoading}
             decimals={decimals}
             useEth={useEth}
             setUseEth={(b: boolean) => {
               setUseEth(b);
             }}
+            maxCollateralIn={
+              maxCollateralIn
+                ? formatUnits(maxCollateralIn, decimals)
+                : undefined
+            }
             balance={formatUnits(balance ?? 0n, decimals)}
             form={form}
             depositAsset={formData.long}
           />
         </DepositInputs.Root>
-
+        <div className="py-3">
+          <Show when={Boolean(disabledInputs && !isLoading)}>
+            <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
+          </Show>
+        </div>
         <Estimations
           isApe={isApe}
           disabled={!Boolean(quoteData)}
-          ape={formatNumber(formatUnits(quoteData ?? 0n, 18))}
+          ape={formatUnits(quoteData ?? 0n, decimals)}
         />
-
-        <MintFormSubmit.Root>
-          {isApe && (
-            <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
-          )}
-          <MintFormSubmit.OpenTransactionModalButton
-            isValid={isValid}
-            onClick={() => {
-              setOpenTransactionModal(true);
-              onSubmit();
-            }}
-            submitType={submitType}
-          />
-          <MintFormSubmit.ConnectButton />
-          <MintFormSubmit.FeeInfo
-            feeValue={form.getValues("long").split(",")[1]}
-            isApe={isApe}
-            isValid={isValid}
-            fee={fee}
-            deposit={form.getValues("deposit")}
-          />
-          <MintFormSubmit.Errors>
-            <>{form.formState.errors.root?.message}</>
-          </MintFormSubmit.Errors>
-        </MintFormSubmit.Root>
+        <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0.2 }}>
+          <MintFormSubmit.Root>
+            <Show when={isApe} fallback={<div className="py-3" />}>
+              <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
+            </Show>
+            <MintFormSubmit.OpenTransactionModalButton
+              isValid={isValid}
+              onClick={() => {
+                setOpenTransactionModal(true);
+                onSubmit();
+              }}
+              submitType={submitType}
+            />
+            <MintFormSubmit.ConnectButton />
+            <MintFormSubmit.FeeInfo
+              feeValue={form.getValues("long").split(",")[1]}
+              isApe={isApe}
+              isValid={isValid}
+              fee={fee}
+              deposit={form.getValues("deposit")}
+            />
+            <MintFormSubmit.Errors>
+              {form.formState.errors.root?.message}
+            </MintFormSubmit.Errors>
+          </MintFormSubmit.Root>
+        </motion.div>
       </form>
     </Card>
   );
