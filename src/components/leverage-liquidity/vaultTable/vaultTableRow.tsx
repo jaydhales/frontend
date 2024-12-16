@@ -23,6 +23,7 @@ import {
   getLeverageRatio,
 } from "@/lib/utils/calculations";
 import { getLogoAsset } from "@/lib/assets";
+import { api } from "@/trpc/react";
 
 export function VaultTableRow({
   pool,
@@ -46,16 +47,36 @@ export function VaultTableRow({
     }
   }, [pool.lockedLiquidity, pool.totalTea]);
 
+  // Add a query to retrieve collateral data
+  // Hydrate with server data
+  const { data: reservesData } = api.vault.getReserves.useQuery(
+    {
+      vaultId: Number.parseInt(pool.vaultId),
+    },
+    {
+      initialData: [
+        {
+          reserveApes: pool.apeCollateral,
+          reserveLPers: pool.teaCollateral,
+          tickPriceX42: 0n,
+        },
+      ],
+    },
+  );
   const { setValue } = useMintFormProviderApi();
-  const teaCollateral = parseFloat(formatUnits(pool.teaCollateral, 18));
-  const apeCollateral = parseFloat(formatUnits(pool.apeCollateral, 18));
+  const teaCollateral = parseFloat(
+    formatUnits(reservesData[0]?.reserveLPers ?? 0n, 18),
+  );
+  const apeCollateral = parseFloat(
+    formatUnits(reservesData[0]?.reserveApes ?? 0n, 18),
+  );
   const tvl = apeCollateral + teaCollateral;
   const tvlPercent = tvl / apeCollateral;
   const variant = useCalculateVaultHealth({
     isApe,
     leverageTier: pool.leverageTier,
-    apeCollateral: pool.apeCollateral,
-    teaCollateral: pool.teaCollateral,
+    apeCollateral: reservesData[0]?.reserveApes ?? 0n,
+    teaCollateral: reservesData[0]?.reserveLPers ?? 0n,
   });
 
   const showPercent = () => {
