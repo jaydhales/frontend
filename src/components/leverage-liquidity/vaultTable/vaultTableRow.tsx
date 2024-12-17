@@ -9,7 +9,7 @@ import type { VariantProps } from "class-variance-authority";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
 import type { TVault } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import useCalculateVaultHealth from "./hooks/useCalculateVaultHealth";
 import {
@@ -46,7 +46,7 @@ export function VaultTableRow({
       return 0;
     }
   }, [pool.lockedLiquidity, pool.totalTea]);
-
+  const [tick, setTick] = useState(0n);
   // Add a query to retrieve collateral data
   // Hydrate with server data
   const { data: reservesData } = api.vault.getReserves.useQuery(
@@ -54,15 +54,19 @@ export function VaultTableRow({
       vaultId: Number.parseInt(pool.vaultId),
     },
     {
+      // Dont fetch data on component mount
+      // Data is from server and is fresh until invalidation
+      refetchOnMount: false,
       initialData: [
         {
           reserveApes: pool.apeCollateral,
           reserveLPers: pool.teaCollateral,
-          tickPriceX42: 0n,
+          tickPriceX42: tick,
         },
       ],
     },
   );
+  console.log({ reservesData });
   const { setValue } = useMintFormProviderApi();
   const teaCollateral = parseFloat(
     formatUnits(reservesData[0]?.reserveLPers ?? 0n, 18),
