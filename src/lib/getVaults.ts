@@ -12,8 +12,20 @@ import { executeVaultsQuery } from "@/server/queries/vaults";
 import { parseUnits } from "viem";
 
 // export const revalidate = 6000;
-const getVaults = async () => {
-  const vaults = await executeVaultsQuery({});
+const getVaults = async ({
+  filterLeverage,
+  filterCollateralToken,
+  filterDebtToken,
+}: {
+  filterLeverage?: string;
+  filterDebtToken?: string;
+  filterCollateralToken?: string;
+}) => {
+  const vaults = await executeVaultsQuery({
+    filterLeverage,
+    filterCollateralToken,
+    filterDebtToken,
+  });
   return { vaults };
 };
 const getCollateralAmounts = async (vaultIds: number[]) => {
@@ -24,21 +36,20 @@ const getCollateralAmounts = async (vaultIds: number[]) => {
   });
   return result;
 };
-export const getVaultData = async (offset: number) => {
+export const getVaultsForTable = async (
+  offset: number,
+  filters?: {
+    filterLeverage?: string;
+    filterDebtToken?: string;
+    filterCollateralToken?: string;
+  },
+) => {
   let vaultQuery;
 
-  const v = await getVaults();
+  const v = await getVaults(filters ?? {});
 
   vaultQuery = v.vaults;
-  console.log(vaultQuery, "Vault Query");
-  // if (!vaults) {
-  //   // Don't block with await only need for next cache
-  //   kv.set("vaults", JSON.stringify(vaultQuery), { ex: 60 * 4 }).catch((e) => {
-  //     console.log(e, "Failed to store in KV");
-  //   });
-  // } else {
-  //   vaultQuery = vaults as { vaults: VaultFieldFragment[] };
-  // }
+
   let pageVaults: VaultFieldFragment[] | undefined;
   if (isFinite(offset)) {
     pageVaults = vaultQuery?.vaults.slice(offset, offset + 10);
@@ -68,23 +79,6 @@ export const getVaultData = async (offset: number) => {
       console.log(e);
     }
   }
-
-  kv.set(
-    vaultIdHash,
-    JSON.stringify(
-      collateral.map((c) => ({
-        ...c,
-        reserveApes: c.reserveApes.toString(),
-        reserveLPers: c.reserveLPers.toString(),
-        tickPriceX42: c.tickPriceX42.toString(),
-      })),
-    ),
-    {
-      ex: 60 * 5,
-    },
-  ).catch((e) => {
-    console.log("Error setting vaultIdHash", e);
-  });
 
   vaultQuery = {
     vaults: vaultQuery?.vaults.map((v, i) => ({
