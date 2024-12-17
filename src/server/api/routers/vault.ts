@@ -7,15 +7,36 @@ import { executeVaultsQuery } from "@/server/queries/vaults";
 import { parseUnits } from "viem";
 import { z } from "zod";
 export const vaultRouter = createTRPCRouter({
-  getVaults: publicProcedure.query(async ({}) => {
-    const vaults = await executeVaultsQuery();
-    return vaults;
-  }),
+  getVaults: publicProcedure
+    .input(
+      z
+        .object({
+          filterLeverage: z.string().optional(),
+          filterDebtToken: z.string().optional(),
+          filterCollateralToken: z.string().optional(),
+        })
+        .optional(),
+    )
+    .query(async ({ input }) => {
+      if (input) {
+        console.log(input, "INPUT");
+        const { filterLeverage, filterDebtToken, filterCollateralToken } =
+          input;
+        const vaults = await executeVaultsQuery({
+          filterLeverage,
+          filterDebtToken,
+          filterCollateralToken,
+        });
+        return vaults;
+      } else {
+        const vaults = await executeVaultsQuery({});
+        return vaults;
+      }
+    }),
 
   getReserve: publicProcedure
     .input(z.object({ vaultId: z.number() }))
     .query(async ({ input }) => {
-      console.log("Ran getReserves");
       const result = await readContract({
         ...AssistantContract,
         args: [[input.vaultId]],
@@ -24,9 +45,10 @@ export const vaultRouter = createTRPCRouter({
       return result;
     }),
   getReserves: publicProcedure
-    .input(z.object({ vaultIds: z.array(z.number()) }))
+    .input(z.object({ vaultIds: z.array(z.number()).optional() }))
     .query(async ({ input }) => {
       console.log("Ran getReserves");
+      if (!input.vaultIds) return [];
       const result = await readContract({
         ...AssistantContract,
         args: [input.vaultIds],
