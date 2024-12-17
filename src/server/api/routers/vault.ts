@@ -1,5 +1,6 @@
 import { ApeContract } from "@/contracts/ape";
 import { AssistantContract } from "@/contracts/assistant";
+import { getVaultsForTable } from "@/lib/getVaults";
 import type { TAddressString } from "@/lib/types";
 import { multicall, readContract } from "@/lib/viemClient";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
@@ -33,7 +34,22 @@ export const vaultRouter = createTRPCRouter({
         return vaults;
       }
     }),
-
+  getTableVaults: publicProcedure
+    .input(
+      z
+        .object({
+          offset: z.number().optional(),
+          filters: ZVaultFilters.optional(),
+        })
+        .optional(),
+    )
+    .query(async ({ input }) => {
+      const result = await getVaultsForTable(
+        input?.offset ?? 0,
+        input?.filters,
+      );
+      return result;
+    }),
   getReserve: publicProcedure
     .input(z.object({ vaultId: z.number() }))
     .query(async ({ input }) => {
