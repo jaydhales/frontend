@@ -1,4 +1,5 @@
 import type { TMintFormFields, TVaults } from "@/lib/types";
+import { api } from "@/trpc/react";
 import { useMemo } from "react";
 
 interface Props {
@@ -9,6 +10,14 @@ interface Props {
  * Narrows down dropdown items(vaults) when other dropdowns are selected.
  */
 export function useFilterVaults({ formData, vaultsQuery }: Props) {
+  console.log(formData, "FORM DATA");
+  const { data } = api.vault.getVaults.useQuery({
+    filterDebtToken: formData.versus.split(",")[0],
+    filterCollateralToken: formData.long.split(",")[0],
+    filterLeverage: formData.leverageTier,
+  });
+
+  console.log(data, "GET VAUltS DATA");
   const { versus, leverageTiers, long } = useMemo(() => {
     if (vaultsQuery?.vaults === undefined)
       return { versus: [], leverageTiers: [], long: [] };
@@ -30,20 +39,23 @@ export function useFilterVaults({ formData, vaultsQuery }: Props) {
       }
       return true;
     });
-
+    const matchingFetchPools = data?.vaults;
     const long = [
       ...new Map(
-        matchingPools.map((item) => [item.collateralToken, item]),
+        matchingFetchPools?.map((item) => [item.collateralToken, item]),
       ).values(),
     ];
     const versus = [
-      ...new Map(matchingPools.map((item) => [item.debtToken, item])).values(),
+      ...new Map(
+        matchingFetchPools?.map((item) => [item.debtToken, item]),
+      ).values(),
     ];
     const leverageTiers = [
-      ...new Set(matchingPools.map((p) => p.leverageTier)),
+      ...new Set(matchingFetchPools?.map((p) => p.leverageTier)),
     ];
     return { leverageTiers, long, versus };
   }, [
+    data?.vaults,
     formData.leverageTier,
     formData.long,
     formData.versus,
