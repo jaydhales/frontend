@@ -1,12 +1,16 @@
+"use client";
+import type { TVault, VaultFieldFragment } from "@/lib/types";
 import { api } from "@/trpc/react";
-import type { ReactNode } from "react";
-import React, { createContext, useContext, useRef, useState } from "react";
+import { skipToken } from "@tanstack/react-query";
+import React, { createContext, useContext, useMemo, useRef } from "react";
 
-interface VaultProviderType {}
+interface VaultProviderType {
+  vaults: VaultFieldFragment[] | undefined;
+}
 
 const VaultContext = createContext<VaultProviderType | undefined>(undefined);
-// Utils function to create an Hashmap for every TVault
-// Ex {'1':0, '2':0, ...}
+// Utils function to create an Hashmap for every TVault Index
+// Ex. {'1':0, '2':0, ...}
 const createNumberObject = (length: number): Record<string, number> => {
   const result: Record<string, number> = {};
   for (let i = 1; i <= length; i++) {
@@ -14,15 +18,23 @@ const createNumberObject = (length: number): Record<string, number> => {
   }
   return result;
 };
-export const VaultProvider = ({ children }: { children: ReactNode }) => {
-  const callIds = useRef(createNumberObject(4));
+interface Props {
+  children: React.ReactNode;
+  graphVaults: VaultFieldFragment[];
+}
 
-  // get TVaults from server
-  // get query
-  // return function to update single vault
-  //
-  api.vault.getReserves.useQuery({ vaultId: 1 }, {});
-  return <VaultContext.Provider value={{}}>{children}</VaultContext.Provider>;
+export const VaultProvider = ({ children, graphVaults }: Props) => {
+  const callIds = useRef(createNumberObject(graphVaults?.length ?? 0));
+  const { data: vaultData } = api.vault.getVaults.useQuery(skipToken, {
+    initialData: { vaults: graphVaults },
+    refetchOnMount: false,
+  });
+  const vaults = useMemo(() => {
+    return vaultData.vaults;
+  }, [vaultData]);
+  return (
+    <VaultContext.Provider value={{ vaults }}>{children}</VaultContext.Provider>
+  );
 };
 
 // Custom hook to use the context
@@ -33,3 +45,10 @@ export const useVaultProvider = () => {
   }
   return context;
 };
+
+// Graph Vaults - Vaults from Subgraph query
+// Have a global state with Graph Vaults
+// For every page grab reserves
+// Have loader on Vaults for reserve amounts
+// ** Graph Vaults will remain the same, however, we will grab individual
+// Full refresh will get all new Graph Vaults Though
