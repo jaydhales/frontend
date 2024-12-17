@@ -13,7 +13,7 @@ import { parseUnits } from "viem";
 
 // export const revalidate = 6000;
 const getVaults = async () => {
-  const vaults = await executeVaultsQuery();
+  const vaults = await executeVaultsQuery({});
   return { vaults };
 };
 const getCollateralAmounts = async (vaultIds: number[]) => {
