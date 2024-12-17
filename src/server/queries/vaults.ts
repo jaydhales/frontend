@@ -1,5 +1,5 @@
 import { graphqlClient } from "@/lib/graphqlClient";
-import type { TAddressString, TVaults } from "@/lib/types";
+import type { TAddressString, TVaults, VaultFieldFragment } from "@/lib/types";
 import { gql } from "graphql-request";
 const vaults = gql`
   #graphql
@@ -82,7 +82,7 @@ export const executeGetUserApePositions = async ({
 export const executeVaultsQuery = async () => {
   const result = await graphqlClient.request(vaults);
   console.log(result, "RESULT");
-  return result as TVaults;
+  return result as { vaults: VaultFieldFragment[] };
 };
 
 export type TUserPosition = {
