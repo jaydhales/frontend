@@ -8,7 +8,7 @@ interface Props {
 /**
  * Narrows down dropdown items(vaults) when other dropdowns are selected.
  */
-export function useSelectMemo({ formData, vaultsQuery }: Props) {
+export function useFilterVaults({ formData, vaultsQuery }: Props) {
   const { versus, leverageTiers, long } = useMemo(() => {
     if (vaultsQuery?.vaults === undefined)
       return { versus: [], leverageTiers: [], long: [] };
