@@ -1,11 +1,10 @@
 "use client";
-import type { TVault, VaultFieldFragment } from "@/lib/types";
+import type { TVaults, VaultFieldFragment } from "@/lib/types";
 import { api } from "@/trpc/react";
-import { skipToken } from "@tanstack/react-query";
-import React, { createContext, useContext, useMemo, useRef } from "react";
+import React, { createContext, useContext, useRef } from "react";
 
 interface VaultProviderType {
-  vaults: VaultFieldFragment[] | undefined;
+  vaults: TVaults | undefined;
 }
 
 const VaultContext = createContext<VaultProviderType | undefined>(undefined);
@@ -24,16 +23,12 @@ interface Props {
 }
 
 export const VaultProvider = ({ children, graphVaults }: Props) => {
+  const { data } = api.vault.getTableVaults.useQuery();
   const callIds = useRef(createNumberObject(graphVaults?.length ?? 0));
-  const { data: vaultData } = api.vault.getVaults.useQuery(skipToken, {
-    initialData: { vaults: graphVaults },
-    refetchOnMount: false,
-  });
-  const vaults = useMemo(() => {
-    return vaultData.vaults;
-  }, [vaultData]);
   return (
-    <VaultContext.Provider value={{ vaults }}>{children}</VaultContext.Provider>
+    <VaultContext.Provider value={{ vaults: data?.vaultQuery }}>
+      {children}
+    </VaultContext.Provider>
   );
 };
 
