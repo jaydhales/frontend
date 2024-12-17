@@ -11,12 +11,25 @@ export const vaultRouter = createTRPCRouter({
     const vaults = await executeVaultsQuery();
     return vaults;
   }),
-  getReserves: publicProcedure
+
+  getReserve: publicProcedure
     .input(z.object({ vaultId: z.number() }))
     .query(async ({ input }) => {
+      console.log("Ran getReserves");
       const result = await readContract({
         ...AssistantContract,
         args: [[input.vaultId]],
+        functionName: "getReserves",
+      });
+      return result;
+    }),
+  getReserves: publicProcedure
+    .input(z.object({ vaultIds: z.array(z.number()) }))
+    .query(async ({ input }) => {
+      console.log("Ran getReserves");
+      const result = await readContract({
+        ...AssistantContract,
+        args: [input.vaultIds],
         functionName: "getReserves",
       });
       return result;
