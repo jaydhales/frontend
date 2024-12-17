@@ -1,5 +1,5 @@
 import { kv } from "@vercel/kv";
-import { createHash, randomInt } from "crypto";
+import { createHash } from "crypto";
 import { readContract } from "./viemClient";
 import { AssistantContract } from "@/contracts/assistant";
 import type {
