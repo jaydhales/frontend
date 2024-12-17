@@ -49,7 +49,7 @@ export function VaultTableRow({
   const [tick, setTick] = useState(0n);
   // Add a query to retrieve collateral data
   // Hydrate with server data
-  const { data: reservesData } = api.vault.getReserves.useQuery(
+  const { data: reservesData } = api.vault.getReserve.useQuery(
     {
       vaultId: Number.parseInt(pool.vaultId),
     },
@@ -200,7 +200,6 @@ function DisplayBadgeInfo({
   variant: VariantProps<typeof badgeVariants>;
   isApe: boolean;
 }) {
-  console.log(variant.variant, "VARIANT");
   if (variant.variant === "green") {
     return isApe ? (
       <span>Healthy, more than enough liquidity.</span>
