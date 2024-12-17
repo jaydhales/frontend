@@ -7,6 +7,11 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { executeVaultsQuery } from "@/server/queries/vaults";
 import { parseUnits } from "viem";
 import { z } from "zod";
+const ZVaultFilters = z.object({
+  filterLeverage: z.string().optional(),
+  filterDebtToken: z.string().optional(),
+  filterCollateralToken: z.string().optional(),
+});
 export const vaultRouter = createTRPCRouter({
   getVaults: publicProcedure
     .input(
@@ -20,7 +25,6 @@ export const vaultRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       if (input) {
-        console.log(input, "INPUT");
         const { filterLeverage, filterDebtToken, filterCollateralToken } =
           input;
         const vaults = await executeVaultsQuery({
