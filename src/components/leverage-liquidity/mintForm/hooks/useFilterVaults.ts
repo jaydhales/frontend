@@ -16,7 +16,6 @@ export function useFilterVaults({ formData, vaultsQuery }: Props) {
     filterCollateralToken: formData.long.split(",")[0],
     filterLeverage: formData.leverageTier,
   });
-  const vaultData = useDebounce(data, 50);
   const [filters, setFilters] = useState<{
     versus: VaultFieldFragment[];
     long: VaultFieldFragment[];
@@ -32,10 +31,10 @@ export function useFilterVaults({ formData, vaultsQuery }: Props) {
   // all unique values
 
   useEffect(() => {
-    if (!vaultData) {
+    if (!data?.vaults) {
       return;
     }
-    const matchingFetchPools = vaultData?.vaults;
+    const matchingFetchPools = data?.vaults;
     const long = [
       ...new Map(
         matchingFetchPools?.map((item) => [item.collateralToken, item]),
@@ -52,7 +51,7 @@ export function useFilterVaults({ formData, vaultsQuery }: Props) {
 
     setFilters({ long, versus, leverageTiers });
     // return { leverageTiers, long, versus };
-  }, [isFetching, vaultData?.vaults, vaultsQuery?.vaults]);
+  }, [data?.vaults, isFetching, vaultsQuery?.vaults]);
   const { versus, leverageTiers, long } = filters;
   console.log(long, "LONG");
   return { versus, leverageTiers, long };
