@@ -6,7 +6,7 @@ const EthCallParamsSchema = z.object({
   data: z.string(),
   from: z.string(),
   to: z.string(),
-  value: z.string(),
+  value: z.string().optional(),
 });
 
 const EthCallSchema = z.object({
@@ -24,8 +24,10 @@ const handler = async (req: NextRequest) => {
       if (param !== "latest") {
         if (
           param.to !== env.NEXT_PUBLIC_SIR_ADDRESS &&
-          param.to !== env.NEXT_PUBLIC_VAULT_ADDRESS
+          param.to !== env.NEXT_PUBLIC_VAULT_ADDRESS &&
+          param.to !== env.NEXT_PUBLIC_ASSISTANT_ADDRESS
         ) {
+          console.error("WRONG ADDRESS IN RPC");
           return NextResponse.json({ success: false }, { status: 429 });
         }
       }
@@ -39,6 +41,8 @@ const handler = async (req: NextRequest) => {
     }).then((r) => r.json());
     return NextResponse.json(rpcCall);
   } else {
+    console.error("FAILED TO PARSE JSON");
+    console.log(call.error);
     return NextResponse.json({ success: false }, { status: 429 });
   }
 };
