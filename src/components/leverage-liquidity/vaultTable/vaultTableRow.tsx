@@ -24,6 +24,7 @@ import {
 } from "@/lib/utils/calculations";
 import { getLogoAsset } from "@/lib/assets";
 import { api } from "@/trpc/react";
+import VaultTableSkeleton from "./vaultTableSkeleton";
 
 export function VaultTableRow({
   pool,

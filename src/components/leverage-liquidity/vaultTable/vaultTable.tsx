@@ -4,6 +4,8 @@ import type { TVaults } from "@/lib/types";
 import { VaultTableRow } from "./vaultTableRow";
 import { useSearchParams } from "next/navigation";
 import ToolTip from "@/components/ui/tooltip";
+import VaultRowSkeleton from "./vaultRowSkeleton";
+import Show from "@/components/shared/show";
 export default function VaultTable({
   vaultQuery,
   isApe,
@@ -26,21 +28,34 @@ export default function VaultTable({
 
       <tbody className="space-y-2">
         <VaultTableRowHeaders />
-        {vaultQuery?.vaults
-          .slice(pagination * 8 - 8, pagination * 8)
-          .map((pool, ind) => {
-            return (
-              <VaultTableRow
-                key={pool.vaultId}
-                pool={pool}
-                number={ind.toString()}
-                badgeVariant={{
-                  variant: ind % 2 === 0 ? "yellow" : "default",
-                }}
-                isApe={isApe}
-              />
-            );
-          })}
+
+        <Show
+          when={false}
+          fallback={
+            <>
+              <VaultRowSkeleton />
+              <VaultRowSkeleton />
+              <VaultRowSkeleton />
+              <VaultRowSkeleton />
+            </>
+          }
+        >
+          {vaultQuery?.vaults
+            .slice(pagination * 8 - 8, pagination * 8)
+            .map((pool, ind) => {
+              return (
+                <VaultTableRow
+                  key={pool.vaultId}
+                  pool={pool}
+                  number={ind.toString()}
+                  badgeVariant={{
+                    variant: ind % 2 === 0 ? "yellow" : "default",
+                  }}
+                  isApe={isApe}
+                />
+              );
+            })}
+        </Show>
       </tbody>
     </table>
   );
