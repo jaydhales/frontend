@@ -15,7 +15,7 @@ const vaults = (
   if (filterLeverage) whereClauses.push("leverageTier: $leverageTier");
   const whereClause =
     whereClauses.length > 0 ? `where: { ${whereClauses.join(", ")} }` : "";
-  console.log(whereClause);
+  console.log(whereClause, "WHERE CLAUSE");
   return gql`
   #graphql
 
@@ -119,7 +119,6 @@ export const executeVaultsQuery = async ({
       leverageTier: filterLeverage ? parseInt(filterLeverage) : undefined,
     },
   );
-  console.log(result, "RESULT");
   return result as { vaults: VaultFieldFragment[] };
 };
 

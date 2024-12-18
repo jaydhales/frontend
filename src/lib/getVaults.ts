@@ -11,7 +11,6 @@ import type {
 import { executeVaultsQuery } from "@/server/queries/vaults";
 import { parseUnits } from "viem";
 
-// export const revalidate = 6000;
 const getVaults = async ({
   filterLeverage,
   filterCollateralToken,
@@ -45,7 +44,6 @@ export const getVaultsForTable = async (
   },
 ) => {
   let vaultQuery;
-
   const v = await getVaults(filters ?? {});
 
   vaultQuery = v.vaults;

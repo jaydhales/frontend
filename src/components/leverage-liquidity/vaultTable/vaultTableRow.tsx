@@ -66,7 +66,6 @@ export function VaultTableRow({
       ],
     },
   );
-  console.log({ reservesData });
   const { setValue } = useMintFormProviderApi();
   const teaCollateral = parseFloat(
     formatUnits(reservesData[0]?.reserveLPers ?? 0n, 18),
