@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StaticImageData } from "next/image";
+import { LoaderCircle } from "lucide-react";
 import {
   FormControl,
   FormField,
@@ -37,8 +38,10 @@ export default function Select({
   onChangeInput,
   searchItems,
   value,
+  loading,
 }: {
   title: string;
+  loading?: boolean;
   clear?: boolean;
   noSearch?: boolean;
   searchItems?: TItem[];
@@ -106,43 +109,54 @@ export default function Select({
                     onChange={(e) => onChangeInput?.(e.target.value)}
                   />
                 </Show>
-                <CommandEmpty>No tokens found.</CommandEmpty>
+                <Show when={showItems.length === 0 && !loading}>
+                  <CommandEmpty>No tokens found.</CommandEmpty>
+                </Show>
                 {/* <CommandGroup> */}
                 <CommandList>
-                  {showItems.map((item) => (
-                    <CommandItem
-                      key={item.value + item.label}
-                      value={item.value}
-                      onSelect={() => {
-                        setOpen(false);
-                        setTimeout(() => {
-                          form.setValue(name, item.value);
-                        }, 100);
-                      }}
-                      className="flex h-[40px] justify-between px-2"
-                    >
-                      <div className="flex items-center gap-x-2">
-                        {item.imageUrl && (
-                          <ImageWithFallback
-                            height={100}
-                            width={100}
-                            className="h-[28px] w-[28px] rounded-full"
-                            src={item.imageUrl}
-                            alt={item.label}
-                          />
-                        )}
-                        {item.label}
+                  <Show
+                    when={!loading}
+                    fallback={
+                      <div className="flex justify-center py-2">
+                        <LoaderCircle className="animate-spin" />
                       </div>
-                      <Check
-                        className={cn(
-                          "h-5 w-5 ",
-                          item.value === field.value
-                            ? "opacity-100"
-                            : "opacity-0",
-                        )}
-                      />
-                    </CommandItem>
-                  ))}
+                    }
+                  >
+                    {showItems.map((item) => (
+                      <CommandItem
+                        key={item.value + item.label}
+                        value={item.value}
+                        onSelect={() => {
+                          setOpen(false);
+                          setTimeout(() => {
+                            form.setValue(name, item.value);
+                          }, 100);
+                        }}
+                        className="flex h-[40px] justify-between px-2"
+                      >
+                        <div className="flex items-center gap-x-2">
+                          {item.imageUrl && (
+                            <ImageWithFallback
+                              height={100}
+                              width={100}
+                              className="h-[28px] w-[28px] rounded-full"
+                              src={item.imageUrl}
+                              alt={item.label}
+                            />
+                          )}
+                          {item.label}
+                        </div>
+                        <Check
+                          className={cn(
+                            "h-5 w-5 ",
+                            item.value === field.value
+                              ? "opacity-100"
+                              : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </Show>
                 </CommandList>
                 {/* </CommandGroup> */}
               </Command>
