@@ -4,6 +4,7 @@ import { getVaultsForTable } from "@/lib/getVaults";
 import type { TAddressString } from "@/lib/types";
 import { multicall, readContract } from "@/lib/viemClient";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { executeSearchVaultsQuery } from "@/server/queries/searchVaults";
 import { executeVaultsQuery } from "@/server/queries/vaults";
 import { parseUnits } from "viem";
 import { z } from "zod";
@@ -37,6 +38,22 @@ export const vaultRouter = createTRPCRouter({
         const vaults = await executeVaultsQuery({});
         return vaults;
       }
+    }),
+  getSearchVaults: publicProcedure
+    .input(
+      z.object({
+        filters: ZVaultFilters.optional(),
+        search: z.string(),
+        type: z.union([z.literal("debt"), z.literal("collateral")]),
+      }),
+    )
+    .query(async ({ input }) => {
+      const result = await executeSearchVaultsQuery({
+        ...input.filters,
+        search: input.search,
+        type: input.type,
+      });
+      return result;
     }),
   getTableVaults: publicProcedure
     .input(
