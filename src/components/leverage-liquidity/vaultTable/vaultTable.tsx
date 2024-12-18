@@ -30,7 +30,7 @@ export default function VaultTable({
         <VaultTableRowHeaders />
 
         <Show
-          when={false}
+          when={true}
           fallback={
             <>
               <VaultRowSkeleton />
