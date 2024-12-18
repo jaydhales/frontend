@@ -20,17 +20,16 @@ interface Props {
 export default function SelectWithSearch({ form, name, title, items }: Props) {
   const type = name === "long" ? "collateral" : "debt";
   const [input, setInput] = useState("");
-  const deInput = useDebounce(input, 300);
-  const { data } = api.vault.getSearchVaults.useQuery(
+  const { debouncedValue, debouncing } = useDebounce(input, 300);
+  const { data, isFetching } = api.vault.getSearchVaults.useQuery(
     {
-      search: deInput.toUpperCase(),
+      search: debouncedValue.toUpperCase(),
       type,
     },
     {
-      enabled: Boolean(deInput),
+      enabled: Boolean(debouncedValue),
     },
   );
-  console.log(data, "data");
   let searchItems: TItem[] | undefined = [
     ...new Map(
       data?.vaults?.map((item) => [
@@ -56,8 +55,10 @@ export default function SelectWithSearch({ form, name, title, items }: Props) {
   if (input === "") {
     searchItems = undefined;
   }
+  console.log(input, "INPUT", searchItems, items);
   return (
     <Select
+      loading={isFetching || debouncing}
       searchItems={searchItems}
       title={title}
       onChangeInput={(s) => {
