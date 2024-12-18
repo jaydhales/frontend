@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import { StaticImageData } from "next/image";
 import {
   FormControl,
   FormField,
@@ -16,15 +16,10 @@ import {
 
 import { Check, ChevronDown, X } from "lucide-react";
 import { Button } from "../ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "../ui/command";
+import { Command, CommandEmpty, CommandItem, CommandList } from "../ui/command";
 import type { TMintForm } from "@/lib/types";
 import ImageWithFallback from "./ImageWithFallback";
+import Show from "./show";
 // TODO
 // rm default placeholders
 type TItem = {
@@ -39,19 +34,25 @@ export default function Select({
   title,
   items,
   noSearch,
+  onChangeInput,
+  searchItems,
+  value,
 }: {
   title: string;
   clear?: boolean;
   noSearch?: boolean;
+  searchItems?: TItem[];
   items: TItem[];
   placeholder?: string;
   name: "leverageTier" | "long" | "versus" | "depositToken";
   form: TMintForm;
   colorScheme?: "light" | "dark" | null;
-
+  onChangeInput?: (s: string) => void;
+  value?: string;
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
+  const showItems = searchItems ? searchItems : items;
   return (
     <FormField
       control={form.control}
@@ -97,13 +98,18 @@ export default function Select({
             </PopoverTrigger>
             <PopoverContent className=" w-[180px] p-0">
               <Command>
-                {!field.value && !noSearch && (
-                  <CommandInput placeholder={placeholder ?? "Search..."} />
-                )}
+                <Show when={!field.value && !noSearch}>
+                  <input
+                    className="m-2 border-0 bg-transparent p-2 focus-within:bg-none"
+                    placeholder={placeholder ?? "Search..."}
+                    value={value}
+                    onChange={(e) => onChangeInput?.(e.target.value)}
+                  />
+                </Show>
                 <CommandEmpty>No tokens found.</CommandEmpty>
                 {/* <CommandGroup> */}
                 <CommandList>
-                  {items.map((item) => (
+                  {showItems.map((item) => (
                     <CommandItem
                       key={item.value + item.label}
                       value={item.value}
