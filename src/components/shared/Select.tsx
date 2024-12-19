@@ -38,6 +38,7 @@ export default function Select({
   placeholder,
   title,
   items,
+  setStore,
   noSearch,
 }: {
   title: string;
@@ -48,7 +49,7 @@ export default function Select({
   name: "leverageTier" | "long" | "versus" | "depositToken";
   form: TMintForm;
   colorScheme?: "light" | "dark" | null;
-
+  setStore: (s: string) => void;
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -88,6 +89,7 @@ export default function Select({
                       className="h-5 w-5"
                       onClick={(e) => {
                         e.preventDefault();
+                        setStore("");
                         form.setValue(name, "");
                       }}
                     ></X>
@@ -110,6 +112,7 @@ export default function Select({
                       onSelect={() => {
                         setOpen(false);
                         setTimeout(() => {
+                          setStore(item.value);
                           form.setValue(name, item.value);
                         }, 100);
                       }}
