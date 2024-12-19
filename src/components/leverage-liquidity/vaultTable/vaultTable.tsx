@@ -6,6 +6,8 @@ import { useSearchParams } from "next/navigation";
 import ToolTip from "@/components/ui/tooltip";
 import { useVaultProvider } from "@/components/providers/vaultProvider";
 import useVaultFilterStore from "@/lib/store";
+import VaultRowSkeleton from "./vaultRowSkeleton";
+import Show from "@/components/shared/show";
 export default function VaultTable({
   isApe,
 }: {
@@ -43,6 +45,34 @@ export default function VaultTable({
               />
             );
           })}
+
+        <Show
+          when={true}
+          fallback={
+            <>
+              <VaultRowSkeleton />
+              <VaultRowSkeleton />
+              <VaultRowSkeleton />
+              <VaultRowSkeleton />
+            </>
+          }
+        >
+          {vaultQuery?.vaults
+            .slice(pagination * 8 - 8, pagination * 8)
+            .map((pool, ind) => {
+              return (
+                <VaultTableRow
+                  key={pool.vaultId}
+                  pool={pool}
+                  number={ind.toString()}
+                  badgeVariant={{
+                    variant: ind % 2 === 0 ? "yellow" : "default",
+                  }}
+                  isApe={isApe}
+                />
+              );
+            })}
+        </Show>
       </tbody>
     </table>
   );

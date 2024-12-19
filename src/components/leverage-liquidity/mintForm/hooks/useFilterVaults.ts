@@ -1,6 +1,7 @@
-import type { TMintFormFields, TVaults } from "@/lib/types";
+import { useDebounce } from "@/components/shared/hooks/useDebounce";
+import type { TMintFormFields, TVaults, VaultFieldFragment } from "@/lib/types";
 import { api } from "@/trpc/react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface Props {
   formData: TMintFormFields;
@@ -10,20 +11,29 @@ interface Props {
  * Narrows down dropdown items(vaults) when other dropdowns are selected.
  */
 export function useFilterVaults({ formData, vaultsQuery }: Props) {
-  console.log(formData, "FORM DATA");
-  const { data } = api.vault.getVaults.useQuery({
+  const { data, isLoading, isFetching } = api.vault.getVaults.useQuery({
     filterDebtToken: formData.versus.split(",")[0],
     filterCollateralToken: formData.long.split(",")[0],
     filterLeverage: formData.leverageTier,
+  });
+  const [filters, setFilters] = useState<{
+    versus: VaultFieldFragment[];
+    long: VaultFieldFragment[];
+    leverageTiers: number[];
+  }>({
+    long: [],
+    versus: [],
+    leverageTiers: [],
   });
   // have a second query for address searches
 
   // turn into a set
   // all unique values
 
-  const { versus, leverageTiers, long } = useMemo(() => {
-    if (vaultsQuery?.vaults === undefined)
-      return { versus: [], leverageTiers: [], long: [] };
+  useEffect(() => {
+    if (!data?.vaults) {
+      return;
+    }
     const matchingFetchPools = data?.vaults;
     const long = [
       ...new Map(
@@ -38,8 +48,12 @@ export function useFilterVaults({ formData, vaultsQuery }: Props) {
     const leverageTiers = [
       ...new Set(matchingFetchPools?.map((p) => p.leverageTier)),
     ];
-    return { leverageTiers, long, versus };
-  }, [data?.vaults, vaultsQuery?.vaults]);
+
+    setFilters({ long, versus, leverageTiers });
+    // return { leverageTiers, long, versus };
+  }, [data?.vaults, isFetching, vaultsQuery?.vaults]);
+  const { versus, leverageTiers, long } = filters;
+  console.log(long, "LONG");
   return { versus, leverageTiers, long };
 }
 

@@ -25,6 +25,7 @@ import {
 import { getLogoAsset } from "@/lib/assets";
 import { api } from "@/trpc/react";
 import useVaultFilterStore from "@/lib/store";
+import VaultTableSkeleton from "./vaultTableSkeleton";
 
 export function VaultTableRow({
   pool,
@@ -67,7 +68,6 @@ export function VaultTableRow({
       ],
     },
   );
-  console.log({ reservesData });
   const { setValue } = useMintFormProviderApi();
   const teaCollateral = parseFloat(
     formatUnits(reservesData[0]?.reserveLPers ?? 0n, 18),
