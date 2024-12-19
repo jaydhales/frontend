@@ -5,7 +5,6 @@ import { VaultTableRow } from "./vaultTableRow";
 import { useSearchParams } from "next/navigation";
 import ToolTip from "@/components/ui/tooltip";
 import { useVaultProvider } from "@/components/providers/vaultProvider";
-import useVaultFilterStore from "@/lib/store";
 import VaultRowSkeleton from "./vaultRowSkeleton";
 import Show from "@/components/shared/show";
 export default function VaultTable({
@@ -18,7 +17,7 @@ export default function VaultTable({
   const vaultPage = params.get("vault-page");
   let pagination = 1;
   if (vaultPage) {
-    const x = parseInt(vaultPage);
+    const x = Number.parseInt(vaultPage);
     if (isFinite(x)) pagination = x;
   }
   const { vaults } = useVaultProvider();
@@ -57,7 +56,7 @@ export default function VaultTable({
             </>
           }
         >
-          {vaultQuery?.vaults
+          {vaults?.vaults
             .slice(pagination * 8 - 8, pagination * 8)
             .map((pool, ind) => {
               return (

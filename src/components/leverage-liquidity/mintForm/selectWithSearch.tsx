@@ -1,6 +1,7 @@
 import Select from "@/components/shared/Select";
 import { useDebounce } from "@/components/shared/hooks/useDebounce";
 import { getLogoAsset } from "@/lib/assets";
+import useVaultFilterStore from "@/lib/store";
 import type { TMintForm } from "@/lib/types";
 import { api } from "@/trpc/react";
 import type { StaticImageData } from "next/image";
@@ -55,9 +56,12 @@ export default function SelectWithSearch({ form, name, title, items }: Props) {
   if (input === "") {
     searchItems = undefined;
   }
-  console.log(input, "INPUT", searchItems, items);
+  const setStore = useVaultFilterStore((state) =>
+    type === "debt" ? state.setVersus : state.setLong,
+  );
   return (
     <Select
+      setStore={setStore}
       loading={isFetching || debouncing}
       searchItems={searchItems}
       title={title}

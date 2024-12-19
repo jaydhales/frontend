@@ -25,7 +25,6 @@ import {
 import { getLogoAsset } from "@/lib/assets";
 import { api } from "@/trpc/react";
 import useVaultFilterStore from "@/lib/store";
-import VaultTableSkeleton from "./vaultTableSkeleton";
 
 export function VaultTableRow({
   pool,
