@@ -31,7 +31,7 @@ export function useFormSuccessReset({
     if (isConfirmed && useEth && form.getValues("deposit")) {
       form.resetField("deposit");
       utils.user.getEthBalance.invalidate().catch((e) => console.log(e));
-      utils.vault.getTableVaults.invalidate();
+      utils.vault.getTableVaults.invalidate().catch((e) => console.log(e));
     }
   }, [
     isConfirming,
