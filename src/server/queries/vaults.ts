@@ -45,6 +45,7 @@ const vaults = (
      
       first: 8
       orderBy: totalValue
+      orderDirection: desc
       ${whereClause}
     ) {
       ...VaultFields
