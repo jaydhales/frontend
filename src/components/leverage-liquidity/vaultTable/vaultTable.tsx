@@ -20,7 +20,7 @@ export default function VaultTable({
     const x = Number.parseInt(vaultPage);
     if (isFinite(x)) pagination = x;
   }
-  const { vaults } = useVaultProvider();
+  const { vaults, isFetching } = useVaultProvider();
   return (
     <table className="w-full">
       <caption className="pb-2 font-lora text-[32px] font-bold">
@@ -29,26 +29,14 @@ export default function VaultTable({
 
       <tbody className="space-y-2">
         <VaultTableRowHeaders />
-        {vaults?.vaults
-          .slice(pagination * 8 - 8, pagination * 8)
-          .map((pool, ind) => {
-            return (
-              <VaultTableRow
-                key={pool.vaultId}
-                pool={pool}
-                number={ind.toString()}
-                badgeVariant={{
-                  variant: ind % 2 === 0 ? "yellow" : "default",
-                }}
-                isApe={isApe}
-              />
-            );
-          })}
 
         <Show
-          when={true}
+          when={!isFetching}
           fallback={
             <>
+              <VaultRowSkeleton />
+              <VaultRowSkeleton />
+              <VaultRowSkeleton />
               <VaultRowSkeleton />
               <VaultRowSkeleton />
               <VaultRowSkeleton />

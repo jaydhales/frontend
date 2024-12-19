@@ -6,6 +6,7 @@ import React, { createContext, useContext, useRef } from "react";
 
 interface VaultProviderType {
   vaults: TVaults | undefined;
+  isFetching: boolean;
 }
 
 const VaultContext = createContext<VaultProviderType | undefined>(undefined);
@@ -23,7 +24,7 @@ interface Props {
   graphVaults: VaultFieldFragment[];
 }
 
-export const VaultProvider = ({ children, graphVaults }: Props) => {
+export const VaultProvider = ({ children }: Props) => {
   const filterCollateralToken = useVaultFilterStore(
     (state) => state.long,
   ).split(",")[0];
@@ -31,7 +32,13 @@ export const VaultProvider = ({ children, graphVaults }: Props) => {
     ",",
   )[0];
   const filterLeverage = useVaultFilterStore((state) => state.leverageTier);
-  const { data } = api.vault.getTableVaults.useQuery({
+  console.log(
+    filterCollateralToken,
+    filterDebtToken,
+    filterLeverage,
+    "FILTERS",
+  );
+  const { data, isFetching } = api.vault.getTableVaults.useQuery({
     filters: {
       filterLeverage,
       filterDebtToken,
@@ -40,7 +47,7 @@ export const VaultProvider = ({ children, graphVaults }: Props) => {
   });
   const callIds = useRef({});
   return (
-    <VaultContext.Provider value={{ vaults: data?.vaultQuery }}>
+    <VaultContext.Provider value={{ vaults: data?.vaultQuery, isFetching }}>
       {children}
     </VaultContext.Provider>
   );
