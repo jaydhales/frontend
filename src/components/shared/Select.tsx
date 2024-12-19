@@ -133,6 +133,7 @@ export default function Select({
                           setOpen(false);
                           setTimeout(() => {
                             form.setValue(name, item.value);
+                            setStore(item.value);
                           }, 100);
                         }}
                         className="flex h-[40px] justify-between px-2"
