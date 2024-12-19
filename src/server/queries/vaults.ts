@@ -40,6 +40,7 @@ const vaults = (
   query VaultQuery($collateralToken: String, $debtToken: String, $leverageTier: Int ) {
     vaults(
       orderDirection: desc
+      first: 10
       orderBy: totalValue
       ${whereClause}
     ) {
@@ -119,6 +120,7 @@ export const executeVaultsQuery = async ({
       leverageTier: filterLeverage ? parseInt(filterLeverage) : undefined,
     },
   );
+  console.log(result, "VAULTS");
   return result as { vaults: VaultFieldFragment[] };
 };
 
