@@ -104,7 +104,6 @@ export function formatNumber(number: number | string, decimals = 3): string {
     return "0";
   }
   if (n < 1 && n >= 0.001) {
-    console.log("ran here");
     const parts = n.toString().split(".");
     return Number.parseFloat(`0.${parts[1]?.slice(0, decimals)}`).toString();
   }
