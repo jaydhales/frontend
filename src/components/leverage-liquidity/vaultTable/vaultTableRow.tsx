@@ -2,7 +2,7 @@ import { Badge, type badgeVariants } from "@/components/ui/badge";
 import { formatNumber, roundDown } from "@/lib/utils";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
-import boostIcon from "@/../public/images/sir-logo.svg";
+import boostIcon from "@/../public/images/white-logo.svg";
 import { motion } from "motion/react";
 import unknownImg from "@/../public/IconUnknown.png";
 import type { VariantProps } from "class-variance-authority";
