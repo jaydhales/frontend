@@ -60,11 +60,14 @@ export const vaultRouter = createTRPCRouter({
       z
         .object({
           offset: z.number().optional(),
-          filters: ZVaultFilters.optional(),
+          filters: ZVaultFilters.extend({
+            filterLastId: z.string().optional(),
+          }).optional(),
         })
         .optional(),
     )
     .query(async ({ input }) => {
+      console.log(input?.filters, "FILTERS");
       const result = await getVaultsForTable(
         input?.offset ?? 0,
         input?.filters,

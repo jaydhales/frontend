@@ -15,8 +15,10 @@ const getVaults = async ({
   filterLeverage,
   filterCollateralToken,
   filterDebtToken,
+  filterLastId,
 }: {
   filterLeverage?: string;
+  filterLastId?: string;
   filterDebtToken?: string;
   filterCollateralToken?: string;
 }) => {
@@ -24,10 +26,12 @@ const getVaults = async ({
     filterLeverage,
     filterCollateralToken,
     filterDebtToken,
+    filterLastId,
   });
   return { vaults };
 };
 const getCollateralAmounts = async (vaultIds: number[]) => {
+  if (vaultIds.length === 0) return [];
   const result = await readContract({
     ...AssistantContract,
     functionName: "getReserves",
@@ -38,6 +42,7 @@ const getCollateralAmounts = async (vaultIds: number[]) => {
 export const getVaultsForTable = async (
   offset: number,
   filters?: {
+    filterLastId?: string;
     filterLeverage?: string;
     filterDebtToken?: string;
     filterCollateralToken?: string;
@@ -55,20 +60,20 @@ export const getVaultsForTable = async (
     pageVaults = vaultQuery?.vaults;
   }
   const vaultIds = pageVaults?.map((v) => parseInt(v.vaultId));
-  const vaultIdHash = createHash("md5")
-    .update(JSON.stringify(vaultIds))
-    .digest("hex");
+  // const vaultIdHash = createHash("md5")
+  //   .update(JSON.stringify(vaultIds))
+  //   .digest("hex");
   let collateral: TCollateral;
-  const resp = await kv.get(vaultIdHash + "1");
+  // const resp = await kv.get(vaultIdHash + "1");
   // Grab collteral
-  if (resp) {
-    collateral = (resp as TCollateralResp).map((c) => {
-      return {
-        reserveLPers: parseUnits(c.reserveLPers, 0),
-        reserveApes: parseUnits(c.reserveApes, 0),
-        tickPriceX42: parseUnits(c.tickPriceX42, 0),
-      };
-    });
+  if (false) {
+    // collateral = (resp as TCollateralResp).map((c) => {
+    //   return {
+    //     reserveLPers: parseUnits(c.reserveLPers, 0),
+    //     reserveApes: parseUnits(c.reserveApes, 0),
+    //     tickPriceX42: parseUnits(c.tickPriceX42, 0),
+    //   };
+    // });
   } else {
     try {
       collateral = await getCollateralAmounts(vaultIds ?? []);
