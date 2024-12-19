@@ -52,14 +52,19 @@ export const VaultProvider = ({ children }: Props) => {
     setPage(1);
     setLastId("");
   }, [filterLeverage, filterDebtToken, filterCollateralToken]);
-  const { data, isFetching } = api.vault.getTableVaults.useQuery({
-    filters: {
-      filterLeverage,
-      filterDebtToken,
-      filterCollateralToken,
-      filterLastId: lastId,
+  const { data, isFetching } = api.vault.getTableVaults.useQuery(
+    {
+      filters: {
+        filterLeverage,
+        filterDebtToken,
+        filterCollateralToken,
+        filterLastId: lastId,
+      },
     },
-  });
+    {
+      staleTime: 1000 * 60,
+    },
+  );
   const nextPage = () => {
     const length = data?.vaultQuery?.vaults.length;
     const vaults = data?.vaultQuery?.vaults;
