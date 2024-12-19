@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import type { TVaults } from "@/lib/types";
 import { VaultTableRow } from "./vaultTableRow";
 import { useSearchParams } from "next/navigation";
@@ -23,7 +23,7 @@ export default function VaultTable({
   const { vaults, isFetching } = useVaultProvider();
   return (
     <table className="w-full">
-      <caption className="pb-2 font-lora text-[32px] font-bold">
+      <caption className="pb-2 font-lora text-[32px] font-bold leading-[32px]">
         Popular Vaults
       </caption>
 
@@ -34,6 +34,7 @@ export default function VaultTable({
           when={!isFetching}
           fallback={
             <>
+              <VaultRowSkeleton />
               <VaultRowSkeleton />
               <VaultRowSkeleton />
               <VaultRowSkeleton />
