@@ -30,7 +30,7 @@ function Skeleton({ width }: { width: string }) {
   return (
     <div
       style={{ width }}
-      className="h-4  animate-pulse rounded-full bg-gray-700/70 "
+      className="my-1 h-4  animate-pulse rounded-full bg-gray-700/70 "
     ></div>
   );
 }
