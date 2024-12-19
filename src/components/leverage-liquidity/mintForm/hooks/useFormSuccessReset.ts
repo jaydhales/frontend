@@ -31,6 +31,7 @@ export function useFormSuccessReset({
     if (isConfirmed && useEth && form.getValues("deposit")) {
       form.resetField("deposit");
       utils.user.getEthBalance.invalidate().catch((e) => console.log(e));
+      utils.vault.getTableVaults.invalidate();
     }
   }, [
     isConfirming,
@@ -40,5 +41,6 @@ export function useFormSuccessReset({
     currentTxType,
     useEth,
     form,
+    utils.vault.getTableVaults,
   ]);
 }
