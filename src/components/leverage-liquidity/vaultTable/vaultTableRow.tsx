@@ -24,6 +24,7 @@ import {
 } from "@/lib/utils/calculations";
 import { getLogoAsset } from "@/lib/assets";
 import { api } from "@/trpc/react";
+import useVaultFilterStore from "@/lib/store";
 
 export function VaultTableRow({
   pool,
@@ -94,12 +95,19 @@ export function VaultTableRow({
     }
   };
   const parsedTaxAmount = parseUnits(pool.taxAmount, 0);
+  const setAll = useVaultFilterStore((state) => state.setAll);
   return (
     <tr
       onClick={() => {
         setValue("versus", pool.debtToken + "," + pool.debtSymbol);
         setValue("long", pool.collateralToken + "," + pool.collateralSymbol);
         setValue("leverageTier", pool.leverageTier.toString());
+        console.log("--===== SET ALL ======--");
+        setAll(
+          pool.leverageTier.toString(),
+          pool.debtToken + "," + pool.debtSymbol,
+          pool.collateralToken + "," + pool.collateralSymbol,
+        );
       }}
       className="grid cursor-pointer grid-cols-4 rounded-md   px-1 py-1 text-left text-[16px] text-sm font-normal transition-colors hover:bg-primary md:grid-cols-9"
     >
@@ -163,7 +171,11 @@ export function VaultTableRow({
       <th className="pl-2">
         <HoverCard openDelay={0} closeDelay={20}>
           <HoverCardTrigger asChild>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1 }}
+            >
               <Badge {...variant} className="text-nowrap text-[10px]">
                 {`${getLeverageRatio(pool.leverageTier)}x${showPercent() ? " (" + formatNumber(tvlPercent, 2) + "x)" : ""}`}
               </Badge>

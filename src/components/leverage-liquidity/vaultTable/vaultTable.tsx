@@ -1,11 +1,12 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import type { TVaults } from "@/lib/types";
 import { VaultTableRow } from "./vaultTableRow";
 import { useSearchParams } from "next/navigation";
 import ToolTip from "@/components/ui/tooltip";
+import { useVaultProvider } from "@/components/providers/vaultProvider";
+import useVaultFilterStore from "@/lib/store";
 export default function VaultTable({
-  vaultQuery,
   isApe,
 }: {
   vaultQuery: TVaults;
@@ -18,6 +19,7 @@ export default function VaultTable({
     const x = parseInt(vaultPage);
     if (isFinite(x)) pagination = x;
   }
+  const { vaults } = useVaultProvider();
   return (
     <table className="w-full">
       <caption className="pb-2 font-lora text-[32px] font-bold">
@@ -26,7 +28,7 @@ export default function VaultTable({
 
       <tbody className="space-y-2">
         <VaultTableRowHeaders />
-        {vaultQuery?.vaults
+        {vaults?.vaults
           .slice(pagination * 8 - 8, pagination * 8)
           .map((pool, ind) => {
             return (

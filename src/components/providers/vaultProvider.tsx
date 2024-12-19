@@ -1,4 +1,5 @@
 "use client";
+import useVaultFilterStore from "@/lib/store";
 import type { TVaults, VaultFieldFragment } from "@/lib/types";
 import { api } from "@/trpc/react";
 import React, { createContext, useContext, useRef } from "react";
@@ -23,8 +24,21 @@ interface Props {
 }
 
 export const VaultProvider = ({ children, graphVaults }: Props) => {
-  const { data } = api.vault.getTableVaults.useQuery();
-  const callIds = useRef(createNumberObject(graphVaults?.length ?? 0));
+  const filterCollateralToken = useVaultFilterStore(
+    (state) => state.long,
+  ).split(",")[0];
+  const filterDebtToken = useVaultFilterStore((state) => state.versus).split(
+    ",",
+  )[0];
+  const filterLeverage = useVaultFilterStore((state) => state.leverageTier);
+  const { data } = api.vault.getTableVaults.useQuery({
+    filters: {
+      filterLeverage,
+      filterDebtToken,
+      filterCollateralToken,
+    },
+  });
+  const callIds = useRef({});
   return (
     <VaultContext.Provider value={{ vaults: data?.vaultQuery }}>
       {children}

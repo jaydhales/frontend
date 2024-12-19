@@ -1,5 +1,6 @@
 import Select from "@/components/shared/Select";
 import { getLogoAsset } from "@/lib/assets";
+import useVaultFilterStore from "@/lib/store";
 import type { TMintForm, VaultFieldFragment } from "@/lib/types";
 import { getLeverageRatio } from "@/lib/utils/calculations";
 interface Props {
@@ -14,9 +15,13 @@ export default function VaultParamsInputSelects({
   versus,
   leverageTiers,
 }: Props) {
+  const setVersus = useVaultFilterStore((store) => store.setVersus);
+  const setLong = useVaultFilterStore((store) => store.setLong);
+  const setLeverage = useVaultFilterStore((store) => store.setLeverageTier);
   return (
     <div className=" grid gap-x-4 md:grid-cols-3">
       <Select
+        setStore={setLong}
         name="long"
         title="Go long"
         form={form}
@@ -27,6 +32,7 @@ export default function VaultParamsInputSelects({
         }))}
       />
       <Select
+        setStore={setVersus}
         name="versus"
         title="Versus"
         form={form}
@@ -38,6 +44,7 @@ export default function VaultParamsInputSelects({
       />
       <Select
         placeholder="Select Tier"
+        setStore={setLeverage}
         items={leverageTiers.map((e) => ({
           label: getLeverageRatio(e).toString() + "x",
           value: e.toString(),
