@@ -1,6 +1,8 @@
 import { env } from "@/env";
+import { kv } from "@vercel/kv";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { Ratelimit } from "@upstash/ratelimit";
 import z from "zod";
 const EthCallParamsSchema = z.object({
   data: z.string(),
@@ -15,7 +17,21 @@ const EthCallSchema = z.object({
   method: z.literal("eth_call"),
   params: z.tuple([EthCallParamsSchema, z.literal("latest")]),
 });
+const { limit } = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.slidingWindow(
+    60,
+    "60s",
+    // 200 requests from the same IP in 900 seconds
+  ),
+});
 const handler = async (req: NextRequest) => {
+  const limiter = await limit(req.ip ?? "0");
+  if (!limiter.success) {
+    console.log("RPC Rate Limited");
+    return NextResponse.json({ success: false }, { status: 429 });
+  }
+
   const j = (await req.json()) as unknown;
   const call = EthCallSchema.safeParse(j);
   if (call.success) {
