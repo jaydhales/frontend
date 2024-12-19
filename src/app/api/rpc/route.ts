@@ -20,7 +20,7 @@ const EthCallSchema = z.object({
 const { limit } = new Ratelimit({
   redis: kv,
   limiter: Ratelimit.slidingWindow(
-    60,
+    200,
     "60s",
     // 200 requests from the same IP in 900 seconds
   ),
