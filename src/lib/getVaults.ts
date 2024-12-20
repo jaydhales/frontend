@@ -1,25 +1,16 @@
-import { kv } from "@vercel/kv";
-import { createHash } from "crypto";
 import { readContract } from "./viemClient";
 import { AssistantContract } from "@/contracts/assistant";
-import type {
-  TCollateral,
-  TVaults,
-  TCollateralResp,
-  VaultFieldFragment,
-} from "./types";
+import type { TCollateral, TVaults, VaultFieldFragment } from "./types";
 import { executeVaultsQuery } from "@/server/queries/vaults";
-import { parseUnits } from "viem";
-import { executeGetBlockNumber } from "@/server/queries/utils";
 
 const getVaults = async ({
   filterLeverage,
   filterCollateralToken,
   filterDebtToken,
-  filterLastId,
+  skip,
 }: {
   filterLeverage?: string;
-  filterLastId?: string;
+  skip?: number;
   filterDebtToken?: string;
   filterCollateralToken?: string;
 }) => {
@@ -27,7 +18,7 @@ const getVaults = async ({
     filterLeverage,
     filterCollateralToken,
     filterDebtToken,
-    filterLastId,
+    skip,
   });
   return { vaults };
 };
@@ -43,7 +34,7 @@ const getCollateralAmounts = async (vaultIds: number[]) => {
 export const getVaultsForTable = async (
   offset: number,
   filters?: {
-    filterLastId?: string;
+    skip?: number;
     filterLeverage?: string;
     filterDebtToken?: string;
     filterCollateralToken?: string;

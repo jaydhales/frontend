@@ -61,7 +61,7 @@ export const vaultRouter = createTRPCRouter({
         .object({
           offset: z.number().optional(),
           filters: ZVaultFilters.extend({
-            filterLastId: z.string().optional(),
+            skip: z.number().optional(),
           }).optional(),
         })
         .optional(),

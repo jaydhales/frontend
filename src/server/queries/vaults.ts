@@ -5,7 +5,6 @@ const vaults = (
   filterCollateral: boolean,
   filterDebt: boolean,
   filterLeverage: boolean,
-  filterLastId: boolean,
 ) => {
   // I have to make where clase optional
   // very stupid to not have optional values default
@@ -14,8 +13,8 @@ const vaults = (
   if (filterCollateral) whereClauses.push("collateralToken: $collateralToken");
   if (filterDebt) whereClauses.push("debtToken: $debtToken");
   if (filterLeverage) whereClauses.push("leverageTier: $leverageTier");
-  if (filterLastId) whereClauses.push("id_gt: $lastId");
-  console.log(whereClauses, "WHERE CLAUSES");
+  // if (filterLastId) whereClauses.push("id_gt: $lastId");
+  // console.log(whereClauses, "WHERE CLAUSES");
   const whereClause =
     whereClauses.length > 0 ? `where: { ${whereClauses.join(", ")} }` : "";
   return gql`
@@ -40,10 +39,11 @@ const vaults = (
     id
   }
 
-  query VaultQuery($collateralToken: String, $debtToken: String, $leverageTier: Int, $lastId: String ) {
+  query VaultQuery($collateralToken: String, $skip: Int, $debtToken: String, $leverageTier: Int ) {
     vaults(
      
       first: 8
+      skip: $skip
       orderBy: totalValue
       orderDirection: desc
       ${whereClause}
@@ -107,25 +107,24 @@ export const executeVaultsQuery = async ({
   filterLeverage,
   filterDebtToken,
   filterCollateralToken,
-  filterLastId,
+  skip,
 }: {
   filterLeverage?: string;
   filterDebtToken?: string;
   filterCollateralToken?: string;
-  filterLastId?: string;
+  skip?: number;
 }) => {
   const result = await graphqlClient.request(
     vaults(
       Boolean(filterCollateralToken),
       Boolean(filterDebtToken),
       Boolean(filterLeverage),
-      Boolean(filterLastId),
     ),
     {
       collateralToken: filterCollateralToken,
       debtToken: filterDebtToken,
       leverageTier: filterLeverage ? parseInt(filterLeverage) : undefined,
-      lastId: filterLastId,
+      skip,
     },
   );
   return result as { vaults: VaultFieldFragment[] };
