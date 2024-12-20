@@ -92,7 +92,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     isSuccess: isConfirmed,
     data: transactionData,
   } = useWaitForTransactionReceipt({ hash });
-
   const selectedVault = useMemo(() => {
     return findVault(vaultsQuery, formData);
   }, [formData, vaultsQuery]);
@@ -108,12 +107,19 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     // Used to know which
     "approve" | "mint" | undefined
   >();
-  useFormSuccessReset({ isConfirming, isConfirmed, currentTxType, useEth });
+  useFormSuccessReset({
+    isConfirming,
+    isConfirmed,
+    currentTxType,
+    useEth,
+    txBlock: parseInt(transactionData?.blockNumber.toString() ?? "0"),
+  });
 
   const { maxCollateralIn, badHealth, isLoading } = useCalculateMaxApe({
     leverageTier: formData.leverageTier,
     vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
   });
+
   const { isValid, errorMessage, submitType } = useCheckSubmitValid({
     ethBalance: userEthBalance,
     decimals,
