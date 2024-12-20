@@ -128,7 +128,6 @@ export const executeVaultsQuery = async ({
       lastId: filterLastId,
     },
   );
-  console.log(result, "VAULTS");
   return result as { vaults: VaultFieldFragment[] };
 };
 

@@ -10,6 +10,7 @@ import type {
 } from "./types";
 import { executeVaultsQuery } from "@/server/queries/vaults";
 import { parseUnits } from "viem";
+import { executeGetBlockNumber } from "@/server/queries/utils";
 
 const getVaults = async ({
   filterLeverage,
