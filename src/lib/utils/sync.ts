@@ -1,8 +1,9 @@
 import z from "zod";
 
 const respSchema = z.object({ success: z.boolean() });
-// Helper function used to
-// poll for subgraph sync
+/**Helper function used to
+ * poll for subgraph block sync
+ * **/
 export const subgraphSyncPoll = async (
   blockNumber?: number,
   nextIfFail?: boolean,
