@@ -21,19 +21,21 @@ const priceSchema = z.object({
           value: z.string(),
         }),
       ),
-      error: z.null(),
+      error: z.null().optional(),
     }),
   ),
 });
+
+// {
+//   dividends: { ethAmount: '9535018543666960', stakedAmount: '84597856160006079' }
+// }
 const dividendsPaidSchema = z.object({
-  data: z.object({
-    dividends: z.nullable(
-      z.object({
-        ethAmount: z.string(),
-        stakedAmount: z.string(),
-      }),
-    ),
-  }),
+  dividends: z.nullable(
+    z.object({
+      ethAmount: z.string(),
+      stakedAmount: z.string(),
+    }),
+  ),
 });
 
 const url = "https://api.g.alchemy.com/prices/v1/tokens/by-symbol?symbols=ETH";
@@ -46,22 +48,28 @@ export default async function AprCard() {
     method: "GET",
     headers: headers,
   }).then((response) => response.json());
-
   const dividendsPaidRequest = await executeGetDividendsPaid();
   const [ethPriceResponse, dividendsPaidResponse] = await Promise.allSettled([
     ethPriceRequest,
     dividendsPaidRequest,
   ]);
+
+  console.log(
+    ethPriceResponse.status === "fulfilled" ? ethPriceResponse.value : "",
+    "ETH RESPONSE",
+  );
   const safePrice = priceSchema.safeParse(
     ethPriceResponse.status === "fulfilled" ? ethPriceResponse.value : null,
   );
-
+  console.log(
+    ethPriceResponse.status === "fulfilled" ? ethPriceResponse.value : "",
+  );
   const safeDividends = dividendsPaidSchema.safeParse(
     dividendsPaidResponse.status === "fulfilled"
       ? dividendsPaidResponse.value
       : null,
   );
-  console.log(safePrice, safeDividends);
+
   //APR will be 0 if error occurs
   if (!safeDividends.success) {
     console.error("Dividends Error", safeDividends.error);
@@ -78,15 +86,16 @@ export default async function AprCard() {
       amountOfStakedSir: parseUnits("1000000", 12),
     });
   }
+  console.log(APR, "APR");
   return (
     <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
       <div className="flex w-full flex-row items-center justify-center">
         <div className="px-2 text-sm text-gray-300">Staking APR</div>
-        <ToolTip>Tool tip info.</ToolTip>
+        {/* <ToolTip>Annual</ToolTip> */}
         {/* <AprInfo></AprInfo> */}
       </div>
       <div className="font-lora text-2xl ">
-        <Show when={APR > 0n} fallback={<h1>N/A</h1>}>
+        <Show when={APR > 0n} fallback={<h1>N/AA</h1>}>
           <h1>{formatNumber(formatUnits(APR, 0))}%</h1>
         </Show>
       </div>
