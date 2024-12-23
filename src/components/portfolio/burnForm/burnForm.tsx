@@ -26,6 +26,7 @@ import ClaimAndStakeToggle from "./claimAndStakeToggle";
 import { DisplayCollateral } from "./displayCollateral";
 import { TokenInput } from "./tokenInput";
 import { subgraphSyncPoll } from "@/lib/utils/sync";
+import { AlertDialog } from "@/components/ui/alert-dialog";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
