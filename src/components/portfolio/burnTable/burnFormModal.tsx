@@ -1,4 +1,3 @@
-import TransactionModal from "@/components/shared/transactionModal";
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 
 interface Props {
