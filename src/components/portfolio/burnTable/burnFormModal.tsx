@@ -17,7 +17,7 @@ export function BurnFormModal({ open, children }: Props) {
         className="bg-transparent"
       >
         <div
-          className={`relative rounded-xl bg-secondary-800 p-4 text-white  transition-all duration-700`}
+          className={`relative rounded-xl bg-secondary-800 p-6 text-white  transition-all duration-700`}
         >
           {/* <TransactionModal.Close setOpen={setOpen} /> */}
           {children}
