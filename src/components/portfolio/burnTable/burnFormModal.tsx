@@ -2,13 +2,12 @@ import TransactionModal from "@/components/shared/transactionModal";
 import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 
 interface Props {
-  open: boolean;
   // setOpen: (b: boolean) => void;
   children: React.ReactNode;
 }
-export function BurnFormModal({ open, children }: Props) {
+export function BurnFormModal({ children }: Props) {
   return (
-    <AlertDialog open={open}>
+    <AlertDialog open={true}>
       <AlertDialogContent
         title="Mint Modal"
         align="center"
@@ -17,7 +16,7 @@ export function BurnFormModal({ open, children }: Props) {
         className="bg-transparent"
       >
         <div
-          className={`relative rounded-xl bg-secondary-800 p-6 text-white  transition-all duration-700`}
+          className={`rounde!selectedRow &&d-xl relative bg-secondary-800 p-6 text-white  transition-all duration-700`}
         >
           {/* <TransactionModal.Close setOpen={setOpen} /> */}
           {children}

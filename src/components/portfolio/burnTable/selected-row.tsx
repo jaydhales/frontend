@@ -52,7 +52,7 @@ export default function SelectedRow({
   //   ? formatUnits(teaRewards ?? 0n, 12)
   //   : formatEther(atBal);
   return (
-    <BurnFormModal setOpen={() => {}} open={true}>
+    <BurnFormModal open={true}>
       <BurnForm
         isClaiming={isClaiming}
         teaRewardBalance={teaRewards}
