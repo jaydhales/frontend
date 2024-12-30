@@ -52,6 +52,5 @@ export function calculateVaultHealth({
   if (gentlemenMinimum > gentlemen) {
     return isApe ? { variant: "red" } : { variant: "green" };
   }
-  console.log("ran backup");
   return { variant: "green" };
 }
