@@ -23,6 +23,7 @@ import {
   getLeverageRatio,
 } from "@/lib/utils/calculations";
 import { getLogoAsset } from "@/lib/assets";
+import { L_FEE } from "@/data/constants";
 
 export function VaultTableRow({
   pool,
@@ -33,7 +34,7 @@ export function VaultTableRow({
   pool: TVault;
   isApe: boolean;
 }) {
-  const fee = calculateApeVaultFee(pool.leverageTier) * 100;
+  const fee = calculateApeVaultFee(pool.leverageTier, L_FEE) * 100;
   const POL = useMemo(() => {
     const totalLocked = parseUnits(pool.totalTea, 0);
     const lockedLiquidity = parseUnits(pool.lockedLiquidity, 0);
