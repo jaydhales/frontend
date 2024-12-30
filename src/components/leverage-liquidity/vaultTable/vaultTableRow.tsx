@@ -25,6 +25,7 @@ import {
 import { getLogoAsset } from "@/lib/assets";
 import { api } from "@/trpc/react";
 import useVaultFilterStore from "@/lib/store";
+import { L_FEE } from "@/data/constants";
 
 export function VaultTableRow({
   pool,
