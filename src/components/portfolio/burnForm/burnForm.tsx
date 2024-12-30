@@ -166,7 +166,9 @@ export default function BurnForm({
   const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
   const onSubmit = () => {
     if (isConfirmed) {
-      return setOpen(false);
+      setOpen(false);
+      close();
+      return;
     }
     console.log(claimRewardRequest && isClaimingRewards);
     if (isClaimingRewards && claimRewardRequest) {
