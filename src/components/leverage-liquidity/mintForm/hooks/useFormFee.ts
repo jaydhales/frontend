@@ -1,3 +1,4 @@
+import { BASE_FEE } from "@/data/constants";
 import { formatNumber } from "@/lib/utils";
 import { calculateApeVaultFee } from "@/lib/utils/calculations";
 import { useMemo } from "react";
@@ -12,7 +13,7 @@ export default function useFormFee({ levTier, isApe }: Props) {
       return "19";
     }
     if (isFinite(lev)) {
-      return formatNumber(calculateApeVaultFee(lev) * 100, 2);
+      return formatNumber(calculateApeVaultFee(lev, BASE_FEE) * 100, 2);
     } else {
       return undefined;
     }
