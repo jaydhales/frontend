@@ -25,7 +25,7 @@ import {
 import { getLogoAsset } from "@/lib/assets";
 import { api } from "@/trpc/react";
 import useVaultFilterStore from "@/lib/store";
-import { L_FEE } from "@/data/constants";
+import { BASE_FEE } from "@/data/constants";
 
 export function VaultTableRow({
   pool,
@@ -36,7 +36,7 @@ export function VaultTableRow({
   pool: TVault;
   isApe: boolean;
 }) {
-  const fee = calculateApeVaultFee(pool.leverageTier, L_FEE) * 100;
+  const fee = calculateApeVaultFee(pool.leverageTier, BASE_FEE) * 100;
   const POL = useMemo(() => {
     const totalLocked = parseUnits(pool.totalTea, 0);
     const lockedLiquidity = parseUnits(pool.lockedLiquidity, 0);
