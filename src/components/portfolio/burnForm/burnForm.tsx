@@ -26,6 +26,7 @@ import ClaimAndStakeToggle from "./claimAndStakeToggle";
 import { DisplayCollateral } from "./displayCollateral";
 import { TokenInput } from "./tokenInput";
 import { subgraphSyncPoll } from "@/lib/utils/sync";
+import { AlertDialog } from "@/components/ui/alert-dialog";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -165,7 +166,9 @@ export default function BurnForm({
   const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
   const onSubmit = () => {
     if (isConfirmed) {
-      return setOpen(false);
+      setOpen(false);
+      close();
+      return;
     }
     console.log(claimRewardRequest && isClaimingRewards);
     if (isClaimingRewards && claimRewardRequest) {
