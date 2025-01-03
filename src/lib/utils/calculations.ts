@@ -1,11 +1,11 @@
-import { L_FEE } from "@/data/constants";
+import { BASE_FEE, L_FEE } from "@/data/constants";
 
 /**
  *
  * @param k - Leverage Tier should be values -4 to 2
  * @returns number
  */
-export function calculateApeVaultFee(k: number, BASE_FEE: number) {
+export function calculateApeVaultFee(k: number) {
   const l = getLeverageRatio(k);
   const b = (1 + (l - 1) * BASE_FEE) ** 2;
   const a = 1 / b;

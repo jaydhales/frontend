@@ -241,6 +241,16 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                     parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
                   )} ${form.getValues("long").split(",")[1]}`}
                 />
+
+                <div className="flex w-full justify-start   text-[14px] text-gray-400">
+                  <div className="flex w-[300px]">
+                    <p>
+                      {isApe
+                        ? "Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
+                        : "Gentlemen pay fees when minting and burning liquidity. These fees deter attacks and reward early liquidity providers. It's advantageous to mint TEA early and burn it late."}
+                    </p>
+                  </div>
+                </div>
               </TransactionModal.StatContainer>
             </Show>
 
@@ -314,7 +324,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
               feeValue={form.getValues("long").split(",")[1]}
               isApe={isApe}
               isValid={isValid}
-              fee={fee}
+              feeAmount={`${formatNumber(
+                parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
+              )} ${form.getValues("long").split(",")[1]}`}
+              feePercent={fee}
               deposit={form.getValues("deposit")}
             />
             <MintFormSubmit.Errors>
