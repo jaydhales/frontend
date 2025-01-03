@@ -246,8 +246,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                   <div className="flex w-[300px]">
                     <p>
                       {isApe
-                        ? "Apes pay fees only twice: once when minting and once when burning their APE tokens. No additional fees are charged while holding APE tokens, regardless of the duration."
-                        : "Gentlemen pay fees when minting and burning liquidity. These fees deter attacks and reward early liquidity providers. It's advantageous to mint TEA early and burn it late."}
+                        ? "You pay a one-time fee. No recurring fees are charged while holding APE tokens regardless of the duration."
+                        : "As an LPer, you pay a one-time fee to mitigate some types of economic attacks, which you will recover over time as you earn fees."}
                     </p>
                   </div>
                 </div>
