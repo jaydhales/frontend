@@ -32,9 +32,9 @@ export function TransactionEstimates({
           {formatNumber(formatUnits(collateralEstimate ?? 0n, 18), 6)}
         </span>
         <span className="text-sm text-gray-300">
-          <span>{isApe ? "APE" : "TEA"} </span>
-          <span className="font-bold text-gray-700">-</span>{" "}
-          <span>{vaultId}</span>
+          <span>
+            {isApe ? "APE" : "TEA"}-{vaultId}
+          </span>
         </span>
       </h3>
     </div>
