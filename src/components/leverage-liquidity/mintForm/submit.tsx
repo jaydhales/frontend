@@ -5,7 +5,6 @@ import { useAccount } from "wagmi";
 import { ESubmitType } from "./hooks/useCheckSubmitValid";
 import { ChevronDown } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
-import { isValid } from "zod";
 
 const SubmitContext = React.createContext(undefined);
 
