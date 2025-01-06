@@ -18,9 +18,6 @@ test("Test utils add function.", () => {
 test("Test calculate leverage tier ratio.", () => {
   expect(getLeverageRatio(-1)).toBe(1.5);
 });
-test("Test calculate leverage tier ratio.", () => {
-  // expect(calculateApeVaultFee(-1)).toBe(0.10494517789214601);
-});
 // test("Test if getApeAddress gets proper contract address.", () => {
 //   expect(
 //     getApeAddress({

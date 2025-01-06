@@ -27,7 +27,7 @@ const StakeData = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className="mx-auto grid gap-4 font-normal md:w-[600px] md:grid-cols-3  ">
-      <div className="flex flex-col  items-center justify-center gap-2 rounded-md bg-secondary py-2">
+      <Card className="flex flex-col  items-center justify-center gap-2 rounded-md bg-secondary py-2">
         <div className="text-sm font-normal text-gray-300">
           Total Staked SIR
         </div>
@@ -41,9 +41,9 @@ const StakeData = ({ children }: { children: ReactNode }) => {
             unitLabel="SIR"
           />
         </div>
-      </div>
+      </Card>
 
-      <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
+      <Card className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
         <div className="flex w-full flex-row items-center justify-center">
           <div className="px-2 text-sm text-gray-300">Your Staked SIR</div>
         </div>
