@@ -3,10 +3,9 @@
 import { api } from "@/trpc/react";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
-import ToolTip from "@/components/ui/tooltip";
 import { useGetStakedSir } from "@/components/shared/hooks/useGetStakedSir";
 import { TokenDisplay } from "@/components/ui/token-display";
-import AprCard from "./aprCard";
+import { Card } from "@/components/ui/card";
 
 interface supplyProps {
   data?: bigint;
@@ -55,19 +54,20 @@ const StakeData = ({ children }: { children: ReactNode }) => {
           />
           {/* {formatUnits(userStakedSir, 12)} */}
         </div>
-      </div>
-      {/* <AprCard /> */}
+      </Card>
+
       {children}
-      {/* <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2"> */}
-      {/*   <div className="flex w-full flex-row items-center justify-center"> */}
-      {/*     <div className="px-2 text-sm text-gray-300">Staking APR</div> */}
-      {/*     <ToolTip>Tool tip info.</ToolTip> */}
-      {/*     {/* <AprInfo></AprInfo> */}
-      {/*   </div> */}
-      {/*   <div className=" text-2xl ">N/A</div> */}
-      {/* </div> */}
     </div>
   );
 };
 
 export default StakeData;
+
+// <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
+//   <div className="flex w-full flex-row items-center justify-center">
+//     <div className="px-2 text-sm text-gray-300">Staking APR</div>
+//     <ToolTip>Tool tip info.</ToolTip>
+//     {/* <AprInfo></AprInfo>
+//   </div>
+//   <div className=" text-2xl ">N/A</div>
+// </div>
