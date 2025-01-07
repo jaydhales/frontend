@@ -96,7 +96,6 @@ export function formatNumber(number: number | string, decimals = 3): string {
 
   if (number >= 1 && number <= 999) {
     const parts = n.toString().split(".");
-    console.log(`${parts[0]}.${parts[1]?.slice(0, 3)}`);
     return Number.parseFloat(
       `${parts[0]}.${parts[1]?.slice(0, decimals)}`,
     ).toString();
