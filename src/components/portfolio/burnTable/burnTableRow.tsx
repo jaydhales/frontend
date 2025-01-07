@@ -10,6 +10,7 @@ import { useAccount } from "wagmi";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import { getLeverageRatio } from "@/lib/utils/calculations";
 import { getLogoAsset } from "@/lib/assets";
+import Show from "@/components/shared/show";
 interface Props {
   row: TUserPosition;
   isApe: boolean;
@@ -160,7 +161,7 @@ export function BurnTableRowMobile({
       </MobileTh>
       <th>
         <div className="space-x-1">
-          {!isApe && (
+          <Show when={!isApe && (teaRewards ?? 0n) > 0n}>
             <Button
               onClick={() => setSelectedRow(true)}
               type="button"
@@ -175,7 +176,7 @@ export function BurnTableRowMobile({
                 </span>
               </div>
             </Button>
-          )}
+          </Show>
           <Button
             onClick={() => setSelectedRow(false)}
             disabled={
