@@ -216,7 +216,9 @@ export default function BurnForm({
               )}
               {!isClaimingRewards && (
                 <TransactionEstimates
-                  inAssetName={isApe ? "APE" : "TEA"}
+                  inAssetName={
+                    isApe ? `APE-${row.vaultId}` : `TEA-${row.vaultId}`
+                  }
                   outAssetName={row.collateralSymbol}
                   collateralEstimate={quoteBurn}
                   usingEth={false}
