@@ -190,15 +190,6 @@ export function BurnTableRowMobile({
             {"Burn"}
           </Button>
         </div>
-        {/**/}
-        {/* <Button */}
-        {/*   onClick={() => setSelectedRow(false)} */}
-        {/*   type="button" */}
-        {/*   disabled={teaBalance === 0n} */}
-        {/*   className="h-8 rounded-full px-5 py-2 text-[14px] " */}
-        {/* > */}
-        {/*   Burn */}
-        {/* </Button> */}
       </th>
     </tr>
   );
