@@ -1,6 +1,7 @@
 import { useDebounce } from "@/components/shared/hooks/useDebounce";
 import type { TMintFormFields } from "@/lib/types";
 import { api } from "@/trpc/react";
+import { useAccount } from "wagmi";
 
 export function useQuoteMint({
   formData,
@@ -9,6 +10,7 @@ export function useQuoteMint({
   isApe: boolean;
   formData: TMintFormFields;
 }) {
+  const { isConnected } = useAccount();
   const allSelected = Boolean(
     formData.deposit &&
       formData.long !== "" &&
