@@ -204,6 +204,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       setOpenTransactionModal(false);
     }
   }, [isPending, setOpenTransactionModal, isConfirming, isConfirmed]);
+  const { isConnected } = useAccount();
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -280,7 +281,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <DepositInputs.Root>
           <DepositInputs.Inputs
             inputLoading={isLoading}
-            disabled={Boolean(disabledInputs) && !isLoading}
+            disabled={(Boolean(disabledInputs) && !isLoading) || !isConnected}
             decimals={decimals}
             useEth={useEth}
             setUseEth={(b: boolean) => {
