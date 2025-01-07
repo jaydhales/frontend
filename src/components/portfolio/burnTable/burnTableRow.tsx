@@ -76,7 +76,7 @@ export function BurnTableRow({
               <span className="pl-1 text-[12px] text-gray-400"></span>
             </span>
             <div className="space-x-1">
-              {!isApe && (
+              <Show when={!isApe && (teaRewards ?? 0n) > 0n}>
                 <Button
                   onClick={() => {
                     setSelectedRow(true);
@@ -93,7 +93,7 @@ export function BurnTableRow({
                     </span>
                   </div>
                 </Button>
-              )}
+              </Show>
               <Button
                 onClick={() => {
                   setSelectedRow(false);
