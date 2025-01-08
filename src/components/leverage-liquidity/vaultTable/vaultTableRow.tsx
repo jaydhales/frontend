@@ -112,7 +112,7 @@ export function VaultTableRow({
     >
       <th className="">
         <div className="flex items-center gap-x-2">
-          <span>{pool.vaultId}</span>
+          <span className="w-2">{pool.vaultId}</span>
           {parsedTaxAmount > 0n && (
             <HoverCard openDelay={0} closeDelay={20}>
               <HoverCardTrigger asChild>
