@@ -19,8 +19,12 @@ export function BalancePercent({
   const dis = Boolean(disabled) || !isConnected;
   console.log({ dis });
   return (
-    <h2 className="flex justify-end gap-x-2 pt-1 text-right text-sm text-[#26DEC8]">
+    <h2
+      data-state={dis ? "disabled" : "enabled"}
+      className="flex justify-end gap-x-2  pt-1 text-right text-sm text-[#26DEC8] data-[state=disabled]:cursor-not-allowed data-[state=disabled]:opacity-75"
+    >
       <button
+        className="disabled:cursor-not-allowed disabled:opacity-75"
         onClick={() => {
           if (dis) return;
 
@@ -35,6 +39,7 @@ export function BalancePercent({
         25%
       </button>{" "}
       <button
+        className="disabled:cursor-not-allowed disabled:opacity-75"
         disabled={dis}
         onClick={() => {
           if (dis) return;
@@ -49,6 +54,7 @@ export function BalancePercent({
         50%
       </button>{" "}
       <button
+        className="disabled:cursor-not-allowed disabled:opacity-75"
         type="button"
         disabled={true}
         onClick={() => {
