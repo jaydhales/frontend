@@ -56,10 +56,8 @@ export function BalancePercent({
       <button
         className="disabled:cursor-not-allowed disabled:opacity-75"
         type="button"
-        disabled={true}
+        disabled={dis}
         onClick={() => {
-          if (dis) return;
-          console.log("HERE");
           if (!overrideMaxValue) {
             setValue(balance ?? "");
             return;
