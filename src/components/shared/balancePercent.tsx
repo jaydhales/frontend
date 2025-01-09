@@ -39,10 +39,7 @@ export function BalancePercent({
         25%
       </button>{" "}
       <button
-<<<<<<< HEAD
         className="disabled:cursor-not-allowed disabled:opacity-75"
-=======
->>>>>>> 5d5d22c (feat: Disable quoteMint, input and balance selects !isConnected)
         disabled={dis}
         onClick={() => {
           if (dis) return;
@@ -60,13 +57,15 @@ export function BalancePercent({
         className="disabled:cursor-not-allowed disabled:opacity-75"
         type="button"
 <<<<<<< HEAD
+<<<<<<< HEAD
         disabled={dis}
 =======
         disabled={true}
 >>>>>>> 5d5d22c (feat: Disable quoteMint, input and balance selects !isConnected)
+=======
+        disabled={dis}
+>>>>>>> 08788ef (fix: fixed disabled Max btn)
         onClick={() => {
-          if (dis) return;
-          console.log("HERE");
           if (!overrideMaxValue) {
             setValue(balance ?? "");
             return;
