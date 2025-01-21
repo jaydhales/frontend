@@ -287,16 +287,16 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
               <>
                 <Show when={Boolean(selectedVault.result)}>
                   <Dropdown.Item
-                    tokenAddress={selectedVault.result?.collateralToken ?? ""}
-                    value={selectedVault.result?.collateralToken ?? ""}
-                  >
-                    {selectedVault.result?.collateralSymbol}
-                  </Dropdown.Item>
-                  <Dropdown.Item
                     tokenAddress={selectedVault.result?.debtToken ?? ""}
                     value={selectedVault.result?.debtToken ?? ""}
                   >
                     {selectedVault.result?.debtSymbol}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    tokenAddress={selectedVault.result?.collateralToken ?? ""}
+                    value={selectedVault.result?.collateralToken ?? ""}
+                  >
+                    {selectedVault.result?.collateralSymbol}
                   </Dropdown.Item>
                 </Show>
               </>
