@@ -26,6 +26,7 @@ import ClaimAndStakeToggle from "./claimAndStakeToggle";
 import { DisplayCollateral } from "./displayCollateral";
 import { TokenInput } from "./tokenInput";
 import { subgraphSyncPoll } from "@/lib/utils/sync";
+import { AlertDialog } from "@/components/ui/alert-dialog";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -163,7 +164,9 @@ export default function BurnForm({
   const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
   const onSubmit = () => {
     if (isConfirmed) {
-      return setOpen(false);
+      setOpen(false);
+      close();
+      return;
     }
     console.log(claimRewardRequest && isClaimingRewards);
     if (isClaimingRewards && claimRewardRequest) {
@@ -211,7 +214,9 @@ export default function BurnForm({
               )}
               {!isClaimingRewards && (
                 <TransactionEstimates
-                  inAssetName={isApe ? "APE" : "TEA"}
+                  inAssetName={
+                    isApe ? `APE-${row.vaultId}` : `TEA-${row.vaultId}`
+                  }
                   outAssetName={row.collateralSymbol}
                   collateralEstimate={quoteBurn}
                   usingEth={false}
@@ -236,14 +241,14 @@ export default function BurnForm({
         </TransactionModal.InfoContainer>
         {/*----*/}
         <TransactionModal.StatSubmitContainer>
-          {!isClaimingRewards && !isConfirmed && (
-            <TransactionModal.StatContainer>
-              <TransactionModal.StatRow
-                title="Fee"
-                value={fee + "%"}
-              ></TransactionModal.StatRow>
-            </TransactionModal.StatContainer>
-          )}
+          {/* {!isClaimingRewards && !isConfirmed && ( */}
+          {/*   <TransactionModal.StatContainer> */}
+          {/*     <TransactionModal.StatRow */}
+          {/*       title="Fee" */}
+          {/*       value={fee + "%"} */}
+          {/*     ></TransactionModal.StatRow> */}
+          {/*   </TransactionModal.StatContainer> */}
+          {/* )} */}
           <TransactionModal.SubmitButton
             disabled={false}
             loading={isConfirming || isPending}
