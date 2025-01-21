@@ -32,6 +32,7 @@ import ErrorMessage from "@/components/ui/error-message";
 import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 import { useFilterVaults } from "./hooks/useFilterVaults";
 import { useMintFormValidation } from "./hooks/useMintFormValidation";
+import Dropdown from "@/components/shared/dropDown";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -94,7 +95,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const selectedVault = useMemo(() => {
     return findVault(vaultsQuery, formData);
   }, [formData, vaultsQuery]);
-
+  useEffect(() => {
+    form.setValue("depositToken", selectedVault.result?.collateralToken ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedVault.result?.collateralToken, form.setValue]);
   const { tokenReceived } = useGetReceivedTokens({
     apeAddress: selectedVault.result?.apeAddress ?? "0x",
     logs: transactionData?.logs,
@@ -279,6 +283,24 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         />
         <DepositInputs.Root>
           <DepositInputs.Inputs
+            depositTokenItems={
+              <>
+                <Show when={Boolean(selectedVault.result)}>
+                  <Dropdown.Item
+                    tokenAddress={selectedVault.result?.collateralToken ?? ""}
+                    value={selectedVault.result?.collateralToken ?? ""}
+                  >
+                    {selectedVault.result?.collateralSymbol}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    tokenAddress={selectedVault.result?.debtToken ?? ""}
+                    value={selectedVault.result?.debtToken ?? ""}
+                  >
+                    {selectedVault.result?.debtSymbol}
+                  </Dropdown.Item>
+                </Show>
+              </>
+            }
             inputLoading={isLoading}
             disabled={Boolean(disabledInputs) && !isLoading}
             decimals={decimals}
