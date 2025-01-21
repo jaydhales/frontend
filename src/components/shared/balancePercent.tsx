@@ -17,7 +17,6 @@ export function BalancePercent({
     console.log("disabled");
   }
   const dis = Boolean(disabled) || !isConnected;
-  console.log({ dis });
   return (
     <h2
       data-state={dis ? "disabled" : "enabled"}
