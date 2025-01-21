@@ -24,7 +24,11 @@ import { useCheckStakeValidity } from "../shared/stake/stakeForm/useCheckStakeVa
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
-const UnstakeForm = () => {
+const UnstakeForm = ({
+  closeUnstakeModal,
+}: {
+  closeUnstakeModal: () => void;
+}) => {
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
@@ -147,6 +151,7 @@ const UnstakeForm = () => {
               isConfirmed={isConfirmed}
               onClick={() => {
                 if (isConfirmed) {
+                  closeUnstakeModal();
                   setOpen(false);
                 } else {
                   onSubmit();
