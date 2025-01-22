@@ -334,7 +334,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             </Dropdown.Root>
           </DepositInputs.Inputs>
         </DepositInputs.Root>
-        <div className="py-3">
+        <div className="py-3 ">
           <Show when={Boolean(disabledInputs && !isLoading)}>
             <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
           </Show>
