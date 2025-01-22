@@ -1,28 +1,46 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { UniswapQuoterV2 } from "@/contracts/uniswap-quoterv2";
-import { readContract } from "@/lib/viemClient";
-import { parseUnits } from "viem";
+import { rpcViemClient } from "@/lib/viemClient";
+import { OracleContract } from "@/contracts/oracle";
 import type { TAddressString } from "@/lib/types";
+import { parseUnits } from "viem";
 export const quoteRouter = createTRPCRouter({
-  getQuote: publicProcedure
+  getUniswapSwapQuote: publicProcedure
     .input(
       z.object({
-        poolAddress: z.string().startsWith("0x").length(42),
+        tokenAddressA: z.string().startsWith("0x").length(42),
+        tokenAddressB: z.string().startsWith("0x").length(42),
         amount: z.string(),
         decimals: z.number(),
-        tokenAddressB: z.string().startsWith("0x").length(42),
       }),
     )
     .query(async ({ input }) => {
-      const read = await readContract({
+      // grab fee tier
+      // from SIR Oracle to ensure we get quote from correct pool
+      const feeTier = await rpcViemClient.readContract({
+        ...OracleContract,
+        functionName: "state",
+        args: [
+          input.tokenAddressA as TAddressString,
+          input.tokenAddressB as TAddressString,
+        ],
+      });
+      const simmy = await rpcViemClient.simulateContract({
         ...UniswapQuoterV2,
         functionName: "quoteExactInputSingle",
         args: [
-          input.poolAddress as TAddressString,
-          parseUnits(input.amount, input.decimals),
+          {
+            tokenIn: "0x",
+            tokenOut: "0x",
+            fee: feeTier.uniswapFeeTier.fee,
+            amountIn: parseUnits(input.amount, input.decimals),
+            sqrtPriceLimitX96: 0n,
+          },
         ],
       });
-      return read;
+      const [amountOut, sqrtPrice, initializedTicksCrossed, gasEstimate] =
+        simmy.result;
+      return { amountOut, sqrtPrice, initializedTicksCrossed, gasEstimate };
     }),
 });
