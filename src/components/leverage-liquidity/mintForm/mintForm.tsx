@@ -57,19 +57,24 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
+  const selectedDepositToken =
+    formData.depositToken === parseAddress(formData.long)
+      ? formData.long
+      : formData.versus;
+  console.log(selectedDepositToken, "SELECTED depositToken");
   const { data: decimalData } = api.erc20.getErc20Decimals.useQuery(
     {
-      tokenAddress: formData.long.split(",")[0] ?? "0x",
+      tokenAddress: parseAddress(selectedDepositToken) ?? "0x",
     },
     {
-      enabled: Boolean(formData.long),
+      enabled: Boolean(formData.long) && Boolean(formData.versus),
     },
   );
 
   const useEth = useMemo(() => {
     // Ensure use eth toggle is not used on non-weth tokens
     const isWeth =
-      formData.long.split(",")[0]?.toLowerCase() === WETH_ADDRESS.toLowerCase();
+      parseAddress(formData.long)?.toLowerCase() === WETH_ADDRESS.toLowerCase();
     return isWeth ? useEthRaw : false;
   }, [useEthRaw, formData.long]);
 
