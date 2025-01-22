@@ -37,7 +37,7 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    NEXT_PUBLIC_ORACLE_ADDRESS: process.env.NEXT_PUBLIC_ORACLE,
+    NEXT_PUBLIC_ORACLE_ADDRESS: process.env.NEXT_PUBLIC_ORACLE_ADDRESS,
     NEXT_PUBLIC_BASE_FEE: process.env.NEXT_PUBLIC_BASE_FEE,
     NEXT_PUBLIC_MINTING_FEE: process.env.NEXT_PUBLIC_MINTING_FEE,
     TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
