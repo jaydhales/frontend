@@ -55,7 +55,7 @@ export function useTransactions({
   });
 
   const { approveSimulate } = useApproveErc20({
-    tokenAddr: formData.depositToken,
+    tokenAddr: formData.depositToken ?? "",
     approveContract: VaultContract.address,
   });
 
