@@ -21,9 +21,14 @@ const selectTriggerVariants = cva(
         light: "bg-primary",
         dark: "bg-secondary",
       },
+      orderDirection: {
+        row: "flex-row",
+        rowReversed: "flex-row-reverse",
+      },
     },
     defaultVariants: {
       colorScheme: "light",
+      orderDirection: "row",
     },
   },
 );
@@ -33,10 +38,12 @@ export interface SelectTriggerProps
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
->(({ className, colorScheme, children, ...props }, ref) => (
+>(({ className, colorScheme, orderDirection, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
-    className={cn(selectTriggerVariants({ colorScheme, className }))}
+    className={cn(
+      selectTriggerVariants({ orderDirection, colorScheme, className }),
+    )}
     {...props}
   >
     {children}
@@ -54,7 +61,7 @@ const SelectScrollUpButton = React.forwardRef<
   <SelectPrimitive.ScrollUpButton
     ref={ref}
     className={cn(
-      "flex cursor-default items-center justify-center py-1",
+      "flex cursor-default items-center justify-center  py-1",
       className,
     )}
     {...props}

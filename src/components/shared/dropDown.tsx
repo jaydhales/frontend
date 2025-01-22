@@ -28,7 +28,7 @@ function Item({
 }) {
   return (
     <SelectItem value={value}>
-      <div className="flex items-center gap-x-2">
+      <div className="flex items-center gap-x-2 text-sm">
         <ImageWithFallback
           src={getLogoAsset(tokenAddress as TAddressString)}
           width={25}
