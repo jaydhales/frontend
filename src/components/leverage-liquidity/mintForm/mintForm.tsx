@@ -39,6 +39,13 @@ interface Props {
 }
 
 /**
+ * Form inputs long and versus are both formatted address,symbol.
+ * This function parses the address from them.
+ */
+function parseAddress(s: string) {
+  return s.split(",")[0];
+}
+/**
  * Contains form actions and validity.
  */
 export default function MintForm({ vaultsQuery, isApe }: Props) {
@@ -50,7 +57,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
-
   const { data: decimalData } = api.erc20.getErc20Decimals.useQuery(
     {
       tokenAddress: formData.long.split(",")[0] ?? "0x",
@@ -283,24 +289,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         />
         <DepositInputs.Root>
           <DepositInputs.Inputs
-            depositTokenItems={
-              <>
-                <Show when={Boolean(selectedVault.result)}>
-                  <Dropdown.Item
-                    tokenAddress={selectedVault.result?.debtToken ?? ""}
-                    value={selectedVault.result?.debtToken ?? ""}
-                  >
-                    {selectedVault.result?.debtSymbol}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    tokenAddress={selectedVault.result?.collateralToken ?? ""}
-                    value={selectedVault.result?.collateralToken ?? ""}
-                  >
-                    {selectedVault.result?.collateralSymbol}
-                  </Dropdown.Item>
-                </Show>
-              </>
-            }
             inputLoading={isLoading}
             disabled={Boolean(disabledInputs) && !isLoading}
             decimals={decimals}
@@ -316,7 +304,30 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             balance={formatUnits(balance ?? 0n, decimals)}
             form={form}
             depositAsset={formData.long}
-          />
+          >
+            <Dropdown.Root
+              colorScheme="dark"
+              name="depositToken"
+              title=""
+              disabled={!Boolean(selectedVault.result)}
+              form={form}
+            >
+              <Show when={Boolean(selectedVault.result)}>
+                <Dropdown.Item
+                  tokenAddress={selectedVault.result?.debtToken ?? ""}
+                  value={selectedVault.result?.debtToken ?? ""}
+                >
+                  {selectedVault.result?.debtSymbol}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  tokenAddress={selectedVault.result?.collateralToken ?? ""}
+                  value={selectedVault.result?.collateralToken ?? ""}
+                >
+                  {selectedVault.result?.collateralSymbol}
+                </Dropdown.Item>
+              </Show>
+            </Dropdown.Root>
+          </DepositInputs.Inputs>
         </DepositInputs.Root>
         <div className="py-3">
           <Show when={Boolean(disabledInputs && !isLoading)}>
