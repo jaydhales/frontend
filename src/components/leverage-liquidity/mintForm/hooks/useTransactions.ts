@@ -24,7 +24,6 @@ export function useTransactions({
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
-
   const { address } = useAccount();
   const { data: userBalance, isFetching } =
     api.user.getBalanceAndAllowance.useQuery(
@@ -56,7 +55,7 @@ export function useTransactions({
   });
 
   const { approveSimulate } = useApproveErc20({
-    tokenAddr: formatDataInput(formData.long),
+    tokenAddr: formData.depositToken,
     approveContract: VaultContract.address,
   });
 
