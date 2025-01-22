@@ -26,18 +26,26 @@ export function useTransactions({
   const formData = form.watch();
 
   const { address } = useAccount();
-  const { data: userBalance, isFetching } = api.user.getBalance.useQuery(
-    {
-      userAddress: address,
-      tokenAddress: formatDataInput(formData.long),
-      spender: VaultContract.address,
-    },
-    { enabled: Boolean(address) && Boolean(formData.long) },
-  );
+  const { data: userBalance, isFetching } =
+    api.user.getBalanceAndAllowance.useQuery(
+      {
+        userAddress: address,
+        tokenAddress: formData.depositToken,
+        spender: VaultContract.address,
+      },
+      {
+        enabled:
+          Boolean(address) &&
+          Boolean(formData.long) &&
+          Boolean(formData.depositToken),
+      },
+    );
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   const { Mint, isFetching: mintFetching } = useMintApeOrTea({
     useEth,
+    depositToken: formData.depositToken,
+    decimals,
     vaultId: findVault(vaultsQuery, formData).result?.vaultId.toString(),
     isApe,
     debtToken: formatDataInput(formData.versus), //value formatted : address,symbol
