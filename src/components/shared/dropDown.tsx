@@ -61,6 +61,7 @@ function Root({
   className?: string;
   disabled?: boolean;
 }) {
+  console.log(disabled, "DISABLED");
   return (
     <div className={"flex w-full gap-x-2  " + className}>
       <div className="flex-grow">
@@ -78,8 +79,11 @@ function Root({
                 value={field.value}
               >
                 <FormControl>
-                  <SelectTrigger colorScheme={colorScheme}>
-                    <SelectValue placeholder={placeholder} />
+                  <SelectTrigger disabled={disabled} colorScheme={colorScheme}>
+                    <SelectValue
+                      aria-disabled={disabled}
+                      placeholder={placeholder}
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>{children}</SelectContent>
