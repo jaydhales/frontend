@@ -37,7 +37,7 @@ interface Props {
   disabled: boolean;
   maxCollateralIn?: string | undefined;
   inputLoading: boolean;
-  depositTokenItems: ReactNode;
+  children: ReactNode;
 }
 function Inputs({
   form,
@@ -49,7 +49,7 @@ function Inputs({
   disabled,
   maxCollateralIn,
   inputLoading,
-  depositTokenItems,
+  children,
 }: Props) {
   return (
     <div
@@ -115,18 +115,11 @@ function Inputs({
       <div className="flex flex-col items-end">
         <h2 className="pb-2 text-sm">Deposit Asset</h2>
         <div
-          className={`flex w-[170px] items-center justify-center gap-x-2 rounded-md bg-secondary px-2  ${!depositAsset ? "opacity-70" : ""}`}
+          className={`flex h-[40px] w-[150px] items-center justify-center gap-x-2 rounded-md bg-secondary px-2  ${!depositAsset ? "opacity-70" : ""}`}
         >
           {/* {!depositAsset && <div className="h-[25px] w-[25px]" />} */}
-          <Dropdown.Root
-            colorScheme="dark"
-            name="depositToken"
-            title=""
-            form={form}
-          >
-            {depositTokenItems}
-          </Dropdown.Root>
           {/* <AssetInfo depositAsset={depositAsset} useEth={useEth} /> */}
+          {children}
         </div>
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
           Balance: {formatNumber(balance ?? "0")}
