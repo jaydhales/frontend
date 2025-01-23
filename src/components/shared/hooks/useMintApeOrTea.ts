@@ -45,6 +45,11 @@ export function useMintApeOrTea({
   );
   const tokenAmount = useEth ? 0n : amount;
   const ethAmount = useEth ? amount : 0n;
+  let minCollateralOut = uniswapQuote?.amountOut;
+  if (minCollateralOut && uniswapQuote?.amountOut) {
+    const onePercent = uniswapQuote?.amountOut / 100n;
+    minCollateralOut = minCollateralOut - onePercent;
+  }
   const {
     data: Mint,
     refetch,
@@ -58,13 +63,13 @@ export function useMintApeOrTea({
       { ...vault },
       // isApe ? apeAddress : zeroAddress,
       tokenAmount ?? 0n,
-      debtTokenDeposit ? uniswapQuote?.amountOut ?? 0n : 0n,
+      debtTokenDeposit ? minCollateralOut ?? 0n : 0n,
     ],
     value: ethAmount ?? 0n,
   });
 
   if (error) {
-    // console.log(error, "APE OR TEA ERROR");
+    console.log(error, "APE OR TEA ERROR");
   }
   useEffect(() => {
     refetch().catch((e) => console.log(e));
