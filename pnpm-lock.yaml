@@ -97,7 +97,7 @@ importers:
         version: 16.4.5
       drizzle-orm:
         specifier: ^0.36.0
-        version: 0.36.0(@libsql/client@0.6.2(bufferutil@4.0.8))(@types/react@18.2.78)(react@18.2.0)(sqlite3@@libsql+client+sqlite3)
+        version: 0.36.0(@libsql/client@0.6.2(bufferutil@4.0.8))(@types/react@18.2.78)(react@18.2.0)
       encoding:
         specifier: ^0.1.13
         version: 0.1.13
@@ -201,6 +201,9 @@ importers:
       eslint-config-next:
         specifier: ^14.1.3
         version: 14.2.1(eslint@8.57.0)(typescript@5.4.5)
+      husky:
+        specifier: ^9.1.7
+        version: 9.1.7
       jsdom:
         specifier: ^24.0.0
         version: 24.0.0(bufferutil@4.0.8)
@@ -5647,6 +5650,11 @@ packages:
   human-signals@5.0.0:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
+
+  husky@9.1.7:
+    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   i18next-browser-languagedetector@7.2.1:
     resolution: {integrity: sha512-h/pM34bcH6tbz8WgGXcmWauNpQupCGr25XPp9cZwZInR9XHSjIFDYp1SIok7zSPsTOMxdvuLyu86V+g2Kycnfw==}
@@ -14547,12 +14555,11 @@ snapshots:
       '@dprint/linux-x64-musl': 0.45.1
       '@dprint/win32-x64': 0.45.1
 
-  drizzle-orm@0.36.0(@libsql/client@0.6.2(bufferutil@4.0.8))(@types/react@18.2.78)(react@18.2.0)(sqlite3@@libsql+client+sqlite3):
+  drizzle-orm@0.36.0(@libsql/client@0.6.2(bufferutil@4.0.8))(@types/react@18.2.78)(react@18.2.0):
     optionalDependencies:
       '@libsql/client': 0.6.2(bufferutil@4.0.8)
       '@types/react': 18.2.78
       react: 18.2.0
-      sqlite3: link:@libsql/client/sqlite3
 
   dset@3.1.3: {}
 
@@ -15587,6 +15594,8 @@ snapshots:
   human-signals@2.1.0: {}
 
   human-signals@5.0.0: {}
+
+  husky@9.1.7: {}
 
   i18next-browser-languagedetector@7.2.1:
     dependencies:

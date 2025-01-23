@@ -12,8 +12,9 @@
     "lint": "next lint",
     "start": "next start",
     "test": "vitest",
-    "ts-lint": "tsc --noEmit --incremental",
-    "build-graph": "graphclient build"
+    "type-check": "tsc --noEmit --incremental",
+    "build-graph": "graphclient build",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -83,6 +84,7 @@
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.1.3",
+    "husky": "^9.1.7",
     "jsdom": "^24.0.0",
     "postcss": "^8.4.34",
     "prettier": "^3.2.5",
