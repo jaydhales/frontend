@@ -16,6 +16,11 @@
     "build-graph": "graphclient build",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@libsql/client": "^0.6.2",
@@ -51,6 +56,7 @@
     "eslint-plugin-react-compiler": "19.0.0-beta-201e55d-20241215",
     "graphql-request": "^7.0.1",
     "graphql-tag": "^2.12.6",
+    "lint-staged": "^15.4.2",
     "lucide-react": "^0.368.0",
     "motion": "^11.11.17",
     "next": "^14.2.0",
