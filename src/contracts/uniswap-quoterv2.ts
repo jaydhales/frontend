@@ -1,7 +1,7 @@
 import type { TAddressString } from "@/lib/types";
 
 export const UniswapQuoterV2 = {
-  address: `0x3ED05DE92879a5D47a3c8cc402DD5259219505aD` as TAddressString,
+  address: `0x61ffe014ba17989e743c5f6cb21bf9697530b21e` as TAddressString,
   abi: [
     {
       inputs: [

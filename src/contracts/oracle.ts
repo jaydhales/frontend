@@ -1,7 +1,7 @@
-import type { TAddressString } from "@/lib/types";
+import { EContracts, getAddress } from "@/lib/contractAddresses";
 
 export const OracleContract = {
-  address: `0x3ED05DE92879a5D47a3c8cc402DD5259219505aD` as TAddressString,
+  address: getAddress(EContracts.ORACLE),
   abi: [
     {
       type: "constructor",
