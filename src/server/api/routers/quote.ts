@@ -31,8 +31,8 @@ export const quoteRouter = createTRPCRouter({
         functionName: "quoteExactInputSingle",
         args: [
           {
-            tokenIn: "0x",
-            tokenOut: "0x",
+            tokenIn: input.tokenAddressA as TAddressString,
+            tokenOut: input.tokenAddressB as TAddressString,
             fee: feeTier.uniswapFeeTier.fee,
             amountIn: parseUnits(input.amount, input.decimals),
             sqrtPriceLimitX96: 0n,
