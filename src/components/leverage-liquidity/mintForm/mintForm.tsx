@@ -74,9 +74,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const useEth = useMemo(() => {
     // Ensure use eth toggle is not used on non-weth tokens
     const isWeth =
-      parseAddress(formData.long)?.toLowerCase() === WETH_ADDRESS.toLowerCase();
+      formData.depositToken?.toLowerCase() === WETH_ADDRESS.toLowerCase();
     return isWeth ? useEthRaw : false;
-  }, [useEthRaw, formData.long]);
+  }, [formData.depositToken, useEthRaw]);
 
   const decimals = useEth ? 18 : decimalData ?? 18;
 
@@ -308,7 +308,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             }
             balance={formatUnits(balance ?? 0n, decimals)}
             form={form}
-            depositAsset={formData.long}
+            depositAsset={formData.depositToken}
           >
             <Dropdown.Root
               colorScheme="dark"
