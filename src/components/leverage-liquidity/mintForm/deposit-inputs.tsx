@@ -14,8 +14,7 @@ import { WETH_ADDRESS } from "@/data/constants";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import { getLogoAsset } from "@/lib/assets";
 import Show from "@/components/shared/show";
-import Dropdown from "@/components/shared/dropDown";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 function Root({ children }: { children: React.ReactNode }) {
   return (
