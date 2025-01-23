@@ -225,6 +225,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   //     setOpenTransactionModal(false);
   //   }
   // }, [isPending, setOpenTransactionModal, isConfirming, isConfirmed]);
+  const depositTokenSymbol =
+    formData.depositToken === parseAddress(formData.long)
+      ? selectedVault.result?.collateralSymbol
+      : selectedVault.result?.debtSymbol;
+  console.log(collateralDecimals, "collateralDecimals");
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -260,7 +265,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                   title="Fee Amount"
                   value={`${formatNumber(
                     parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
-                  )} ${form.getValues("long").split(",")[1]}`}
+                  )} ${depositTokenSymbol}`}
                 />
 
                 <div className="flex w-full justify-start   text-[14px] text-gray-400">
@@ -370,7 +375,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
               isValid={isValid}
               feeAmount={`${formatNumber(
                 parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
-              )} ${form.getValues("long").split(",")[1]}`}
+              )} ${depositTokenSymbol}`}
               feePercent={fee}
               deposit={form.getValues("deposit")}
             />
