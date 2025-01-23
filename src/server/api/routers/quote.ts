@@ -18,6 +18,7 @@ export const quoteRouter = createTRPCRouter({
     .query(async ({ input }) => {
       // grab fee tier
       // from SIR Oracle to ensure we get quote from correct pool
+
       const feeTier = await rpcViemClient.readContract({
         ...OracleContract,
         functionName: "state",
@@ -31,8 +32,8 @@ export const quoteRouter = createTRPCRouter({
         functionName: "quoteExactInputSingle",
         args: [
           {
-            tokenIn: input.tokenAddressA as TAddressString,
-            tokenOut: input.tokenAddressB as TAddressString,
+            tokenIn: input.tokenAddressB as TAddressString,
+            tokenOut: input.tokenAddressA as TAddressString,
             fee: feeTier.uniswapFeeTier.fee,
             amountIn: parseUnits(input.amount, input.decimals),
             sqrtPriceLimitX96: 0n,
@@ -41,6 +42,7 @@ export const quoteRouter = createTRPCRouter({
       });
       const [amountOut, sqrtPrice, initializedTicksCrossed, gasEstimate] =
         simmy.result;
+      console.log(amountOut, "AMOUNT OUT");
       return { amountOut, sqrtPrice, initializedTicksCrossed, gasEstimate };
     }),
 });
