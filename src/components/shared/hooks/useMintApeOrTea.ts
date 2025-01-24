@@ -3,8 +3,6 @@ import { useSimulateContract } from "wagmi";
 import type { TAddressString } from "@/lib/types";
 import { VaultContract } from "@/contracts/vault";
 import { useEffect } from "react";
-import { api } from "@/trpc/react";
-import { formatUnits } from "viem";
 interface Props {
   collateralToken: string;
   debtToken: string;
@@ -16,6 +14,7 @@ interface Props {
   isApe: boolean;
   useEth: boolean;
   decimals: number;
+  minCollateralOut: bigint | undefined;
 }
 export function useMintApeOrTea({
   collateralToken,
@@ -26,7 +25,7 @@ export function useMintApeOrTea({
   isApe,
   useEth,
   depositToken,
-  decimals,
+  minCollateralOut,
 }: Props) {
   const vault = {
     debtToken: debtToken as TAddressString,
@@ -34,22 +33,8 @@ export function useMintApeOrTea({
     leverageTier,
   };
   const debtTokenDeposit = depositToken === debtToken && debtToken !== "";
-  const { data: uniswapQuote } = api.quote.getUniswapSwapQuote.useQuery(
-    {
-      amount: formatUnits(amount ?? 0n, 18),
-      decimals,
-      tokenAddressA: collateralToken,
-      tokenAddressB: debtToken,
-    },
-    { enabled: debtTokenDeposit },
-  );
   const tokenAmount = useEth ? 0n : amount;
   const ethAmount = useEth ? amount : 0n;
-  let minCollateralOut = uniswapQuote?.amountOut;
-  if (minCollateralOut && uniswapQuote?.amountOut) {
-    const onePercent = uniswapQuote?.amountOut / 100n;
-    minCollateralOut = minCollateralOut - onePercent;
-  }
   const {
     data: Mint,
     refetch,
@@ -61,7 +46,6 @@ export function useMintApeOrTea({
     args: [
       isApe,
       { ...vault },
-      // isApe ? apeAddress : zeroAddress,
       tokenAmount ?? 0n,
       debtTokenDeposit ? minCollateralOut ?? 0n : 0n,
     ],

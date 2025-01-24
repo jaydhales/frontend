@@ -16,11 +16,13 @@ export function useTransactions({
   vaultsQuery,
   decimals,
   useEth,
+  minCollateralOut,
 }: {
   isApe: boolean;
   vaultsQuery: TVaults;
   decimals: number;
   useEth: boolean;
+  minCollateralOut: bigint | undefined;
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
@@ -43,6 +45,7 @@ export function useTransactions({
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   const { Mint, isFetching: mintFetching } = useMintApeOrTea({
     useEth,
+    minCollateralOut,
     depositToken: formData.depositToken,
     decimals,
     vaultId: findVault(vaultsQuery, formData).result?.vaultId.toString(),

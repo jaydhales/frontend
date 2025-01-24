@@ -85,6 +85,12 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     formData.depositToken === parseAddress(formData.long)
       ? collateralDecimals
       : debtDecimals;
+
+  const { quoteData, minCollateralOut } = useQuoteMint({
+    formData,
+    isApe,
+    decimals: debtDecimals ?? 18,
+  });
   const {
     requests,
     userBalanceFetching,
@@ -93,6 +99,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     userBalance,
   } = useTransactions({
     useEth,
+    minCollateralOut,
     isApe,
     vaultsQuery,
     decimals: decimals ?? 18,
@@ -153,7 +160,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     maxCollateralIn: isApe ? maxCollateralIn : 0n,
   });
 
-  const { quoteData } = useQuoteMint({ formData, isApe });
   useSetRootError({
     formData,
     setError: form.setError,

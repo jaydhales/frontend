@@ -1,13 +1,16 @@
 import { useDebounce } from "@/components/shared/hooks/useDebounce";
 import type { TMintFormFields } from "@/lib/types";
+import { formatDataInput } from "@/lib/utils";
 import { api } from "@/trpc/react";
 
 export function useQuoteMint({
   formData,
   isApe,
+  decimals,
 }: {
   isApe: boolean;
   formData: TMintFormFields;
+  decimals: number;
 }) {
   const allSelected = Boolean(
     formData.deposit &&
@@ -19,6 +22,16 @@ export function useQuoteMint({
     formData.deposit,
     500,
   );
+
+  const { data: uniswapQuote } = api.quote.getUniswapSwapQuote.useQuery(
+    {
+      amount: depositDebounce ?? "0",
+      decimals,
+      tokenAddressA: formatDataInput(formData.long),
+      tokenAddressB: formatDataInput(formData.versus),
+    },
+    { enabled: formData.depositToken === formatDataInput(formData.versus) },
+  );
   const { data: quoteData } = api.vault.quoteMint.useQuery(
     {
       amount: depositDebounce,
@@ -29,5 +42,5 @@ export function useQuoteMint({
     },
     { enabled: allSelected },
   );
-  return { quoteData };
+  return { quoteData, minCollateralOut: uniswapQuote?.amountOut };
 }
