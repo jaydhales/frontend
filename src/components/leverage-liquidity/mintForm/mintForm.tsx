@@ -86,7 +86,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       ? collateralDecimals
       : debtDecimals;
 
-  const { quoteData, minCollateralOut } = useQuoteMint({
+  const { amountTokens, minCollateralOut } = useQuoteMint({
     formData,
     isApe,
     decimals: debtDecimals ?? 18,
@@ -255,7 +255,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
               submitType={submitType}
               isApe={isApe}
               useEth={useEth}
-              quoteData={quoteData}
+              quoteData={amountTokens}
               isApproving={isApproving}
               tokenReceived={tokenReceived}
             />
@@ -358,8 +358,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         </div>
         <Estimations
           isApe={isApe}
-          disabled={!Boolean(quoteData)}
-          ape={formatUnits(quoteData ?? 0n, collateralDecimals ?? 18)}
+          disabled={!Boolean(amountTokens)}
+          ape={formatUnits(amountTokens ?? 0n, collateralDecimals ?? 18)}
         />
         <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0.2 }}>
           <MintFormSubmit.Root>

@@ -6,7 +6,6 @@ import { api } from "@/trpc/react";
 export function useQuoteMint({
   formData,
   isApe,
-  decimals,
 }: {
   isApe: boolean;
   formData: TMintFormFields;
@@ -23,18 +22,13 @@ export function useQuoteMint({
     500,
   );
 
-  const { data: uniswapQuote } = api.quote.getUniswapSwapQuote.useQuery(
-    {
-      amount: depositDebounce ?? "0",
-      decimals,
-      tokenAddressA: formatDataInput(formData.long),
-      tokenAddressB: formatDataInput(formData.versus),
-    },
-    { enabled: formData.depositToken === formatDataInput(formData.versus) },
-  );
+  const usingDebtToken =
+    formData.depositToken === formatDataInput(formData.versus) &&
+    formData.depositToken !== "";
   const { data: quoteData } = api.vault.quoteMint.useQuery(
     {
       amount: depositDebounce,
+      usingDebtToken: usingDebtToken,
       isApe,
       collateralToken: formData.long.split(",")[0],
       debtToken: formData.versus.split(",")[0],
@@ -42,5 +36,5 @@ export function useQuoteMint({
     },
     { enabled: allSelected },
   );
-  return { quoteData, minCollateralOut: uniswapQuote?.amountOut };
+  return { amountTokens: quoteData?.[0], minCollateralOut: quoteData?.[1] };
 }
