@@ -26,7 +26,7 @@ import { useCheckStakeValidity } from "./useCheckStakeValidity";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
-const StakeForm = () => {
+const StakeForm = ({ closeStakeModal }: { closeStakeModal: () => void }) => {
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
@@ -84,10 +84,14 @@ const StakeForm = () => {
       utils.user.getUnstakedSirBalance
         .invalidate()
         .catch((e) => console.log(e));
+      utils.user.getUnclaimedContributorRewards.invalidate().catch((e) => {
+        console.error(e);
+      });
     }
   }, [
     isConfirmed,
     utils.user.getTotalSirBalance,
+    utils.user.getUnclaimedContributorRewards,
     utils.user.getUnstakedSirBalance,
   ]);
   useEffect(() => {
@@ -134,6 +138,8 @@ const StakeForm = () => {
               onClick={() => {
                 if (isConfirmed) {
                   setOpen(false);
+
+                  closeStakeModal();
                 } else {
                   onSubmit();
                 }

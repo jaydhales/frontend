@@ -20,7 +20,7 @@ export function UnstakeModal({ open, setOpen }: Props) {
         >
           <TransactionModal.Close setOpen={setOpen} />
           <h1 className="pt-4 text-center font-lora text-2xl">Unstake</h1>
-          <UnstakeForm></UnstakeForm>
+          <UnstakeForm closeUnstakeModal={() => setOpen(false)}></UnstakeForm>
         </div>
       </AlertDialogContent>
     </AlertDialog>
