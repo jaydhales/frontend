@@ -57,6 +57,7 @@ export function BalancePercent({
         type="button"
         disabled={dis}
         onClick={() => {
+          console.log(overrideMaxValue, "overrideMaxValue");
           if (!overrideMaxValue) {
             setValue(balance ?? "");
             return;
@@ -68,7 +69,9 @@ export function BalancePercent({
             setValue(balance ?? "");
             return;
           }
-          setValue(overrideMaxValue);
+          if (Number.parseFloat(overrideMaxValue) > 0) {
+            setValue(overrideMaxValue);
+          }
         }}
         aria-label="Max Balance"
       >
