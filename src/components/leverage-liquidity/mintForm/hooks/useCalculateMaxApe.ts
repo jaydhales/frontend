@@ -8,9 +8,11 @@ import useCalculateVaultHealth from "../../vaultTable/hooks/useCalculateVaultHea
 export function useCalculateMaxApe({
   leverageTier,
   vaultId,
+  isApe,
 }: {
   vaultId: number;
   leverageTier: string;
+  isApe: boolean;
 }) {
   const { data, isLoading } = api.vault.getReserve.useQuery(
     { vaultId },
@@ -26,17 +28,20 @@ export function useCalculateMaxApe({
     isApe: true,
   });
   const { badHealth, maxCollateralIn } = useMemo(() => {
-    const maxCollateralIn = calculateMaxApe({
-      leverageTier: parseUnits(leverageTier ?? "0", 0),
-      baseFee: parseUnits(BASE_FEE.toString(), 4),
-      apeReserve: ape,
-      gentlemenReserve: tea,
-    });
+    let maxCollateralIn;
+    if (!isApe) {
+      maxCollateralIn = calculateMaxApe({
+        leverageTier: parseUnits(leverageTier ?? "0", 0),
+        baseFee: parseUnits(BASE_FEE.toString(), 4),
+        apeReserve: ape,
+        gentlemenReserve: tea,
+      });
+    }
     let badHealth = false;
     if (variant === "red" || variant === "yellow") {
       badHealth = true;
     }
     return { badHealth, maxCollateralIn };
-  }, [ape, leverageTier, tea, variant]);
+  }, [ape, isApe, leverageTier, tea, variant]);
   return { badHealth, maxCollateralIn, isLoading };
 }
