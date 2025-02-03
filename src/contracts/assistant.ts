@@ -148,6 +148,19 @@ export const AssistantContract = {
     },
     {
       type: "function",
+      name: "quoteCollateralToDebtToken",
+      inputs: [
+        { name: "debtToken", type: "address", internalType: "address" },
+        { name: "collateralToken", type: "address", internalType: "address" },
+        { name: "amountCollateral", type: "uint256", internalType: "uint256" },
+      ],
+      outputs: [
+        { name: "amountDebtToken", type: "uint256", internalType: "uint256" },
+      ],
+      stateMutability: "view",
+    },
+    {
+      type: "function",
       name: "quoteMint",
       inputs: [
         { name: "isAPE", type: "bool", internalType: "bool" },
