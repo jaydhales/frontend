@@ -74,6 +74,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       enabled: Boolean(formData.long) && Boolean(formData.versus),
     },
   );
+
   const useEth = useMemo(() => {
     // Ensure use eth toggle is not used on non-weth tokens
     const isWeth =
@@ -89,8 +90,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const { amountTokens, minCollateralOut } = useQuoteMint({
     formData,
     isApe,
-    decimals: debtDecimals ?? 18,
+    decimals: depositDecimals ?? 0,
   });
+  console.log({ minCollateralOut, amountTokens }, "MIN COLLATERAL OUT");
   const {
     requests,
     userBalanceFetching,
@@ -236,8 +238,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       ? selectedVault.result?.collateralSymbol
       : selectedVault.result?.debtSymbol;
   const maxTokenIn = usingDebtToken
-    ? formatUnits(maxCollateralIn ?? 0n, collateralDecimals ?? 18)
-    : formatUnits(maxDebtIn ?? 0n, debtDecimals ?? 18);
+    ? formatUnits(maxDebtIn ?? 0n, debtDecimals ?? 18)
+    : formatUnits(maxCollateralIn ?? 0n, collateralDecimals ?? 18);
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
