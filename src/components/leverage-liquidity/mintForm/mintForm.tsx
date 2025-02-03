@@ -81,7 +81,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     return isWeth ? useEthRaw : false;
   }, [formData.depositToken, useEthRaw]);
 
-  const decimals =
+  const depositDecimals =
     formData.depositToken === parseAddress(formData.long)
       ? collateralDecimals
       : debtDecimals;
@@ -102,7 +102,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     minCollateralOut,
     isApe,
     vaultsQuery,
-    decimals: decimals ?? 18,
+    decimals: depositDecimals ?? 18,
   });
   const { versus, leverageTiers, long } = useFilterVaults({
     formData,
@@ -140,12 +140,17 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     useEth,
     txBlock: parseInt(transactionData?.blockNumber.toString() ?? "0"),
   });
-
-  const { maxCollateralIn, badHealth, isLoading } = useCalculateMaxApe({
-    leverageTier: formData.leverageTier,
-    vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
-  });
-
+  const usingDebtToken = useMemo(() => {
+    return formData.depositToken === parseAddress(formData.versus);
+  }, [formData.depositToken, formData.versus]);
+  const { maxCollateralIn, maxDebtIn, badHealth, isLoading } =
+    useCalculateMaxApe({
+      usingDebtToken,
+      leverageTier: formData.leverageTier,
+      collateralDecimals: collateralDecimals ?? 18,
+      vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
+    });
+  const maxIn = usingDebtToken ? maxDebtIn : maxCollateralIn;
   const { isValid, errorMessage, submitType } = useMintFormValidation({
     ethBalance: userEthBalance,
     decimals: collateralDecimals ?? 18,
@@ -157,7 +162,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     tokenAllowance: userBalance?.tokenAllowance?.result,
     mintFetching: isMintFetching,
     approveFetching: isApproveFetching,
-    maxCollateralIn: isApe ? maxCollateralIn : 0n,
+    maxCollateralIn: isApe ? maxIn : 0n,
   });
 
   useSetRootError({
@@ -225,17 +230,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
   }, [disabledInputs, form, form.setValue, formData.deposit]);
   const deposit = form.getValues("deposit");
-  // useEffect(() => {
-  //   if (!isPending && !isConfirming && !isConfirmed) {
-  //     console.log("ran here");
-  //     setOpenTransactionModal(false);
-  //   }
-  // }, [isPending, setOpenTransactionModal, isConfirming, isConfirmed]);
   const depositTokenSymbol =
     formData.depositToken === parseAddress(formData.long)
       ? selectedVault.result?.collateralSymbol
       : selectedVault.result?.debtSymbol;
-  console.log(collateralDecimals, "collateralDecimals");
+  const maxTokenIn = usingDebtToken
+    ? formatUnits(maxCollateralIn ?? 0n, collateralDecimals ?? 18)
+    : formatUnits(maxDebtIn ?? 0n, debtDecimals ?? 18);
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -318,12 +319,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             setUseEth={(b: boolean) => {
               setUseEth(b);
             }}
-            maxCollateralIn={
-              maxCollateralIn
-                ? formatUnits(maxCollateralIn, decimals ?? 18)
-                : undefined
-            }
-            balance={formatUnits(balance ?? 0n, decimals ?? 18)}
+            maxTokenIn={maxTokenIn}
+            balance={formatUnits(balance ?? 0n, depositDecimals ?? 18)}
             form={form}
             depositAsset={formData.depositToken}
           >
