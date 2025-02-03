@@ -88,9 +88,9 @@ export const vaultRouter = createTRPCRouter({
   getDebtTokenMax: publicProcedure
     .input(
       z.object({
-        debtToken: z.string(),
+        debtToken: ZAddress,
         collateralToken: ZAddress,
-        maxCollateralIn: ZAddress,
+        maxCollateralIn: z.string(),
         decimals: z.number(),
       }),
     )
