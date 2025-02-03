@@ -150,10 +150,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       collateralDecimals: collateralDecimals ?? 18,
       vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
     });
+  console.log(maxDebtIn, "MAX DEBT IN");
   const maxIn = usingDebtToken ? maxDebtIn : maxCollateralIn;
   const { isValid, errorMessage, submitType } = useMintFormValidation({
     ethBalance: userEthBalance,
-    decimals: collateralDecimals ?? 18,
+    decimals: depositDecimals ?? 18,
     useEth,
     deposit: formData.deposit ?? "0",
     depositToken: formData.depositToken,
