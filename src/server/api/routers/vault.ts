@@ -1,12 +1,12 @@
 import { ApeContract } from "@/contracts/ape";
 import { AssistantContract } from "@/contracts/assistant";
 import { getVaultsForTable } from "@/lib/getVaults";
+import { ZAddress } from "@/lib/schemas";
 import type { TAddressString } from "@/lib/types";
 import { multicall, readContract } from "@/lib/viemClient";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { executeSearchVaultsQuery } from "@/server/queries/searchVaults";
 import { executeVaultsQuery } from "@/server/queries/vaults";
-import { Assistant } from "next/font/google";
 import { parseUnits } from "viem";
 import { z } from "zod";
 const ZVaultFilters = z.object({
@@ -82,6 +82,27 @@ export const vaultRouter = createTRPCRouter({
         ...AssistantContract,
         args: [[input.vaultId]],
         functionName: "getReserves",
+      });
+      return result;
+    }),
+  getDebtTokenMax: publicProcedure
+    .input(
+      z.object({
+        debtToken: z.string(),
+        collateralToken: ZAddress,
+        maxCollateralIn: ZAddress,
+        decimals: z.number(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const result = await readContract({
+        ...AssistantContract,
+        functionName: "quoteCollateralToDebtToken",
+        args: [
+          input.debtToken as TAddressString,
+          input.collateralToken as TAddressString,
+          parseUnits(input.maxCollateralIn, input.decimals),
+        ],
       });
       return result;
     }),
