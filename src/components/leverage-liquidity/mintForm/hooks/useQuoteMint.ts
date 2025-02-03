@@ -6,9 +6,11 @@ import { api } from "@/trpc/react";
 export function useQuoteMint({
   formData,
   isApe,
+  decimals,
 }: {
   isApe: boolean;
   formData: TMintFormFields;
+
   decimals: number;
 }) {
   const allSelected = Boolean(
@@ -28,6 +30,7 @@ export function useQuoteMint({
   const { data: quoteData } = api.vault.quoteMint.useQuery(
     {
       amount: depositDebounce,
+      decimals,
       usingDebtToken: usingDebtToken,
       isApe,
       collateralToken: formData.long.split(",")[0],

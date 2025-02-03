@@ -205,6 +205,7 @@ export const vaultRouter = createTRPCRouter({
         usingDebtToken: z.boolean(),
         leverageTier: z.number().optional(),
         amount: z.string().optional(),
+        decimals: z.number(),
         isApe: z.boolean(),
       }),
     )
@@ -231,7 +232,7 @@ export const vaultRouter = createTRPCRouter({
               collateralToken: input.collateralToken as TAddressString,
               leverageTier: input.leverageTier,
             },
-            parseUnits(input.amount, 18),
+            parseUnits(input.amount, input.decimals),
           ],
         });
         return quote;
@@ -247,7 +248,7 @@ export const vaultRouter = createTRPCRouter({
               collateralToken: input.collateralToken as TAddressString,
               leverageTier: input.leverageTier,
             },
-            parseUnits(input.amount, 18),
+            parseUnits(input.amount, input.decimals),
           ],
         });
         return [quote, 0n];

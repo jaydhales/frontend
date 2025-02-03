@@ -39,7 +39,6 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-      console.log(input, "INPUT");
       if (!input.tokenAddress || !input.userAddress || !input.spender) {
         return {};
       }
