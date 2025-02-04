@@ -1,6 +1,5 @@
 "use server";
 import Show from "@/components/shared/show";
-import ToolTip from "@/components/ui/tooltip";
 import { SIR_USD_PRICE } from "@/data/constants";
 import { env } from "@/env";
 import { formatNumber } from "@/lib/utils";
