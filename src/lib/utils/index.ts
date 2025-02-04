@@ -11,6 +11,13 @@ export function add(n: number, a: number) {
   return n + a;
 }
 
+/**
+ * Form inputs long and versus are both formatted address,symbol.
+ * This function parses the address from them.
+ */
+export function parseAddress(s: string) {
+  return s.split(",")[0];
+}
 export function mapLeverage(key: string): string | undefined {
   if (key === "2") {
     return "5";

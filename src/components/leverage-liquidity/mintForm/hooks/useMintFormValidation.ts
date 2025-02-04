@@ -60,6 +60,12 @@ export const useMintFormValidation = ({
       };
     }
     if (maxCollateralIn) {
+      console.log(
+        parseUnits(deposit ?? "0", decimals),
+        maxCollateralIn,
+        decimals,
+        "MAX COLLATERAL IN",
+      );
       if (parseUnits(deposit ?? "0", decimals) > maxCollateralIn) {
         return {
           isValid: false,
