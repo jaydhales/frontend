@@ -1,13 +1,12 @@
 import useGetChainId from "@/components/shared/hooks/useGetChainId";
 import { env } from "@/env";
-import type { TMintFormFields } from "@/lib/types";
 import { ESubmitType } from "@/lib/types";
-import { parseAddress } from "@/lib/utils";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
 import { usingDebtToken } from "../utils";
+import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 
 interface Props {
   requests: {
