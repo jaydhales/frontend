@@ -95,14 +95,3 @@ export interface TUnstakeFormFields {
   amount?: string;
   claimFees?: boolean;
 }
-
-export type TMintForm = UseFormReturn<TMintFormFields, undefined>;
-export interface TMintFormFields {
-  long: string;
-  versus: string;
-  leverageTier: string;
-  depositToken: string;
-  deposit?: string;
-  slippage?: string;
-}
-export type TMintFormFieldKeys = keyof TMintFormFields;
