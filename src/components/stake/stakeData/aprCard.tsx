@@ -80,10 +80,16 @@ export default async function AprCard() {
   let APR = 0n;
   if (safePrice.success && safeDividends.success) {
     APR = calculateApr({
-      ethDividends: parseUnits("0.01", 18),
+      ethDividends: parseUnits(
+        safeDividends.data.dividends?.ethAmount ?? "0",
+        18,
+      ),
       sirUsdPrice: SIR_USD_PRICE,
       ethUsdPrice: safePrice.data.data[0]?.prices[0]?.value ?? "0",
-      amountOfStakedSir: parseUnits("1000000", 12),
+      amountOfStakedSir: parseUnits(
+        safeDividends.data.dividends?.stakedAmount ?? "0",
+        12,
+      ),
     });
   }
   console.log(APR, "APR");
@@ -95,7 +101,7 @@ export default async function AprCard() {
         {/* <AprInfo></AprInfo> */}
       </div>
       <div className="font-lora text-2xl ">
-        <Show when={APR > 0n} fallback={<h1>N/AA</h1>}>
+        <Show when={APR > 0n} fallback={<h1>N/A</h1>}>
           <h1>{formatNumber(formatUnits(APR, 0))}%</h1>
         </Show>
       </div>
