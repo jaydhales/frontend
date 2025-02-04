@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { parseAddress } from "@/lib/utils";
-import type { TMintFormFields } from "@/lib/types";
 import { BalancePercent } from "@/components/shared/balancePercent";
 import { formatNumber, inputPatternMatch } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
@@ -15,6 +14,7 @@ import { WETH_ADDRESS } from "@/data/constants";
 import Show from "@/components/shared/show";
 import type { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
+import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 
 function Root({ children }: { children: React.ReactNode }) {
   return (
@@ -27,7 +27,6 @@ function Root({ children }: { children: React.ReactNode }) {
 }
 
 interface Props {
-  depositAsset: string | undefined;
   balance?: string;
   useEth: boolean;
   setUseEth: (b: boolean) => void;
@@ -39,7 +38,6 @@ interface Props {
 }
 function Inputs({
   decimals,
-  depositAsset,
   balance,
   useEth,
   setUseEth,
@@ -94,7 +92,7 @@ function Inputs({
           />
         </Show>
         <div className="space-y-2">
-          {depositAsset?.split(",")[0] === WETH_ADDRESS && (
+          {formData.depositToken === WETH_ADDRESS && (
             <div className="flex items-center gap-x-2 pt-1">
               <h3 className="text-[12px]">Use ETH</h3>
               <Switch

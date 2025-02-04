@@ -1,8 +1,9 @@
+import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 import { useApproveErc20 } from "@/components/shared/hooks/useApproveErc20";
 import { useMintApeOrTea } from "@/components/shared/hooks/useMintApeOrTea";
 import { VaultContract } from "@/contracts/vault";
-import type { TMintFormFields, TVaults } from "@/lib/types";
-import { formatDataInput, findVault } from "@/lib/utils";
+import type { TVaults } from "@/lib/types";
+import { formatDataInput } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { useFormContext } from "react-hook-form";
 import type { SimulateContractReturnType } from "viem";
@@ -13,7 +14,7 @@ import { z } from "zod";
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 export function useTransactions({
   isApe,
-  vaultsQuery,
+  vaultId,
   decimals,
   useEth,
   minCollateralOut,
@@ -23,6 +24,7 @@ export function useTransactions({
   decimals: number;
   useEth: boolean;
   minCollateralOut: bigint | undefined;
+  vaultId: string | undefined;
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
@@ -48,7 +50,7 @@ export function useTransactions({
     minCollateralOut,
     depositToken: formData.depositToken,
     decimals,
-    vaultId: findVault(vaultsQuery, formData).result?.vaultId.toString(),
+    vaultId,
     isApe,
     debtToken: formatDataInput(formData.versus), //value formatted : address,symbol
     collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
