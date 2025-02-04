@@ -35,15 +35,12 @@ export function useCalculateMaxApe({
     isApe: true,
   });
   const { badHealth, maxCollateralIn } = useMemo(() => {
-    let maxCollateralIn;
-    if (!isApe) {
-      maxCollateralIn = calculateMaxApe({
-        leverageTier: parseUnits(leverageTier ?? "0", 0),
-        baseFee: parseUnits(BASE_FEE.toString(), 4),
-        apeReserve: ape,
-        gentlemenReserve: tea,
-      });
-    }
+    const maxCollateralIn = calculateMaxApe({
+      leverageTier: parseUnits(leverageTier ?? "0", 0),
+      baseFee: parseUnits(BASE_FEE.toString(), 4),
+      apeReserve: ape,
+      gentlemenReserve: tea,
+    });
     let badHealth = false;
     if (variant === "red" || variant === "yellow") {
       badHealth = true;
