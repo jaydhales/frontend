@@ -4,6 +4,8 @@ import { formatUnits } from "viem";
 import type { TAddressString, TMintFormFields, TVaults } from "../types";
 import { z } from "zod";
 import numeral from "numeral";
+import { TMintFormFields } from "@/components/providers/mintFormProvider";
+import { useFormContext } from "react-hook-form";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -40,25 +42,6 @@ export function mapLeverage(key: string): string | undefined {
 
 export function formatDataInput(s: string) {
   return s.split(",")[0] ?? "";
-}
-export function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
-  const debtToken = formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
-    collateralToken = formData.long.split(",")[0] ?? ""; //value formatted : address,symbol
-  const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
-  const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
-
-  const result = vaultQuery?.vaults.find((v) => {
-    if (
-      v.collateralToken === collateralToken &&
-      v.debtToken === debtToken &&
-      leverageTier === v.leverageTier
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  return { result };
 }
 
 export function getApeAddress({
