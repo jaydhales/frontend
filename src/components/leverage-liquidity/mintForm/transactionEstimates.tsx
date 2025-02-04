@@ -1,4 +1,4 @@
-import type { TMintFormFields } from "@/lib/types";
+import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 import { formatNumber, parseAddress } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
 import { formatUnits } from "viem";

@@ -1,8 +1,8 @@
+import type { TMintForm } from "@/components/providers/mintFormProvider";
 import Select from "@/components/shared/Select";
 import { useDebounce } from "@/components/shared/hooks/useDebounce";
 import { getLogoAsset } from "@/lib/assets";
 import useVaultFilterStore from "@/lib/store";
-import type { TMintForm } from "@/lib/types";
 import { api } from "@/trpc/react";
 import type { StaticImageData } from "next/image";
 import React, { useState } from "react";

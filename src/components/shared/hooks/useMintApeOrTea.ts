@@ -1,10 +1,11 @@
 "use client";
 import { useSimulateContract } from "wagmi";
-import type { TAddressString, TMintFormFields } from "@/lib/types";
+import type { TAddressString } from "@/lib/types";
 import { VaultContract } from "@/contracts/vault";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { parseUnits } from "viem";
+import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 interface Props {
   collateralToken: string;
   debtToken: string;

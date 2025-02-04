@@ -1,11 +1,12 @@
 import Select from "@/components/shared/Select";
 import { getLogoAsset } from "@/lib/assets";
 import useVaultFilterStore from "@/lib/store";
-import type { TMintForm, VaultFieldFragment } from "@/lib/types";
+import type { VaultFieldFragment } from "@/lib/types";
 import { getLeverageRatio } from "@/lib/utils/calculations";
 import SelectWithSearch from "./selectWithSearch";
 import { useMemo } from "react";
 import Show from "@/components/shared/show";
+import type { TMintForm } from "@/components/providers/mintFormProvider";
 interface Props {
   form: TMintForm;
   long: VaultFieldFragment[];
