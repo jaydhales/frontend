@@ -1,11 +1,12 @@
+import { ESubmitType } from "@/lib/types";
 import { api } from "@/trpc/react";
 import { useEffect, useState } from "react";
-import { ESubmitType } from "./useCheckSubmitValid";
 interface Props {
   isConfirmed: boolean;
   reset: () => void;
   submitType: ESubmitType;
 }
+
 export function useResetAfterApprove({
   isConfirmed,
   reset,
@@ -22,7 +23,7 @@ export function useResetAfterApprove({
   const utils = api.useUtils();
   useEffect(() => {
     if (isConfirmed && isApproving) {
-      utils.user.getBalance
+      utils.user.getBalanceAndAllowance
         .invalidate()
         .then(() => {
           reset();
@@ -30,6 +31,12 @@ export function useResetAfterApprove({
         })
         .catch((e) => console.log(e));
     }
-  }, [isApproving, reset, isConfirmed, utils.user.getBalance, setIsApproving]);
+  }, [
+    isApproving,
+    reset,
+    isConfirmed,
+    setIsApproving,
+    utils.user.getBalanceAndAllowance,
+  ]);
   return isApproving;
 }

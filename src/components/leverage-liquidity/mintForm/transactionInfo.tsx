@@ -1,10 +1,10 @@
 import TransactionModal from "@/components/shared/transactionModal";
-import { ESubmitType } from "./hooks/useCheckSubmitValid";
 import { TransactionEstimates } from "./transactionEstimates";
 import { TransactionStatus } from "./transactionStatus";
 import { CircleCheck } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
 import { formatUnits } from "viem";
+import { ESubmitType } from "@/lib/types";
 
 interface Props {
   isConfirmed: boolean;
@@ -18,6 +18,7 @@ interface Props {
   isApe: boolean;
   useEth: boolean;
   quoteData: bigint | undefined;
+  vaultId: string;
 }
 
 export default function TransactionInfo({
@@ -32,6 +33,7 @@ export default function TransactionInfo({
   decimals,
   useEth,
   userBalanceFetching,
+  vaultId,
 }: Props) {
   if (!isConfirmed) {
     return (
@@ -44,8 +46,10 @@ export default function TransactionInfo({
         {submitType === ESubmitType.mint && (
           <TransactionEstimates
             isApe={isApe}
+            decimals={decimals}
             usingEth={useEth}
             collateralEstimate={quoteData}
+            vaultId={vaultId}
           />
         )}
         {submitType === ESubmitType.mint && (
@@ -78,8 +82,10 @@ export default function TransactionInfo({
         {Boolean(tokenReceived) && (
           <h3 className="flex items-center justify-center gap-x-1 ">
             <span className="text-xl font-bold ">
-              {isApe ? "APE" : "TEA"}{" "}
-              {formatNumber(formatUnits(tokenReceived ?? 0n, decimals), 4)}
+              {formatNumber(formatUnits(tokenReceived ?? 0n, decimals), 4)}{" "}
+              {isApe ? "APE" : "TEA"}
+              <span className="text-gray-400">{"-"}</span>
+              {vaultId}{" "}
             </span>
           </h3>
         )}

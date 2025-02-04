@@ -21,7 +21,7 @@ export function StakeModal({ open, setOpen }: Props) {
         >
           <TransactionModal.Close setOpen={setOpen} />
           <h1 className="pt-4 text-center font-lora text-2xl">Stake</h1>
-          <StakeForm></StakeForm>
+          <StakeForm closeStakeModal={() => setOpen(false)}></StakeForm>
         </div>
       </AlertDialogContent>
     </AlertDialog>

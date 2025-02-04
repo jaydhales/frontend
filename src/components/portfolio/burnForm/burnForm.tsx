@@ -9,7 +9,6 @@ import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
 import type { SimulateContractReturnType } from "viem";
 import { formatUnits, parseUnits } from "viem";
-import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
@@ -26,7 +25,7 @@ import ClaimAndStakeToggle from "./claimAndStakeToggle";
 import { DisplayCollateral } from "./displayCollateral";
 import { TokenInput } from "./tokenInput";
 import { subgraphSyncPoll } from "@/lib/utils/sync";
-import { AlertDialog } from "@/components/ui/alert-dialog";
+import { useBurnFormValidation } from "./hooks/useBurnFormValidation";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -100,11 +99,9 @@ export default function BurnForm({
       } else {
         if (isClaimingRewards) {
           utils.user.getTeaRewards.invalidate().catch((e) => console.log(e));
-          if (claimAndStake) {
-            utils.user.getUnstakedSirBalance
-              .invalidate()
-              .catch((e) => console.log(e));
-          }
+          utils.user.getUnstakedSirBalance
+            .invalidate()
+            .catch((e) => console.log(e));
           utils.user.getTotalSirBalance.invalidate().catch((e) => {
             console.log(e);
           });
@@ -156,11 +153,11 @@ export default function BurnForm({
     }
   }, [form, isConfirmed]);
 
-  const { isValid, error } = useCheckValidityBurn(
+  const { isValid, error } = useBurnFormValidation(
     formData,
     balance,
-    isClaimingRewards,
-    claimRewardRequest as unknown as SimulateContractReturnType["request"],
+    // isClaimingRewards,
+    // claimRewardRequest as unknown as SimulateContractReturnType["request"],
   );
 
   const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
@@ -216,7 +213,10 @@ export default function BurnForm({
               )}
               {!isClaimingRewards && (
                 <TransactionEstimates
-                  inAssetName={isApe ? "APE" : "TEA"}
+                  decimals={row.positionDecimals}
+                  inAssetName={
+                    isApe ? `APE-${row.vaultId}` : `TEA-${row.vaultId}`
+                  }
                   outAssetName={row.collateralSymbol}
                   collateralEstimate={quoteBurn}
                   usingEth={false}

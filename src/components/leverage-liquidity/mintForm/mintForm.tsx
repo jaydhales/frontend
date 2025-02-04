@@ -9,10 +9,9 @@ import {
 import { motion } from "motion/react";
 import { formatUnits } from "viem";
 import { useFormContext } from "react-hook-form";
-import type { TMintFormFields, TVaults } from "@/lib/types";
+import { ESubmitType, type TMintFormFields, type TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
 import VaultParamsInputSelects from "./vaultParamsInputSelects";
-import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
 import { Card } from "@/components/ui/card";
@@ -32,12 +31,20 @@ import { useResetTransactionModal } from "./hooks/useResetTransactionModal";
 import ErrorMessage from "@/components/ui/error-message";
 import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 import { useFilterVaults } from "./hooks/useFilterVaults";
-import useVaultFilterStore from "@/lib/store";
+import { useMintFormValidation } from "./hooks/useMintFormValidation";
+import Dropdown from "@/components/shared/dropDown";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
 }
 
+/**
+ * Form inputs long and versus are both formatted address,symbol.
+ * This function parses the address from them.
+ */
+function parseAddress(s: string) {
+  return s.split(",")[0];
+}
 /**
  * Contains form actions and validity.
  */
@@ -50,25 +57,42 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
-
-  const { data: decimalData } = api.erc20.getErc20Decimals.useQuery(
+  const { data: collateralDecimals } = api.erc20.getErc20Decimals.useQuery(
     {
-      tokenAddress: formData.long.split(",")[0] ?? "0x",
+      tokenAddress: parseAddress(formData.long) ?? "0x",
     },
     {
-      enabled: Boolean(formData.long),
+      enabled: Boolean(formData.long) && Boolean(formData.versus),
+    },
+  );
+
+  const { data: debtDecimals } = api.erc20.getErc20Decimals.useQuery(
+    {
+      tokenAddress: parseAddress(formData.versus) ?? "0x",
+    },
+    {
+      enabled: Boolean(formData.long) && Boolean(formData.versus),
     },
   );
 
   const useEth = useMemo(() => {
     // Ensure use eth toggle is not used on non-weth tokens
     const isWeth =
-      formData.long.split(",")[0]?.toLowerCase() === WETH_ADDRESS.toLowerCase();
+      formData.depositToken?.toLowerCase() === WETH_ADDRESS.toLowerCase();
     return isWeth ? useEthRaw : false;
-  }, [useEthRaw, formData.long]);
+  }, [formData.depositToken, useEthRaw]);
 
-  const decimals = useEth ? 18 : decimalData ?? 18;
+  const depositDecimals =
+    formData.depositToken === parseAddress(formData.long)
+      ? collateralDecimals
+      : debtDecimals;
 
+  const { amountTokens, minCollateralOut } = useQuoteMint({
+    formData,
+    isApe,
+    decimals: depositDecimals ?? 0,
+  });
+  console.log({ minCollateralOut, amountTokens }, "MIN COLLATERAL OUT");
   const {
     requests,
     userBalanceFetching,
@@ -77,9 +101,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     userBalance,
   } = useTransactions({
     useEth,
+    minCollateralOut,
     isApe,
     vaultsQuery,
-    decimals,
+    decimals: depositDecimals ?? 18,
   });
   const { versus, leverageTiers, long } = useFilterVaults({
     formData,
@@ -95,7 +120,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const selectedVault = useMemo(() => {
     return findVault(vaultsQuery, formData);
   }, [formData, vaultsQuery]);
-
+  useEffect(() => {
+    form.setValue("depositToken", selectedVault.result?.collateralToken ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedVault.result?.collateralToken, form.setValue]);
   const { tokenReceived } = useGetReceivedTokens({
     apeAddress: selectedVault.result?.apeAddress ?? "0x",
     logs: transactionData?.logs,
@@ -114,15 +142,21 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     useEth,
     txBlock: parseInt(transactionData?.blockNumber.toString() ?? "0"),
   });
-
-  const { maxCollateralIn, badHealth, isLoading } = useCalculateMaxApe({
-    leverageTier: formData.leverageTier,
-    vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
-  });
-
-  const { isValid, errorMessage, submitType } = useCheckSubmitValid({
+  const usingDebtToken = useMemo(() => {
+    return formData.depositToken === parseAddress(formData.versus);
+  }, [formData.depositToken, formData.versus]);
+  const { maxCollateralIn, maxDebtIn, badHealth, isLoading } =
+    useCalculateMaxApe({
+      usingDebtToken,
+      leverageTier: formData.leverageTier,
+      collateralDecimals: collateralDecimals ?? 18,
+      vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
+    });
+  console.log(maxDebtIn, "MAX DEBT IN");
+  const maxIn = usingDebtToken ? maxDebtIn : maxCollateralIn;
+  const { isValid, errorMessage, submitType } = useMintFormValidation({
     ethBalance: userEthBalance,
-    decimals,
+    decimals: depositDecimals ?? 18,
     useEth,
     deposit: formData.deposit ?? "0",
     depositToken: formData.depositToken,
@@ -131,10 +165,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     tokenAllowance: userBalance?.tokenAllowance?.result,
     mintFetching: isMintFetching,
     approveFetching: isApproveFetching,
-    maxCollateralIn: isApe ? maxCollateralIn : 0n,
+    maxCollateralIn: isApe ? maxIn : 0n,
   });
 
-  const { quoteData } = useQuoteMint({ formData, isApe });
   useSetRootError({
     formData,
     setError: form.setError,
@@ -200,11 +233,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
   }, [disabledInputs, form, form.setValue, formData.deposit]);
   const deposit = form.getValues("deposit");
-  useEffect(() => {
-    if (!isPending && !isConfirming && !isConfirmed) {
-      setOpenTransactionModal(false);
-    }
-  }, [isPending, setOpenTransactionModal, isConfirming, isConfirmed]);
+  const depositTokenSymbol =
+    formData.depositToken === parseAddress(formData.long)
+      ? selectedVault.result?.collateralSymbol
+      : selectedVault.result?.debtSymbol;
+  const maxTokenIn = usingDebtToken
+    ? formatUnits(maxDebtIn ?? 0n, debtDecimals ?? 18)
+    : formatUnits(maxCollateralIn ?? 0n, collateralDecimals ?? 18);
   return (
     <Card>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -215,7 +250,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <TransactionModal.Close setOpen={setOpenTransactionModal} />
           <TransactionModal.InfoContainer>
             <TransactionInfo
-              decimals={decimals}
+              vaultId={selectedVault.result?.vaultId ?? "0"}
+              decimals={collateralDecimals ?? 18}
               isConfirmed={isConfirmed}
               isConfirming={isConfirming}
               userBalanceFetching={userBalanceFetching}
@@ -223,7 +259,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
               submitType={submitType}
               isApe={isApe}
               useEth={useEth}
-              quoteData={quoteData}
+              quoteData={amountTokens}
               isApproving={isApproving}
               tokenReceived={tokenReceived}
             />
@@ -239,7 +275,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                   title="Fee Amount"
                   value={`${formatNumber(
                     parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
-                  )} ${form.getValues("long").split(",")[1]}`}
+                  )} ${depositTokenSymbol}`}
                 />
 
                 <div className="flex w-full justify-start   text-[14px] text-gray-400">
@@ -281,30 +317,49 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <DepositInputs.Inputs
             inputLoading={isLoading}
             disabled={Boolean(disabledInputs) && !isLoading}
-            decimals={decimals}
+            decimals={collateralDecimals ?? 18}
             useEth={useEth}
             setUseEth={(b: boolean) => {
               setUseEth(b);
             }}
-            maxCollateralIn={
-              maxCollateralIn
-                ? formatUnits(maxCollateralIn, decimals)
-                : undefined
-            }
-            balance={formatUnits(balance ?? 0n, decimals)}
+            maxTokenIn={maxTokenIn}
+            balance={formatUnits(balance ?? 0n, depositDecimals ?? 18)}
             form={form}
-            depositAsset={formData.long}
-          />
+            depositAsset={formData.depositToken}
+          >
+            <Dropdown.Root
+              colorScheme="dark"
+              name="depositToken"
+              title=""
+              disabled={!Boolean(selectedVault.result)}
+              form={form}
+            >
+              <Show when={Boolean(selectedVault.result)}>
+                <Dropdown.Item
+                  tokenAddress={selectedVault.result?.collateralToken ?? ""}
+                  value={selectedVault.result?.collateralToken ?? ""}
+                >
+                  {selectedVault.result?.collateralSymbol}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  tokenAddress={selectedVault.result?.debtToken ?? ""}
+                  value={selectedVault.result?.debtToken ?? ""}
+                >
+                  {selectedVault.result?.debtSymbol}
+                </Dropdown.Item>
+              </Show>
+            </Dropdown.Root>
+          </DepositInputs.Inputs>
         </DepositInputs.Root>
-        <div className="py-3">
+        <div className="py-3 ">
           <Show when={Boolean(disabledInputs && !isLoading)}>
             <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
           </Show>
         </div>
         <Estimations
           isApe={isApe}
-          disabled={!Boolean(quoteData)}
-          ape={formatUnits(quoteData ?? 0n, decimals)}
+          disabled={!Boolean(amountTokens)}
+          ape={formatUnits(amountTokens ?? 0n, collateralDecimals ?? 18)}
         />
         <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0.2 }}>
           <MintFormSubmit.Root>
@@ -315,7 +370,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
               isValid={isValid}
               onClick={() => {
                 setOpenTransactionModal(true);
-                onSubmit();
+                // onSubmit();
               }}
               submitType={submitType}
             />
@@ -326,7 +381,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
               isValid={isValid}
               feeAmount={`${formatNumber(
                 parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
-              )} ${form.getValues("long").split(",")[1]}`}
+              )} ${depositTokenSymbol}`}
               feePercent={fee}
               deposit={form.getValues("deposit")}
             />
