@@ -1,27 +1,20 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { api } from "@/trpc/react";
-import {
-  useAccount,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
+import React, { useCallback, useMemo, useState } from "react";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { motion } from "motion/react";
 import { formatUnits } from "viem";
-import { useFormContext } from "react-hook-form";
-import { ESubmitType, type TMintFormFields, type TVaults } from "@/lib/types";
+import { ESubmitType, type TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
 import VaultParamsInputSelects from "./vaultParamsInputSelects";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
 import { Card } from "@/components/ui/card";
-import { findVault, formatNumber } from "@/lib/utils";
+import { formatNumber } from "@/lib/utils";
 import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
 import TransactionModal from "@/components/shared/transactionModal";
-import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { useResetAfterApprove } from "./hooks/useResetAfterApprove";
 import TransactionInfo from "./transactionInfo";
@@ -33,64 +26,39 @@ import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 import { useFilterVaults } from "./hooks/useFilterVaults";
 import { useMintFormValidation } from "./hooks/useMintFormValidation";
 import Dropdown from "@/components/shared/dropDown";
+import useGetUserBals from "./hooks/useGetUserBals";
+import { useIsWeth } from "./hooks/useIsWeth";
+import useSetDepositTokenDefault from "./hooks/useSetDepositTokenDefault";
+import type { TMintFormFields } from "@/components/providers/mintFormProvider";
+import { useFormContext } from "react-hook-form";
+import { useFindVault } from "./hooks/useFindVault";
+import useIsDebtToken from "./hooks/useIsDebtToken";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
 }
 
 /**
- * Form inputs long and versus are both formatted address,symbol.
- * This function parses the address from them.
- */
-function parseAddress(s: string) {
-  return s.split(",")[0];
-}
-/**
  * Contains form actions and validity.
  */
 export default function MintForm({ vaultsQuery, isApe }: Props) {
   const [useEthRaw, setUseEth] = useState(false);
-  const { address } = useAccount();
+  const { userEthBalance, debtDecimals, collateralDecimals, depositDecimals } =
+    useGetUserBals();
+  const isWeth = useIsWeth();
+
+  // Ensure use eth toggle is not used on non-weth tokens
   const form = useFormContext<TMintFormFields>();
-  const formData = form.watch();
-  const { data: userEthBalance } = api.user.getEthBalance.useQuery(
-    { userAddress: address },
-    { enabled: Boolean(address) && Boolean(formData.long) },
-  );
-  const { data: collateralDecimals } = api.erc20.getErc20Decimals.useQuery(
-    {
-      tokenAddress: parseAddress(formData.long) ?? "0x",
-    },
-    {
-      enabled: Boolean(formData.long) && Boolean(formData.versus),
-    },
-  );
-
-  const { data: debtDecimals } = api.erc20.getErc20Decimals.useQuery(
-    {
-      tokenAddress: parseAddress(formData.versus) ?? "0x",
-    },
-    {
-      enabled: Boolean(formData.long) && Boolean(formData.versus),
-    },
-  );
-
   const useEth = useMemo(() => {
-    // Ensure use eth toggle is not used on non-weth tokens
-    const isWeth =
-      formData.depositToken?.toLowerCase() === WETH_ADDRESS.toLowerCase();
     return isWeth ? useEthRaw : false;
-  }, [formData.depositToken, useEthRaw]);
-
-  const depositDecimals =
-    formData.depositToken === parseAddress(formData.long)
-      ? collateralDecimals
-      : debtDecimals;
+  }, [isWeth, useEthRaw]);
 
   const { amountTokens, minCollateralOut } = useQuoteMint({
     isApe,
     decimals: depositDecimals ?? 0,
   });
+
+  const selectedVault = useFindVault(vaultsQuery);
   const {
     requests,
     userBalanceFetching,
@@ -99,13 +67,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     userBalance,
   } = useTransactions({
     useEth,
+    vaultId: selectedVault.result?.vaultId,
     minCollateralOut,
     isApe,
     vaultsQuery,
     decimals: depositDecimals ?? 18,
   });
   const { versus, leverageTiers, long } = useFilterVaults({
-    formData,
     vaultsQuery,
   });
 
@@ -115,13 +83,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     isSuccess: isConfirmed,
     data: transactionData,
   } = useWaitForTransactionReceipt({ hash });
-  const selectedVault = useMemo(() => {
-    return findVault(vaultsQuery, formData);
-  }, [formData, vaultsQuery]);
-  useEffect(() => {
-    form.setValue("depositToken", selectedVault.result?.collateralToken ?? "");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedVault.result?.collateralToken, form.setValue]);
+  useSetDepositTokenDefault({
+    collToken: selectedVault.result?.collateralToken,
+  });
   const { tokenReceived } = useGetReceivedTokens({
     apeAddress: selectedVault.result?.apeAddress ?? "0x",
     logs: transactionData?.logs,
@@ -140,13 +104,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     useEth,
     txBlock: parseInt(transactionData?.blockNumber.toString() ?? "0"),
   });
-  const usingDebtToken = useMemo(() => {
-    return formData.depositToken === parseAddress(formData.versus);
-  }, [formData.depositToken, formData.versus]);
+  const usingDebtToken = useIsDebtToken();
   const { maxCollateralIn, maxDebtIn, badHealth, isLoading } =
     useCalculateMaxApe({
       usingDebtToken,
-      leverageTier: formData.leverageTier,
       collateralDecimals: collateralDecimals ?? 18,
       vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
     });
@@ -164,7 +125,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   });
 
   useSetRootError({
-    formData,
     setError: form.setError,
     errorMessage,
     rootErrorMessage: form.formState.errors.root?.message,
@@ -209,29 +169,24 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
   };
   const disabledInputs = useMemo(() => {
-    if (!isApe) return false;
-    if (!selectedVault.result?.vaultId) {
+    if (!selectedVault.result?.vaultId || !isApe) {
+      form.setValue("deposit", "");
       return false;
     }
     if (badHealth) {
       return true;
     }
-  }, [badHealth, selectedVault.result?.vaultId, isApe]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedVault.result?.vaultId, isApe, badHealth, form.setValue]);
   const isApproving = useResetAfterApprove({
     isConfirmed,
     reset,
     submitType,
   });
-  useEffect(() => {
-    if (formData.deposit !== "" && disabledInputs) {
-      form.setValue("deposit", "");
-    }
-  }, [disabledInputs, form, form.setValue, formData.deposit]);
   const deposit = form.getValues("deposit");
-  const depositTokenSymbol =
-    formData.depositToken === parseAddress(formData.long)
-      ? selectedVault.result?.collateralSymbol
-      : selectedVault.result?.debtSymbol;
+  const depositTokenSymbol = !usingDebtToken
+    ? selectedVault.result?.collateralSymbol
+    : selectedVault.result?.debtSymbol;
   const maxTokenIn = usingDebtToken
     ? formatUnits(maxDebtIn ?? 0n, debtDecimals ?? 18)
     : formatUnits(maxCollateralIn ?? 0n, collateralDecimals ?? 18);
@@ -318,7 +273,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             }}
             maxTokenIn={maxTokenIn}
             balance={formatUnits(balance ?? 0n, depositDecimals ?? 18)}
-            depositAsset={formData.depositToken}
           >
             <Dropdown.Root
               colorScheme="dark"
