@@ -88,11 +88,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       : debtDecimals;
 
   const { amountTokens, minCollateralOut } = useQuoteMint({
-    formData,
     isApe,
     decimals: depositDecimals ?? 0,
   });
-  console.log({ minCollateralOut, amountTokens }, "MIN COLLATERAL OUT");
   const {
     requests,
     userBalanceFetching,
@@ -152,14 +150,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
       collateralDecimals: collateralDecimals ?? 18,
       vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
     });
-  console.log(maxDebtIn, "MAX DEBT IN");
   const maxIn = usingDebtToken ? maxDebtIn : maxCollateralIn;
   const { isValid, errorMessage, submitType } = useMintFormValidation({
     ethBalance: userEthBalance,
     decimals: depositDecimals ?? 18,
     useEth,
-    deposit: formData.deposit ?? "0",
-    depositToken: formData.depositToken,
     requests,
     tokenBalance: userBalance?.tokenBalance?.result,
     tokenAllowance: userBalance?.tokenAllowance?.result,
@@ -323,7 +318,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             }}
             maxTokenIn={maxTokenIn}
             balance={formatUnits(balance ?? 0n, depositDecimals ?? 18)}
-            form={form}
             depositAsset={formData.depositToken}
           >
             <Dropdown.Root
