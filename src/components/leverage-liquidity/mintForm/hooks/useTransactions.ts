@@ -4,11 +4,9 @@ import { useMintApeOrTea } from "@/components/shared/hooks/useMintApeOrTea";
 import { VaultContract } from "@/contracts/vault";
 import type { TVaults } from "@/lib/types";
 import { formatDataInput } from "@/lib/utils";
-import { api } from "@/trpc/react";
 import { useFormContext } from "react-hook-form";
 import type { SimulateContractReturnType } from "viem";
 import { parseUnits } from "viem";
-import { useAccount } from "wagmi";
 import { z } from "zod";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
@@ -18,6 +16,7 @@ export function useTransactions({
   decimals,
   useEth,
   minCollateralOut,
+  tokenAllowance,
 }: {
   isApe: boolean;
   vaultsQuery: TVaults;
@@ -25,24 +24,10 @@ export function useTransactions({
   useEth: boolean;
   minCollateralOut: bigint | undefined;
   vaultId: string | undefined;
+  tokenAllowance: bigint | undefined;
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
-  const { address } = useAccount();
-  const { data: userBalance, isFetching } =
-    api.user.getBalanceAndAllowance.useQuery(
-      {
-        userAddress: address,
-        tokenAddress: formData.depositToken,
-        spender: VaultContract.address,
-      },
-      {
-        enabled:
-          Boolean(address) &&
-          Boolean(formData.long) &&
-          Boolean(formData.depositToken),
-      },
-    );
   const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
   const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
   const { Mint, isFetching: mintFetching } = useMintApeOrTea({
@@ -56,7 +41,7 @@ export function useTransactions({
     collateralToken: formatDataInput(formData.long), //value formatted : address,symbol
     leverageTier: leverageTier,
     amount: safeParseUnits(formData.deposit ?? "0", decimals),
-    tokenAllowance: userBalance?.tokenAllowance?.result,
+    tokenAllowance,
   });
 
   const { approveSimulate } = useApproveErc20({
@@ -71,8 +56,6 @@ export function useTransactions({
     },
     isApproveFetching: approveSimulate.isFetching,
     isMintFetching: mintFetching,
-    userBalance,
-    userBalanceFetching: isFetching,
   };
 }
 

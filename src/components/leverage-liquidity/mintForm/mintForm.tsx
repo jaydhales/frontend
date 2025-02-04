@@ -26,25 +26,31 @@ import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 import { useFilterVaults } from "./hooks/useFilterVaults";
 import { useMintFormValidation } from "./hooks/useMintFormValidation";
 import Dropdown from "@/components/shared/dropDown";
-import useGetUserBals from "./hooks/useGetUserBals";
 import { useIsWeth } from "./hooks/useIsWeth";
 import useSetDepositTokenDefault from "./hooks/useSetDepositTokenDefault";
 import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 import { useFormContext } from "react-hook-form";
 import { useFindVault } from "./hooks/useFindVault";
 import useIsDebtToken from "./hooks/useIsDebtToken";
+import useGetFormTokensInfo from "./hooks/useGetUserBals";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
 }
 
 /**
- * Contains form actions and validity.
+ * Contains form actions and validition.
  */
 export default function MintForm({ vaultsQuery, isApe }: Props) {
   const [useEthRaw, setUseEth] = useState(false);
-  const { userEthBalance, debtDecimals, collateralDecimals, depositDecimals } =
-    useGetUserBals();
+  const {
+    userEthBalance,
+    userBalanceFetching,
+    userBalance,
+    debtDecimals,
+    collateralDecimals,
+    depositDecimals,
+  } = useGetFormTokensInfo();
   const isWeth = useIsWeth();
 
   // Ensure use eth toggle is not used on non-weth tokens
@@ -59,14 +65,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   });
 
   const selectedVault = useFindVault(vaultsQuery);
-  const {
-    requests,
-    userBalanceFetching,
-    isApproveFetching,
-    isMintFetching,
-    userBalance,
-  } = useTransactions({
+  const { requests, isApproveFetching, isMintFetching } = useTransactions({
     useEth,
+    tokenAllowance: userBalance?.tokenAllowance?.result,
     vaultId: selectedVault.result?.vaultId,
     minCollateralOut,
     isApe,
