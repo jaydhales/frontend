@@ -103,5 +103,6 @@ export interface TMintFormFields {
   leverageTier: string;
   depositToken: string;
   deposit?: string;
+  slippage?: string;
 }
 export type TMintFormFieldKeys = keyof TMintFormFields;

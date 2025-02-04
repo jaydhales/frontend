@@ -11,6 +11,7 @@ const MintSchema = z.object({
   versus: z.string(),
   leverageTier: z.string(),
   depositToken: z.string(),
+  slippage: z.string().optional(),
   deposit: z.string().optional(),
 });
 
@@ -24,6 +25,7 @@ export default function MintFormProvider({
     mode: "onChange",
     defaultValues: {
       deposit: "",
+      slippage: "",
       leverageTier: "",
       long: "",
       versus: "",
