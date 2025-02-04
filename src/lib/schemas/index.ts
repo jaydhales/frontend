@@ -3,7 +3,7 @@ const linkSchema = z.object({
   name: z.string(),
   url: z.string().url(),
 });
-
+export const ZAddress = z.string().startsWith("0x").length(42);
 export const CreateVaultInputValues = z.object({
   longToken: z.string().startsWith("0x").length(42),
   versusToken: z.string().startsWith("0x").length(42),
