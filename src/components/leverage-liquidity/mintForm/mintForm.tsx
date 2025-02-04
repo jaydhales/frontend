@@ -178,6 +178,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedVault.result?.vaultId, isApe, badHealth, form.setValue]);
+
   const isApproving = useResetAfterApprove({
     isConfirmed,
     reset,
