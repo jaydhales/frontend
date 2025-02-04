@@ -13,9 +13,10 @@ import {
   FormControl,
   FormMessage,
 } from "../ui/form";
-import type { TAddressString, TMintForm } from "@/lib/types";
+import type { TAddressString } from "@/lib/types";
 import ImageWithFallback from "./ImageWithFallback";
 import { getLogoAsset } from "@/lib/assets";
+import type { TMintForm } from "../providers/mintFormProvider";
 //retrive FormField props
 function Item({
   value,

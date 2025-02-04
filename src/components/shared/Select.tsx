@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StaticImageData } from "next/image";
+import type { StaticImageData } from "next/image";
 import { LoaderCircle } from "lucide-react";
 import {
   FormControl,
@@ -18,9 +18,9 @@ import {
 import { Check, ChevronDown, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Command, CommandEmpty, CommandItem, CommandList } from "../ui/command";
-import type { TMintForm } from "@/lib/types";
 import ImageWithFallback from "./ImageWithFallback";
 import Show from "./show";
+import type { TMintForm } from "../providers/mintFormProvider";
 // TODO
 // rm default placeholders
 type TItem = {
