@@ -1,4 +1,3 @@
-import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 import Select from "@/components/shared/Select";
 import { useDebounce } from "@/components/shared/hooks/useDebounce";
 import { getLogoAsset } from "@/lib/assets";
@@ -6,7 +5,6 @@ import useVaultFilterStore from "@/lib/store";
 import { api } from "@/trpc/react";
 import type { StaticImageData } from "next/image";
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
 
 type TItem = {
   value: string;
@@ -19,7 +17,6 @@ interface Props {
   title: string;
 }
 export default function SelectWithSearch({ name, title, items }: Props) {
-  const form = useFormContext<TMintFormFields>();
   const type = name === "long" ? "collateral" : "debt";
   const [input, setInput] = useState("");
   const { debouncedValue, debouncing } = useDebounce(input, 300);
