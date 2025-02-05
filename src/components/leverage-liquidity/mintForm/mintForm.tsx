@@ -93,6 +93,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     logs: transactionData?.logs,
     isApe,
   });
+  console.log("====================");
+  console.log({ amountTokens });
 
   // Invalidate if approve or mint tx is successful.
   const [currentTxType, setCurrentTxType] = useState<
