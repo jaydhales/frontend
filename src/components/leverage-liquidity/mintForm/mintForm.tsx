@@ -269,7 +269,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <DepositInputs.Root>
           <DepositInputs.Inputs
             inputLoading={isLoading}
-            disabled={Boolean(disabledInputs) && !isLoading}
+            disabled={false}
             decimals={collateralDecimals ?? 18}
             useEth={useEth}
             setUseEth={(b: boolean) => {
