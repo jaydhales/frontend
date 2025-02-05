@@ -71,7 +71,6 @@ export default function SelectWithSearch({ name, title, items }: Props) {
       }}
       items={items}
       name={name}
-      form={form}
       value={input}
     />
   );
