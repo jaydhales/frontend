@@ -84,7 +84,6 @@ export function formatNumber(number: number | string, decimals = 3): string {
     if (!parts[0]) {
       return "0";
     }
-    console.log({ length: parts[0].length });
     // show only three most sign digits
     const sig = 3 - parts[0].length ?? 0;
     return Number.parseFloat(
