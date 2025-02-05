@@ -62,7 +62,6 @@ function Root({
   className?: string;
   disabled?: boolean;
 }) {
-  console.log(disabled, "DISABLED");
   const { control } = useFormContext<TMintFormFields>();
   return (
     <div className={"flex w-full gap-x-2  " + className}>
