@@ -29,7 +29,7 @@ export default function MintFormProvider({
     mode: "onChange",
     defaultValues: {
       deposit: "",
-      slippage: "",
+      slippage: "0.5",
       leverageTier: "",
       long: "",
       versus: "",
