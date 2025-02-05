@@ -7,9 +7,8 @@ export default function useSetDepositTokenDefault({
 }: {
   collToken: string | undefined;
 }) {
-  const form = useFormContext<TMintFormFields>();
+  const { setValue } = useFormContext<TMintFormFields>();
   useEffect(() => {
-    form.setValue("depositToken", collToken ?? "");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collToken, form.setValue]);
+    setValue("depositToken", collToken ?? "");
+  }, [collToken, setValue]);
 }
