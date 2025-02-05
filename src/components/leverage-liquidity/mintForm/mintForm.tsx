@@ -9,7 +9,7 @@ import VaultParamsInputSelects from "./vaultParamsInputSelects";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
 import { Card } from "@/components/ui/card";
-import { formatNumber } from "@/lib/utils";
+import { formatNumber, parseAddress } from "@/lib/utils";
 import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
@@ -54,7 +54,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const isWeth = useIsWeth();
 
   // Ensure use eth toggle is not used on non-weth tokens
-  const form = useFormContext<TMintFormFields>();
+  const { getValues, setError, formState, setValue, handleSubmit } =
+    useFormContext<TMintFormFields>();
   const useEth = useMemo(() => {
     return isWeth ? useEthRaw : false;
   }, [isWeth, useEthRaw]);
@@ -126,9 +127,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   });
 
   useSetRootError({
-    setError: form.setError,
+    setError: setError,
     errorMessage,
-    rootErrorMessage: form.formState.errors.root?.message,
+    rootErrorMessage: formState.errors.root?.message,
   });
 
   const onSubmit = useCallback(() => {
@@ -160,7 +161,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const { openTransactionModal, setOpenTransactionModal } =
     useResetTransactionModal({ reset, isConfirmed });
 
-  const levTier = form.getValues("leverageTier");
+  const levTier = getValues("leverageTier");
   const fee = useFormFee({ levTier, isApe });
   const modalSubmit = () => {
     if (!isConfirmed) {
@@ -171,21 +172,20 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   };
   const disabledInputs = useMemo(() => {
     if (!selectedVault.result?.vaultId || !isApe) {
-      form.setValue("deposit", "");
+      setValue("deposit", "");
       return false;
     }
     if (badHealth) {
       return true;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedVault.result?.vaultId, isApe, badHealth, form.setValue]);
+  }, [selectedVault.result?.vaultId, isApe, badHealth, setValue]);
 
   const isApproving = useResetAfterApprove({
     isConfirmed,
     reset,
     submitType,
   });
-  const deposit = form.getValues("deposit");
+  const deposit = getValues("deposit");
   const depositTokenSymbol = !usingDebtToken
     ? selectedVault.result?.collateralSymbol
     : selectedVault.result?.debtSymbol;
@@ -194,7 +194,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     : formatUnits(maxCollateralIn ?? 0n, collateralDecimals ?? 18);
   return (
     <Card>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <TransactionModal.Root
           setOpen={setOpenTransactionModal}
           open={openTransactionModal}
@@ -260,7 +260,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
 
         {/* Versus, Long, and Leverage Dropdowns */}
         <VaultParamsInputSelects
-          form={form}
           versus={versus}
           leverageTiers={leverageTiers}
           long={long}
@@ -282,7 +281,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
               name="depositToken"
               title=""
               disabled={!Boolean(selectedVault.result)}
-              form={form}
             >
               <Show when={Boolean(selectedVault.result)}>
                 <Dropdown.Item
@@ -326,17 +324,17 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             />
             <MintFormSubmit.ConnectButton />
             <MintFormSubmit.FeeInfo
-              feeValue={form.getValues("long").split(",")[1]}
+              feeValue={parseAddress(getValues("long"))}
               isApe={isApe}
               isValid={isValid}
               feeAmount={`${formatNumber(
                 parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
               )} ${depositTokenSymbol}`}
               feePercent={fee}
-              deposit={form.getValues("deposit")}
+              deposit={getValues("deposit")}
             />
             <MintFormSubmit.Errors>
-              {form.formState.errors.root?.message}
+              {formState.errors.root?.message}
             </MintFormSubmit.Errors>
           </MintFormSubmit.Root>
         </motion.div>
