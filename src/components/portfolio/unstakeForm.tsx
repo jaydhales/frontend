@@ -179,7 +179,9 @@ const UnstakeForm = ({
             ></StakeInput>
             <ClaimFeesCheckbox
               value={unstakeAndClaimFees}
-              dividends={Boolean(dividends) ? formatUnits(0n ?? 0n, 18) : ""}
+              dividends={
+                Boolean(dividends) ? formatUnits(dividends ?? 0n, 18) : ""
+              }
               onChange={setUnstakeAndClaimFees}
             ></ClaimFeesCheckbox>
 
