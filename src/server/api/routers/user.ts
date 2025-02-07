@@ -30,7 +30,7 @@ export const userRouter = createTRPCRouter({
       });
       return rewards;
     }),
-  getBalance: publicProcedure
+  getBalanceAndAllowance: publicProcedure
     .input(
       z.object({
         userAddress: z.string().startsWith("0x").optional(),
@@ -39,7 +39,6 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-      console.log(input, "INPUT");
       if (!input.tokenAddress || !input.userAddress || !input.spender) {
         return {};
       }

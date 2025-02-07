@@ -5,16 +5,13 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import type { TAddressString, TMintForm } from "@/lib/types";
+import type { TMintForm } from "@/lib/types";
 import { BalancePercent } from "@/components/shared/balancePercent";
-import Image from "next/image";
 import { formatNumber, inputPatternMatch } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { WETH_ADDRESS } from "@/data/constants";
-import ImageWithFallback from "@/components/shared/ImageWithFallback";
-import { getLogoAsset } from "@/lib/assets";
 import Show from "@/components/shared/show";
-import { LoaderCircle } from "lucide-react";
+import type { ReactNode } from "react";
 
 function Root({ children }: { children: React.ReactNode }) {
   return (
@@ -34,8 +31,9 @@ interface Props {
   setUseEth: (b: boolean) => void;
   decimals: number;
   disabled: boolean;
-  maxCollateralIn?: string | undefined;
+  maxTokenIn?: string | undefined;
   inputLoading: boolean;
+  children: ReactNode;
 }
 function Inputs({
   form,
@@ -45,8 +43,9 @@ function Inputs({
   useEth,
   setUseEth,
   disabled,
-  maxCollateralIn,
+  maxTokenIn,
   inputLoading,
+  children,
 }: Props) {
   return (
     <div
@@ -110,12 +109,13 @@ function Inputs({
       </div>
 
       <div className="flex flex-col items-end">
-        <h2 className="pb-2 text-sm">Deposit Asset:</h2>
+        <h2 className="pb-2 text-sm">Deposit Asset</h2>
         <div
-          className={`flex w-[104px] items-center justify-center gap-x-2 rounded-md bg-secondary py-1 ${!depositAsset ? "opacity-70" : ""}`}
+          className={`flex h-[40px] w-[130px] items-center justify-center gap-x-2 rounded-md bg-secondary ${!depositAsset ? "opacity-70" : ""}`}
         >
-          {!depositAsset && <div className="h-[25px] w-[25px]" />}
-          <AssetInfo depositAsset={depositAsset} useEth={useEth} />
+          {/* {!depositAsset && <div className="h-[25px] w-[25px]" />} */}
+          {/* <AssetInfo depositAsset={depositAsset} useEth={useEth} /> */}
+          {children}
         </div>
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
           Balance: {formatNumber(balance ?? "0")}
@@ -126,49 +126,10 @@ function Inputs({
           setValue={(s: string) => {
             form.setValue("deposit", s);
           }}
-          overrideMaxValue={maxCollateralIn}
+          overrideMaxValue={maxTokenIn}
         />
       </div>
     </div>
-  );
-}
-
-function AssetInfo({
-  useEth,
-  depositAsset,
-}: {
-  useEth: boolean;
-  depositAsset: string | undefined;
-}) {
-  if (useEth) {
-    return (
-      <>
-        {depositAsset && (
-          <Image
-            src={
-              "https://raw.githubusercontent.com/fusionxx23/assets/master/blockchains/ethereum/info/logo.png"
-            }
-            alt={"ETH"}
-            width={25}
-            height={25}
-          />
-        )}
-        <span>{"ETH"}</span>
-      </>
-    );
-  }
-  return (
-    <>
-      {depositAsset && (
-        <ImageWithFallback
-          src={getLogoAsset(depositAsset?.split(",")[0] as TAddressString)}
-          alt={depositAsset.split(",")[1] ?? ""}
-          width={25}
-          height={25}
-        />
-      )}
-      <span>{depositAsset?.split(",")[1]}</span>
-    </>
   );
 }
 
