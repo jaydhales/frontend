@@ -259,7 +259,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
-
         {/* Versus, Long, and Leverage Dropdowns */}
         <VaultParamsInputSelects
           versus={versus}
@@ -301,10 +300,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             </Dropdown.Root>
           </DepositInputs.Inputs>
         </DepositInputs.Root>
-        <div className="py-3 ">
-          <Show when={Boolean(disabledInputs && !isLoading)}>
-            <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
-          </Show>
+        {/* opacity-0 */}
+        <div
+          className={`py-3 ${Boolean(disabledInputs && !isLoading) === true ? "" : "opacity-0"}`}
+        >
+          {/* <Show when={Boolean(disabledInputs && !isLoading)}> */}
+          <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
+          {/* </Show> */}
         </div>
         <Estimations
           isApe={isApe}
