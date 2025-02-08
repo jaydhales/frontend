@@ -118,6 +118,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const maxIn = usingDebtToken ? maxDebtIn : maxCollateralIn;
   const { isValid, errorMessage, submitType } = useMintFormValidation({
     ethBalance: userEthBalance,
+    isApe,
     decimals: depositDecimals ?? 18,
     useEth,
     requests,
