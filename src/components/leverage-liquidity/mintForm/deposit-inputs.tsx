@@ -6,7 +6,6 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { parseAddress } from "@/lib/utils";
 import { BalancePercent } from "@/components/shared/balancePercent";
 import { formatNumber, inputPatternMatch } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
@@ -121,6 +120,7 @@ function Inputs({
           Balance: {formatNumber(balance ?? "0")}
         </h2>
         <BalancePercent
+          settings={<MintFormSettings />}
           disabled={disabled}
           balance={balance}
           setValue={(s: string) => {

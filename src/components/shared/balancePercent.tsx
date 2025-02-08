@@ -1,19 +1,20 @@
 import { roundDown } from "@/lib/utils";
-import MintFormSettings from "../leverage-liquidity/mintForm/MintFormSettings";
 export function BalancePercent({
   setValue,
   balance,
   overrideMaxValue,
   disabled,
+  settings,
 }: {
   overrideMaxValue?: string;
   setValue: (s: string) => void;
   balance: string | undefined;
   disabled?: boolean;
+  settings?: React.ReactNode;
 }) {
   return (
     <h2 className="flex justify-end gap-x-2 pt-1 text-right text-sm text-[#26DEC8]">
-      <MintFormSettings />
+      {settings}
       <button
         onClick={() =>
           setValue(
