@@ -105,16 +105,6 @@ function Inputs({
               />
             </div>
           )}
-          <Show
-            when={
-              !inputLoading &&
-              parseAddress(formData.versus) === formData.depositToken
-            }
-          >
-            <div className="flex items-center gap-x-2">
-              <MintFormSettings />
-            </div>
-          </Show>
         </div>
       </div>
 
