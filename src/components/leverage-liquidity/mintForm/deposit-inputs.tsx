@@ -53,7 +53,7 @@ function Inputs({
       data-state={disabled ? "disabled" : "active"}
       className="flex justify-between rounded-md bg-primary p-3 data-[state=disabled]:opacity-60"
     >
-      <div className="pt-[16px]">
+      <div className="pt-[26px]">
         <Show
           when={!inputLoading}
           fallback={
