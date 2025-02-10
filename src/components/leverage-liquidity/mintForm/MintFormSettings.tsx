@@ -57,7 +57,7 @@ export default function MintFormSettings() {
                           placeholder="0"
                           {...field}
                           onChange={(e) => {
-                            if (inputPatternMatch(e.target.value, 0)) {
+                            if (inputPatternMatch(e.target.value, 1)) {
                               return field.onChange(e.target.value);
                             }
                           }}
