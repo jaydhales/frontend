@@ -57,6 +57,9 @@ export default function MintFormSettings() {
                           placeholder="0"
                           {...field}
                           onChange={(e) => {
+                            if (e.target.value === '') {
+                              return field.onChange(e.target.value);
+                            }
                             const value = parseFloat(e.target.value);
                             if (value < 100 && inputPatternMatch(e.target.value, 1)) {
                               return field.onChange(e.target.value);
