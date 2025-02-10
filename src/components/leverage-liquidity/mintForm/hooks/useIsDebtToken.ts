@@ -6,7 +6,10 @@ import { useFormContext } from "react-hook-form";
 export default function useIsDebtToken() {
   const formData = useFormContext<TMintFormFields>().watch();
   const usingDebtToken = useMemo(() => {
-    return formData.depositToken === parseAddress(formData.versus);
+    return (
+      formData.depositToken === parseAddress(formData.versus) &&
+      formData.depositToken !== ""
+    );
   }, [formData.depositToken, formData.versus]);
   return usingDebtToken;
 }

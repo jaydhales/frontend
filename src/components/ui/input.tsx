@@ -14,7 +14,7 @@ const InputVariants = classVarianceAuthority.cva(
           "bg-transparent placeholder:text-muted-foreground  w-full p-1 rounded-none ",
         primary: "bg-primary py-1",
       },
-      textSize: { sm: "text-[14px]", md: "text-[18px]", xl: "text-[22px]" },
+      textSize: { sm: "text-[14px]", md: "text-[18px]", xl: "text-[26px]" },
       height: { sm: "h-5", md: "h-8", lg: "h-10" },
     },
     defaultVariants: { background: "transparent", height: "lg" },
