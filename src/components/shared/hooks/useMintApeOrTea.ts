@@ -44,7 +44,7 @@ export function useMintApeOrTea({
 
   if (minCollateralOut !== undefined) {
     if (minCollateralOut > 0n) {
-      const slippage = parseUnits( formData.slippage?.trim() || "0.5", 0);
+      const slippage = parseUnits( formData.slippage?.trim() || "0.5", 1);
       const minus = ((minCollateralOut ?? 0n) * BigInt(slippage)) / 100n;
       minCollateralOutWithSlippage = minCollateralOut - minus;
     }
