@@ -19,6 +19,7 @@ interface Props {
   mintFetching: boolean;
   approveFetching?: boolean;
   useEth?: boolean;
+  isApe: boolean;
   decimals: number;
   maxCollateralIn?: bigint;
 }
@@ -41,12 +42,13 @@ export const useMintFormValidation = ({
   maxCollateralIn,
   useEth,
   decimals,
+  isApe,
 }: Props) => {
   const chainId = useGetChainId();
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
   const { deposit, slippage, depositToken, versus } = formData;
-
+  console.log(maxCollateralIn, "MAX COLLATERAL IN");
   const { isValid, errorMessage, submitType } = useMemo(() => {
     if (usingDebtToken(versus, depositToken)) {
       const num = Number.parseFloat(slippage ?? "0");
@@ -73,20 +75,20 @@ export const useMintFormValidation = ({
         submitType: ESubmitType.mint,
       };
     }
-    if (maxCollateralIn) {
-      console.log(
-        parseUnits(deposit ?? "0", decimals),
-        maxCollateralIn,
-        decimals,
-        "MAX COLLATERAL IN",
-      );
+    if (maxCollateralIn && isApe) {
       if (parseUnits(deposit ?? "0", decimals) > maxCollateralIn) {
         return {
           isValid: false,
-          errorMessage: "Insufficient liquidity in the vault.",
+          errorMessage: "",
           submitType: ESubmitType.mint,
         };
       }
+    } else if (!maxCollateralIn && isApe) {
+      return {
+        isValid: false,
+        errorMessage: "",
+        submitType: ESubmitType.mint,
+      };
     }
     if (useEth) {
       if ((ethBalance ?? 0n) < parseUnits(deposit ?? "0", decimals)) {
