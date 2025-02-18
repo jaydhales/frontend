@@ -1,19 +1,19 @@
 import React from "react";
-import { AlertDialog, AlertDialogContent } from "../ui/alert-dialog";
 
 import TransactionModal from "../shared/transactionModal";
+import { Dialog, DialogContent } from "../ui/dialog";
 interface Props {
   open: boolean;
   setOpen: (b: boolean) => void;
 }
 export function ClaimModal({ open, setOpen }: Props) {
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent
         title="Mint Modal"
-        align="center"
-        animate="none"
-        closeColor={"black"}
+        // align="center"
+        // animate="none"
+        // closeColor={"black"}
         className="bg-transparent "
       >
         <div
@@ -21,7 +21,7 @@ export function ClaimModal({ open, setOpen }: Props) {
         >
           <TransactionModal.Close setOpen={setOpen} />
         </div>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   );
 }

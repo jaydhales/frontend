@@ -118,6 +118,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const maxIn = usingDebtToken ? maxDebtIn : maxCollateralIn;
   const { isValid, errorMessage, submitType } = useMintFormValidation({
     ethBalance: userEthBalance,
+    isApe,
     decimals: depositDecimals ?? 18,
     useEth,
     requests,
@@ -259,7 +260,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
-
         {/* Versus, Long, and Leverage Dropdowns */}
         <VaultParamsInputSelects
           versus={versus}
@@ -269,7 +269,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <DepositInputs.Root>
           <DepositInputs.Inputs
             inputLoading={isLoading}
-            disabled={Boolean(disabledInputs) && !isLoading}
+            disabled={false}
             decimals={collateralDecimals ?? 18}
             useEth={useEth}
             setUseEth={(b: boolean) => {
@@ -301,10 +301,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             </Dropdown.Root>
           </DepositInputs.Inputs>
         </DepositInputs.Root>
-        <div className="py-3 ">
-          <Show when={Boolean(disabledInputs && !isLoading)}>
-            <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
-          </Show>
+        {/* opacity-0 */}
+        <div
+          className={`py-3 ${Boolean(disabledInputs && !isLoading) === true ? "" : "opacity-0"}`}
+        >
+          {/* <Show when={Boolean(disabledInputs && !isLoading)}> */}
+          <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
+          {/* </Show> */}
         </div>
         <Estimations
           isApe={isApe}

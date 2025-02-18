@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogContent } from "../ui/alert-dialog";
+import { Dialog, DialogContent } from "../ui/dialog";
 import TransactionModal from "../shared/transactionModal";
 import UnstakeForm from "./unstakeForm";
 interface Props {
@@ -7,12 +7,12 @@ interface Props {
 }
 export function UnstakeModal({ open, setOpen }: Props) {
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent
         title="Mint Modal"
-        align="center"
-        animate="none"
-        closeColor={"black"}
+        // align="center"
+        // animate="none"
+        // closeColor={"black"}
         className="bg-transparent"
       >
         <div
@@ -22,7 +22,7 @@ export function UnstakeModal({ open, setOpen }: Props) {
           <h1 className="pt-4 text-center font-lora text-2xl">Unstake</h1>
           <UnstakeForm closeUnstakeModal={() => setOpen(false)}></UnstakeForm>
         </div>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   );
 }
