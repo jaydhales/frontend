@@ -31,8 +31,7 @@ export default function PortfolioPage() {
 
                 <div className="pt-2 text-sm text-gray-500">
                   <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Adipisci, sint. Iste vel animi quaerat soluta ex, qui
+                    Stake your SIR to earn ETH dividends.
                   </p>
                 </div>
               </div>
