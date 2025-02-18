@@ -1,8 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { formatUnits } from "viem";
-import type { TAddressString, TMintFormFields, TVaults } from "../types";
-import { z } from "zod";
+import type { TAddressString } from "../types";
 import numeral from "numeral";
 import { BASE_FEE, L_FEE } from "@/data/constants";
 import { getLeverageRatio } from "./calculations";
@@ -42,25 +41,6 @@ export function mapLeverage(key: string): string | undefined {
 
 export function formatDataInput(s: string) {
   return s.split(",")[0] ?? "";
-}
-export function findVault(vaultQuery: TVaults, formData: TMintFormFields) {
-  const debtToken = formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
-    collateralToken = formData.long.split(",")[0] ?? ""; //value formatted : address,symbol
-  const safeLeverageTier = z.coerce.number().safeParse(formData.leverageTier);
-  const leverageTier = safeLeverageTier.success ? safeLeverageTier.data : -1;
-
-  const result = vaultQuery?.vaults.find((v) => {
-    if (
-      v.collateralToken === collateralToken &&
-      v.debtToken === debtToken &&
-      leverageTier === v.leverageTier
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  return { result };
 }
 
 export function getApeAddress({

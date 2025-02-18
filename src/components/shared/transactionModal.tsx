@@ -1,8 +1,8 @@
-import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import ToolTip from "@/components/ui/tooltip";
-import { Check, X } from "lucide-react";
+import { X } from "lucide-react";
 import type { ReactNode } from "react";
+import { Dialog, DialogContent } from "../ui/dialog";
 interface Props {
   setOpen: (b: boolean) => void;
   open: boolean;
@@ -10,13 +10,12 @@ interface Props {
 }
 function Root({ open, setOpen, children }: Props) {
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent
-        onTop={true}
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent
         title="Mint Modal"
-        align="center"
-        animate="none"
-        closeColor={"black"}
+        // align="center"
+        // animate="none"
+        // closeColor={"black"}
         className="z-[400] bg-transparent"
       >
         <div
@@ -24,8 +23,8 @@ function Root({ open, setOpen, children }: Props) {
         >
           {children}
         </div>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   );
 }
 const StatContainer = ({ children }: { children: ReactNode }) => (

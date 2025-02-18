@@ -1,3 +1,4 @@
+"use client";
 import {
   FormControl,
   FormField,
@@ -5,17 +6,19 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import type { TMintForm } from "@/lib/types";
 import { BalancePercent } from "@/components/shared/balancePercent";
 import { formatNumber, inputPatternMatch } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 import { WETH_ADDRESS } from "@/data/constants";
 import Show from "@/components/shared/show";
 import type { ReactNode } from "react";
+import { useFormContext } from "react-hook-form";
+import type { TMintFormFields } from "@/components/providers/mintFormProvider";
+import MintFormSettings from "./MintFormSettings";
 
 function Root({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <div className="relative">
       <FormLabel htmlFor="deposit">Deposit</FormLabel>
       <div className="pt-1"></div>
       {children}
@@ -24,8 +27,6 @@ function Root({ children }: { children: React.ReactNode }) {
 }
 
 interface Props {
-  form: TMintForm;
-  depositAsset: string | undefined;
   balance?: string;
   useEth: boolean;
   setUseEth: (b: boolean) => void;
@@ -36,9 +37,7 @@ interface Props {
   children: ReactNode;
 }
 function Inputs({
-  form,
   decimals,
-  depositAsset,
   balance,
   useEth,
   setUseEth,
@@ -47,12 +46,14 @@ function Inputs({
   inputLoading,
   children,
 }: Props) {
+  const form = useFormContext<TMintFormFields>();
+  const formData = form.watch();
   return (
     <div
       data-state={disabled ? "disabled" : "active"}
       className="flex justify-between rounded-md bg-primary p-3 data-[state=disabled]:opacity-60"
     >
-      <div>
+      <div className="pt-[26px]">
         <Show
           when={!inputLoading}
           fallback={
@@ -90,9 +91,8 @@ function Inputs({
             )}
           />
         </Show>
-
-        <div className="">
-          {depositAsset?.split(",")[0] === WETH_ADDRESS && (
+        <div className="space-y-2">
+          {formData.depositToken === WETH_ADDRESS && (
             <div className="flex items-center gap-x-2 pt-1">
               <h3 className="text-[12px]">Use ETH</h3>
               <Switch
@@ -105,13 +105,12 @@ function Inputs({
             </div>
           )}
         </div>
-        {/* <h2 className="pt-1 text-sm text-[#B6B6C9]">$22.55</h2> */}
       </div>
 
       <div className="flex flex-col items-end">
         <h2 className="pb-2 text-sm">Deposit Asset</h2>
         <div
-          className={`flex h-[40px] w-[130px] items-center justify-center gap-x-2 rounded-md bg-secondary ${!depositAsset ? "opacity-70" : ""}`}
+          className={`flex h-[40px] w-[130px] items-center justify-center gap-x-2 rounded-md bg-secondary ${!formData.depositToken ? "opacity-70" : ""}`}
         >
           {/* {!depositAsset && <div className="h-[25px] w-[25px]" />} */}
           {/* <AssetInfo depositAsset={depositAsset} useEth={useEth} /> */}
@@ -121,6 +120,7 @@ function Inputs({
           Balance: {formatNumber(balance ?? "0")}
         </h2>
         <BalancePercent
+          settings={<MintFormSettings />}
           disabled={disabled}
           balance={balance}
           setValue={(s: string) => {
