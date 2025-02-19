@@ -29,7 +29,6 @@ export function useGetReceivedTokens({ logs, apeAddress, isApe }: Props) {
             data: log.data,
             topics: log.topics,
           });
-
           if (parsed.eventName === "Transfer") {
             setTokenReceived(parsed.args.amount);
             return;
@@ -40,7 +39,6 @@ export function useGetReceivedTokens({ logs, apeAddress, isApe }: Props) {
           (l) =>
             l.address.toLowerCase() === VaultContract.address.toLowerCase(),
         );
-        console.log(foundLogs, "FOUND LOGS");
         if (!foundLogs) return;
         foundLogs.forEach((log) => {
           const parse = decodeEventLog({
@@ -48,7 +46,6 @@ export function useGetReceivedTokens({ logs, apeAddress, isApe }: Props) {
             data: log.data,
             topics: log.topics,
           });
-          console.log(parse, "PARSED");
           if (parse.eventName === "TransferSingle") {
             if (parse.args.to === address) {
               setTokenReceived(parse.args.amount);
