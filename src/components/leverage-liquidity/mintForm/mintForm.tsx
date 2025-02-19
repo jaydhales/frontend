@@ -192,9 +192,12 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const depositTokenSymbol = !usingDebtToken
     ? selectedVault.result?.collateralSymbol
     : selectedVault.result?.debtSymbol;
-  const maxTokenIn = usingDebtToken
-    ? formatUnits(maxDebtIn ?? 0n, debtDecimals ?? 18)
-    : formatUnits(maxCollateralIn ?? 0n, collateralDecimals ?? 18);
+  let maxTokenIn;
+  if(isApe){
+    maxTokenIn = usingDebtToken
+      ? formatUnits(maxDebtIn ?? 0n, debtDecimals ?? 18)
+      : formatUnits(maxCollateralIn ?? 0n, collateralDecimals ?? 18);
+  }
   return (
     <Card>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -275,7 +278,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             setUseEth={(b: boolean) => {
               setUseEth(b);
             }}
-            maxTokenIn={isApe ? maxTokenIn : undefined}
+            maxTokenIn={maxTokenIn}
             balance={formatUnits(balance ?? 0n, depositDecimals ?? 18)}
           >
             <Dropdown.Root
