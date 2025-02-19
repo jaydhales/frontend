@@ -320,7 +320,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0.2 }}>
           <MintFormSubmit.Root>
             <Show when={isApe} fallback={<div className="py-3" />}>
-              <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
+              <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`SIR eliminates volatility decay and liquidation risks, but as a new primitive, it isn't risk-free — volatility can still result in losses.`}</p>
             </Show>
             <MintFormSubmit.OpenTransactionModalButton
               isValid={isValid}
