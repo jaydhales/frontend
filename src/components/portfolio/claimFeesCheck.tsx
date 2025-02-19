@@ -19,8 +19,9 @@ const ClaimFeesCheckbox = ({ dividends, value, onChange }: Props) => {
           {dividends ? formatNumber(dividends, 6) : "0"} ETH
         </span>
       </div>
-      <div className="flex items-center justify-end gap-x-4 pb-2">
+      <div className="flex items-center justify-end gap-x-2 pb-2">
         <Checkbox
+          className="border border-white bg-secondary-800"
           checked={value}
           disabled={!Boolean(dividends)}
           onCheckedChange={(value) => {
