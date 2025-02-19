@@ -144,7 +144,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     errorMessage,
     rootErrorMessage: formState.errors.root?.message,
   });
-  console.log(requests.approveWriteRequest, "REQUESTS");
   const onSubmit = useCallback(() => {
     if (requests.approveWriteRequest && needsApproval) {
       setCurrentTxType("approve");
@@ -252,15 +251,19 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 </div>
               </TransactionModal.StatContainer>
             </Show>
-
+            {isMintFetching && <h2>Mint is Fetching</h2>}
             <TransactionModal.SubmitButton
               onClick={modalSubmit}
-              disabled={(!isValid && !isConfirmed) || isPending}
+              disabled={
+                (!isValid && !isConfirmed) ||
+                isPending ||
+                (isConfirmed && needsApproval)
+              }
               loading={isPending || isConfirming}
               isConfirmed={isConfirmed}
             >
               <Show
-                when={!needsApproval}
+                when={!needsApproval || isConfirmed}
                 fallback={isConfirmed ? "Confirm Mint" : "Confirm Approve"} // if approval confirmed there will be invalidation lag
               >
                 {"Confirm Mint"}
