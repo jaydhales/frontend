@@ -7,7 +7,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
-import type { SimulateContractReturnType } from "viem";
 import { formatUnits, parseUnits } from "viem";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
@@ -186,8 +185,8 @@ export default function BurnForm({
 
   const submitButtonText = isClaimingRewards ? "Confirm Claim" : "Confirm Burn";
 
-  let fee = useGetFee({ isApe, levTier });
-  fee = fee ?? "";
+  // let fee = useGetFee({ isApe, levTier });
+  // fee = fee ?? "";
 
   return (
     <FormProvider {...form}>
@@ -260,7 +259,7 @@ export default function BurnForm({
         </TransactionModal.StatSubmitContainer>
       </TransactionModal.Root>
       <form>
-        <div className="w-[320px] space-y-2 md:w-full">
+        <div className="w-[320px] space-y-2  p-2 md:w-full">
           <div className="flex justify-between">
             {!isClaimingRewards && (
               <label htmlFor="a" className="">
