@@ -18,7 +18,6 @@ import { useGetTxTokens } from "./hooks/useGetTxTokens";
 import { X } from "lucide-react";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 import { useClaimTeaRewards } from "./hooks/useClaimTeaRewards";
-import useGetFee from "./hooks/useGetFee";
 import { formatNumber } from "@/lib/utils";
 import ClaimAndStakeToggle from "./claimAndStakeToggle";
 import { DisplayCollateral } from "./displayCollateral";
@@ -261,14 +260,14 @@ export default function BurnForm({
       <form>
         <div className="w-[320px] space-y-2  p-2 md:w-full">
           <div className="flex justify-between">
-            {!isClaimingRewards && (
-              <label htmlFor="a" className="">
-                Burn Amount
-              </label>
-            )}
             {isClaimingRewards && (
               <h2 className="w-full pl-[24px] text-center font-lora text-[24px]">
                 Claim
+              </h2>
+            )}
+            {!isClaimingRewards && (
+              <h2 className="w-full pl-[24px] text-center font-lora text-[24px]">
+                Burn
               </h2>
             )}
 
@@ -280,60 +279,67 @@ export default function BurnForm({
               <X />
             </button>
           </div>
+
           {!isClaimingRewards && (
             <TokenInput
               positionDecimals={row.positionDecimals}
               balance={balance}
-              bg="bg-primary"
+              bg="bg-secondary-600"
               form={form}
               vaultId={row.vaultId}
               isApe={isApe}
             />
           )}
-          <div className="pt-2"></div>
-          <div>
+          <div
+            data-state={isClaimingRewards ? "claiming" : ""}
+            className=" my-2 rounded-md px-4 py-2 data-[state=claiming]:bg-secondary-600"
+          >
+            <div className="pt-2"></div>
             <div>
-              <label htmlFor="a" className="">
-                {isClaimingRewards ? "Amount" : "Into"}
-              </label>
-            </div>
+              <div>
+                <label htmlFor="a" className="">
+                  {isClaimingRewards ? "Amount" : "Into"}
+                </label>
+              </div>
 
-            <DisplayCollateral
-              data={{
-                leverageTier: parseFloat(row.leverageTier),
-                collateralToken: isClaimingRewards
-                  ? SirContract.address
-                  : row.collateralToken,
-                debtToken: row.debtToken,
-              }}
-              amount={
-                isClaimingRewards
-                  ? formatUnits(reward, 12)
-                  : formatUnits(quoteBurn ?? 0n, 18)
-              }
-              collateralSymbol={
-                isClaimingRewards ? "SIR" : row.collateralSymbol
-              }
-              bg=""
-            />
-          </div>
-
-          {isClaimingRewards && (
-            <div className="flex items-center justify-end gap-x-2 py-2">
-              <h3 className="text-[14px] text-gray-200">Claim and Stake</h3>
-
-              <ClaimAndStakeToggle
-                onChange={setClaimAndStake}
-                value={claimAndStake}
+              <DisplayCollateral
+                isClaiming={isClaimingRewards}
+                data={{
+                  leverageTier: parseFloat(row.leverageTier),
+                  collateralToken: isClaimingRewards
+                    ? SirContract.address
+                    : row.collateralToken,
+                  debtToken: row.debtToken,
+                }}
+                amount={
+                  isClaimingRewards
+                    ? formatUnits(reward, 12)
+                    : formatUnits(quoteBurn ?? 0n, 18)
+                }
+                collateralSymbol={
+                  isClaimingRewards ? "SIR" : row.collateralSymbol
+                }
+                bg=""
               />
             </div>
-          )}
-          <div className="pt-2"></div>
-          <div className="flex justify-center">
-            {/* <h4 className="w-[400px] text-center text-sm italic text-gray-400"> */}
-            {/*   With leveraging you risk losing up to 100% of your deposit, you */}
-            {/*   can not lose more than your deposit. */}
-            {/* </h4> */}
+
+            {isClaimingRewards && (
+              <div className="flex items-center justify-end gap-x-2 py-2">
+                <h3 className="text-[14px] text-gray-200">Claim and Stake</h3>
+
+                <ClaimAndStakeToggle
+                  onChange={setClaimAndStake}
+                  value={claimAndStake}
+                />
+              </div>
+            )}
+            <div className="pt-2"></div>
+            <div className="flex justify-center">
+              {/* <h4 className="w-[400px] text-center text-sm italic text-gray-400"> */}
+              {/*   With leveraging you risk losing up to 100% of your deposit, you */}
+              {/*   can not lose more than your deposit. */}
+              {/* </h4> */}
+            </div>
           </div>
           <div className="pt-1"></div>
           <Button
