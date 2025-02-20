@@ -61,7 +61,7 @@ export default function MintFormSettings() {
                               return field.onChange(e.target.value);
                             }
                             const value = parseFloat(e.target.value);
-                            if (value < 100 && inputPatternMatch(e.target.value, 1)) {
+                            if (value <= 10 && inputPatternMatch(e.target.value, 1)) {
                               return field.onChange(e.target.value);
                             }
                           }}

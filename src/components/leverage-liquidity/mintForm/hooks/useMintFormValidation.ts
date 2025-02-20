@@ -52,10 +52,10 @@ export const useMintFormValidation = ({
   const { isValid, errorMessage, submitType } = useMemo(() => {
     if (usingDebtToken(versus, depositToken)) {
       const num = Number.parseFloat(slippage ?? "0");
-      if (num < 0 || num > 99) {
+      if (num < 0 || num > 10) {
         return {
           isValid: false,
-          errorMessage: "Slippage must be between 0% and 99%.",
+          errorMessage: "Slippage must be between 0% and 10%.",
           submitType: ESubmitType.mint,
         };
       }
