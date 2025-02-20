@@ -178,6 +178,7 @@ export const vaultRouter = createTRPCRouter({
         leverageTier: z.number(),
         amount: z.string(),
         isApe: z.boolean(),
+        decimals: z.number(),
       }),
     )
     .query(async ({ input }) => {
@@ -191,7 +192,7 @@ export const vaultRouter = createTRPCRouter({
             collateralToken: input.collateralToken as TAddressString,
             leverageTier: input.leverageTier,
           },
-          parseUnits(input.amount, 18),
+          parseUnits(input.amount, input.decimals),
         ],
       });
 

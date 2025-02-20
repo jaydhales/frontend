@@ -63,6 +63,7 @@ export default function BurnForm({
       debtToken: row.debtToken,
       leverageTier: parseInt(row.leverageTier),
       collateralToken: row.collateralToken,
+      decimals: row.positionDecimals,
     },
     {
       enabled: Boolean(formData.deposit),
