@@ -71,12 +71,15 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const needsApproval = useMemo(() => {
     const tokenAllowance = userBalance?.tokenAllowance?.result;
     const decimals = depositDecimals ?? 18;
+    if (useEth) {
+      return false;
+    }
     if (parseUnits(deposit ?? "0", decimals) > (tokenAllowance ?? 0n)) {
       return true;
     } else {
       return false;
     }
-  }, [deposit, depositDecimals, userBalance?.tokenAllowance?.result]);
+  }, [deposit, depositDecimals, useEth, userBalance?.tokenAllowance?.result]);
   const { requests, isApproveFetching, isMintFetching } = useTransactions({
     useEth,
     tokenAllowance: userBalance?.tokenAllowance?.result,
