@@ -49,7 +49,7 @@ export default async function AprCard() {
     method: "GET",
     headers: headers,
   }).then((response) => response.json());
-  const dividendsPaidRequest = await executeGetDividendsPaid();
+  const dividendsPaidRequest = await executeGetDividendsPaid({ timestamp: 1 });
   const [ethPriceResponse, dividendsPaidResponse] = await Promise.allSettled([
     ethPriceRequest,
     dividendsPaidRequest,
@@ -85,7 +85,7 @@ export default async function AprCard() {
         safeDividends.data.dividends?.ethAmount ?? "0",
         18,
       ),
-      sirUsdPrice: SIR_USD_PRICE,
+      sirUsdPrice: SIR_USD_PRICE as string,
       ethUsdPrice: safePrice.data.data[0]?.prices[0]?.value ?? "0",
       amountOfStakedSir: parseUnits(
         safeDividends.data.dividends?.stakedAmount ?? "0",
