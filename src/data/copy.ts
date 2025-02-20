@@ -3,32 +3,41 @@ import { EPage } from "@/lib/types";
 export const Explainers = {
   [EPage.LEVERAGE]: {
     title: "Take on Leverage",
-    description:
-      "SIR provides constant leverage without typical downsides. Compound gains as prices rise, with no maintenance fees, volatility decay, or liquidations. Pay fees only when opening or closing positions (minting or burning APE), enabling long-term leveraged investing.",
+    description: 
+      `APE is a leveraged token that keeps your leverage steady, so gains grow exponentially as prices rise. No daily fees, no losses from market swings, and no forced selling.
+Pay one fee upfront when you mint APE —then hold long-term for amplified growth.`
+      .trim(),
   },
   [EPage.LIQUIDITY]: {
     title: "Provide Liquidity",
-    description:
-      "Liquidity providers (LPers) are essential to our protocol, enabling true constant leverage. To participate, LPers mint TEA, our liquidity token, by providing assets to the vaults. They earn fees from users taking on leverage, as well as from other LPs minting or burning TEA. Eligible vaults also receive SIR rewards.",
+    description: 
+      `Deposit assets into vaults to mint TEA, our liquidity token (requires a one-time fee to prevent system abuse), and earn fees from users taking on leverage. The protocol’s permanent liquidity mining program rewards LPers in eligible vaults with SIR tokens.
+No lock-ups —withdraw anytime.`
+      .trim(),
   },
   [EPage.PORTFOLIO]: {
     title: "All Assets in One Place",
     description:
-      "Manage your SIR protocol positions here. View your APE and TEA tokens, and burn them to close positions or exit liquidity provision. You can also stake or unstake SIR to earn or stop earning ETH dividends, and claim SIR rewards if you're an eligible liquidity provider.",
+      `Track and manage your APE (leveraged) and TEA (liquidity) tokens here. Burn tokens to close positions or exit liquidity provision.
+Liquidity providers in eligible vaults can claim SIR tokens and stake them to earn ETH rewards.`
+      .trim(),
   },
   [EPage.STAKE]: {
     title: "Stake Your SIR",
-    description:
-      "By staking your SIR, you have a pro-rata claim on future protocol fees, paid out in ETH. The amount will depend on activity on SIR and which vaults are most active.",
+    description: `By staking your SIR, you have a pro-rata claim on future protocol fees, paid out in ETH. Your yield will fluctuate depending on the volume and the amount of SIR staked.`
+      .trim(),
   },
   [EPage.AUCTIONS]: {
     title: "Bid for Token Lots",
-    description:
-      "Help convert staker fees to ETH by bidding on token lots with WETH. Snap up underpriced tokens and profit from the difference. Auctions run daily, and a new auction for the same token can be started after a 1-week cooldown.",
+    description: 
+      `Help convert staker fees to ETH by bidding on token lots with WETH. Snap up underpriced tokens and profit from the difference. Auctions run daily, and a new auction for the same token can be started after a 1-week cooldown.`
+      .trim(),
   },
   [EPage.CREATE_VAULT]: {
     title: "Create New Vaults",
     description:
-      "Choose your favorite tokens for going long and short, and the right leverage. Since this is constant true leverage, a smaller leverage amount than typical is necessary as gains compound quickly when prices rise. High leverage leads to high upfront fees when going long.",
+      `Choose your favorite pair of tokens to long/short, and the right leverage.
+Since this is constant true leverage, a smaller leverage amount than typical is necessary as gains compound quickly when prices rise. High leverage leads to high upfront fees when going long.`
+      .trim(),
   },
 };
