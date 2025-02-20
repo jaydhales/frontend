@@ -8,9 +8,9 @@ import { executeGetDividendsPaid } from "@/server/queries/dividendsPaid";
 import React from "react";
 import { formatUnits, parseUnits } from "viem";
 import z from "zod";
-//query APR
+// query APR
 // get latest timestamp
-//
+// querySubgraph for events after timestamp
 const priceSchema = z.object({
   data: z.array(
     z.object({

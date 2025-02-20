@@ -2,16 +2,20 @@ import { graphqlClient } from "@/lib/graphqlClient";
 import { gql } from "graphql-request";
 
 const query = gql`
-  query getDividendsPaid {
-    dividends(id: "0") {
+  query getDividendsPaid($timestamp: BigInt!) {
+    dividends(where: { timestamp_gt: $timestamp }) {
       ethAmount
+      timestamp
       stakedAmount
     }
   }
 `;
 
-export const executeGetDividendsPaid = async () => {
-  const result = await graphqlClient.request(query);
-  console.log(result, "DIVIDENDS PAID");
+export const executeGetDividendsPaid = async ({
+  timestamp,
+}: {
+  timestamp: number;
+}) => {
+  const result = await graphqlClient.request(query, { timestamp });
   return result;
 };
