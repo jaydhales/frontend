@@ -157,8 +157,7 @@ export default function BurnForm({
   const { isValid, error } = useBurnFormValidation(
     formData,
     balance,
-    // isClaimingRewards,
-    // claimRewardRequest as unknown as SimulateContractReturnType["request"],
+    row.positionDecimals,
   );
 
   const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
