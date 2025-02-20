@@ -1,7 +1,10 @@
-import { sql } from "drizzle-orm";
-import { text, sqliteTable, integer } from "drizzle-orm/sqlite-core";
+import { text, integer, pgTable, uuid } from "drizzle-orm/pg-core";
 
-export const feedbackTable = sqliteTable("feedback", {
-  id: integer("id").primaryKey(),
-  feedback: text("feedback").notNull(),
+export const aprsTable = pgTable("apr_rates", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  apr: text("feedback").notNull(),
+  timestamp: integer("timestamp").notNull(),
 });
+
+export type InsertAprs = typeof aprsTable.$inferInsert;
+export type SelectAprs = typeof aprsTable.$inferSelect;
