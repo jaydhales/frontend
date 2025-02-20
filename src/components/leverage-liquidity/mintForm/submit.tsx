@@ -2,9 +2,6 @@ import { Button } from "@/components/ui/button";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import React, { useState } from "react";
 import { useAccount } from "wagmi";
-import { ChevronDown } from "lucide-react";
-import { formatNumber } from "@/lib/utils";
-import { ESubmitType } from "@/lib/types";
 
 const SubmitContext = React.createContext(undefined);
 
@@ -44,9 +41,9 @@ const ConnectButton = () => {
 const OpenTransactionModalButton = ({
   onClick,
   isValid,
-  submitType,
+  needsApproval,
 }: {
-  submitType: ESubmitType;
+  needsApproval: boolean;
   onClick: () => void;
   isValid: boolean;
 }) => {
@@ -59,14 +56,13 @@ const OpenTransactionModalButton = ({
       type="button"
       onClick={onClick}
     >
-      {submitType === ESubmitType.mint ? "Mint" : "Approve"}
+      {!needsApproval ? "Mint" : "Approve"}
     </Button>
   );
 };
 const FeeInfo = ({
   feePercent,
   feeAmount,
-  isApe,
   feeValue,
   deposit,
   isValid,
@@ -76,10 +72,8 @@ const FeeInfo = ({
   feePercent: string | undefined;
   deposit: string | undefined;
   feeValue: string | undefined;
-  isApe: boolean;
   isValid: boolean;
 }) => {
-  const [open, setOpen] = useState(false);
   if (
     feeValue === "" ||
     deposit === "" ||

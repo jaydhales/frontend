@@ -1,6 +1,5 @@
 import useGetChainId from "@/components/shared/hooks/useGetChainId";
 import { env } from "@/env";
-import { ESubmitType } from "@/lib/types";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import type { SimulateContractReturnType } from "viem";
@@ -30,7 +29,6 @@ interface Props {
  * @returns
  * isValid -
  * errorMessage -
- * submitType - 'approve' | 'mint'
  */
 export const useMintFormValidation = ({
   tokenAllowance,
@@ -49,14 +47,13 @@ export const useMintFormValidation = ({
   const formData = form.watch();
   const { deposit, slippage, depositToken, versus } = formData;
   console.log(maxCollateralIn, "MAX COLLATERAL IN");
-  const { isValid, errorMessage, submitType } = useMemo(() => {
+  const { isValid, errorMessage } = useMemo(() => {
     if (usingDebtToken(versus, depositToken)) {
       const num = Number.parseFloat(slippage ?? "0");
       if (num < 0 || num > 10) {
         return {
           isValid: false,
           errorMessage: "Slippage must be between 0% and 10%.",
-          submitType: ESubmitType.mint,
         };
       }
     }
@@ -64,7 +61,6 @@ export const useMintFormValidation = ({
       return {
         isValid: false,
         errorMessage: "Wrong network!",
-        submitType: ESubmitType.mint,
       };
     }
 
@@ -72,7 +68,6 @@ export const useMintFormValidation = ({
       return {
         isValid: false,
         errorMessage: "Enter amount greater than 0.",
-        submitType: ESubmitType.mint,
       };
     }
     if (maxCollateralIn && isApe) {
@@ -80,14 +75,12 @@ export const useMintFormValidation = ({
         return {
           isValid: false,
           errorMessage: "",
-          submitType: ESubmitType.mint,
         };
       }
     } else if (!maxCollateralIn && isApe) {
       return {
         isValid: false,
         errorMessage: "",
-        submitType: ESubmitType.mint,
       };
     }
     if (useEth) {
@@ -95,20 +88,17 @@ export const useMintFormValidation = ({
         return {
           isValid: false,
           errorMessage: "Insufficient Balance.",
-          submitType: ESubmitType.mint,
         };
       }
       if (requests.mintRequest) {
         return {
           isValid: true,
           errorMessage: "",
-          submitType: ESubmitType.mint,
         };
       }
       return {
         isValid: false,
         errorMessage: "",
-        submitType: ESubmitType.mint,
       };
     }
 
@@ -116,7 +106,6 @@ export const useMintFormValidation = ({
       return {
         isValid: false,
         errorMessage: "Insufficient Balance.",
-        submitType: ESubmitType.mint,
       };
     }
     // CHECK ALLOWANCE FIRST
@@ -128,20 +117,17 @@ export const useMintFormValidation = ({
         return {
           isValid: true,
           errorMessage: null,
-          submitType: ESubmitType.approve,
         };
       else {
         if (approveFetching) {
           return {
             isValid: false,
             errorMessage: "",
-            submitType: ESubmitType.approve,
           };
         } else {
           return {
             isValid: false,
             errorMessage: "An Approve Error Occured.",
-            submitType: ESubmitType.approve,
           };
         }
       }
@@ -150,36 +136,37 @@ export const useMintFormValidation = ({
       return {
         isValid: true,
         errorMessage: null,
-        submitType: ESubmitType.mint,
       };
     else {
       if (mintFetching) {
         return {
           isValid: false,
           errorMessage: "",
-          submitType: ESubmitType.mint,
         };
       } else {
         return {
           isValid: false,
           errorMessage: "Unexpected mint error.",
-          submitType: ESubmitType.mint,
         };
       }
     }
   }, [
+    versus,
+    depositToken,
     chainId,
     deposit,
     decimals,
     maxCollateralIn,
+    isApe,
     useEth,
     tokenBalance,
     tokenAllowance,
     requests.approveWriteRequest,
     requests.mintRequest,
+    slippage,
     ethBalance,
     approveFetching,
     mintFetching,
   ]);
-  return { isValid, errorMessage, submitType };
+  return { isValid, errorMessage };
 };

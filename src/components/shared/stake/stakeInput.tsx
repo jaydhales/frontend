@@ -22,7 +22,7 @@ const StakeInput = ({ form, balance, isStaking }: Props) => {
   const logo = sir_logo as StaticImageData;
 
   return (
-    <div className="rounded-md bg-secondary-500 px-3 py-2">
+    <div className="rounded-md bg-secondary-600 px-3 py-2">
       <FormLabel htmlFor="stake">Amount</FormLabel>
       <div className="flex justify-between  ">
         <FormField
@@ -61,7 +61,7 @@ const StakeInput = ({ form, balance, isStaking }: Props) => {
             className={`flex items-center justify-center gap-x-2 rounded-md py-1`}
           >
             <Image src={logo} alt="sir-logo" width={25} height={25} />
-            <span className="font-medium">
+            <span className="text-nowrap font-medium">
               {isStaking ? "Unstaked SIR" : "Staked SIR"}
             </span>
           </div>

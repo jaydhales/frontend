@@ -1,10 +1,9 @@
-import { ESubmitType } from "@/lib/types";
 import { api } from "@/trpc/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 interface Props {
   isConfirmed: boolean;
   reset: () => void;
-  submitType: ESubmitType;
+  needsApproval: boolean;
 }
 /**
  * Invalidates user balance query.
@@ -12,33 +11,15 @@ interface Props {
 export function useResetAfterApprove({
   isConfirmed,
   reset,
-  submitType,
+  needsApproval,
 }: Props) {
-  const [isApproving, setIsApproving] = useState(false);
-
-  useEffect(() => {
-    if (submitType === ESubmitType.approve) {
-      setIsApproving(true);
-    }
-  }, [submitType]);
-
   const utils = api.useUtils();
   useEffect(() => {
-    if (isConfirmed && isApproving) {
+    if (isConfirmed && needsApproval) {
+      reset();
       utils.user.getBalanceAndAllowance
         .invalidate()
-        .then(() => {
-          reset();
-          setIsApproving(false);
-        })
         .catch((e) => console.log(e));
     }
-  }, [
-    isApproving,
-    reset,
-    isConfirmed,
-    setIsApproving,
-    utils.user.getBalanceAndAllowance,
-  ]);
-  return isApproving;
+  }, [reset, isConfirmed, utils.user.getBalanceAndAllowance, needsApproval]);
 }

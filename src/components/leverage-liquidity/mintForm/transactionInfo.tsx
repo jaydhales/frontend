@@ -4,7 +4,6 @@ import { TransactionStatus } from "./transactionStatus";
 import { CircleCheck } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
 import { formatUnits } from "viem";
-import { ESubmitType } from "@/lib/types";
 
 interface Props {
   isConfirmed: boolean;
@@ -13,7 +12,7 @@ interface Props {
   isConfirming: boolean;
   userBalanceFetching: boolean;
   isPending: boolean;
-  submitType: ESubmitType;
+  needsApproval: boolean;
   tokenReceived: bigint | undefined;
   isApe: boolean;
   useEth: boolean;
@@ -28,22 +27,23 @@ export default function TransactionInfo({
   isConfirmed,
   isPending,
   isApproving,
-  submitType,
+  needsApproval,
   tokenReceived,
   decimals,
   useEth,
   userBalanceFetching,
   vaultId,
 }: Props) {
+  console.log(isApproving, "IS APPROVING");
   if (!isConfirmed) {
     return (
       <>
         <TransactionStatus
           showLoading={isConfirming || userBalanceFetching}
           waitForSign={isPending}
-          action={submitType === ESubmitType.mint ? "Mint" : "Approve"}
+          action={!needsApproval ? "Mint" : "Approve"}
         />
-        {submitType === ESubmitType.mint && (
+        {!needsApproval && (
           <TransactionEstimates
             isApe={isApe}
             decimals={decimals}
@@ -52,12 +52,12 @@ export default function TransactionInfo({
             vaultId={vaultId}
           />
         )}
-        {submitType === ESubmitType.mint && (
+        {!needsApproval && (
           <TransactionModal.Disclaimer>
             Output is estimated.
           </TransactionModal.Disclaimer>
         )}
-        {submitType === ESubmitType.approve && (
+        {needsApproval && (
           <TransactionModal.Disclaimer>
             Approve SIR to send token funds .....
           </TransactionModal.Disclaimer>
@@ -81,7 +81,7 @@ export default function TransactionInfo({
         <h2 className="text-center text-gray-300">Transaction Successful!</h2>
         {Boolean(tokenReceived) && (
           <h3 className="flex items-center justify-center gap-x-1 ">
-            <span className="text-xl font-semibold ">
+            <span className="text-xl font-medium ">
               {formatNumber(formatUnits(tokenReceived ?? 0n, decimals), 4)}{" "}
               {isApe ? "APE" : "TEA"}
               <span className="text-gray-400">{"-"}</span>
