@@ -11,19 +11,21 @@ Pay one fee upfront when you mint APE —then hold long-term for amplified growt
   [EPage.LIQUIDITY]: {
     title: "Provide Liquidity",
     description: `
-      Deposit assets into vaults to mint TEA, our liquidity token, and earn fees from users taking on leverage.
-The protocol's permanent liquidity mining program also rewards LPers in elligible vaults with SIR tokens. No lock-ups —withdraw anytime.`
+      Deposit assets into vaults to mint TEA, our liquidity token, and earn fees from users taking on leverage. The protocol's permanent liquidity mining program also rewards LPers in elligible vaults with SIR tokens.
+  No lock-ups —withdraw anytime.`
       .trim(),
   },
   [EPage.PORTFOLIO]: {
     title: "All Assets in One Place",
     description:
-      "Manage your SIR protocol positions here. View your APE and TEA tokens, and burn them to close positions or exit liquidity provision. You can also stake or unstake SIR to earn or stop earning ETH dividends, and claim SIR rewards if you're an eligible liquidity provider.",
+      `Track and manage your APE (leveraged) and TEA (liquidity) tokens here. Burn tokens to close positions or exit liquidity provision.
+Liquidity providers in eligible vaults can claim SIR tokens and stake them to earn ETH rewards.`
+      .trim(),
   },
   [EPage.STAKE]: {
     title: "Stake Your SIR",
-    description:
-      "By staking your SIR, you have a pro-rata claim on future protocol fees, paid out in ETH. The amount will depend on activity on SIR and which vaults are most active.",
+    description: `By staking your SIR, you have a pro-rata claim on future protocol fees, paid out in ETH. Your yield will fluctuate depending on the volume and the amount of SIR staked.`
+      .trim(),
   },
   [EPage.AUCTIONS]: {
     title: "Bid for Token Lots",
