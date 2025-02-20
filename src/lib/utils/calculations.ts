@@ -49,7 +49,6 @@ export function calculateMaxApe({
   apeReserve,
   gentlemenReserve,
 }: Params) {
-  console.log(leverageTier, "LEVERAGE TIER");
   try {
     if (leverageTier > 0) {
       const nom =

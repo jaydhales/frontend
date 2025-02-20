@@ -111,13 +111,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   useSetDepositTokenDefault({
     collToken: selectedVault.result?.collateralToken,
   });
-  console.log({ transactionData });
   const { tokenReceived } = useGetReceivedTokens({
     apeAddress: selectedVault.result?.apeAddress ?? "0x",
     logs: transactionData?.logs,
     isApe,
   });
-  console.log(tokenReceived, "TOKEN RECEIVED");
   // Invalidate if approve or mint tx is successful.
   const [currentTxType, setCurrentTxType] = useState<
     // Used to know which

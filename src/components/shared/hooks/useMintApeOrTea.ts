@@ -55,8 +55,6 @@ export function useMintApeOrTea({
     ? true
     : (tokenAllowance ?? 0n) > (tokenAmount ?? 0n);
   const tokenCheck = useEth ? (ethAmount ?? 0n) > 0n : (tokenAmount ?? 0n) > 0n;
-  console.log({ tokenAllowanceCheck, tokenAmount });
-  console.log({ enabled: tokenAllowanceCheck && (tokenAmount ?? 0n) > 0n });
   const {
     data: Mint,
     isFetching,

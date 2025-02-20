@@ -1,10 +1,8 @@
 import type { ReactNode } from "react";
-import PageHeader from "../shared/pageHeader";
 import PageHeadingSpace from "../shared/pageHeadingSpace";
 
 export default function LeverageLiquidityPage({
   children,
-  title,
 }: {
   children: ReactNode;
   title: string;

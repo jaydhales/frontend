@@ -132,7 +132,6 @@ export default function CreateVaultForm() {
     vaultSimulation: Boolean(data?.request),
     vaultData,
   });
-  console.log(isValid, "");
   const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
     if (isConfirmed && !openModal) {

@@ -8,12 +8,6 @@ export function useClaimTeaRewards({
   vaultId: bigint;
   claimAndStake: boolean;
 }) {
-  console.log(claimAndStake, "claimAndStake");
-  console.log({
-    ...SirContract,
-    functionName: claimAndStake ? "lPerMintAndStake" : "lPerMint",
-    args: [vaultId],
-  });
   const { data: teaRewardData } = useSimulateContract({
     ...SirContract,
     functionName: claimAndStake ? "lPerMintAndStake" : "lPerMint",

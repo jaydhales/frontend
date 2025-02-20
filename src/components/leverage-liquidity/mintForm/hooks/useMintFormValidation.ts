@@ -46,7 +46,6 @@ export const useMintFormValidation = ({
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
   const { deposit, slippage, depositToken, versus } = formData;
-  console.log(maxCollateralIn, "MAX COLLATERAL IN");
   const { isValid, errorMessage } = useMemo(() => {
     if (usingDebtToken(versus, depositToken)) {
       const num = Number.parseFloat(slippage ?? "0");

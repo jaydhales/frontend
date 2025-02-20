@@ -27,7 +27,6 @@ export default function useGetChainId() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
     window?.ethereum?.on("chainChanged", (chain: string | undefined) => {
       if (!chain) return;
-      console.log(typeof chain, chain);
       const dec = fromHex(chain as TAddressString, "number");
       setChainId(dec);
     });
