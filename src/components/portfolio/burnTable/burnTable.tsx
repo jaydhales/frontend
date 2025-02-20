@@ -50,32 +50,30 @@ export default function BurnTable({
   }, [selectedRow?.vaultId]);
   const loading = ape.isLoading || tea.isLoading;
   const apePosition = ape.data?.userPositions.map((r) => (
-    <>
-      <BurnTableRow
-        setSelectedRow={(isClaiming: boolean) =>
-          setSelectedRow({
-            vaultId: r.vaultId,
-            isApe: true,
-            isClaiming,
-          })
-        }
-        key={r.vaultId + "ape"}
-        row={{
-          id: r.vaultId,
-          balance: r.balance,
-          user: r.user,
-          positionDecimals: r.positionDecimals,
-          collateralSymbol: r.collateralSymbol,
-          debtSymbol: r.debtSymbol,
-          collateralToken: r.collateralToken,
-          debtToken: r.debtToken,
-          leverageTier: r.leverageTier,
+    <BurnTableRow
+      setSelectedRow={(isClaiming: boolean) =>
+        setSelectedRow({
           vaultId: r.vaultId,
-        }}
-        isApe={true}
-        apeAddress={r.APE}
-      />
-    </>
+          isApe: true,
+          isClaiming,
+        })
+      }
+      key={r.vaultId + "ape"}
+      row={{
+        id: r.vaultId,
+        balance: r.balance,
+        user: r.user,
+        positionDecimals: r.positionDecimals,
+        collateralSymbol: r.collateralSymbol,
+        debtSymbol: r.debtSymbol,
+        collateralToken: r.collateralToken,
+        debtToken: r.debtToken,
+        leverageTier: r.leverageTier,
+        vaultId: r.vaultId,
+      }}
+      isApe={true}
+      apeAddress={r.APE}
+    />
   ));
   let showTea = undefined;
   if (selectedRow !== undefined && selectedRowParamsTea !== undefined) {

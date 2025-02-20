@@ -91,7 +91,7 @@ export default function ClaimCard() {
           <span>Dividends</span>
         </h2>
         <div className="flex items-center justify-between">
-          <TokenDisplay amount={0n} unitLabel={"ETH"} />
+          <TokenDisplay amount={dividends ?? 0n} unitLabel={"ETH"} />
           <Button
             onClick={() => {
               if (isValid.isValid) setOpenModal(true);

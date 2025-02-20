@@ -2,7 +2,6 @@
 import { useSimulateContract } from "wagmi";
 import type { TAddressString } from "@/lib/types";
 import { VaultContract } from "@/contracts/vault";
-import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { parseUnits } from "viem";
 import type { TMintFormFields } from "@/components/providers/mintFormProvider";
@@ -44,14 +43,20 @@ export function useMintApeOrTea({
 
   if (minCollateralOut !== undefined) {
     if (minCollateralOut > 0n) {
-      const slippage = parseUnits( (formData.slippage?.trim() ?? "") || "0.5",  1);
+      const slippage = parseUnits(
+        (formData.slippage?.trim() ?? "") || "0.5",
+        1,
+      );
       const minus = ((minCollateralOut ?? 0n) * BigInt(slippage)) / 100n;
       minCollateralOutWithSlippage = minCollateralOut - minus;
     }
   }
+  const tokenAllowanceCheck = useEth
+    ? true
+    : (tokenAllowance ?? 0n) > (tokenAmount ?? 0n);
+  console.log(VaultContract.address);
   const {
     data: Mint,
-    refetch,
     isFetching,
     error,
   } = useSimulateContract({
@@ -64,13 +69,13 @@ export function useMintApeOrTea({
       debtTokenDeposit ? minCollateralOutWithSlippage ?? 0n : 0n,
     ],
     value: ethAmount ?? 0n,
+    query: {
+      enabled: tokenAllowanceCheck && (tokenAmount ?? 0n) > 0n,
+    },
   });
 
   if (error) {
     console.log(error, "APE OR TEA ERROR");
   }
-  useEffect(() => {
-    refetch().catch((e) => console.log(e));
-  }, [refetch, tokenAllowance]);
   return { Mint, isFetching };
 }

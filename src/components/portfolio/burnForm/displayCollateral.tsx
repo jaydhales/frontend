@@ -6,9 +6,11 @@ export function DisplayCollateral({
   data,
   amount,
   collateralSymbol,
+  isClaiming,
 }: {
   bg: string;
   amount: string;
+  isClaiming: boolean;
   data:
     | {
         leverageTier: number | undefined;
@@ -26,7 +28,10 @@ export function DisplayCollateral({
         </div>
         <div>
           <div className={"flex  gap-x-2 "}>
-            <div className="flex h-[45px] w-[140px] items-center gap-x-2 rounded-md bg-primary px-2">
+            <div
+              data-state={!isClaiming ? "claiming" : ""}
+              className="flex h-[45px] w-[134px] items-center  gap-x-2 rounded-md bg-secondary-800 px-2 data-[state=claiming]:justify-end "
+            >
               <ImageWithFallback
                 src={getLogoAsset(data?.collateralToken)}
                 alt="collateral"
@@ -38,47 +43,6 @@ export function DisplayCollateral({
           </div>
         </div>
       </div>
-      <div className="flex items-end justify-between pt-1">
-        {/* <span className="text-sm font-medium text-gray-500">$22.44</span> */}
-        {/* <span className="text-sm italic text-gray">Balance $232.23</span> */}
-      </div>
     </div>
   );
-}
-
-{
-  /* KEEP FOR FUTURE */
-}
-{
-  /* <div className="flex-grow">
-              <FormField
-                control={form.control}
-                name="token"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger
-                          className="h-[45px] w-[140px] "
-                          colorScheme="light"
-                        >
-                          <SelectValue placeholder={"Select token"} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {data?.collateralToken && (
-                          <SelectItem value={data.collateralToken}>
-                            Collateral
-                          </SelectItem>
-                        )}
-                        {data?.debtToken && (
-                          <SelectItem value={data.debtToken}>Debt</SelectItem>
-                        )}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div> */
 }
