@@ -4,7 +4,7 @@ export const Explainers = {
   [EPage.LEVERAGE]: {
     title: "Take on Leverage",
     description:
-      "SIR provides constant leverage without typical downsides. Compound gains as prices rise, with no maintenance fees, volatility decay, or liquidations. Pay fees only when opening or closing positions (minting or burning APE), enabling long-term leveraged investing.",
+      "APE is a leveraged token that keeps your leverage steady, so gains grow exponentially as prices rise. No daily fees, no losses from market swings, and no forced selling.\n Pay one fee upfront when you create APE—then hold long-term for amplified growth."
   },
   [EPage.LIQUIDITY]: {
     title: "Provide Liquidity",
