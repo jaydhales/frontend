@@ -1,11 +1,10 @@
-import FeedBackForm from "./feedbackForm";
+// import FeedBackForm from "./feedbackForm";
 
 export default function Footer() {
   return (
     <div className="flex  flex-grow items-end px-[16px] py-[32px]">
-      <div className="flex w-full items-end justify-between">
-        <FeedBackForm />
-      </div>
+      {/* <div className="flex w-full items-end justify-between"> */}
+      {/* </div> */}
     </div>
   );
 }

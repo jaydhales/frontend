@@ -10,7 +10,10 @@ export function useResetTransactionModal({
   const [openTransactionModal, setOpenTransactionModal] = useState(false);
   useEffect(() => {
     if (isConfirmed && !openTransactionModal) {
-      reset();
+      setTimeout(() => {
+        // wait for modal to close
+        reset();
+      }, 300);
     }
   }, [isConfirmed, reset, openTransactionModal]);
   return { openTransactionModal, setOpenTransactionModal };

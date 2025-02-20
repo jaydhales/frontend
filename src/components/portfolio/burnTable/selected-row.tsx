@@ -1,13 +1,10 @@
 import type { TAddressString } from "@/lib/types";
-// import { formatNumber } from "@/lib/utils";
 import BurnForm from "../burnForm/burnForm";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { useTeaAndApeBals } from "./hooks/useTeaAndApeBals";
-// import { formatEther, formatUnits } from "viem";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import { useEffect } from "react";
-// import { getLeverageRatio } from "@/lib/utils/calculations";
 import { BurnFormModal } from "./burnFormModal";
 
 export default function SelectedRow({
@@ -28,6 +25,7 @@ export default function SelectedRow({
     apeAddress,
     isApe,
   });
+
   const { address } = useAccount();
   const { data: teaRewards } = api.user.getTeaRewards.useQuery(
     { userAddress: address ?? "0x", vaultId: params.vaultId },
@@ -51,8 +49,9 @@ export default function SelectedRow({
   // const balance = isClaiming
   //   ? formatUnits(teaRewards ?? 0n, 12)
   //   : formatEther(atBal);
+  //
   return (
-    <BurnFormModal>
+    <BurnFormModal reset={close}>
       <BurnForm
         isClaiming={isClaiming}
         teaRewardBalance={teaRewards}
