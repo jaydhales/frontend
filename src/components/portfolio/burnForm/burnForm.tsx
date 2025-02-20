@@ -40,7 +40,6 @@ export default function BurnForm({
   row,
   isApe,
   close,
-  levTier,
   teaRewardBalance,
   isClaiming,
 }: {
@@ -137,7 +136,10 @@ export default function BurnForm({
       debtToken: row.debtToken,
       leverageTier: parseFloat(row.leverageTier),
     },
-    amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
+    amount: parseUnits(
+      formData.deposit?.toString() ?? "0",
+      row.positionDecimals,
+    ),
   });
 
   const { claimRewardRequest } = useClaimTeaRewards({
@@ -314,7 +316,7 @@ export default function BurnForm({
                 amount={
                   isClaimingRewards
                     ? formatUnits(reward, 12)
-                    : formatUnits(quoteBurn ?? 0n, 18)
+                    : formatUnits(quoteBurn ?? 0n, row.positionDecimals)
                 }
                 collateralSymbol={
                   isClaimingRewards ? "SIR" : row.collateralSymbol
