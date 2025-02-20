@@ -8,7 +8,9 @@ import { executeGetDividendsPaid } from "@/server/queries/dividendsPaid";
 import React from "react";
 import { formatUnits, parseUnits } from "viem";
 import z from "zod";
-
+//query APR
+// get latest timestamp
+//
 const priceSchema = z.object({
   data: z.array(
     z.object({
@@ -101,7 +103,7 @@ export default async function AprCard() {
       </div>
       <div className="font-lora text-2xl ">
         <Show when={APR > 0n} fallback={<h1>N/A</h1>}>
-          <h1>{formatNumber(formatUnits(APR, 0))}%</h1>
+          <h1>{formatNumber(formatUnits(APR, 12))}%</h1>
         </Show>
       </div>
     </div>
