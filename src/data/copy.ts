@@ -4,14 +4,18 @@ export const Explainers = {
   [EPage.LEVERAGE]: {
     title: "Take on Leverage",
     description: `
-      APE is a leveraged token that keeps your leverage steady, so gains grow exponentially as prices rise. No daily fees, no losses from market swings, and no forced selling.
-Pay one fee upfront when you create APE —then hold long-term for amplified growth.`
+      APE is a leveraged token that keeps your leverage steady, so gains grow exponentially as prices rise.
+      No daily fees, no losses from market swings, and no forced selling.\n
+      Pay one fee upfront when you create APE —then hold long-term for amplified growth.`
       .trim(),
   },
   [EPage.LIQUIDITY]: {
     title: "Provide Liquidity",
-    description:
-      "Liquidity providers (LPers) are essential to our protocol, enabling true constant leverage. To participate, LPers mint TEA, our liquidity token, by providing assets to the vaults. They earn fees from users taking on leverage, as well as from other LPs minting or burning TEA. Eligible vaults also receive SIR rewards.",
+    description: `
+      Deposit assets into vaults to mint TEA, our liquidity token, and earn fees from taking on leverage.
+      The protocol's permanent liquidity mining program rewards LPers with SIR tokens.\n
+      No lock-ups—withdraw anytime.`
+      .trim(),
   },
   [EPage.PORTFOLIO]: {
     title: "All Assets in One Place",
