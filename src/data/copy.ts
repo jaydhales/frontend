@@ -3,10 +3,11 @@ import { EPage } from "@/lib/types";
 export const Explainers = {
   [EPage.LEVERAGE]: {
     title: "Take on Leverage",
-    description:`
-      APE is a leveraged token that keeps your leverage steady, so gains grow exponentially as prices rise.
-      Pay one fee upfront when you create APE—then hold long-term for amplified growth.
-    `
+    description: `
+      APE is a leveraged token that keeps your leverage steady, so gains grow exponentially as prices rise. No daily fees, no losses from market swings, and no forced selling.
+      
+      Pay one fee upfront when you create APE —then hold long-term for amplified growth.`
+      .trim(),
   },
   [EPage.LIQUIDITY]: {
     title: "Provide Liquidity",
