@@ -69,6 +69,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const selectedVault = useFindVault(vaultsQuery);
 
   const needsApproval = useMemo(() => {
+    if (userBalanceFetching) {
+      return false;
+    }
     const tokenAllowance = userBalance?.tokenAllowance?.result;
     const decimals = depositDecimals ?? 18;
     if (useEth) {
@@ -79,7 +82,13 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     } else {
       return false;
     }
-  }, [deposit, depositDecimals, useEth, userBalance?.tokenAllowance?.result]);
+  }, [
+    deposit,
+    depositDecimals,
+    useEth,
+    userBalance?.tokenAllowance?.result,
+    userBalanceFetching,
+  ]);
   const { requests, isApproveFetching, isMintFetching } = useTransactions({
     useEth,
     tokenAllowance: userBalance?.tokenAllowance?.result,
@@ -260,10 +269,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
               disabled={
                 (!isValid && !isConfirmed) ||
                 isPending ||
+                isConfirming ||
                 (isConfirmed && needsApproval)
               }
               loading={isPending || isConfirming}
-              isConfirmed={isConfirmed}
+              isConfirmed={isConfirmed && !needsApproval}
             >
               <Show
                 when={!needsApproval || isConfirmed}
