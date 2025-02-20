@@ -51,6 +51,10 @@ export function useMintApeOrTea({
       minCollateralOutWithSlippage = minCollateralOut - minus;
     }
   }
+  const tokenAllowanceCheck = useEth
+    ? true
+    : (tokenAllowance ?? 0n) > (tokenAmount ?? 0n);
+  console.log(VaultContract.address);
   const {
     data: Mint,
     isFetching,
@@ -66,7 +70,7 @@ export function useMintApeOrTea({
     ],
     value: ethAmount ?? 0n,
     query: {
-      enabled: (tokenAllowance ?? 0n) > (tokenAmount ?? 0n),
+      enabled: tokenAllowanceCheck && (tokenAmount ?? 0n) > 0n,
     },
   });
 
