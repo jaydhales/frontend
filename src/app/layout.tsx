@@ -7,14 +7,15 @@ import { Toaster } from "@/components/ui/toaster";
 import EvmProvider from "@/components/providers/evmProvider";
 import { headers } from "next/headers";
 import { Header } from "@/components/header";
-import { Inter, Bebas_Neue } from "next/font/google";
+import { Inter, Bebas_Neue, Nunito, Poppins } from "next/font/google";
 import Bg from "../../public/background.png";
 import Warning from "@/components/ui/warning";
 import Footer from "@/components/footer/footer";
 import { VaultProvider } from "@/components/providers/vaultProvider";
 import { api } from "@/trpc/server";
-const inter = Inter({
+const inter = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
 });
 const lora = Bebas_Neue({
@@ -47,7 +48,7 @@ export default async function RootLayout({
           backgroundImage: `url(${Bg.src})`,
           backgroundRepeat: "repeat",
         }}
-        className={`relative  ${lora.variable} ${inter.className} `}
+        className={`relative font-semibold  ${lora.variable} ${inter.className} `}
       >
         {/* <Image */}
         {/*   className="absolute object-fill   z-0 top-0 left-0  w-screen h-full" */}
