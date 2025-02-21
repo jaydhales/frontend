@@ -1,5 +1,5 @@
 import type { TAddressString } from "@/lib/types";
-import { formatUnits, maxInt256, parseUnits } from "viem";
+import { maxUint256 } from "viem";
 import { useSimulateContract } from "wagmi";
 interface Props {
   tokenAddr: string;
@@ -11,7 +11,7 @@ export function useApproveErc20({ tokenAddr, approveContract }: Props) {
     address: tokenAddr as TAddressString,
     abi: getAbi(tokenAddr as TAddressString),
     functionName: "approve",
-    args: [approveContract, parseUnits(formatUnits(maxInt256, 18), 0)],
+    args: [approveContract, maxUint256],
   });
   return { approveSimulate };
 }

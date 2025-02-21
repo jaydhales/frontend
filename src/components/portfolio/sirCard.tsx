@@ -12,7 +12,7 @@ export function SirCard() {
     { enabled: isConnected },
   );
   return (
-    <div className="rounded-md bg-secondary-600 bg-opacity-40 p-2 pb-2">
+    <div className="rounded-md bg-secondary-700 bg-opacity-40 p-2 pb-2">
       <div className=" flex justify-between rounded-md text-2xl">
         <div className="flex gap-x-2 ">
           <div className="flex w-full justify-between">

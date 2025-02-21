@@ -11,7 +11,6 @@ interface Props {
  */
 export function useGetReceivedSir({ logs, staking }: Props) {
   const [tokenReceived, setTokenReceived] = useState<bigint | undefined>();
-  console.log(logs, "LOGS", SirContract.address);
   useEffect(() => {
     if (logs) {
       const foundLogs = logs.filter(

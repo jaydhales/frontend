@@ -9,7 +9,7 @@ import type { VariantProps } from "class-variance-authority";
 import { useMintFormProviderApi } from "@/components/providers/mintFormProviderApi";
 import type { TVault } from "@/lib/types";
 import { formatUnits, parseUnits } from "viem";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import useCalculateVaultHealth from "./hooks/useCalculateVaultHealth";
 import {
@@ -41,13 +41,11 @@ export function VaultTableRow({
     const lockedLiquidity = parseUnits(pool.lockedLiquidity, 0);
     if (lockedLiquidity > 0n && totalLocked > 0n) {
       const percent = (lockedLiquidity * 10000n) / totalLocked;
-      console.log(lockedLiquidity, totalLocked);
       return parseFloat(percent.toString()) / 100;
     } else {
       return 0;
     }
   }, [pool.lockedLiquidity, pool.totalTea]);
-  const [tick, setTick] = useState(0n);
   // Add a query to retrieve collateral data
   // Hydrate with server data
   const { data: reservesData } = api.vault.getReserve.useQuery(
@@ -62,7 +60,7 @@ export function VaultTableRow({
         {
           reserveApes: pool.apeCollateral,
           reserveLPers: pool.teaCollateral,
-          tickPriceX42: tick,
+          tickPriceX42: 0n,
         },
       ],
     },

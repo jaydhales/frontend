@@ -31,7 +31,6 @@ export default function ContributorClaim() {
     functionName: !checked ? "contributorMint" : "contributorMintAndStake",
   });
   const { writeContract, reset, isPending, data: hash } = useWriteContract();
-  console.log(hash, "HASH");
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,

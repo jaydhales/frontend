@@ -13,7 +13,6 @@ export function useCreateVault({
   if (!isFinite(lt)) {
     lt = 0;
   }
-  console.log(lt, "LT");
   const enabled = Boolean(versusToken !== "" && longToken !== "");
 
   const vault = {
@@ -33,7 +32,6 @@ export function useCreateVault({
     ],
   });
 
-  console.log(error, "init error", data);
   if (error) {
     console.log(error, "init error", data);
   }

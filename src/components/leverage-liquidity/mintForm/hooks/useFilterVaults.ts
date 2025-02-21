@@ -55,7 +55,6 @@ export function useFilterVaults({ vaultsQuery }: Props) {
     // return { leverageTiers, long, versus };
   }, [data?.vaults, isFetching, vaultsQuery?.vaults]);
   const { versus, leverageTiers, long } = filters;
-  console.log(long, "LONG");
   return { versus, leverageTiers, long };
 }
 

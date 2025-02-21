@@ -6,6 +6,9 @@
 
 /* @type {import("next").NextConfig} */
 const config = {
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   images: {
     remotePatterns: [
       {

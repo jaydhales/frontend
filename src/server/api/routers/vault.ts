@@ -68,7 +68,6 @@ export const vaultRouter = createTRPCRouter({
         .optional(),
     )
     .query(async ({ input }) => {
-      console.log(input?.filters, "FILTERS");
       const result = await getVaultsForTable(
         input?.offset ?? 0,
         input?.filters,
@@ -109,7 +108,6 @@ export const vaultRouter = createTRPCRouter({
   getReserves: publicProcedure
     .input(z.object({ vaultIds: z.array(z.number()).optional() }))
     .query(async ({ input }) => {
-      console.log("Ran getReserves");
       if (!input.vaultIds) return [];
       const result = await readContract({
         ...AssistantContract,
@@ -178,6 +176,7 @@ export const vaultRouter = createTRPCRouter({
         leverageTier: z.number(),
         amount: z.string(),
         isApe: z.boolean(),
+        decimals: z.number(),
       }),
     )
     .query(async ({ input }) => {
@@ -191,7 +190,7 @@ export const vaultRouter = createTRPCRouter({
             collateralToken: input.collateralToken as TAddressString,
             leverageTier: input.leverageTier,
           },
-          parseUnits(input.amount, 18),
+          parseUnits(input.amount, input.decimals),
         ],
       });
 
@@ -210,7 +209,6 @@ export const vaultRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-      console.log({ input });
       if (
         !input.collateralToken ||
         !input.debtToken ||

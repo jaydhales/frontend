@@ -32,6 +32,8 @@ export default function useGetFormTokensInfo() {
     { userAddress: address },
     { enabled: Boolean(address) && Boolean(formData.long) },
   );
+  // TODO
+  // REFACTOR TO ONE CALL
   const { data: collateralDecimals } = api.erc20.getErc20Decimals.useQuery(
     {
       tokenAddress: parseAddress(formData.long) ?? "0x",

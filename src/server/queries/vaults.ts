@@ -14,7 +14,6 @@ const vaults = (
   if (filterDebt) whereClauses.push("debtToken: $debtToken");
   if (filterLeverage) whereClauses.push("leverageTier: $leverageTier");
   // if (filterLastId) whereClauses.push("id_gt: $lastId");
-  // console.log(whereClauses, "WHERE CLAUSES");
   const whereClause =
     whereClauses.length > 0 ? `where: { ${whereClauses.join(", ")} }` : "";
   return gql`

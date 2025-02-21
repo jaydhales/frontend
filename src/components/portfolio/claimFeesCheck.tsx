@@ -10,7 +10,6 @@ interface Props {
 }
 
 const ClaimFeesCheckbox = ({ dividends, value, onChange }: Props) => {
-  console.log(dividends, "DIVIDENDS");
   return (
     <div className="flex justify-between gap-x-4 pt-2">
       <div className="flex items-center gap-x-1 pb-2">

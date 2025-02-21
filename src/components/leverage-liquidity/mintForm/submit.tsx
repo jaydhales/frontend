@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import React, { useState } from "react";
+import React from "react";
 import { useAccount } from "wagmi";
 
 const SubmitContext = React.createContext(undefined);

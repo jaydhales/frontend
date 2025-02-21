@@ -19,7 +19,7 @@ export function TransactionEstimates({
   const form = useFormContext<TMintFormFields>();
   const deposit = form.getValues("deposit");
   return (
-    <div className="flex gap-x-2 py-2">
+    <div className="flex h-[40px] gap-x-2 py-2">
       <h3 className="space-x-1">
         <span>{deposit}</span>
         <span className="text-sm text-gray-300">{inAssetName}</span>

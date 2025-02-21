@@ -58,7 +58,7 @@ export function TokenInput({
       </div>
       <div className="flex items-end justify-between pt-2">
         <BalancePercent
-          balance={formatUnits(balance ?? 0n, 18)}
+          balance={formatUnits(balance ?? 0n, positionDecimals)}
           setValue={(s: string) => {
             form.setValue("deposit", s);
           }}

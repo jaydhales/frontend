@@ -91,8 +91,12 @@ export default function Explainer({ page }: Props) {
       >
         <CloseModalButton close={close} />
         <h1 className="text-[20px] font-bold">{Explainers[page].title}</h1>
-        <p className="pt-2 text-[16px] font-medium leading-5">
-          {Explainers[page].description}
+        <p className="pt-2 text-[16px] font-medium leading-5 whitespace-pre-wrap [&>p+p]:mt-2">
+          {Explainers[page].description.split('\n').map((line, index) => (
+            <p key={index} className={index > 0 ? "mt-4" : ""}>
+              {line}
+            </p>
+          ))}
         </p>
       </Card>
     </div>
