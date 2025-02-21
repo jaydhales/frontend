@@ -1,7 +1,7 @@
 import { getBlock } from "@/lib/viemClient";
 import { executeGetBlockNumber } from "@/server/queries/utils";
-import type { NextApiRequest } from "next";
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -14,7 +14,6 @@ const handler = async (req: NextRequest) => {
     let blockNumber = 0;
     const queryBlock = req?.nextUrl?.searchParams.get("block");
 
-    console.log(queryBlock);
     if (queryBlock) {
       blockNumber = parseInt(queryBlock);
     } else {
@@ -30,7 +29,6 @@ const handler = async (req: NextRequest) => {
       await sleep(300);
       loops++;
       graphBlock = await executeGetBlockNumber();
-      console.log(graphBlock);
       if (!graphBlock) {
         console.error("Failed to parse graphBlock");
         return NextResponse.json({ success: false }, { status: 500 });

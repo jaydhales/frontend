@@ -62,7 +62,6 @@ export const userRouter = createTRPCRouter({
           },
         ],
       });
-      console.log(balance, allowance, input.tokenAddress, "BAL ALLOWANCE");
       return {
         tokenBalance: balance,
         tokenAllowance: allowance,
@@ -123,7 +122,6 @@ export const userRouter = createTRPCRouter({
       z.object({ address: z.string().startsWith("0x").length(42).optional() }),
     )
     .query(async ({ input }) => {
-      console.log({ input });
       if (!input.address) {
         return;
       }
@@ -139,7 +137,6 @@ export const userRouter = createTRPCRouter({
       z.object({ address: z.string().startsWith("0x").length(42).optional() }),
     )
     .query(async ({ input }) => {
-      console.log({ input });
       if (!input.address) {
         return;
       }

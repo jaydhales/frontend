@@ -54,7 +54,7 @@ export function useMintApeOrTea({
   const tokenAllowanceCheck = useEth
     ? true
     : (tokenAllowance ?? 0n) > (tokenAmount ?? 0n);
-  console.log(VaultContract.address);
+  const tokenCheck = useEth ? (ethAmount ?? 0n) > 0n : (tokenAmount ?? 0n) > 0n;
   const {
     data: Mint,
     isFetching,
@@ -70,7 +70,7 @@ export function useMintApeOrTea({
     ],
     value: ethAmount ?? 0n,
     query: {
-      enabled: tokenAllowanceCheck && (tokenAmount ?? 0n) > 0n,
+      enabled: tokenAllowanceCheck && tokenCheck,
     },
   });
 

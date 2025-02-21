@@ -111,7 +111,6 @@ const UnstakeForm = ({
     logs: transactionData?.logs,
     staking: false,
   });
-  console.log(tokenReceived, "tokenReceived");
   return (
     <>
       <div className="w-full px-4 py-4">

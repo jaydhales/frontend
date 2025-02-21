@@ -42,7 +42,6 @@ export const quoteRouter = createTRPCRouter({
       });
       const [amountOut, sqrtPrice, initializedTicksCrossed, gasEstimate] =
         simmy.result;
-      console.log(amountOut, "AMOUNT OUT");
       return { amountOut, sqrtPrice, initializedTicksCrossed, gasEstimate };
     }),
 });

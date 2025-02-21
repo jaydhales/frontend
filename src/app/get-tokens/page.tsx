@@ -24,7 +24,6 @@ export default function Page() {
     }
   };
 
-  console.log(TarpData, MethData);
   const onSubmitTarp = () => {
     if (TarpData) {
       writeContract(TarpData?.request);

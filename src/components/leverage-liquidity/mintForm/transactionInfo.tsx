@@ -34,7 +34,6 @@ export default function TransactionInfo({
   userBalanceFetching,
   vaultId,
 }: Props) {
-  console.log(isApproving, "IS APPROVING");
   if (!isConfirmed) {
     return (
       <>

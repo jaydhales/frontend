@@ -28,7 +28,9 @@ function Root({ open, setOpen, children }: Props) {
   );
 }
 const StatContainer = ({ children }: { children: ReactNode }) => (
-  <div className="flex w-full flex-col gap-y-1 py-2">{children}</div>
+  <div className="flex w-full animate-fade-in flex-col gap-y-1 py-2 duration-500">
+    {children}
+  </div>
 );
 function StatSubmitContainer({ children }: { children: ReactNode }) {
   return (
@@ -76,7 +78,7 @@ function StatRow({
   value: string;
 }) {
   return (
-    <div className="relative  flex justify-between text-[13px]">
+    <div className="relative  flex h-[20px] justify-between text-[13px]">
       <h3 className="text-gray-300 ">
         <span className="z-20 flex items-center gap-x-1">
           {title} {info && <ToolTip>{info}</ToolTip>}

@@ -167,7 +167,6 @@ export default function BurnForm({
       close();
       return;
     }
-    console.log(claimRewardRequest && isClaimingRewards);
     if (isClaimingRewards && claimRewardRequest) {
       writeContract(claimRewardRequest);
       return;

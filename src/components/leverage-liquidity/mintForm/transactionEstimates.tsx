@@ -19,10 +19,8 @@ export function TransactionEstimates({
 }: EstimateProps) {
   const form = useFormContext<TMintFormFields>();
   const data = form.watch();
-  console.log(data.depositToken, data.versus, "data");
   const usingDebt =
     data.depositToken === parseAddress(data.versus) && data.depositToken !== "";
-  console.log(usingDebt, "usingDebt");
   const collateralAssetName = usingEth
     ? "ETH"
     : form.getValues("long").split(",")[1] ?? "";
@@ -31,7 +29,7 @@ export function TransactionEstimates({
     : form.getValues("versus").split(",")[1] ?? "";
   const deposit = form.getValues("deposit");
   return (
-    <div className="flex gap-x-2 py-2">
+    <div className="flex animate-fade-in gap-x-2 py-2 duration-300">
       <h3 className="space-x-1">
         <span>{deposit}</span>
         <span className="text-sm text-gray-300">

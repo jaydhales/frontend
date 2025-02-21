@@ -5,7 +5,6 @@ import { env } from "@/env";
 
 import { createPublicClient, http } from "viem";
 import { mainnet } from "viem/chains";
-console.log(env.RPC_URL, "RPC");
 const getChainId = () => {
   const result = env.NEXT_PUBLIC_CHAIN_ID;
   return parseInt(result);
