@@ -47,7 +47,7 @@ export default async function RootLayout({
           backgroundImage: `url(${Bg.src})`,
           backgroundRepeat: "repeat",
         }}
-        className={`relative ${lora.variable} ${inter.className} `}
+        className={`relative  ${lora.variable} ${inter.className} `}
       >
         {/* <Image */}
         {/*   className="absolute object-fill   z-0 top-0 left-0  w-screen h-full" */}

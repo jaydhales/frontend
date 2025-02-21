@@ -14,7 +14,6 @@ import { formatNumber } from "@/lib/utils";
 import TransactionModal from "@/components/shared/transactionModal";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 import { useState } from "react";
-import { isValid } from "zod";
 
 import { api } from "@/trpc/react";
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
