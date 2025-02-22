@@ -4,7 +4,8 @@ import { SIR_USD_PRICE } from "@/data/constants";
 import { env } from "@/env";
 import { formatNumber } from "@/lib/utils";
 import { calculateApr } from "@/lib/utils/calculations";
-import { executeGetDividendsPaid } from "@/server/queries/dividendsPaid";
+import { headers } from "next/headers";
+import type { NextRequest } from "next/server";
 import React from "react";
 import { formatUnits, parseUnits } from "viem";
 import z from "zod";
@@ -27,9 +28,6 @@ const priceSchema = z.object({
   ),
 });
 
-// {
-//   dividends: { ethAmount: '9535018543666960', stakedAmount: '84597856160006079' }
-// }
 const dividendsPaidSchema = z.object({
   dividends: z.nullable(
     z.object({
@@ -40,19 +38,37 @@ const dividendsPaidSchema = z.object({
 });
 
 const url = "https://api.g.alchemy.com/prices/v1/tokens/by-symbol?symbols=ETH";
-const headers = {
+const headersAlch = {
   Accept: "application/json",
   Authorization: `Bearer ${env.ALCHEMY_BEARER}`,
 };
-export default async function AprCard() {
+export default async function AprCard({}: NextRequest) {
+  const list = headers();
+  const aprUrl = list.get("host");
+  const scheme = process.env.NODE_ENV === "production" ? "https" : "http";
+  fetch(`${scheme}://${aprUrl}/api/apr`, {
+    headers: {
+      Authorization: `Bearer ${env.ALCHEMY_BEARER}`,
+    },
+  }).catch((e) => {
+    console.log(e);
+  });
+  // call concurrently
+  // get lastDividendsEvent
+  // get lastAprAgg
   const ethPriceRequest = fetch(url, {
     method: "GET",
-    headers: headers,
+    headers: headersAlch,
   }).then((response) => response.json());
-  const dividendsPaidRequest = await executeGetDividendsPaid({ timestamp: 1 });
+  // const dividendsPaidRequest = await executeGetDividendsPaid({ timestamp: 1 });
+  // console.log({ dividendsPaidRequest });
   const [ethPriceResponse, dividendsPaidResponse] = await Promise.allSettled([
     ethPriceRequest,
-    dividendsPaidRequest,
+    {
+      ethAmount: "100",
+      stakedAmount: "100",
+    },
+    // dividendsPaidRequest,
   ]);
 
   console.log(
@@ -93,7 +109,6 @@ export default async function AprCard() {
       ),
     });
   }
-  console.log(APR, "APR");
   return (
     <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
       <div className="flex w-full flex-row items-center justify-center">
