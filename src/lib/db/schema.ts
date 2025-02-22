@@ -1,13 +1,13 @@
-import { text, integer, pgTable, uuid, unique } from "drizzle-orm/pg-core";
+import { text, integer, pgTable, serial, unique } from "drizzle-orm/pg-core";
 
 export const aprsTable = pgTable("apr_rates", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  apr: text("").notNull(),
+  id: serial("id").primaryKey(),
+  apr: text("apr").notNull(),
   timestamp: integer("timestamp").notNull(),
 });
 
-export const lastMonthApr = pgTable(
-  "last_month_apr",
+export const currentApr = pgTable(
+  "current_apr",
   {
     id: integer("id").primaryKey().default(1), // Always ID 1
     apr: text("apr").notNull(),
@@ -19,5 +19,5 @@ export const lastMonthApr = pgTable(
 );
 export type InsertAprs = typeof aprsTable.$inferInsert;
 export type SelectAprs = typeof aprsTable.$inferSelect;
-export type InsertLastMonthApr = typeof lastMonthApr.$inferInsert;
-export type SelectLastMonthApr = typeof lastMonthApr.$inferSelect;
+export type InsertCurrentApr = typeof currentApr.$inferInsert;
+export type SelectCurrentApr = typeof currentApr.$inferSelect;
