@@ -2,7 +2,7 @@ import { text, integer, pgTable, uuid, unique } from "drizzle-orm/pg-core";
 
 export const aprsTable = pgTable("apr_rates", {
   id: uuid("id").defaultRandom().primaryKey(),
-  apr: text("feedback").notNull(),
+  apr: text("").notNull(),
   timestamp: integer("timestamp").notNull(),
 });
 
