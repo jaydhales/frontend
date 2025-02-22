@@ -71,6 +71,13 @@
       "when": 1740256152597,
       "tag": "0009_good_jamie_braddock",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1740256368811,
+      "tag": "0010_tense_hellfire_club",
+      "breakpoints": true
     }
   ]
 }
