@@ -18,7 +18,7 @@ const buttonVariants = cva(
         outline:
           "bg-transparent text-muted-foreground border-2 rounded-md px-4 py-2 text-[14px] font-semibold hover:bg-primary",
         submit:
-          "md:w-[450px] w-[280px] rounded-md bg-gold py-2 text-xl font-semibold text-black/80 hover:bg-gold/90",
+          "md:w-[450px] w-[280px] rounded-md bg-gold py-2 text-xl font-semibold text-black/90 hover:bg-gold/90",
         modal:
           "md:w-[300px] w-[280px] bg-gold rounded-lg font-bold  py-2 text-xl text-black/90 hover:bg-gold/90",
       },
