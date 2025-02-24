@@ -16,6 +16,7 @@ export default async function AprCard({}: NextRequest) {
   });
   if (dividendsPaidRequest.length) {
     // sync apr with new events
+    // **DON'T BLOCK THREAD WITH AWAIT
     api.divends.syncDividendsApr().catch((e) => console.log(e));
   }
 
@@ -25,8 +26,6 @@ export default async function AprCard({}: NextRequest) {
     <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
       <div className="flex w-full flex-row items-center justify-center">
         <div className="px-2 text-sm text-gray-300">Staking APR</div>
-        {/* <ToolTip>Annual</ToolTip> */}
-        {/* <AprInfo></AprInfo> */}
       </div>
       <div className="font-lora text-2xl ">
         <Show when={APR > 0n} fallback={<h1>N/A</h1>}>
