@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import { z } from "zod";
 function formatTimestamp(unixTimestamp: number) {
   const date = new Date(unixTimestamp * 1000); // Convert seconds to milliseconds
@@ -19,7 +20,7 @@ export async function getEthUsdPriceOnDate({
     method: "GET",
     headers: {
       accept: "application/json",
-      "x-cg-demo-api-key": "API KEY GOES HERE",
+      "x-cg-demo-api-key": env.COINGECKO_API,
     },
   };
 
@@ -27,11 +28,14 @@ export async function getEthUsdPriceOnDate({
     .then((res) => res.json())
     .then((json: unknown) => json)
     .catch((err) => console.error(err));
-
+  console.log({ resp });
   const parse = CryptoSchema.safeParse(resp);
   if (parse.success) {
     const data = parse.data;
     return data.market_data.current_price.usd;
+  } else {
+    console.error("Error parsing CyprtoSchema");
+    console.log(parse.error);
   }
   return undefined;
 }
