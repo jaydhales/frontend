@@ -4,11 +4,10 @@ import { selectCurrentApr } from "@/lib/db/queries/select";
 import { formatNumber } from "@/lib/utils";
 import { executeGetDividendGreaterThan } from "@/server/queries/dividendsPaid";
 import { api } from "@/trpc/server";
-import type { NextRequest } from "next/server";
 import React from "react";
 import { formatUnits, parseUnits } from "viem";
 
-export default async function AprCard({}: NextRequest) {
+export default async function AprCard() {
   const apr = await selectCurrentApr();
   console.log(apr, "APR");
   const dividendsPaidRequest = await executeGetDividendGreaterThan({
