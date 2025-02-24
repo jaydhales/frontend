@@ -28,7 +28,7 @@ export default function PortfolioPage() {
                   </div>
                 </div>
 
-                <div className="pt-2 text-sm text-gray-500">
+                <div className=" text-sm text-gray-500">
                   <p>Stake your SIR to earn ETH dividends.</p>
                 </div>
               </div>
