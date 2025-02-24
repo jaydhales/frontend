@@ -7,7 +7,7 @@ const AmountVariants = classVarianceAuthority.cva("", {
   variants: {
     amountSize: {
       small: "",
-      large: "text-xl",
+      large: "text-lg",
     },
   },
   defaultVariants: { amountSize: "large" },
