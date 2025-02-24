@@ -13,7 +13,7 @@ const AmountVariants = classVarianceAuthority.cva("", {
   defaultVariants: { amountSize: "large" },
 });
 
-const LabelVariants = classVarianceAuthority.cva(" text-gray-400", {
+const LabelVariants = classVarianceAuthority.cva("font-light text-gray-400", {
   variants: {
     labelSize: {
       small: "",
