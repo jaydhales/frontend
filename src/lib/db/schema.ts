@@ -1,8 +1,9 @@
 import { text, integer, pgTable, serial, unique } from "drizzle-orm/pg-core";
 
-export const aprsTable = pgTable("apr_rates", {
-  id: serial("id").primaryKey(),
-  apr: text("apr").notNull(),
+export const payoutTable = pgTable("payouts", {
+  id: serial("id_").primaryKey(),
+  sirInUSD: text("sir_in_usd").notNull(),
+  ethInUSD: text("eth_in_usd").notNull(),
   timestamp: integer("timestamp").notNull(),
 });
 
@@ -17,7 +18,7 @@ export const currentApr = pgTable(
     unique().on(table.id), // Ensures only one row
   ],
 );
-export type InsertAprs = typeof aprsTable.$inferInsert;
-export type SelectAprs = typeof aprsTable.$inferSelect;
+export type InsertPayout = typeof payoutTable.$inferInsert;
+export type SelectPayout = typeof payoutTable.$inferSelect;
 export type InsertCurrentApr = typeof currentApr.$inferInsert;
 export type SelectCurrentApr = typeof currentApr.$inferSelect;
