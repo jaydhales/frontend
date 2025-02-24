@@ -67,8 +67,8 @@ export function RadioItem({
       <div
         data-active={value === fieldValue ? "true" : ""}
         className={`flex w-full cursor-pointer justify-between gap-x-2
-                    rounded-md border-2 border-secondary-700  bg-secondary-700
-                    px-2 py-1 data-[active=true]:border-gold`}
+                    rounded-md border-2 border-secondary-500 bg-secondary-500  px-2
+                    py-1 hover:border-secondary-200 data-[active=true]:border-gold`}
         onClick={handleCardClicked}
       >
         <div className="flex select-none flex-col  gap-y-1">
