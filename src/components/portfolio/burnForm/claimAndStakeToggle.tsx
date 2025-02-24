@@ -14,10 +14,10 @@ export default function ClaimAndStakeToggle({
 }: Props) {
   return (
     <Checkbox
-      className="border !border-white/70 bg-secondary-600"
+      className="border border-white/70 bg-secondary-600"
       checked={value}
-      onCheckedChange={(checked) => {
-        onChange(Boolean(checked)); // Call onChange to update the state in UnstakeForm
+      onCheckedChange={(value) => {
+        onChange(Boolean(value)); // Call onChange to update the state in UnstakeForm
       }}
       disabled={disabled}
     ></Checkbox>
