@@ -10,14 +10,14 @@ const DividendsPaidSchema = z.object({
 });
 
 const GetDividendsPaidSchema = z.object({
-  dividends: z.array(DividendsPaidSchema),
+  dividends_collection: z.array(DividendsPaidSchema),
 });
 
 export { GetDividendsPaidSchema };
 
 const greaterThanTimestampDividendsPaid = gql`
   query getDividendsPaid($timestamp: BigInt!) {
-    dividends(where: { timestamp_gt: $timestamp }) {
+    dividends_collection(where: { timestamp_gt: $timestamp }) {
       ethAmount
       timestamp
       stakedAmount
@@ -26,7 +26,7 @@ const greaterThanTimestampDividendsPaid = gql`
 `;
 const lastestDividendsPaid = gql`
   query getDividendsPaid($timestamp: BigInt!) {
-    dividends(orderBy: timestamp, orderDirection: desc, first: 1) {
+    dividends_collection(orderBy: timestamp, orderDirection: desc, first: 1) {
       ethAmount
       timestamp
       stakedAmount
@@ -45,10 +45,12 @@ export const executeGetDividendGreaterThan = async ({
       timestamp,
     },
   );
+
   const parsed = GetDividendsPaidSchema.safeParse(result);
   if (parsed.success) {
-    return parsed.data.dividends;
+    return parsed.data.dividends_collection;
   } else {
+    console.log(result);
     console.log(parsed.error);
     throw new Error(
       "Failed to parse dividends paid events (executeGetDividendGreatherThan)",
@@ -60,7 +62,7 @@ export const executeGetLastestDividendsPaid = async () => {
   const result = await graphqlClient.request(lastestDividendsPaid);
   const parsed = GetDividendsPaidSchema.safeParse(result);
   if (parsed.success) {
-    return parsed.data.dividends;
+    return parsed.data.dividends_collection;
   } else {
     console.log(parsed.error);
     throw new Error(
