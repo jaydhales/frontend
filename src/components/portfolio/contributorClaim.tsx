@@ -110,6 +110,7 @@ export default function ContributorClaim() {
                 Mint and Stake
               </label>
               <Checkbox
+                className="border border-white/70 bg-secondary-600"
                 id="stake"
                 checked={checked}
                 onCheckedChange={(value) => {
