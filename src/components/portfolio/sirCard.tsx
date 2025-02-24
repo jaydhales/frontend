@@ -2,6 +2,7 @@ import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import StakeCard from "./stakeCard";
 import { TokenDisplay } from "../ui/token-display";
+import { Card } from "../ui/card";
 
 export function SirCard() {
   const { isConnected, address } = useAccount();
@@ -12,7 +13,7 @@ export function SirCard() {
     { enabled: isConnected },
   );
   return (
-    <div className="rounded-md border-2 border-secondary-600/45 bg-secondary-600 bg-opacity-40 px-3 py-4 ">
+    <Card variant="secondary">
       <div className=" flex justify-between rounded-md text-2xl">
         <div className="flex gap-x-2 ">
           <div className="flex w-full justify-between">
@@ -32,6 +33,6 @@ export function SirCard() {
         </div>
         <StakeCard bal={totalBalance} />
       </div>
-    </div>
+    </Card>
   );
 }

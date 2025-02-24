@@ -5,6 +5,7 @@ import StakeFormProvider from "../providers/stakeFormProvider";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import { TokenDisplay } from "../ui/token-display";
+import { Card } from "../ui/card";
 
 export default function StakeCard() {
   const [openModal, setOpenModal] = useState(false);
@@ -14,7 +15,7 @@ export default function StakeCard() {
     { enabled: isConnected },
   );
   return (
-    <div className="rounded-md border-2 border-secondary-600/50 bg-secondary-600/40 p-2 text-2xl">
+    <Card variant="secondary">
       <StakeFormProvider>
         <StakeModal open={openModal} setOpen={setOpenModal} />
       </StakeFormProvider>
@@ -40,6 +41,6 @@ export default function StakeCard() {
           Stake
         </Button>
       </div>
-    </div>
+    </Card>
   );
 }
