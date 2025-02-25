@@ -25,7 +25,7 @@ const greaterThanTimestampDividendsPaid = gql`
   }
 `;
 const lastestDividendsPaid = gql`
-  query getDividendsPaid($timestamp: BigInt!) {
+  query getDividendsPaid {
     dividends_collection(orderBy: timestamp, orderDirection: desc, first: 1) {
       ethAmount
       timestamp
