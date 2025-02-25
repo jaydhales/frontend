@@ -17,3 +17,11 @@ export async function insertOrUpdateCurrentApr(data: InsertCurrentApr) {
     .onConflictDoUpdate({ target: currentApr.id, set: data });
   return query;
 }
+export async function deletePayouts() {
+  const query = await db.delete(payoutTable);
+  return query;
+}
+export async function deleteCurrentApr() {
+  const query = await db.delete(currentApr);
+  return query;
+}
