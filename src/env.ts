@@ -8,6 +8,7 @@ export const env = createEnv({
 
   // COINGECKO_API=CG-5PHeXo67HYraaF49yhMbZZ6f
   server: {
+    SECRET_KEY: z.string(),
     COINGECKO_API: z.string(),
     RPC_URL: z.string(),
     SUBGRAPH_URL: z.string(),
@@ -40,6 +41,7 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    SECRET_KEY: process.env.SECRET_KEY,
     COINGECKO_API: process.env.COINGECKO_API,
     ALCHEMY_BEARER: process.env.ALCHEMY_BEARER,
     NEXT_PUBLIC_ORACLE_ADDRESS: process.env.NEXT_PUBLIC_ORACLE_ADDRESS,
