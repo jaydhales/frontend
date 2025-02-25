@@ -13,15 +13,17 @@ export function useQuoteMint({
 }) {
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
+
+  const { debouncedValue: depositDebounce } = useDebounce(
+    formData.deposit,
+    500,
+  );
+
   const allSelected = Boolean(
     formData.deposit &&
       formData.long !== "" &&
       formData.versus !== "" &&
       formData.leverageTier !== "",
-  );
-  const { debouncedValue: depositDebounce } = useDebounce(
-    formData.deposit,
-    500,
   );
 
   const usingDebtToken =
