@@ -31,7 +31,7 @@ export default function AprDisplay({
   return (
     <div className="font-lora text-2xl ">
       <Show when={APR > 0n} fallback={<h1>N/A</h1>}>
-        <h1>{formatNumber(formatUnits(APR, 12))}%</h1>
+        <h1>{formatNumber(formatUnits(APR, 6))}%</h1>
       </Show>
     </div>
   );
