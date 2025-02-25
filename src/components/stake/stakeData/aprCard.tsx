@@ -1,25 +1,32 @@
-"use server";
-import Show from "@/components/shared/show";
-import { selectCurrentApr } from "@/lib/db/queries/select";
-import { formatNumber } from "@/lib/utils";
+import { env } from "@/env";
 import { executeGetDividendGreaterThan } from "@/server/queries/dividendsPaid";
 import { api } from "@/trpc/server";
+import { headers } from "next/headers";
 import React from "react";
-import { formatUnits, parseUnits } from "viem";
-
+import AprDisplay from "./aprDisplay";
+export const revalidate = 60;
 export default async function AprCard() {
-  const apr = await selectCurrentApr();
+  const list = headers();
+  const aprUrl = list.get("host");
+  const scheme = process.env.NODE_ENV === "production" ? "https" : "http";
+  const apr = await api.divends.getApr();
   console.log(apr, "APR");
   const dividendsPaidRequest = await executeGetDividendGreaterThan({
     timestamp: apr?.latestTimestamp ?? 0,
   });
+  let sync = false;
   if (dividendsPaidRequest.length) {
+    sync = true;
+    fetch(`${scheme}://${aprUrl}/api/dividends`, {
+      headers: {
+        Authorization: `Bearer ${env.SECRET_KEY}`,
+      },
+    }).catch((e) => {
+      console.log(e);
+    });
     // sync apr with new events
     // **DON'T BLOCK THREAD WITH AWAIT
-    api.divends.syncDividendsApr().catch((e) => console.log(e));
   }
-
-  const APR = parseUnits(apr?.apr ?? "0", 0);
 
   return (
     <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
@@ -27,9 +34,7 @@ export default async function AprCard() {
         <div className="px-2 text-sm text-gray-300">Staking APR</div>
       </div>
       <div className="font-lora text-2xl ">
-        <Show when={APR > 0n} fallback={<h1>N/A</h1>}>
-          <h1>{formatNumber(formatUnits(APR, 12))}%</h1>
-        </Show>
+        <AprDisplay currentApr={apr} sync={sync} />
       </div>
     </div>
   );
