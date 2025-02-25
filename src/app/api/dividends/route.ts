@@ -24,6 +24,10 @@ const handler = async (req: NextRequest) => {
   if (!req.headers.get("authorization")?.includes(env.SECRET_KEY)) {
     return NextResponse.json({ success: false }, { status: 403 });
   }
+  // Using Key Value for 'Process Ids'
+  // To prevent duplicate syncs
+  // TODO: maybe a better way to do this
+  // Use a queue system to prevent multiple syncs
   const uid = randomInt(0, 10000000000);
   const currentSyncId = await kv.get("syncId");
   if (currentSyncId !== null) {
