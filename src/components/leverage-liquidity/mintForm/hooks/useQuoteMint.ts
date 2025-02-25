@@ -27,7 +27,7 @@ export function useQuoteMint({
   const usingDebtToken =
     formData.depositToken === formatDataInput(formData.versus) &&
     formData.depositToken !== "";
-  const { data: quoteData } = api.vault.quoteMint.useQuery(
+  const { data: quoteData, error } = api.vault.quoteMint.useQuery(
     {
       amount: depositDebounce,
       decimals,
@@ -39,5 +39,8 @@ export function useQuoteMint({
     },
     { enabled: allSelected },
   );
+  if (error) {
+    console.error("quoteMint failed:", error);
+  }
   return { amountTokens: quoteData?.[0], minCollateralOut: quoteData?.[1] };
 }
