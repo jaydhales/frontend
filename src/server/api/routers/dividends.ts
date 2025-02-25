@@ -1,6 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { executeGetLastestDividendsPaid } from "@/server/queries/dividendsPaid";
-import { selectCurrentApr, selectLastPayout } from "@/lib/db/queries/select";
+import { selectCurrentApr } from "@/lib/db/queries/select";
 //sleep function
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -12,9 +12,12 @@ export const dividendsRouter = createTRPCRouter({
     while (true) {
       tries++;
       await sleep(1000);
-      const lastPayout = await selectLastPayout();
-      lastPayout[0]?.timestamp;
-      if (lastPayout[0]?.timestamp === event[0]?.timestamp) {
+      const lastPayout = await selectCurrentApr();
+      console.log(lastPayout?.latestTimestamp, event[0]?.timestamp);
+
+      if (
+        lastPayout?.latestTimestamp === parseInt(event[0]?.timestamp ?? "0")
+      ) {
         return true;
       }
       if (tries > 10) {
@@ -24,6 +27,7 @@ export const dividendsRouter = createTRPCRouter({
   }),
   getApr: publicProcedure.query(async () => {
     const result = await selectCurrentApr();
+    console.log(result, "RESULT");
     return result;
   }),
 });
