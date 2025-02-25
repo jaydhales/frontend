@@ -28,7 +28,6 @@ export async function getEthUsdPriceOnDate({
     .then((res) => res.json())
     .then((json: unknown) => json)
     .catch((err) => console.error(err));
-  console.log({ resp });
   const parse = CryptoSchema.safeParse(resp);
   if (parse.success) {
     const data = parse.data;
