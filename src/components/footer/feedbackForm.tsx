@@ -1,20 +1,18 @@
 "use client";
-import { postFeedBack } from "@/lib/db/action";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
 
 export default function FeedBackForm() {
   const [feedback, setFeedback] = useState("");
-  const [successSubmit, setSucessSubmit] = useState(false);
   const submit = () => {
-    postFeedBack({ feedback })
-      .then((e) => {
-        if (e) {
-          setSucessSubmit(true);
-        }
-      })
-      .catch((e) => console.log(e));
+    // postFeedBack({ feedback })
+    //   .then((e) => {
+    //     if (e) {
+    //       setSucessSubmit(true);
+    //     }
+    //   })
+    //   .catch((e) => console.log(e));
   };
 
   const [openForm, setOpenForm] = useState(false);
@@ -23,9 +21,6 @@ export default function FeedBackForm() {
     if (openForm)
       window.document.getElementById("submit-form")?.scrollIntoView();
   }, [openForm]);
-  if (successSubmit) {
-    return <h2 className="text-white">Thanks for submitting feedback!</h2>;
-  }
   return (
     <div
       data-state={openForm ? "opened" : "closed"}
