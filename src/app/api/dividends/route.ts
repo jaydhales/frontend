@@ -30,6 +30,7 @@ const handler = async (req: NextRequest) => {
   // Use a queue system to prevent multiple syncs
   const uid = randomInt(0, 10000000000);
   const currentSyncId = await kv.get("syncId");
+  console.log({ currentSyncId });
   if (currentSyncId !== null) {
     return NextResponse.json({ success: false }, { status: 200 });
   }
