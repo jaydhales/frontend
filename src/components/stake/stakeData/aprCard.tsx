@@ -10,6 +10,8 @@ export default async function AprCard() {
   const dividendsPaidRequest = await executeGetDividendGreaterThan({
     timestamp: apr?.latestTimestamp ?? 0,
   });
+  const paid = await executeGetDividendGreaterThan({ timestamp: 0 });
+  console.log({ paid });
   const payouts = await selectPayouts();
   console.log(payouts, "PAYOUTS");
   console.log({ dividendsPaidRequest });
