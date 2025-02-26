@@ -115,13 +115,21 @@ async function getAndCalculateLastMonthApr() {
   const payouts = await selectLastMonthPayouts();
   console.log({ payouts });
   if (!payouts.length) return;
-  payouts.forEach((payout) => {
-    totalSirInUsd += parseUnits(payout.sirInUSD, 0);
-    totalEthInUsd += parseUnits(payout.ethInUSD, 0);
-  });
   console.log({
     totalSirInUsd: formatUnits(totalSirInUsd, 12),
     totalEthInUsd: formatUnits(totalEthInUsd, 18),
+  });
+  payouts.forEach((payout) => {
+    if (payout.sirInUSD) {
+      totalSirInUsd += parseUnits(payout.sirInUSD, 0);
+    } else {
+      totalSirInUsd += 0n;
+    }
+    if (payout.ethInUSD) {
+      totalEthInUsd += parseUnits(payout.ethInUSD, 0);
+    } else {
+      totalEthInUsd += 0n;
+    }
   });
   if (totalSirInUsd === 0n) {
     return;
