@@ -14,6 +14,7 @@ export default async function AprCard() {
   const dividendsPaidRequest = await executeGetDividendGreaterThan({
     timestamp: apr?.latestTimestamp ?? 0,
   });
+  console.log({ dividendsPaidRequest });
   let sync = false;
   if (dividendsPaidRequest.length) {
     sync = true;
