@@ -41,35 +41,13 @@ export function middleware(req: NextRequest) {
       return new NextResponse("Too many requests", { status: 429 });
     }
   }
-
-  return NextResponse.next();
+  const res = NextResponse.next();
+  res.headers.set("Connection", "close"); // Prevents long-lived HTTP/2 connections
+  res.headers.set("Keep-Alive", "timeout=5, max=10"); // Limits keep-alive time
+  res.headers.set("X-Frame-Options", "DENY"); // Blocks iframe exploits
+  return res;
 }
 
 export const config = {
   matcher: ["/create-vault", "/api/:path*"], // Apply only to this page
-};
-//
-// - Limits HTTP/2 stream spam to /create-vault
-// - Blocks excessive requests with 429 Too Many Requests
-// - Applies to Vercel Edge Middleware (efficient & fast)
-
-// Prevent HTTP/2 Connection Overuse
-//
-// By default, browsers can keep persistent HTTP/2 connections open, which can lead to resource exhaustion. Prevent this by closing idle connections.
-//
-// ➤ Modify Headers in next.config.js
-
-module.exports = {
-  async headers() {
-    return [
-      {
-        source: "/create-vault",
-        headers: [
-          { key: "Connection", value: "close" }, // Prevents long-lived HTTP/2 connections
-          { key: "Keep-Alive", value: "timeout=5, max=10" }, // Limits keep-alive time
-          { key: "X-Frame-Options", value: "DENY" }, // Blocks iframe exploits
-        ],
-      },
-    ];
-  },
 };
