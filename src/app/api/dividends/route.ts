@@ -88,6 +88,14 @@ async function syncPayouts({ timestamp }: { timestamp: number }) {
 
     const ethDecimals = 10n ** 18n;
     const sirDecimals = 10n ** 12n;
+    console.log({ ethParsed, ethUsdPriceBig, sirParsed, sirUsdPriceBig });
+    if (
+      ethParsed === 0n ||
+      ethUsdPriceBig === 0n ||
+      sirParsed === 0n ||
+      sirUsdPriceBig === 0n
+    )
+      return;
     const ethInUsd = (ethParsed * ethUsdPriceBig) / ethDecimals;
     const sirInUSD = (sirParsed * sirUsdPriceBig) / sirDecimals;
     if (!ethPrice) continue;
