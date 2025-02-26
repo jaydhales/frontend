@@ -1,14 +1,8 @@
 "use client";
 import useVaultFilterStore from "@/lib/store";
-import type { TVaults, VaultFieldFragment } from "@/lib/types";
+import type { TVaults } from "@/lib/types";
 import { api } from "@/trpc/react";
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { createContext, useContext, useState } from "react";
 
 interface VaultProviderType {
   vaults: TVaults | undefined;
@@ -22,7 +16,6 @@ interface VaultProviderType {
 const VaultContext = createContext<VaultProviderType | undefined>(undefined);
 interface Props {
   children: React.ReactNode;
-  graphVaults: VaultFieldFragment[];
 }
 
 export const VaultProvider = ({ children }: Props) => {
