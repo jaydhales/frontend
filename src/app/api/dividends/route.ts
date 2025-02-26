@@ -81,6 +81,8 @@ async function syncPayouts({ timestamp }: { timestamp: number }) {
     if (!ethPrice) {
       throw new Error("Could not get eth price!");
     }
+    console.log(e.ethAmount, e.stakedAmount, "ETH");
+    if (!e.ethAmount || !e.stakedAmount) return;
     const ethParsed = parseUnits(e.ethAmount, 0);
     const sirParsed = parseUnits(e.stakedAmount, 0);
     const sirUsdPriceBig = parseUnits(SIR_USD_PRICE, 12);
