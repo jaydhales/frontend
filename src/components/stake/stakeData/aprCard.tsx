@@ -19,13 +19,15 @@ export default async function AprCard() {
   if (dividendsPaidRequest.length) {
     console.log(`${scheme}://${aprUrl}/api/dividends`);
     sync = true;
-    fetch(`${scheme}://${aprUrl}/api/dividends`, {
+    await fetch(`${scheme}://${aprUrl}/api/dividends`, {
       headers: {
         Authorization: `Bearer ${env.SECRET_KEY}`,
       },
-    }).catch((e) => {
-      console.log(e);
-    });
+    })
+      .then((r) => r.json())
+      .catch((e) => {
+        console.log(e, "ERROR");
+      });
     // sync apr with new events
     // **DON'T BLOCK THREAD WITH AWAIT
   }

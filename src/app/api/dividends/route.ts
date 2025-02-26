@@ -22,6 +22,7 @@ function sleep(ms = 0) {
 }
 const handler = async (req: NextRequest) => {
   if (!req.headers.get("authorization")?.includes(env.SECRET_KEY)) {
+    console.log("Invalid Key");
     return NextResponse.json({ success: false }, { status: 403 });
   }
   // Using Key Value for 'Process Ids'
