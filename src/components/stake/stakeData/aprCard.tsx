@@ -4,7 +4,6 @@ import React from "react";
 import AprDisplay from "./aprDisplay";
 import { syncDividends } from "@/lib/dividendsSync";
 import { selectPayouts } from "@/lib/db/queries/select";
-import { deleteCurrentApr, deletePayouts } from "@/lib/db/queries/insert";
 export const dynamic = "force-dynamic";
 export default async function AprCard() {
   let apr = await api.divends.getApr();
@@ -13,8 +12,6 @@ export default async function AprCard() {
   });
   const paid = await executeGetDividendGreaterThan({ timestamp: 0 });
   console.log({ paid });
-  await deletePayouts();
-  await deleteCurrentApr();
   const payouts = await selectPayouts();
   console.log(payouts, "PAYOUTS");
   console.log({ dividendsPaidRequest });
