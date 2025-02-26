@@ -12,7 +12,6 @@ import Bg from "../../public/background.png";
 import Warning from "@/components/ui/warning";
 import Footer from "@/components/footer/footer";
 import { VaultProvider } from "@/components/providers/vaultProvider";
-import { api } from "@/trpc/server";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -36,7 +35,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const cookie = headers().get("cookie");
-  const vaults = await api.vault.getVaults();
   // const headerList = headers();
   // const country = headerList.get("x-country");
   return (
@@ -69,7 +67,7 @@ export default async function RootLayout({
         <Toaster />
         <TRPCReactProvider>
           <EvmProvider cookie={cookie}>
-            <VaultProvider graphVaults={vaults?.vaults ?? []}>
+            <VaultProvider>
               <div className=" flex min-h-screen flex-col">
                 <Header />
                 <Warning />
