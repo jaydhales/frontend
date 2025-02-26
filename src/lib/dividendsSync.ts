@@ -139,7 +139,7 @@ async function getAndCalculateLastMonthApr() {
     const totalEth = 12n * totalEthInUsd;
     //because
     const result = divide(totalEth, totalSirInUsd);
-    return result;
+    return result * 100n;
   } else {
     return 0n;
   }
