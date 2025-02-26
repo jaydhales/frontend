@@ -17,6 +17,7 @@ export default async function AprCard() {
   console.log({ dividendsPaidRequest });
   let sync = false;
   if (dividendsPaidRequest.length) {
+    console.log(`${scheme}://${aprUrl}/api/dividends`);
     sync = true;
     fetch(`${scheme}://${aprUrl}/api/dividends`, {
       headers: {
