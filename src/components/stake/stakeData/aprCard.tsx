@@ -4,7 +4,7 @@ import { api } from "@/trpc/server";
 import { headers } from "next/headers";
 import React from "react";
 import AprDisplay from "./aprDisplay";
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 export default async function AprCard() {
   const list = headers();
   const aprUrl = list.get("host");
