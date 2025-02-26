@@ -1,9 +1,11 @@
 "use client";
 import useVaultFilterStore from "@/lib/store";
+import type { TVaults } from "@/lib/types";
 import { api } from "@/trpc/react";
 import React, { createContext, useContext, useState } from "react";
 
 interface VaultProviderType {
+  vaults: TVaults | undefined;
   isFetching: boolean;
   nextPage: () => void;
   prevPage: () => void;
