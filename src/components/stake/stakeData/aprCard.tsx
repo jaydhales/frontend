@@ -1,31 +1,23 @@
-import { env } from "@/env";
 import { executeGetDividendGreaterThan } from "@/server/queries/dividendsPaid";
 import { api } from "@/trpc/server";
-import { headers } from "next/headers";
 import React from "react";
 import AprDisplay from "./aprDisplay";
-export const revalidate = 60;
+import { syncDividends } from "@/lib/dividendsSync";
+import { selectPayouts } from "@/lib/db/queries/select";
+export const dynamic = "force-dynamic";
 export default async function AprCard() {
-  const list = headers();
-  const aprUrl = list.get("host");
-  const scheme = process.env.NODE_ENV === "production" ? "https" : "http";
-  const apr = await api.divends.getApr();
-  console.log(apr, "APR");
+  let apr = await api.divends.getApr();
   const dividendsPaidRequest = await executeGetDividendGreaterThan({
     timestamp: apr?.latestTimestamp ?? 0,
   });
-  let sync = false;
+  const paid = await executeGetDividendGreaterThan({ timestamp: 0 });
+  console.log({ paid });
+  const payouts = await selectPayouts();
+  console.log(payouts, "PAYOUTS");
+  console.log({ dividendsPaidRequest });
   if (dividendsPaidRequest.length) {
-    sync = true;
-    fetch(`${scheme}://${aprUrl}/api/dividends`, {
-      headers: {
-        Authorization: `Bearer ${env.SECRET_KEY}`,
-      },
-    }).catch((e) => {
-      console.log(e);
-    });
-    // sync apr with new events
-    // **DON'T BLOCK THREAD WITH AWAIT
+    await syncDividends();
+    apr = await api.divends.getApr();
   }
 
   return (
@@ -34,7 +26,7 @@ export default async function AprCard() {
         <div className="px-2 text-sm text-gray-300">Staking APR</div>
       </div>
       <div className="font-lora text-2xl ">
-        <AprDisplay currentApr={apr} sync={sync} />
+        <AprDisplay currentApr={apr} />
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import { SIR_USD_PRICE } from "@/data/constants";
-import { env } from "@/env";
 import { getEthUsdPriceOnDate } from "@/lib/coingecko";
 import {
   insertOrUpdateCurrentApr,
@@ -10,7 +9,6 @@ import {
   selectLastPayout,
 } from "@/lib/db/queries/select";
 import { executeGetDividendGreaterThan } from "@/server/queries/dividendsPaid";
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { formatUnits, parseUnits } from "viem";
 
@@ -20,22 +18,22 @@ import { randomInt } from "crypto";
 function sleep(ms = 0) {
   return new Promise((r) => setTimeout(r, ms));
 }
-const handler = async (req: NextRequest) => {
-  if (!req.headers.get("authorization")?.includes(env.SECRET_KEY)) {
-    return NextResponse.json({ success: false }, { status: 403 });
-  }
+
+export async function syncDividends() {
   // Using Key Value for 'Process Ids'
   // To prevent duplicate syncs
   // TODO: maybe a better way to do this
   // Use a queue system to prevent multiple syncs
   const uid = randomInt(0, 10000000000);
   const currentSyncId = await kv.get("syncId");
+  console.log({ currentSyncId });
   if (currentSyncId !== null) {
     return NextResponse.json({ success: false }, { status: 200 });
   }
   await kv.set("syncId", uid);
   await sleep(600);
   const foundId = await kv.get("syncId");
+  console.log(foundId);
   if (foundId !== uid) {
     return NextResponse.json({ success: false }, { status: 200 });
   }
@@ -46,9 +44,12 @@ const handler = async (req: NextRequest) => {
     } else {
       await syncPayouts({ timestamp: 0 });
     }
+    console.log({ lastPayout });
     const apr = await getAndCalculateLastMonthApr();
+    console.log({ apr });
     if (!apr) return;
     const lastPayoutA = await selectLastPayout();
+    console.log({ lastPayoutA });
     if (lastPayoutA[0]) {
       await insertOrUpdateCurrentApr({
         latestTimestamp: lastPayoutA[0].timestamp,
@@ -61,15 +62,15 @@ const handler = async (req: NextRequest) => {
         apr: apr.toString(),
       });
     }
+    console.log("success");
     await kv.set("syncId", null);
     return NextResponse.json({ success: true }, { status: 200 });
   } catch {
     await kv.set("syncId", null);
     return NextResponse.json({ success: false }, { status: 200 });
   }
-};
+}
 
-export { handler as GET };
 async function syncPayouts({ timestamp }: { timestamp: number }) {
   const dividendPaidEvents = await executeGetDividendGreaterThan({
     timestamp,
@@ -81,6 +82,8 @@ async function syncPayouts({ timestamp }: { timestamp: number }) {
     if (!ethPrice) {
       throw new Error("Could not get eth price!");
     }
+    console.log(e.ethAmount, e.stakedAmount, "ETH");
+    if (!e.ethAmount || !e.stakedAmount) return;
     const ethParsed = parseUnits(e.ethAmount, 0);
     const sirParsed = parseUnits(e.stakedAmount, 0);
     const sirUsdPriceBig = parseUnits(SIR_USD_PRICE, 12);
@@ -88,6 +91,14 @@ async function syncPayouts({ timestamp }: { timestamp: number }) {
 
     const ethDecimals = 10n ** 18n;
     const sirDecimals = 10n ** 12n;
+    console.log({ ethParsed, ethUsdPriceBig, sirParsed, sirUsdPriceBig });
+    if (
+      ethParsed === 0n ||
+      ethUsdPriceBig === 0n ||
+      sirParsed === 0n ||
+      sirUsdPriceBig === 0n
+    )
+      return;
     const ethInUsd = (ethParsed * ethUsdPriceBig) / ethDecimals;
     const sirInUSD = (sirParsed * sirUsdPriceBig) / sirDecimals;
     if (!ethPrice) continue;
@@ -104,17 +115,37 @@ async function getAndCalculateLastMonthApr() {
   let totalEthInUsd = 0n;
   const payouts = await selectLastMonthPayouts();
   console.log({ payouts });
-  payouts.forEach((payout) => {
-    totalSirInUsd += parseUnits(payout.sirInUSD, 0);
-    totalEthInUsd += parseUnits(payout.ethInUSD, 0);
-  });
+  if (!payouts.length) return;
   console.log({
     totalSirInUsd: formatUnits(totalSirInUsd, 12),
     totalEthInUsd: formatUnits(totalEthInUsd, 18),
   });
+  payouts.forEach((payout) => {
+    if (payout.sirInUSD) {
+      totalSirInUsd += parseUnits(payout.sirInUSD, 0);
+    } else {
+      totalSirInUsd += 0n;
+    }
+    if (payout.ethInUSD) {
+      totalEthInUsd += parseUnits(payout.ethInUSD, 0);
+    } else {
+      totalEthInUsd += 0n;
+    }
+  });
   if (totalSirInUsd === 0n) {
     return;
   }
-  const result = (12n * totalEthInUsd) / totalSirInUsd;
-  return result * 100n;
+  if (totalSirInUsd !== 0n && totalEthInUsd !== 0n) {
+    const totalEth = 12n * totalEthInUsd;
+    //because
+    const result = divide(totalEth, totalSirInUsd);
+    return result * 100n;
+  } else {
+    return 0n;
+  }
+}
+// because webpack is terrible
+function divide(a: bigint, b: bigint) {
+  if (a === 0n || b === 0n) return 0n;
+  return a / b;
 }
