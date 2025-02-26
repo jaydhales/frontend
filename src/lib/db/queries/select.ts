@@ -1,6 +1,6 @@
-import { desc, gt } from "drizzle-orm";
+import { desc, gt, eq, count } from "drizzle-orm";
 import { db } from "../db";
-import { currentApr, payoutTable } from "../schema";
+import { currentApr, errorLogs, payoutTable } from "../schema";
 
 export async function selectPayouts() {
   const apr = await db.select().from(payoutTable);
@@ -31,4 +31,15 @@ export async function selectCurrentApr() {
     console.error(e);
     return { id: 0, apr: "0", latestTimestamp: 0 };
   }
+}
+export async function selectErrorLogs() {
+  const logs = await db.select().from(errorLogs);
+  return logs;
+}
+export async function selectLogCountFromIp({ ipHash }: { ipHash: string }) {
+  const logs = await db
+    .select({ count: count() })
+    .from(errorLogs)
+    .where(eq(errorLogs.ip, ipHash));
+  return logs[0];
 }

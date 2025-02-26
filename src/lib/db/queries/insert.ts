@@ -1,6 +1,10 @@
 import { db } from "../db";
-import type { InsertCurrentApr, InsertPayout } from "../schema";
-import { currentApr, payoutTable } from "../schema";
+import type {
+  InsertCurrentApr,
+  InsertErrorLogs,
+  InsertPayout,
+} from "../schema";
+import { currentApr, errorLogs, payoutTable } from "../schema";
 
 export async function insertPayout(data: InsertPayout) {
   try {
@@ -17,6 +21,11 @@ export async function insertOrUpdateCurrentApr(data: InsertCurrentApr) {
     .onConflictDoUpdate({ target: currentApr.id, set: data });
   return query;
 }
+export async function insertErrorLogs(data: InsertErrorLogs) {
+  const query = await db.insert(errorLogs).values(data);
+  return query;
+}
+
 export async function deletePayouts() {
   const query = await db.delete(payoutTable);
   return query;
