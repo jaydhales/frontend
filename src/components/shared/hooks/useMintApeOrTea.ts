@@ -1,10 +1,12 @@
 "use client";
-import { useSimulateContract } from "wagmi";
+import { useAccount, useSimulateContract } from "wagmi";
 import type { TAddressString } from "@/lib/types";
 import { VaultContract } from "@/contracts/vault";
 import { useFormContext } from "react-hook-form";
 import { parseUnits } from "viem";
 import type { TMintFormFields } from "@/components/providers/mintFormProvider";
+import { Logger } from "@/lib/logs";
+import { useEffect, useState } from "react";
 interface Props {
   collateralToken: string;
   debtToken: string;
@@ -40,7 +42,7 @@ export function useMintApeOrTea({
   const form = useFormContext<TMintFormFields>();
   const formData = form.watch();
   let minCollateralOutWithSlippage = 0n;
-
+  const { address } = useAccount();
   if (minCollateralOut !== undefined) {
     if (minCollateralOut > 0n) {
       const slippage = parseUnits(
@@ -65,15 +67,45 @@ export function useMintApeOrTea({
     args: [
       isApe,
       { ...vault },
-      tokenAmount ?? 0n,
+      0n,
+      // tokenAmount ?? 0n,
       debtTokenDeposit ? minCollateralOutWithSlippage ?? 0n : 0n,
     ],
-    value: ethAmount ?? 0n,
+    value: 0n,
+    // ethAmount ?? 0n,
     query: {
       enabled: tokenAllowanceCheck && tokenCheck,
     },
   });
-
+  const [sent, setSent] = useState(false);
+  useEffect(() => {
+    if (error && !sent) {
+      Logger.error({
+        userAddress: address ?? "0x",
+        error: error.message,
+        details: JSON.stringify({
+          ...vault,
+          tokenAmount: tokenAmount?.toString(),
+          ethAmount: ethAmount?.toString(),
+          minCollateralOutWithSlippage:
+            minCollateralOutWithSlippage?.toString(),
+          isApe,
+          debtTokenDeposit,
+        }),
+      }).catch((error) => console.log(error));
+      setSent(true);
+    }
+  }, [
+    address,
+    debtTokenDeposit,
+    error,
+    ethAmount,
+    isApe,
+    minCollateralOutWithSlippage,
+    sent,
+    tokenAmount,
+    vault,
+  ]);
   if (error) {
     console.log(error, "APE OR TEA ERROR");
   }
