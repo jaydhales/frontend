@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form";
 import { parseUnits } from "viem";
 import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 import { Logger } from "@/lib/logs";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 interface Props {
   collateralToken: string;
   debtToken: string;
@@ -31,11 +31,13 @@ export function useMintApeOrTea({
   depositToken,
   minCollateralOut,
 }: Props) {
-  const vault = {
-    debtToken: debtToken as TAddressString,
-    collateralToken: collateralToken as TAddressString,
-    leverageTier,
-  };
+  const vault = useMemo(() => {
+    return {
+      debtToken: debtToken as TAddressString,
+      collateralToken: collateralToken as TAddressString,
+      leverageTier,
+    };
+  }, [collateralToken, debtToken, leverageTier]);
   const debtTokenDeposit = depositToken === debtToken && debtToken !== "";
   const tokenAmount = useEth ? 0n : amount;
   const ethAmount = useEth ? amount : 0n;
