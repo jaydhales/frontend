@@ -69,12 +69,10 @@ export function useMintApeOrTea({
     args: [
       isApe,
       { ...vault },
-      0n,
-      // tokenAmount ?? 0n,
+      tokenAmount ?? 0n,
       debtTokenDeposit ? minCollateralOutWithSlippage ?? 0n : 0n,
     ],
-    value: 0n,
-    // ethAmount ?? 0n,
+    value: ethAmount ?? 0n,
     query: {
       enabled: tokenAllowanceCheck && tokenCheck,
     },
