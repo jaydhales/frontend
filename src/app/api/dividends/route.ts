@@ -36,6 +36,7 @@ const handler = async (req: NextRequest) => {
   await kv.set("syncId", uid);
   await sleep(600);
   const foundId = await kv.get("syncId");
+  console.log(foundId);
   if (foundId !== uid) {
     return NextResponse.json({ success: false }, { status: 200 });
   }
@@ -46,9 +47,12 @@ const handler = async (req: NextRequest) => {
     } else {
       await syncPayouts({ timestamp: 0 });
     }
+    console.log({ lastPayout });
     const apr = await getAndCalculateLastMonthApr();
+    console.log({ apr });
     if (!apr) return;
     const lastPayoutA = await selectLastPayout();
+    console.log({ lastPayoutA });
     if (lastPayoutA[0]) {
       await insertOrUpdateCurrentApr({
         latestTimestamp: lastPayoutA[0].timestamp,
@@ -61,6 +65,7 @@ const handler = async (req: NextRequest) => {
         apr: apr.toString(),
       });
     }
+    console.log("success");
     await kv.set("syncId", null);
     return NextResponse.json({ success: true }, { status: 200 });
   } catch {
