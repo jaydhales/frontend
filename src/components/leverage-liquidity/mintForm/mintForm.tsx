@@ -33,15 +33,16 @@ import { useFormContext } from "react-hook-form";
 import { useFindVault } from "./hooks/useFindVault";
 import useIsDebtToken from "./hooks/useIsDebtToken";
 import useGetFormTokensInfo from "./hooks/useGetUserBals";
+import { useVaultProvider } from "@/components/providers/vaultProvider";
 interface Props {
-  vaultsQuery: TVaults;
   isApe: boolean;
 }
 
 /**
  * Contains form actions and validition.
  */
-export default function MintForm({ vaultsQuery, isApe }: Props) {
+export default function MintForm({ isApe }: Props) {
+  const { vaults: vaultsQuery } = useVaultProvider();
   const [useEthRaw, setUseEth] = useState(false);
   const {
     userEthBalance,

@@ -1,18 +1,12 @@
 "use client";
 import React from "react";
-import type { TVaults } from "@/lib/types";
 import { VaultTableRow } from "./vaultTableRow";
 import { useSearchParams } from "next/navigation";
 import ToolTip from "@/components/ui/tooltip";
 import { useVaultProvider } from "@/components/providers/vaultProvider";
 import VaultRowSkeleton from "./vaultRowSkeleton";
 import Show from "@/components/shared/show";
-export default function VaultTable({
-  isApe,
-}: {
-  vaultQuery: TVaults;
-  isApe: boolean;
-}) {
+export default function VaultTable({ isApe }: { isApe: boolean }) {
   const params = useSearchParams();
   const vaultPage = params.get("vault-page");
   let pagination = 1;

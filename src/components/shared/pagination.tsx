@@ -1,10 +1,7 @@
 "use client";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { useVaultProvider } from "../providers/vaultProvider";
-export default function Pagination({ max }: { max: number }) {
-  if (max < 1) {
-    max = 1;
-  }
+export default function Pagination() {
   // let page = pagination ? parseInt(pagination) : 1;
   const { nextPage, vaultLength, prevPage, page } = useVaultProvider();
   return (
