@@ -114,6 +114,7 @@ async function getAndCalculateLastMonthApr() {
   let totalEthInUsd = 0n;
   const payouts = await selectLastMonthPayouts();
   console.log({ payouts });
+  if (!payouts.length) return;
   payouts.forEach((payout) => {
     totalSirInUsd += parseUnits(payout.sirInUSD, 0);
     totalEthInUsd += parseUnits(payout.ethInUSD, 0);
