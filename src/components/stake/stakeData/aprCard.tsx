@@ -24,7 +24,7 @@ export default async function AprCard() {
         Authorization: `Bearer ${env.SECRET_KEY}`,
       },
     })
-      .then((r) => r.json())
+      .then((r) => r.text())
       .catch((e) => {
         console.log(e, "ERROR");
       });
