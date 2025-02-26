@@ -134,6 +134,17 @@ async function getAndCalculateLastMonthApr() {
   if (totalSirInUsd === 0n) {
     return;
   }
-  const result = (12n * totalEthInUsd) / totalSirInUsd;
-  return result * 100n;
+  if (totalSirInUsd !== 0n && totalEthInUsd !== 0n) {
+    const totalEth = 12n * totalEthInUsd;
+    //because
+    const result = divide(totalEth, totalSirInUsd);
+    return result;
+  } else {
+    return 0n;
+  }
+}
+// because webpack is terrible
+function divide(a: bigint, b: bigint) {
+  if (a === 0n || b === 0n) return 0n;
+  return a / b;
 }
