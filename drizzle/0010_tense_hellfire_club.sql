@@ -1,0 +1,1 @@
+ALTER TABLE "apr_rates" RENAME COLUMN "id_" TO "id";
