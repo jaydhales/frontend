@@ -41,7 +41,7 @@ export default async function AprCard() {
             <div className="mb-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
               <span>
                 The APR is estimated using the past month&apos;s dividend data.
-                Since SIR isn&apos;t traded yet, the presale price of $0.000165 is used.
+                Since SIR isn&apos;t traded yet, the presale price of $0.000165 per SIR is used.
               </span>
             </div>
           </HoverCardContent>
