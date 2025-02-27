@@ -13,7 +13,7 @@ export default function AprDisplay({
   const APR = parseUnits(currentApr?.apr ?? "0", 0);
 
   return (
-    <div className="font-lora text-2xl ">
+    <div className="font-normal text-2xl ">
       <Show when={APR > 0n} fallback={<h1>N/A</h1>}>
         {/* remove eth decimals since eth 18 sir 12 === 6 */}
         <h1>{formatNumber(formatUnits(APR, 6))}%</h1>
