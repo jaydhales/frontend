@@ -40,8 +40,8 @@ export default async function AprCard() {
           <HoverCardContent side="top" alignOffset={10}>
             <div className="mb-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
               <span>
-                The APR is estimated from last month's dividend data.
-                While SIR does not trade in secondary markets, we use the presale price of $0.00016542597.
+                "The APR is estimated from last month's dividend data.
+                While SIR does not trade in secondary markets, we use the presale price of $0.00016542597."
               </span>
             </div>
           </HoverCardContent>
