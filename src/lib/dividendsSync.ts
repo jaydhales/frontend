@@ -118,8 +118,8 @@ async function getAndCalculateLastMonthApr() {
   let result = 0n;
   payouts.forEach((payout) => {
     if (payout.sirInUSD && payout.ethInUSD) {
-      let sirInUsd = parseUnits(payout.sirInUSD, 0);
-      let ethInUsd = parseUnits(payout.ethInUSD, 0);
+      const sirInUsd = parseUnits(payout.sirInUSD, 0);
+      const ethInUsd = parseUnits(payout.ethInUSD, 0);
       result += divide(100n *12n * ethInUsd, sirInUsd);
     }
   });
