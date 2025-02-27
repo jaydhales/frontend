@@ -24,7 +24,7 @@ export async function syncDividends() {
   // To prevent duplicate syncs
   // TODO: maybe a better way to do this
   // Use a queue system to prevent multiple syncs
-  const uid = randomInt(0, 10000000000);
+  const uid = randomInt(0, 10000000000); // WTF????
   const currentSyncId = await kv.get("syncId");
   console.log({ currentSyncId });
   if (currentSyncId !== null) {
@@ -111,38 +111,19 @@ async function syncPayouts({ timestamp }: { timestamp: number }) {
 }
 
 async function getAndCalculateLastMonthApr() {
-  let totalSirInUsd = 0n;
-  let totalEthInUsd = 0n;
   const payouts = await selectLastMonthPayouts();
   console.log({ payouts });
   if (!payouts.length) return;
-  console.log({
-    totalSirInUsd: formatUnits(totalSirInUsd, 12),
-    totalEthInUsd: formatUnits(totalEthInUsd, 18),
-  });
+
+  let result = 0n;
   payouts.forEach((payout) => {
-    if (payout.sirInUSD) {
-      totalSirInUsd += parseUnits(payout.sirInUSD, 0);
-    } else {
-      totalSirInUsd += 0n;
-    }
-    if (payout.ethInUSD) {
-      totalEthInUsd += parseUnits(payout.ethInUSD, 0);
-    } else {
-      totalEthInUsd += 0n;
+    if (payout.sirInUSD && payout.ethInUSD) {
+      let sirInUsd = parseUnits(payout.sirInUSD, 0);
+      let ethInUsd = parseUnits(payout.ethInUSD, 0);
+      result += divide(100n *12n * ethInUsd, sirInUsd);
     }
   });
-  if (totalSirInUsd === 0n) {
-    return;
-  }
-  if (totalSirInUsd !== 0n && totalEthInUsd !== 0n) {
-    const totalEth = 12n * totalEthInUsd;
-    //because
-    const result = divide(totalEth, totalSirInUsd);
-    return result * 100n;
-  } else {
-    return 0n;
-  }
+  return result;
 }
 // because webpack is terrible
 function divide(a: bigint, b: bigint) {
