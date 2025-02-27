@@ -1,28 +1,20 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { api } from "@/trpc/react";
-import {
-  useAccount,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
+import React, { useCallback, useMemo, useState } from "react";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { motion } from "motion/react";
-import { formatUnits } from "viem";
-import { useFormContext } from "react-hook-form";
-import type { TMintFormFields, TVaults } from "@/lib/types";
+import { formatUnits, parseUnits } from "viem";
+import { type TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
 import VaultParamsInputSelects from "./vaultParamsInputSelects";
-import { ESubmitType, useCheckSubmitValid } from "./hooks/useCheckSubmitValid";
 import { useQuoteMint } from "./hooks/useQuoteMint";
 import useSetRootError from "./hooks/useSetRootError";
 import { Card } from "@/components/ui/card";
-import { findVault, formatNumber } from "@/lib/utils";
+import { formatNumber, parseAddress } from "@/lib/utils";
 import Estimations from "./estimations";
 import MintFormSubmit from "./submit";
 import { useFormSuccessReset } from "./hooks/useFormSuccessReset";
 import { useTransactions } from "./hooks/useTransactions";
 import TransactionModal from "@/components/shared/transactionModal";
-import { WETH_ADDRESS } from "@/data/constants";
 import { useGetReceivedTokens } from "./hooks/useGetReceivedTokens";
 import { useResetAfterApprove } from "./hooks/useResetAfterApprove";
 import TransactionInfo from "./transactionInfo";
@@ -32,57 +24,81 @@ import { useResetTransactionModal } from "./hooks/useResetTransactionModal";
 import ErrorMessage from "@/components/ui/error-message";
 import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 import { useFilterVaults } from "./hooks/useFilterVaults";
-import useVaultFilterStore from "@/lib/store";
+import { useMintFormValidation } from "./hooks/useMintFormValidation";
+import Dropdown from "@/components/shared/dropDown";
+import { useIsWeth } from "./hooks/useIsWeth";
+import useSetDepositTokenDefault from "./hooks/useSetDepositTokenDefault";
+import type { TMintFormFields } from "@/components/providers/mintFormProvider";
+import { useFormContext } from "react-hook-form";
+import { useFindVault } from "./hooks/useFindVault";
+import useIsDebtToken from "./hooks/useIsDebtToken";
+import useGetFormTokensInfo from "./hooks/useGetUserBals";
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
 }
 
 /**
- * Contains form actions and validity.
+ * Contains form actions and validition.
  */
 export default function MintForm({ vaultsQuery, isApe }: Props) {
   const [useEthRaw, setUseEth] = useState(false);
-  const { address } = useAccount();
-  const form = useFormContext<TMintFormFields>();
-  const formData = form.watch();
-  const { data: userEthBalance } = api.user.getEthBalance.useQuery(
-    { userAddress: address },
-    { enabled: Boolean(address) && Boolean(formData.long) },
-  );
-
-  const { data: decimalData } = api.erc20.getErc20Decimals.useQuery(
-    {
-      tokenAddress: formData.long.split(",")[0] ?? "0x",
-    },
-    {
-      enabled: Boolean(formData.long),
-    },
-  );
-
-  const useEth = useMemo(() => {
-    // Ensure use eth toggle is not used on non-weth tokens
-    const isWeth =
-      formData.long.split(",")[0]?.toLowerCase() === WETH_ADDRESS.toLowerCase();
-    return isWeth ? useEthRaw : false;
-  }, [useEthRaw, formData.long]);
-
-  const decimals = useEth ? 18 : decimalData ?? 18;
-
   const {
-    requests,
+    userEthBalance,
     userBalanceFetching,
-    isApproveFetching,
-    isMintFetching,
     userBalance,
-  } = useTransactions({
+    debtDecimals,
+    collateralDecimals,
+    depositDecimals,
+  } = useGetFormTokensInfo();
+  const isWeth = useIsWeth();
+
+  // Ensure use eth toggle is not used on non-weth tokens
+  const { setError, formState, setValue, watch, handleSubmit } =
+    useFormContext<TMintFormFields>();
+  const { deposit, leverageTier, long: longInput } = watch();
+  const useEth = useMemo(() => {
+    return isWeth ? useEthRaw : false;
+  }, [isWeth, useEthRaw]);
+
+  const { amountTokens, minCollateralOut } = useQuoteMint({
+    isApe,
+    decimals: depositDecimals ?? 0,
+  });
+
+  const selectedVault = useFindVault(vaultsQuery);
+
+  const needsApproval = useMemo(() => {
+    if (userBalanceFetching) {
+      return false;
+    }
+    const tokenAllowance = userBalance?.tokenAllowance?.result;
+    const decimals = depositDecimals ?? 18;
+    if (useEth) {
+      return false;
+    }
+    if (parseUnits(deposit ?? "0", decimals) > (tokenAllowance ?? 0n)) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [
+    deposit,
+    depositDecimals,
     useEth,
+    userBalance?.tokenAllowance?.result,
+    userBalanceFetching,
+  ]);
+  const { requests, isApproveFetching, isMintFetching } = useTransactions({
+    useEth,
+    tokenAllowance: userBalance?.tokenAllowance?.result,
+    vaultId: selectedVault.result?.vaultId,
+    minCollateralOut,
     isApe,
     vaultsQuery,
-    decimals,
+    decimals: depositDecimals ?? 18,
   });
   const { versus, leverageTiers, long } = useFilterVaults({
-    formData,
     vaultsQuery,
   });
 
@@ -92,16 +108,14 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     isSuccess: isConfirmed,
     data: transactionData,
   } = useWaitForTransactionReceipt({ hash });
-  const selectedVault = useMemo(() => {
-    return findVault(vaultsQuery, formData);
-  }, [formData, vaultsQuery]);
-
+  useSetDepositTokenDefault({
+    collToken: selectedVault.result?.collateralToken,
+  });
   const { tokenReceived } = useGetReceivedTokens({
     apeAddress: selectedVault.result?.apeAddress ?? "0x",
     logs: transactionData?.logs,
     isApe,
   });
-
   // Invalidate if approve or mint tx is successful.
   const [currentTxType, setCurrentTxType] = useState<
     // Used to know which
@@ -114,52 +128,47 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     useEth,
     txBlock: parseInt(transactionData?.blockNumber.toString() ?? "0"),
   });
-
-  const { maxCollateralIn, badHealth, isLoading } = useCalculateMaxApe({
-    leverageTier: formData.leverageTier,
-    vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
-  });
-
-  const { isValid, errorMessage, submitType } = useCheckSubmitValid({
+  const usingDebtToken = useIsDebtToken();
+  const { maxCollateralIn, maxDebtIn, badHealth, isLoading } =
+    useCalculateMaxApe({
+      usingDebtToken,
+      collateralDecimals: collateralDecimals ?? 18,
+      vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
+    });
+  const maxIn = usingDebtToken ? maxDebtIn : maxCollateralIn;
+  const { isValid, errorMessage } = useMintFormValidation({
     ethBalance: userEthBalance,
-    decimals,
+    isApe,
+    decimals: depositDecimals ?? 18,
     useEth,
-    deposit: formData.deposit ?? "0",
-    depositToken: formData.depositToken,
     requests,
     tokenBalance: userBalance?.tokenBalance?.result,
     tokenAllowance: userBalance?.tokenAllowance?.result,
     mintFetching: isMintFetching,
     approveFetching: isApproveFetching,
-    maxCollateralIn: isApe ? maxCollateralIn : 0n,
+    maxCollateralIn: isApe ? maxIn : 0n,
   });
 
-  const { quoteData } = useQuoteMint({ formData, isApe });
   useSetRootError({
-    formData,
-    setError: form.setError,
+    setError: setError,
     errorMessage,
-    rootErrorMessage: form.formState.errors.root?.message,
+    rootErrorMessage: formState.errors.root?.message,
   });
-
   const onSubmit = useCallback(() => {
-    if (submitType === null) {
-      return;
-    }
-    if (submitType === ESubmitType.mint && requests.mintRequest) {
-      setCurrentTxType("mint");
-      writeContract?.(requests.mintRequest);
-      return;
-    }
-    if (submitType === ESubmitType.approve && requests.approveWriteRequest) {
+    if (requests.approveWriteRequest && needsApproval) {
       setCurrentTxType("approve");
       writeContract(requests.approveWriteRequest);
       return;
     }
+    if (requests.mintRequest) {
+      setCurrentTxType("mint");
+      writeContract?.(requests.mintRequest);
+      return;
+    }
   }, [
+    needsApproval,
     requests.approveWriteRequest,
     requests.mintRequest,
-    submitType,
     writeContract,
   ]);
 
@@ -171,8 +180,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
   const { openTransactionModal, setOpenTransactionModal } =
     useResetTransactionModal({ reset, isConfirmed });
 
-  const levTier = form.getValues("leverageTier");
-  const fee = useFormFee({ levTier, isApe });
+  const fee = useFormFee({ leverageTier, isApe });
   const modalSubmit = () => {
     if (!isConfirmed) {
       onSubmit();
@@ -181,33 +189,32 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     }
   };
   const disabledInputs = useMemo(() => {
-    if (!isApe) return false;
-    if (!selectedVault.result?.vaultId) {
+    if (!selectedVault.result?.vaultId || !isApe) {
+      setValue("deposit", "");
       return false;
     }
     if (badHealth) {
       return true;
     }
-  }, [badHealth, selectedVault.result?.vaultId, isApe]);
-  const isApproving = useResetAfterApprove({
+  }, [selectedVault.result?.vaultId, isApe, badHealth, setValue]);
+
+  useResetAfterApprove({
     isConfirmed,
     reset,
-    submitType,
+    needsApproval,
   });
-  useEffect(() => {
-    if (formData.deposit !== "" && disabledInputs) {
-      form.setValue("deposit", "");
-    }
-  }, [disabledInputs, form, form.setValue, formData.deposit]);
-  const deposit = form.getValues("deposit");
-  useEffect(() => {
-    if (!isPending && !isConfirming && !isConfirmed) {
-      setOpenTransactionModal(false);
-    }
-  }, [isPending, setOpenTransactionModal, isConfirming, isConfirmed]);
+  const depositTokenSymbol = !usingDebtToken
+    ? selectedVault.result?.collateralSymbol
+    : selectedVault.result?.debtSymbol;
+  let maxTokenIn;
+  if (isApe) {
+    maxTokenIn = usingDebtToken
+      ? formatUnits(maxDebtIn ?? 0n, debtDecimals ?? 18)
+      : formatUnits(maxCollateralIn ?? 0n, collateralDecimals ?? 18);
+  }
   return (
     <Card>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <TransactionModal.Root
           setOpen={setOpenTransactionModal}
           open={openTransactionModal}
@@ -215,21 +222,22 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <TransactionModal.Close setOpen={setOpenTransactionModal} />
           <TransactionModal.InfoContainer>
             <TransactionInfo
-              decimals={decimals}
+              needsApproval={needsApproval}
+              vaultId={selectedVault.result?.vaultId ?? "0"}
+              decimals={collateralDecimals ?? 18}
               isConfirmed={isConfirmed}
+              isApproving={needsApproval}
               isConfirming={isConfirming}
               userBalanceFetching={userBalanceFetching}
               isPending={isPending}
-              submitType={submitType}
               isApe={isApe}
               useEth={useEth}
-              quoteData={quoteData}
-              isApproving={isApproving}
+              quoteData={amountTokens}
               tokenReceived={tokenReceived}
             />
           </TransactionModal.InfoContainer>
           <TransactionModal.StatSubmitContainer>
-            <Show when={submitType === ESubmitType.mint && !isConfirmed}>
+            <Show when={!needsApproval && !isConfirmed}>
               <TransactionModal.StatContainer>
                 <TransactionModal.StatRow
                   title={"Fee Percent"}
@@ -239,30 +247,43 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                   title="Fee Amount"
                   value={`${formatNumber(
                     parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
-                  )} ${form.getValues("long").split(",")[1]}`}
+                  )} ${depositTokenSymbol}`}
                 />
+
+                <div className="flex w-full justify-start   text-[14px] text-gray-400">
+                  <div className="flex w-[300px]">
+                    <p>
+                      {isApe
+                        ? "You pay a one-time fee. No recurring fees are charged while holding APE tokens regardless of the duration."
+                        : "As an LPer, you pay a one-time fee to mitigate some types of economic attacks, which you will recover over time as you earn fees."}
+                    </p>
+                  </div>
+                </div>
               </TransactionModal.StatContainer>
             </Show>
-
+            {isMintFetching && <h2>Mint is Fetching</h2>}
             <TransactionModal.SubmitButton
               onClick={modalSubmit}
-              disabled={(!isValid && !isConfirmed) || isPending}
+              disabled={
+                (!isValid && !isConfirmed) ||
+                isPending ||
+                isConfirming ||
+                (isConfirmed && needsApproval)
+              }
               loading={isPending || isConfirming}
-              isConfirmed={isConfirmed}
+              isConfirmed={isConfirmed && !needsApproval}
             >
               <Show
-                when={submitType === ESubmitType.mint}
-                fallback="Confirm Approve"
+                when={!needsApproval || isConfirmed}
+                fallback={isConfirmed ? "Confirm Mint" : "Confirm Approve"} // if approval confirmed there will be invalidation lag
               >
                 {"Confirm Mint"}
               </Show>
             </TransactionModal.SubmitButton>
           </TransactionModal.StatSubmitContainer>
         </TransactionModal.Root>
-
         {/* Versus, Long, and Leverage Dropdowns */}
         <VaultParamsInputSelects
-          form={form}
           versus={versus}
           leverageTiers={leverageTiers}
           long={long}
@@ -270,55 +291,76 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <DepositInputs.Root>
           <DepositInputs.Inputs
             inputLoading={isLoading}
-            disabled={Boolean(disabledInputs) && !isLoading}
-            decimals={decimals}
+            disabled={false}
+            decimals={collateralDecimals ?? 18}
             useEth={useEth}
             setUseEth={(b: boolean) => {
               setUseEth(b);
             }}
-            maxCollateralIn={
-              maxCollateralIn
-                ? formatUnits(maxCollateralIn, decimals)
-                : undefined
-            }
-            balance={formatUnits(balance ?? 0n, decimals)}
-            form={form}
-            depositAsset={formData.long}
-          />
+            maxTokenIn={maxTokenIn}
+            balance={formatUnits(balance ?? 0n, depositDecimals ?? 18)}
+          >
+            <Dropdown.Root
+              colorScheme="dark"
+              name="depositToken"
+              title=""
+              disabled={!Boolean(selectedVault.result)}
+            >
+              <Show when={Boolean(selectedVault.result)}>
+                <Dropdown.Item
+                  tokenAddress={selectedVault.result?.collateralToken ?? ""}
+                  value={selectedVault.result?.collateralToken ?? ""}
+                >
+                  {selectedVault.result?.collateralSymbol}
+                </Dropdown.Item>
+                <Dropdown.Item
+                  tokenAddress={selectedVault.result?.debtToken ?? ""}
+                  value={selectedVault.result?.debtToken ?? ""}
+                >
+                  {selectedVault.result?.debtSymbol}
+                </Dropdown.Item>
+              </Show>
+            </Dropdown.Root>
+          </DepositInputs.Inputs>
         </DepositInputs.Root>
-        <div className="py-3">
-          <Show when={Boolean(disabledInputs && !isLoading)}>
-            <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
-          </Show>
+        {/* opacity-0 */}
+        <div
+          className={`py-3 ${Boolean(disabledInputs && !isLoading) === true ? "" : "opacity-0"}`}
+        >
+          {/* <Show when={Boolean(disabledInputs && !isLoading)}> */}
+          <ErrorMessage>Insufficient liquidity in the vault.</ErrorMessage>
+          {/* </Show> */}
         </div>
         <Estimations
           isApe={isApe}
-          disabled={!Boolean(quoteData)}
-          ape={formatUnits(quoteData ?? 0n, decimals)}
+          disabled={!Boolean(amountTokens)}
+          ape={formatUnits(amountTokens ?? 0n, collateralDecimals ?? 18)}
         />
         <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0.2 }}>
           <MintFormSubmit.Root>
             <Show when={isApe} fallback={<div className="py-3" />}>
-              <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`With leveraging you risk losing up to 100% of your deposit, you can not lose more than your deposit`}</p>
+              <p className="pb-2 text-center text-sm text-gray-500 md:w-[450px]">{`SIR mitigates volatility decay and eliminates liquidation risks, but as a new primitive, it isn't risk-free — volatility can still result in losses.`}</p>
             </Show>
             <MintFormSubmit.OpenTransactionModalButton
               isValid={isValid}
               onClick={() => {
                 setOpenTransactionModal(true);
-                onSubmit();
+                // onSubmit();
               }}
-              submitType={submitType}
+              needsApproval={needsApproval}
             />
             <MintFormSubmit.ConnectButton />
             <MintFormSubmit.FeeInfo
-              feeValue={form.getValues("long").split(",")[1]}
-              isApe={isApe}
+              feeValue={parseAddress(longInput)}
               isValid={isValid}
-              fee={fee}
-              deposit={form.getValues("deposit")}
+              feeAmount={`${formatNumber(
+                parseFloat(deposit ?? "0") * (parseFloat(fee ?? "0") / 100),
+              )} ${depositTokenSymbol}`}
+              feePercent={fee}
+              deposit={deposit}
             />
             <MintFormSubmit.Errors>
-              {form.formState.errors.root?.message}
+              {formState.errors.root?.message}
             </MintFormSubmit.Errors>
           </MintFormSubmit.Root>
         </motion.div>

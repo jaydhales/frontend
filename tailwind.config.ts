@@ -1,4 +1,3 @@
-import { transform } from "next/dist/build/swc";
 import type { Config } from "tailwindcss";
 
 const config = {
@@ -39,7 +38,7 @@ const config = {
       },
       animation: {
         "fade-up": "fadeUp 0.3s ease-in-out ",
-        "fade-in": "fadeIn 0.3s ease-in-out forwards",
+        "fade-in": "fadeIn 0.4s ease-in-out forwards",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
@@ -79,6 +78,7 @@ const config = {
           700: "hsl(var(--secondary-700), <alpha-value>)",
           800: "hsl(var(--secondary-800), <alpha-value>)",
           900: "hsl(var(--secondary-900), <alpha-value>)",
+          1000: "hsl(var(--secondary-1000), <alpha-value>)",
           foreground: "hsl(var(--secondary-foreground), <alpha-value>)",
         },
         tertiary: {

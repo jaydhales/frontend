@@ -1,12 +1,13 @@
 import useGetChainId from "@/components/shared/hooks/useGetChainId";
 import { env } from "@/env";
 import { useMemo } from "react";
+import { useFormContext } from "react-hook-form";
 import type { SimulateContractReturnType } from "viem";
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
+import { usingDebtToken } from "../utils";
+import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 
 interface Props {
-  deposit: string | undefined;
-  depositToken: string;
   requests: {
     mintRequest?: SimulateContractReturnType["request"] | undefined;
     approveWriteRequest?: SimulateContractReturnType["request"] | undefined;
@@ -17,23 +18,19 @@ interface Props {
   mintFetching: boolean;
   approveFetching?: boolean;
   useEth?: boolean;
+  isApe: boolean;
   decimals: number;
   maxCollateralIn?: bigint;
 }
-export enum ESubmitType {
-  "mint",
-  "approve",
-}
 
 /**
- * Checks if user can submit form.
+ * Checks if user can submit transaction.
+ * Also checks if user needs ERC20 approval
  * @returns
  * isValid -
  * errorMessage -
- * submitType - 'approve' | 'mint'
  */
-export const useCheckSubmitValid = ({
-  deposit,
+export const useMintFormValidation = ({
   tokenAllowance,
   mintFetching,
   requests,
@@ -43,14 +40,26 @@ export const useCheckSubmitValid = ({
   maxCollateralIn,
   useEth,
   decimals,
+  isApe,
 }: Props) => {
   const chainId = useGetChainId();
-  const { isValid, errorMessage, submitType } = useMemo(() => {
+  const form = useFormContext<TMintFormFields>();
+  const formData = form.watch();
+  const { deposit, slippage, depositToken, versus } = formData;
+  const { isValid, errorMessage } = useMemo(() => {
+    if (usingDebtToken(versus, depositToken)) {
+      const num = Number.parseFloat(slippage ?? "0");
+      if (num < 0 || num > 10) {
+        return {
+          isValid: false,
+          errorMessage: "Slippage must be between 0% and 10%.",
+        };
+      }
+    }
     if (chainId?.toString() !== env.NEXT_PUBLIC_CHAIN_ID && Boolean(chainId)) {
       return {
         isValid: false,
         errorMessage: "Wrong network!",
-        submitType: ESubmitType.mint,
       };
     }
 
@@ -58,37 +67,37 @@ export const useCheckSubmitValid = ({
       return {
         isValid: false,
         errorMessage: "Enter amount greater than 0.",
-        submitType: ESubmitType.mint,
       };
     }
-    if (maxCollateralIn) {
+    if (maxCollateralIn && isApe) {
       if (parseUnits(deposit ?? "0", decimals) > maxCollateralIn) {
         return {
           isValid: false,
-          errorMessage: "Insufficient liquidity in the vault.",
-          submitType: ESubmitType.mint,
+          errorMessage: "",
         };
       }
+    } else if (!maxCollateralIn && isApe) {
+      return {
+        isValid: false,
+        errorMessage: "",
+      };
     }
     if (useEth) {
       if ((ethBalance ?? 0n) < parseUnits(deposit ?? "0", decimals)) {
         return {
           isValid: false,
           errorMessage: "Insufficient Balance.",
-          submitType: ESubmitType.mint,
         };
       }
       if (requests.mintRequest) {
         return {
           isValid: true,
           errorMessage: "",
-          submitType: ESubmitType.mint,
         };
       }
       return {
         isValid: false,
         errorMessage: "",
-        submitType: ESubmitType.mint,
       };
     }
 
@@ -96,7 +105,6 @@ export const useCheckSubmitValid = ({
       return {
         isValid: false,
         errorMessage: "Insufficient Balance.",
-        submitType: ESubmitType.mint,
       };
     }
     // CHECK ALLOWANCE FIRST
@@ -108,20 +116,17 @@ export const useCheckSubmitValid = ({
         return {
           isValid: true,
           errorMessage: null,
-          submitType: ESubmitType.approve,
         };
       else {
         if (approveFetching) {
           return {
             isValid: false,
             errorMessage: "",
-            submitType: ESubmitType.approve,
           };
         } else {
           return {
             isValid: false,
             errorMessage: "An Approve Error Occured.",
-            submitType: ESubmitType.approve,
           };
         }
       }
@@ -130,36 +135,37 @@ export const useCheckSubmitValid = ({
       return {
         isValid: true,
         errorMessage: null,
-        submitType: ESubmitType.mint,
       };
     else {
       if (mintFetching) {
         return {
           isValid: false,
           errorMessage: "",
-          submitType: ESubmitType.mint,
         };
       } else {
         return {
           isValid: false,
           errorMessage: "Unexpected mint error.",
-          submitType: ESubmitType.mint,
         };
       }
     }
   }, [
+    versus,
+    depositToken,
     chainId,
     deposit,
     decimals,
     maxCollateralIn,
+    isApe,
     useEth,
     tokenBalance,
     tokenAllowance,
     requests.approveWriteRequest,
     requests.mintRequest,
+    slippage,
     ethBalance,
     approveFetching,
     mintFetching,
   ]);
-  return { isValid, errorMessage, submitType };
+  return { isValid, errorMessage };
 };

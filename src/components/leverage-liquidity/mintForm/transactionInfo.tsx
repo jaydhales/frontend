@@ -1,5 +1,4 @@
 import TransactionModal from "@/components/shared/transactionModal";
-import { ESubmitType } from "./hooks/useCheckSubmitValid";
 import { TransactionEstimates } from "./transactionEstimates";
 import { TransactionStatus } from "./transactionStatus";
 import { CircleCheck } from "lucide-react";
@@ -13,11 +12,12 @@ interface Props {
   isConfirming: boolean;
   userBalanceFetching: boolean;
   isPending: boolean;
-  submitType: ESubmitType;
+  needsApproval: boolean;
   tokenReceived: bigint | undefined;
   isApe: boolean;
   useEth: boolean;
   quoteData: bigint | undefined;
+  vaultId: string;
 }
 
 export default function TransactionInfo({
@@ -27,11 +27,12 @@ export default function TransactionInfo({
   isConfirmed,
   isPending,
   isApproving,
-  submitType,
+  needsApproval,
   tokenReceived,
   decimals,
   useEth,
   userBalanceFetching,
+  vaultId,
 }: Props) {
   if (!isConfirmed) {
     return (
@@ -39,21 +40,23 @@ export default function TransactionInfo({
         <TransactionStatus
           showLoading={isConfirming || userBalanceFetching}
           waitForSign={isPending}
-          action={submitType === ESubmitType.mint ? "Mint" : "Approve"}
+          action={!needsApproval ? "Mint" : "Approve"}
         />
-        {submitType === ESubmitType.mint && (
+        {!needsApproval && (
           <TransactionEstimates
             isApe={isApe}
+            decimals={decimals}
             usingEth={useEth}
             collateralEstimate={quoteData}
+            vaultId={vaultId}
           />
         )}
-        {submitType === ESubmitType.mint && (
+        {!needsApproval && (
           <TransactionModal.Disclaimer>
             Output is estimated.
           </TransactionModal.Disclaimer>
         )}
-        {submitType === ESubmitType.approve && (
+        {needsApproval && (
           <TransactionModal.Disclaimer>
             Approve SIR to send token funds .....
           </TransactionModal.Disclaimer>
@@ -77,9 +80,11 @@ export default function TransactionInfo({
         <h2 className="text-center text-gray-300">Transaction Successful!</h2>
         {Boolean(tokenReceived) && (
           <h3 className="flex items-center justify-center gap-x-1 ">
-            <span className="text-xl font-bold ">
-              {isApe ? "APE" : "TEA"}{" "}
-              {formatNumber(formatUnits(tokenReceived ?? 0n, decimals), 4)}
+            <span className="text-xl font-medium ">
+              {formatNumber(formatUnits(tokenReceived ?? 0n, decimals), 4)}{" "}
+              {isApe ? "APE" : "TEA"}
+              <span className="text-gray-400">{"-"}</span>
+              {vaultId}{" "}
             </span>
           </h3>
         )}

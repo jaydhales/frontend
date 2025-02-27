@@ -7,9 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
-import type { SimulateContractReturnType } from "viem";
 import { formatUnits, parseUnits } from "viem";
-import { useCheckValidityBurn } from "./hooks/useCheckValidityBurn";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
@@ -20,12 +18,12 @@ import { useGetTxTokens } from "./hooks/useGetTxTokens";
 import { X } from "lucide-react";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
 import { useClaimTeaRewards } from "./hooks/useClaimTeaRewards";
-import useGetFee from "./hooks/useGetFee";
 import { formatNumber } from "@/lib/utils";
 import ClaimAndStakeToggle from "./claimAndStakeToggle";
 import { DisplayCollateral } from "./displayCollateral";
 import { TokenInput } from "./tokenInput";
 import { subgraphSyncPoll } from "@/lib/utils/sync";
+import { useBurnFormValidation } from "./hooks/useBurnFormValidation";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -42,7 +40,6 @@ export default function BurnForm({
   row,
   isApe,
   close,
-  levTier,
   teaRewardBalance,
   isClaiming,
 }: {
@@ -66,6 +63,7 @@ export default function BurnForm({
       debtToken: row.debtToken,
       leverageTier: parseInt(row.leverageTier),
       collateralToken: row.collateralToken,
+      decimals: row.positionDecimals,
     },
     {
       enabled: Boolean(formData.deposit),
@@ -99,11 +97,9 @@ export default function BurnForm({
       } else {
         if (isClaimingRewards) {
           utils.user.getTeaRewards.invalidate().catch((e) => console.log(e));
-          if (claimAndStake) {
-            utils.user.getUnstakedSirBalance
-              .invalidate()
-              .catch((e) => console.log(e));
-          }
+          utils.user.getUnstakedSirBalance
+            .invalidate()
+            .catch((e) => console.log(e));
           utils.user.getTotalSirBalance.invalidate().catch((e) => {
             console.log(e);
           });
@@ -141,7 +137,10 @@ export default function BurnForm({
       debtToken: row.debtToken,
       leverageTier: parseFloat(row.leverageTier),
     },
-    amount: parseUnits(formData.deposit?.toString() ?? "0", 18),
+    amount: parseUnits(
+      formData.deposit?.toString() ?? "0",
+      row.positionDecimals,
+    ),
   });
 
   const { claimRewardRequest } = useClaimTeaRewards({
@@ -155,19 +154,19 @@ export default function BurnForm({
     }
   }, [form, isConfirmed]);
 
-  const { isValid, error } = useCheckValidityBurn(
+  const { isValid, error } = useBurnFormValidation(
     formData,
     balance,
-    isClaimingRewards,
-    claimRewardRequest as unknown as SimulateContractReturnType["request"],
+    row.positionDecimals,
   );
 
   const { tokenReceived } = useGetTxTokens({ logs: receiptData?.logs });
   const onSubmit = () => {
     if (isConfirmed) {
-      return setOpen(false);
+      setOpen(false);
+      close();
+      return;
     }
-    console.log(claimRewardRequest && isClaimingRewards);
     if (isClaimingRewards && claimRewardRequest) {
       writeContract(claimRewardRequest);
       return;
@@ -186,8 +185,8 @@ export default function BurnForm({
 
   const submitButtonText = isClaimingRewards ? "Confirm Claim" : "Confirm Burn";
 
-  let fee = useGetFee({ isApe, levTier });
-  fee = fee ?? "";
+  // let fee = useGetFee({ isApe, levTier });
+  // fee = fee ?? "";
 
   return (
     <FormProvider {...form}>
@@ -213,7 +212,10 @@ export default function BurnForm({
               )}
               {!isClaimingRewards && (
                 <TransactionEstimates
-                  inAssetName={isApe ? "APE" : "TEA"}
+                  decimals={row.positionDecimals}
+                  inAssetName={
+                    isApe ? `APE-${row.vaultId}` : `TEA-${row.vaultId}`
+                  }
                   outAssetName={row.collateralSymbol}
                   collateralEstimate={quoteBurn}
                   usingEth={false}
@@ -238,14 +240,14 @@ export default function BurnForm({
         </TransactionModal.InfoContainer>
         {/*----*/}
         <TransactionModal.StatSubmitContainer>
-          {!isClaimingRewards && !isConfirmed && (
-            <TransactionModal.StatContainer>
-              <TransactionModal.StatRow
-                title="Fee"
-                value={fee + "%"}
-              ></TransactionModal.StatRow>
-            </TransactionModal.StatContainer>
-          )}
+          {/* {!isClaimingRewards && !isConfirmed && ( */}
+          {/*   <TransactionModal.StatContainer> */}
+          {/*     <TransactionModal.StatRow */}
+          {/*       title="Fee" */}
+          {/*       value={fee + "%"} */}
+          {/*     ></TransactionModal.StatRow> */}
+          {/*   </TransactionModal.StatContainer> */}
+          {/* )} */}
           <TransactionModal.SubmitButton
             disabled={false}
             loading={isConfirming || isPending}
@@ -257,16 +259,16 @@ export default function BurnForm({
         </TransactionModal.StatSubmitContainer>
       </TransactionModal.Root>
       <form>
-        <div className="w-[320px] space-y-2 md:w-full">
+        <div className="w-[320px] space-y-2  p-2 md:w-full">
           <div className="flex justify-between">
-            {!isClaimingRewards && (
-              <label htmlFor="a" className="">
-                Burn Amount
-              </label>
-            )}
             {isClaimingRewards && (
               <h2 className="w-full pl-[24px] text-center font-lora text-[24px]">
                 Claim
+              </h2>
+            )}
+            {!isClaimingRewards && (
+              <h2 className="w-full pl-[24px] text-center font-lora text-[24px]">
+                Burn
               </h2>
             )}
 
@@ -278,60 +280,67 @@ export default function BurnForm({
               <X />
             </button>
           </div>
+
           {!isClaimingRewards && (
             <TokenInput
               positionDecimals={row.positionDecimals}
               balance={balance}
-              bg="bg-primary"
+              bg="bg-secondary-600"
               form={form}
               vaultId={row.vaultId}
               isApe={isApe}
             />
           )}
-          <div className="pt-2"></div>
-          <div>
+          <div
+            data-state={isClaimingRewards ? "claiming" : ""}
+            className=" my-2 rounded-md px-4 py-2 data-[state=claiming]:bg-secondary-600"
+          >
+            <div className="pt-2"></div>
             <div>
-              <label htmlFor="a" className="">
-                {isClaimingRewards ? "Amount" : "Into"}
-              </label>
-            </div>
+              <div>
+                <label htmlFor="a" className="">
+                  {isClaimingRewards ? "Amount" : "Into"}
+                </label>
+              </div>
 
-            <DisplayCollateral
-              data={{
-                leverageTier: parseFloat(row.leverageTier),
-                collateralToken: isClaimingRewards
-                  ? SirContract.address
-                  : row.collateralToken,
-                debtToken: row.debtToken,
-              }}
-              amount={
-                isClaimingRewards
-                  ? formatUnits(reward, 12)
-                  : formatUnits(quoteBurn ?? 0n, 18)
-              }
-              collateralSymbol={
-                isClaimingRewards ? "SIR" : row.collateralSymbol
-              }
-              bg=""
-            />
-          </div>
-
-          {isClaimingRewards && (
-            <div className="flex items-center justify-end gap-x-2 py-2">
-              <h3 className="text-[14px] text-gray-200">Claim and Stake</h3>
-
-              <ClaimAndStakeToggle
-                onChange={setClaimAndStake}
-                value={claimAndStake}
+              <DisplayCollateral
+                isClaiming={isClaimingRewards}
+                data={{
+                  leverageTier: parseFloat(row.leverageTier),
+                  collateralToken: isClaimingRewards
+                    ? SirContract.address
+                    : row.collateralToken,
+                  debtToken: row.debtToken,
+                }}
+                amount={
+                  isClaimingRewards
+                    ? formatUnits(reward, 12)
+                    : formatUnits(quoteBurn ?? 0n, row.positionDecimals)
+                }
+                collateralSymbol={
+                  isClaimingRewards ? "SIR" : row.collateralSymbol
+                }
+                bg=""
               />
             </div>
-          )}
-          <div className="pt-2"></div>
-          <div className="flex justify-center">
-            {/* <h4 className="w-[400px] text-center text-sm italic text-gray-400"> */}
-            {/*   With leveraging you risk losing up to 100% of your deposit, you */}
-            {/*   can not lose more than your deposit. */}
-            {/* </h4> */}
+
+            {isClaimingRewards && (
+              <div className="flex items-center justify-end gap-x-2 py-2">
+                <h3 className="text-[14px] text-gray-200">Claim and Stake</h3>
+
+                <ClaimAndStakeToggle
+                  onChange={setClaimAndStake}
+                  value={claimAndStake}
+                />
+              </div>
+            )}
+            <div className="pt-2"></div>
+            <div className="flex justify-center">
+              {/* <h4 className="w-[400px] text-center text-sm italic text-gray-400"> */}
+              {/*   With leveraging you risk losing up to 100% of your deposit, you */}
+              {/*   can not lose more than your deposit. */}
+              {/* </h4> */}
+            </div>
           </div>
           <div className="pt-1"></div>
           <Button

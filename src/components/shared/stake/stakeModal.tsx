@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import TransactionModal from "../transactionModal";
 import StakeForm from "./stakeForm/stakeForm";
 
@@ -8,22 +8,16 @@ interface Props {
 }
 export function StakeModal({ open, setOpen }: Props) {
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent
-        title="Mint Modal"
-        align="center"
-        animate="none"
-        closeColor={"black"}
-        className="bg-transparent"
-      >
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent title="Mint Modal" className="bg-transparent">
         <div
           className={`relative rounded-xl bg-secondary-800 text-white  transition-all duration-700`}
         >
           <TransactionModal.Close setOpen={setOpen} />
           <h1 className="pt-4 text-center font-lora text-2xl">Stake</h1>
-          <StakeForm></StakeForm>
+          <StakeForm closeStakeModal={() => setOpen(false)}></StakeForm>
         </div>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   );
 }

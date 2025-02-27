@@ -24,7 +24,11 @@ import { useCheckStakeValidity } from "../shared/stake/stakeForm/useCheckStakeVa
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
-const UnstakeForm = () => {
+const UnstakeForm = ({
+  closeUnstakeModal,
+}: {
+  closeUnstakeModal: () => void;
+}) => {
   const form = useFormContext<TUnstakeFormFields>();
   const formData = form.watch();
 
@@ -73,7 +77,7 @@ const UnstakeForm = () => {
     requests: {
       mintRequest: Unstake?.request as SimulateReq,
     },
-    tokenBalance: balance,
+    tokenBalance: balance.unlockedStake,
     mintFetching: unstakeFetching,
     decimals: 12,
   });
@@ -107,7 +111,6 @@ const UnstakeForm = () => {
     logs: transactionData?.logs,
     staking: false,
   });
-  console.log(tokenReceived, "tokenReceived");
   return (
     <>
       <div className="w-full px-4 py-4">
@@ -147,6 +150,7 @@ const UnstakeForm = () => {
               isConfirmed={isConfirmed}
               onClick={() => {
                 if (isConfirmed) {
+                  closeUnstakeModal();
                   setOpen(false);
                 } else {
                   onSubmit();
@@ -170,7 +174,7 @@ const UnstakeForm = () => {
             <StakeInput
               isStaking={false}
               form={form}
-              balance={formatUnits(balance ?? 0n, 12)}
+              balance={formatUnits(balance.unlockedStake ?? 0n, 12)}
             ></StakeInput>
             <ClaimFeesCheckbox
               value={unstakeAndClaimFees}

@@ -30,7 +30,7 @@ export const userRouter = createTRPCRouter({
       });
       return rewards;
     }),
-  getBalance: publicProcedure
+  getBalanceAndAllowance: publicProcedure
     .input(
       z.object({
         userAddress: z.string().startsWith("0x").optional(),
@@ -39,7 +39,6 @@ export const userRouter = createTRPCRouter({
       }),
     )
     .query(async ({ input }) => {
-      console.log(input, "INPUT");
       if (!input.tokenAddress || !input.userAddress || !input.spender) {
         return {};
       }
@@ -63,7 +62,6 @@ export const userRouter = createTRPCRouter({
           },
         ],
       });
-      console.log(balance, allowance, input.tokenAddress, "BAL ALLOWANCE");
       return {
         tokenBalance: balance,
         tokenAllowance: allowance,
@@ -124,7 +122,6 @@ export const userRouter = createTRPCRouter({
       z.object({ address: z.string().startsWith("0x").length(42).optional() }),
     )
     .query(async ({ input }) => {
-      console.log({ input });
       if (!input.address) {
         return;
       }
@@ -140,7 +137,6 @@ export const userRouter = createTRPCRouter({
       z.object({ address: z.string().startsWith("0x").length(42).optional() }),
     )
     .query(async ({ input }) => {
-      console.log({ input });
       if (!input.address) {
         return;
       }
@@ -191,10 +187,22 @@ export const userRouter = createTRPCRouter({
       const result = await readContract({
         abi: SirContract.abi,
         address: SirContract.address,
-        functionName: "dividends",
+        functionName: "unclaimedDividends",
         args: [input.user as TAddressString],
       });
       return result;
+    }),
+  getStakedSirPosition: publicProcedure
+    .input(z.object({ user: z.string() }))
+    .query(async ({ input }) => {
+      const result = await readContract({
+        abi: SirContract.abi,
+        address: SirContract.address,
+        functionName: "stakeOf",
+        args: [input.user as TAddressString],
+      });
+      const [unlockedStake, lockedStake] = result;
+      return { unlockedStake, lockedStake };
     }),
   getTotalSirBalance: publicProcedure
     .input(

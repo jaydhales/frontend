@@ -1,21 +1,24 @@
 import { formatNumber } from "@/lib/utils";
-import { calculateApeVaultFee } from "@/lib/utils/calculations";
+import {
+  calculateApeVaultFee,
+  calculateTeaVaultFee,
+} from "@/lib/utils/calculations";
 import { useMemo } from "react";
 interface Props {
-  levTier: string;
+  leverageTier: string;
   isApe: boolean;
 }
-export default function useFormFee({ levTier, isApe }: Props) {
+export default function useFormFee({ leverageTier, isApe }: Props) {
   const fee = useMemo(() => {
-    const lev = parseFloat(levTier);
+    const lev = parseFloat(leverageTier);
     if (!isApe) {
-      return "19";
+      return formatNumber(calculateTeaVaultFee() * 100, 2);
     }
     if (isFinite(lev)) {
       return formatNumber(calculateApeVaultFee(lev) * 100, 2);
     } else {
       return undefined;
     }
-  }, [isApe, levTier]);
+  }, [isApe, leverageTier]);
   return fee;
 }

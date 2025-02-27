@@ -12,8 +12,8 @@ import Bg from "../../public/background.png";
 import Warning from "@/components/ui/warning";
 import Footer from "@/components/footer/footer";
 import { VaultProvider } from "@/components/providers/vaultProvider";
-import { api } from "@/trpc/server";
 import RewardsNotification from "@/components/ui/rewardsNotification";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -37,7 +37,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const cookie = headers().get("cookie");
-  const vaults = await api.vault.getVaults();
   // const headerList = headers();
   // const country = headerList.get("x-country");
   return (
@@ -48,7 +47,7 @@ export default async function RootLayout({
           backgroundImage: `url(${Bg.src})`,
           backgroundRepeat: "repeat",
         }}
-        className={`relative ${lora.variable} ${inter.className} `}
+        className={`relative  ${lora.variable} ${inter.className} `}
       >
         {/* <Image */}
         {/*   className="absolute object-fill   z-0 top-0 left-0  w-screen h-full" */}

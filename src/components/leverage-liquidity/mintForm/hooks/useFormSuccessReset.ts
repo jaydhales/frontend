@@ -1,4 +1,4 @@
-import type { TMintFormFields } from "@/lib/types";
+import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 import { subgraphSyncPoll } from "@/lib/utils/sync";
 import { api } from "@/trpc/react";
 import { useEffect } from "react";
@@ -28,7 +28,9 @@ export function useFormSuccessReset({
       currentTxType === "mint"
     ) {
       form.resetField("deposit");
-      utils.user.getBalance.invalidate().catch((e) => console.log(e));
+      utils.user.getBalanceAndAllowance
+        .invalidate()
+        .catch((e) => console.log(e));
       subgraphSyncPoll(txBlock)
         .then(() => {
           utils.vault.getTableVaults.invalidate().catch((e) => console.log(e));
@@ -48,7 +50,7 @@ export function useFormSuccessReset({
   }, [
     isConfirming,
     isConfirmed,
-    utils.user.getBalance,
+    utils.user.getBalanceAndAllowance,
     utils.user.getEthBalance,
     currentTxType,
     useEth,

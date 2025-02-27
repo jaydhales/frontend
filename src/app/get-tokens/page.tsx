@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { MethContract } from "@/contracts/meth";
+import { TarpContract } from "@/contracts/tarp";
 import { Copy } from "lucide-react";
 import React from "react";
 import { useSimulateContract, useWriteContract } from "wagmi";
@@ -13,7 +14,7 @@ export default function Page() {
     functionName: "mint",
   });
   const { data: TarpData } = useSimulateContract({
-    ...MethContract,
+    ...TarpContract,
     functionName: "mint",
   });
   const { writeContract } = useWriteContract();
@@ -23,7 +24,6 @@ export default function Page() {
     }
   };
 
-  console.log(TarpData, MethData);
   const onSubmitTarp = () => {
     if (TarpData) {
       writeContract(TarpData?.request);
@@ -109,7 +109,7 @@ export default function Page() {
                   <Row
                     copy
                     title="Address"
-                    value="0x7Aef48AdbFDc1262161e71Baf205b47316430067"
+                    value="0x3ED05DE92879a5D47a3c8cc402DD5259219505aD"
                   />
                 </div>
               </div>

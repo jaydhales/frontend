@@ -1,8 +1,8 @@
-import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import ToolTip from "@/components/ui/tooltip";
-import { Check, X } from "lucide-react";
+import { X } from "lucide-react";
 import type { ReactNode } from "react";
+import { Dialog, DialogContent } from "../ui/dialog";
 interface Props {
   setOpen: (b: boolean) => void;
   open: boolean;
@@ -10,13 +10,12 @@ interface Props {
 }
 function Root({ open, setOpen, children }: Props) {
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent
-        onTop={true}
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent
         title="Mint Modal"
-        align="center"
-        animate="none"
-        closeColor={"black"}
+        // align="center"
+        // animate="none"
+        // closeColor={"black"}
         className="z-[400] bg-transparent"
       >
         <div
@@ -24,12 +23,14 @@ function Root({ open, setOpen, children }: Props) {
         >
           {children}
         </div>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   );
 }
 const StatContainer = ({ children }: { children: ReactNode }) => (
-  <div className="flex w-full flex-col gap-y-1 py-2">{children}</div>
+  <div className="flex w-full animate-fade-in flex-col gap-y-1 py-2 duration-500">
+    {children}
+  </div>
 );
 function StatSubmitContainer({ children }: { children: ReactNode }) {
   return (
@@ -77,7 +78,7 @@ function StatRow({
   value: string;
 }) {
   return (
-    <div className="relative  flex justify-between text-[13px]">
+    <div className="relative  flex h-[20px] justify-between text-[13px]">
       <h3 className="text-gray-300 ">
         <span className="z-20 flex items-center gap-x-1">
           {title} {info && <ToolTip>{info}</ToolTip>}

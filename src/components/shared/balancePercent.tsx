@@ -4,14 +4,17 @@ export function BalancePercent({
   balance,
   overrideMaxValue,
   disabled,
+  settings,
 }: {
   overrideMaxValue?: string;
   setValue: (s: string) => void;
   balance: string | undefined;
   disabled?: boolean;
+  settings?: React.ReactNode;
 }) {
   return (
     <h2 className="flex justify-end gap-x-2 pt-1 text-right text-sm text-[#26DEC8]">
+      {settings}
       <button
         onClick={() =>
           setValue(

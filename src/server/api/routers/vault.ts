@@ -1,6 +1,7 @@
 import { ApeContract } from "@/contracts/ape";
 import { AssistantContract } from "@/contracts/assistant";
 import { getVaultsForTable } from "@/lib/getVaults";
+import { ZAddress } from "@/lib/schemas";
 import type { TAddressString } from "@/lib/types";
 import { multicall, readContract } from "@/lib/viemClient";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
@@ -67,7 +68,6 @@ export const vaultRouter = createTRPCRouter({
         .optional(),
     )
     .query(async ({ input }) => {
-      console.log(input?.filters, "FILTERS");
       const result = await getVaultsForTable(
         input?.offset ?? 0,
         input?.filters,
@@ -84,10 +84,30 @@ export const vaultRouter = createTRPCRouter({
       });
       return result;
     }),
+  getDebtTokenMax: publicProcedure
+    .input(
+      z.object({
+        debtToken: ZAddress,
+        collateralToken: ZAddress,
+        maxCollateralIn: z.string(),
+        decimals: z.number(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const result = await readContract({
+        ...AssistantContract,
+        functionName: "quoteCollateralToDebtToken",
+        args: [
+          input.debtToken as TAddressString,
+          input.collateralToken as TAddressString,
+          parseUnits(input.maxCollateralIn, input.decimals),
+        ],
+      });
+      return result;
+    }),
   getReserves: publicProcedure
     .input(z.object({ vaultIds: z.array(z.number()).optional() }))
     .query(async ({ input }) => {
-      console.log("Ran getReserves");
       if (!input.vaultIds) return [];
       const result = await readContract({
         ...AssistantContract,
@@ -156,6 +176,7 @@ export const vaultRouter = createTRPCRouter({
         leverageTier: z.number(),
         amount: z.string(),
         isApe: z.boolean(),
+        decimals: z.number(),
       }),
     )
     .query(async ({ input }) => {
@@ -169,7 +190,7 @@ export const vaultRouter = createTRPCRouter({
             collateralToken: input.collateralToken as TAddressString,
             leverageTier: input.leverageTier,
           },
-          parseUnits(input.amount, 18),
+          parseUnits(input.amount, input.decimals),
         ],
       });
 
@@ -180,13 +201,14 @@ export const vaultRouter = createTRPCRouter({
       z.object({
         debtToken: z.string().startsWith("0x").optional(),
         collateralToken: z.string().startsWith("0x").optional(),
+        usingDebtToken: z.boolean(),
         leverageTier: z.number().optional(),
         amount: z.string().optional(),
+        decimals: z.number(),
         isApe: z.boolean(),
       }),
     )
     .query(async ({ input }) => {
-      console.log({ input });
       if (
         !input.collateralToken ||
         !input.debtToken ||
@@ -196,7 +218,23 @@ export const vaultRouter = createTRPCRouter({
         return;
       }
 
-      try {
+      if (input.usingDebtToken) {
+        const quote = await readContract({
+          abi: AssistantContract.abi,
+          address: AssistantContract.address,
+          functionName: "quoteMintWithDebtToken",
+          args: [
+            input.isApe,
+            {
+              debtToken: input.debtToken as TAddressString,
+              collateralToken: input.collateralToken as TAddressString,
+              leverageTier: input.leverageTier,
+            },
+            parseUnits(input.amount, input.decimals),
+          ],
+        });
+        return quote;
+      } else {
         const quote = await readContract({
           abi: AssistantContract.abi,
           address: AssistantContract.address,
@@ -208,16 +246,10 @@ export const vaultRouter = createTRPCRouter({
               collateralToken: input.collateralToken as TAddressString,
               leverageTier: input.leverageTier,
             },
-            parseUnits(input.amount, 18),
+            parseUnits(input.amount, input.decimals),
           ],
         });
-        console.log(quote, "QUOTE");
-        if (!quote) throw new Error("Quote mint failed.");
-        return quote;
-      } catch (e) {
-        console.log(e);
-        // console.log(e);
-        return;
+        return [quote, 0n];
       }
     }),
 });

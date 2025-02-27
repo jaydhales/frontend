@@ -1,5 +1,3 @@
-import { formatUnits } from "viem";
-import { formatNumber } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { useAccount } from "wagmi";
 import StakeCard from "./stakeCard";
@@ -14,7 +12,7 @@ export function SirCard() {
     { enabled: isConnected },
   );
   return (
-    <div className="rounded-md bg-secondary-600 bg-opacity-40 p-2 pb-2">
+    <div className="rounded-md bg-secondary-700 bg-opacity-40 p-2 pb-2">
       <div className=" flex justify-between rounded-md text-2xl">
         <div className="flex gap-x-2 ">
           <div className="flex w-full justify-between">
@@ -32,7 +30,7 @@ export function SirCard() {
             </div>
           </div>
         </div>
-        <StakeCard />
+        <StakeCard bal={totalBalance} />
       </div>
     </div>
   );
