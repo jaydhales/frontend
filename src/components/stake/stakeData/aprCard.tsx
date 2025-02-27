@@ -25,7 +25,7 @@ export default async function AprCard() {
       <div className="flex w-full flex-row items-center justify-center">
         <div className="px-2 text-sm text-gray-300">Staking APR</div>
       </div>
-      <div className="font-lora text-2xl ">
+      <div className="font-normal text-2xl ">
         <AprDisplay currentApr={apr} />
       </div>
     </div>
