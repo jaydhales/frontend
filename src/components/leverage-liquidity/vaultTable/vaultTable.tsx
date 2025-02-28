@@ -84,7 +84,7 @@ function VaultTableRowHeaders() {
       </th>
       <th className="hidden items-center gap-x-1 font-medium md:flex">
         Leverage
-        <ToolTip size={15}>SIR's returns grow as (price change)^(leverage).</ToolTip>
+        <ToolTip size={15}>SIR&apos;s returns grow as (price change)^(leverage).</ToolTip>
       </th>
       <th className="text-right font-medium md:col-span-2">TVL</th>
     </tr>
