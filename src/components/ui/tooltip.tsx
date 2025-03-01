@@ -18,7 +18,7 @@ const ToolTip: FC<TooltipsProps> = ({ children, size }) => {
       <HoverCardTrigger>
         <Info size={size ?? 16} />
       </HoverCardTrigger>
-      <HoverCardContent side="top" alignOffset={10}>
+      <HoverCardContent side="top" align="start" alignOffset={5}>
         <div className="max-w-[200px] rounded-md bg-white px-2 py-2 text-gray-800">
           {children}
         </div>
