@@ -10,7 +10,7 @@ import {
 } from "@/lib/db/queries/select";
 import { executeGetDividendGreaterThan } from "@/server/queries/dividendsPaid";
 import { NextResponse } from "next/server";
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
 
 import { kv } from "@vercel/kv";
 import { randomInt } from "crypto";
@@ -120,7 +120,7 @@ async function getAndCalculateLastMonthApr() {
     if (payout.sirInUSD && payout.ethInUSD) {
       const sirInUsd = parseUnits(payout.sirInUSD, 0);
       const ethInUsd = parseUnits(payout.ethInUSD, 0);
-      result += divide(100n *12n * ethInUsd, sirInUsd);
+      result += divide(100n * 12n * ethInUsd, sirInUsd);
     }
   });
   return result;
