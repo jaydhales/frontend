@@ -25,7 +25,6 @@ export async function insertErrorLogs(data: InsertErrorLogs) {
   const query = await db.insert(errorLogs).values(data);
   return query;
 }
-
 export async function deletePayouts() {
   const query = await db.delete(payoutTable);
   return query;

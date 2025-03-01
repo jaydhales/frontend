@@ -25,6 +25,7 @@ export const currentApr = pgTable(
     unique().on(table.id), // Ensures only one row
   ],
 );
+
 export const errorLogs = pgTable(
   "error_logs",
   {
