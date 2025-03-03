@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="16666097-e84d-49a2-a0a5-5d7a35d02a21" name="Changes" comment="calculator&#10;&#10;ui and to-check-formula&#10;&#10;needs a code-clean">
+      <change afterPath="$PROJECT_DIR$/.idea/frontend.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/prettier.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/leverage-calculator/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/MintFormSettings.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/calculations.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/calculatorForm.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/deposit-inputs.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useCalculateMaxApe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useFilterVaults.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useFindVault.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useFormFee.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useFormSuccessReset.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useGetReceivedTokens.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useGetUserBals.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useIsDebtToken.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useIsWeth.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useMintFormValidation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useQuoteMint.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useRecievedApeOrTea.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useResetAfterApprove.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useResetTransactionModal.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useSetDepositToken.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useSetDepositTokenDefault.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useSetRootError.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/hooks/useTransactions.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/price-inputs.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/selectWithSearch.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/submit.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/transactionEstimates.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/transactionInfo.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/transactionStatus.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/calculatorForm/vaultParamsInputSelects.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/explainer.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/leverageCalculatorContent.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/leverageCalculatorPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/leverageLiquidityPage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/vaultTable/hooks/calculateVaultHealth.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/vaultTable/hooks/useCalculateVaultHealth.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/vaultTable/vaultRowSkeleton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/vaultTable/vaultTable.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/leverage-calculator/vaultTable/vaultTableRow.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/providers/calculatorFormProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.graphclient/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.graphclient/persisted_operations.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.graphclient/schema.graphql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.graphclient/sources/sir-trade/index/introspectionSchema.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.graphclient/sources/sir-trade/index/schema.graphql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.graphclient/sources/sir-trade/index/types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/contracts/tarp.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contracts/tarp.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/assets.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/assets.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2i4EWXhdMaSXRRBW6X0n6Aw4CvP" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;abstrucked/eng-340-calculator-tab&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/abstrucked/_dev/frontend/src/components/providers&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;/home/abstrucked/n/bin/node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/abstrucked/_dev/frontend/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/abstrucked/_dev/frontend/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/providers" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-WS-243.25659.40" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="16666097-e84d-49a2-a0a5-5d7a35d02a21" name="Changes" comment="" />
+      <created>1718741480413</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1718741480413</updated>
+      <workItem from="1718741481472" duration="24900000" />
+      <workItem from="1719338945167" duration="900000" />
+      <workItem from="1719506788966" duration="54000" />
+      <workItem from="1719506847426" duration="52000" />
+      <workItem from="1719506902895" duration="307000" />
+      <workItem from="1740581116756" duration="67000" />
+      <workItem from="1740581189164" duration="179000" />
+      <workItem from="1740581375295" duration="18000" />
+      <workItem from="1740609950248" duration="21000" />
+      <workItem from="1740683003759" duration="887000" />
+      <workItem from="1740738631433" duration="417000" />
+      <workItem from="1740743304636" duration="7848000" />
+      <workItem from="1740841703251" duration="48000" />
+      <workItem from="1740843749051" duration="103000" />
+      <workItem from="1740843872743" duration="46000" />
+      <workItem from="1740843958340" duration="10000" />
+      <workItem from="1740850098504" duration="18151000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="calculator&#10;&#10;ui and to-check-formula&#10;&#10;needs a code-clean" />
+    <option name="LAST_COMMIT_MESSAGE" value="calculator&#10;&#10;ui and to-check-formula&#10;&#10;needs a code-clean" />
+  </component>
+</project>
