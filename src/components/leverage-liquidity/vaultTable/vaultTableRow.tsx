@@ -105,7 +105,7 @@ export function VaultTableRow({
           pool.collateralToken + "," + pool.collateralSymbol,
         );
       }}
-      className="grid cursor-pointer grid-cols-4 rounded-md   px-1 py-1 text-left text-[16px] text-sm font-normal transition-colors hover:bg-primary md:grid-cols-9"
+      className="grid cursor-pointer grid-cols-4 rounded-md py-1 text-left text-[16px] text-sm font-normal transition-colors hover:bg-primary md:grid-cols-9"
     >
       <td className="relative">
         <div className="flex items-center gap-x-2">
