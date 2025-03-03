@@ -3,7 +3,7 @@ import { env } from "@/env";
 import sirIcon from "../../public/images/sir-logo.svg";
 import type { StaticImageData } from "next/image";
 import { getAddress } from "viem";
-import { TAddressString } from "./types";
+import type { TAddressString } from "./types";
 import { assetSchema } from "./schemas";
 
 export function getLogoAsset(address: `0x${string}` | undefined) {
@@ -22,7 +22,7 @@ export function getLogoAsset(address: `0x${string}` | undefined) {
       return "holesky";
     }
   };
-  if (address === env.NEXT_PUBLIC_SIR_ADDRESS) {
+  if (address.toLowerCase() === env.NEXT_PUBLIC_SIR_ADDRESS.toLowerCase()) {
     return sirIcon as StaticImageData;
   }
   const chainName = getChainName();
