@@ -173,7 +173,7 @@ export function VaultTableRow({
               transition={{ duration: 1 }}
             >
               <Badge {...variant} className="text-nowrap text-[10px]">
-                {`${getLeverageRatio(pool.leverageTier)}x${showPercent() ? " (" + formatNumber(tvlPercent, 2) + "x)" : ""}`}
+                {`^${getLeverageRatio(pool.leverageTier)}${showPercent() ? " (^" + formatNumber(tvlPercent, 2) + ")" : ""}`}
               </Badge>
             </motion.div>
           </HoverCardTrigger>
