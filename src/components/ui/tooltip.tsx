@@ -15,10 +15,10 @@ interface TooltipsProps {
 const ToolTip: FC<TooltipsProps> = ({ children, size }) => {
   return (
     <HoverCard openDelay={0} closeDelay={20}>
-      <HoverCardTrigger>
+      <HoverCardTrigger className="inline-block">
         <Info size={size ?? 16} />
       </HoverCardTrigger>
-      <HoverCardContent side="top" alignOffset={10}>
+      <HoverCardContent side="top" alignOffset={10}  className="z-50">
         <div className="max-w-[200px] rounded-md bg-white px-2 py-2 text-gray-800">
           {children}
         </div>

@@ -107,7 +107,7 @@ export function VaultTableRow({
       }}
       className="grid cursor-pointer grid-cols-4 rounded-md   px-1 py-1 text-left text-[16px] text-sm font-normal transition-colors hover:bg-primary md:grid-cols-9"
     >
-      <td className="">
+      <td className="relative">
         <div className="flex items-center gap-x-2">
           <span className="w-2">{pool.vaultId}</span>
           {parsedTaxAmount > 0n && (
@@ -136,7 +136,7 @@ export function VaultTableRow({
           )}
         </div>
       </td>
-      <td className="flex items-center md:col-span-3">
+      <td className="relative flex items-center md:col-span-3">
         <ImageWithFallback
           fallbackImageUrl={unknownImg}
           className="h-6 w-6 rounded-full "
@@ -164,7 +164,7 @@ export function VaultTableRow({
       <td className="hidden items-center gap-x-1 text-[13px] font-normal text-red-400 md:flex">
         {roundDown(fee, 2)}%{" "}
       </td>
-      <td className="pl-2">
+      <td className="relative md:flex">
         <HoverCard openDelay={0} closeDelay={20}>
           <HoverCardTrigger asChild>
             <motion.div
@@ -188,7 +188,7 @@ export function VaultTableRow({
         </HoverCard>
       </td>
 
-      <td className="flex items-center justify-end gap-x-1 text-right md:col-span-2">
+      <td className="relative flex items-center justify-end gap-x-1 text-right md:col-span-2">
         <TokenDisplay
           labelSize="small"
           amountSize="small"
