@@ -56,7 +56,7 @@ function EntryPrice({ disabled }: Props) {
                   background="primary"
                   placeholder="0"
                   minLength={1}
-                  textSize="xl"
+                  textSize="md"
                   step="any"
                   {...field}
                   onChange={(e) => {
@@ -103,7 +103,7 @@ function ExitPrice({ disabled, children }: Props) {
                   background="primary"
                   placeholder="0"
                   minLength={1}
-                  textSize="xl"
+                  textSize="md"
                   step="any"
                   {...field}
                   onChange={(e) => {
