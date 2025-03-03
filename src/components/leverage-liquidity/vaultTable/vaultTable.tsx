@@ -68,7 +68,7 @@ export default function VaultTable({
 
 function VaultTableRowHeaders() {
   return (
-    <tr className="grid grid-cols-5  text-left text-[13px] font-normal text-gray-400 md:grid-cols-9">
+    <tr className="grid grid-cols-4  text-left text-[13px] font-normal text-gray-400 md:grid-cols-9">
       <th className="relative  font-medium">ID</th>
       <th className="relative  font-medium md:col-span-3">Vault</th>
 
@@ -85,7 +85,7 @@ function VaultTableRowHeaders() {
           at burn.
         </ToolTip>
       </th>
-      <th className="relative z-10  items-center gap-x-[2px] font-medium md:flex">
+      <th className="relative z-10  flex items-center gap-x-[2px] font-medium">
         Leverage
         <ToolTip iconSize={15}>
           <div>
