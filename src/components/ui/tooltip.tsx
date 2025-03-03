@@ -1,6 +1,6 @@
 import { Info } from "lucide-react";
 import type { FC } from "react";
-import React from "react";
+import React, { useState } from "react";
 import { HoverCard } from "./hover-card";
 import {
   HoverCardArrow,
@@ -25,8 +25,16 @@ interface TooltipsProps extends VariantProps<typeof tooltipVariants> {
 }
 
 const ToolTip: FC<TooltipsProps> = ({ children, iconSize, size }) => {
+  const [open, setOpen] = useState(false);
   return (
-    <HoverCard openDelay={0} closeDelay={20}>
+    <HoverCard
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+      }}
+      openDelay={0}
+      closeDelay={20}
+    >
       <HoverCardTrigger>
         <Info size={iconSize ?? 16} />
       </HoverCardTrigger>
