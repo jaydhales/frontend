@@ -89,7 +89,7 @@ function VaultTableRowHeaders() {
         Leverage
         <ToolTip iconSize={15}>
           <div>
-            SIR&apos;s returns increase as (price change)<span>leverage</span>.
+            SIR&apos;s returns increase as (price change)<sup>leverage</sup>.
           </div>
         </ToolTip>
       </th>

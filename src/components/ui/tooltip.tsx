@@ -1,3 +1,4 @@
+"use client";
 import { Info } from "lucide-react";
 import type { FC } from "react";
 import React, { useState } from "react";
@@ -35,7 +36,7 @@ const ToolTip: FC<TooltipsProps> = ({ children, iconSize, size }) => {
       openDelay={0}
       closeDelay={20}
     >
-      <HoverCardTrigger>
+      <HoverCardTrigger onClick={() => setOpen(true)}>
         <Info size={iconSize ?? 16} />
       </HoverCardTrigger>
       <HoverCardContent side="top" alignOffset={10}>
