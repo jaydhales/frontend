@@ -80,11 +80,11 @@ function VaultTableRowHeaders() {
       </th>
       <th className="hidden items-center gap-x-1 font-medium md:flex">
         Fees
-        <ToolTip size={15}>Fee charged<br />when minting APE</ToolTip>
+        <ToolTip size={15}>One-time APE minting fee. Half distributed to LPers at mint, and half at burn.</ToolTip>
       </th>
       <th className="pl-2 font-medium">
         Leverage
-        <ToolTip size={15}>SIR&apos;s returns increase as (price change)<sup>leverage</sup>.</ToolTip>
+        {/* <ToolTip size={15}>SIR&apos;s returns increase as (price change)<sup>leverage</sup>.</ToolTip> */}
       </th>
       <th className="text-right font-medium md:col-span-2">TVL</th>
     </tr>
