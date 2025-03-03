@@ -43,7 +43,7 @@ const vaults = (
      
       first: 8
       skip: $skip
-      orderBy: totalValue
+      orderBy: sortKey 
       orderDirection: desc
       ${whereClause}
     ) {
