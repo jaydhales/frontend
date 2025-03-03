@@ -68,9 +68,9 @@ export default function VaultTable({
 
 function VaultTableRowHeaders() {
   return (
-    <tr className="grid grid-cols-4  text-left text-[13px] font-normal text-gray-400 md:grid-cols-9">
-      <th className="relative  font-medium">ID</th>
-      <th className="relative  font-medium md:col-span-3">Vault</th>
+    <tr className="grid grid-cols-4 px-1 text-left text-[14px] font-normal text-gray-400 md:grid-cols-9">
+      <th className="font-medium">ID</th>
+      <th className="font-medium md:col-span-3">Vault</th>
 
       <th className="hidden items-center gap-x-1 font-medium md:flex">
         <span>POL</span>
