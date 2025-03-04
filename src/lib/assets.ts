@@ -6,19 +6,25 @@ import { getAddress } from "viem";
 import type { TAddressString } from "./types";
 import { assetSchema } from "./schemas";
 
-export function getLogoAsset(address: `0x${string}` | undefined) {
+export function getLogoAsset(
+  address: `0x${string}` | undefined,
+  chainId?: string,
+) {
   if (!address) {
     return "";
   }
   const getChainName = () => {
-    const chainId = env.NEXT_PUBLIC_CHAIN_ID;
-    if (chainId === "1") {
+    let chainIdEnv = env.NEXT_PUBLIC_CHAIN_ID;
+    if (chainId !== undefined) {
+      chainIdEnv = chainId;
+    }
+    if (chainIdEnv === "1") {
       return "ethereum";
     }
-    if (chainId === "11155111") {
+    if (chainIdEnv === "11155111") {
       return "sepolia";
     }
-    if (chainId === "17000") {
+    if (chainIdEnv === "17000") {
       return "holesky";
     }
   };
