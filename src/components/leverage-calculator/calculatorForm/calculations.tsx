@@ -18,8 +18,8 @@ export default function Calculations({
   const fee = Number(strFee);
 
 
-  const finalPosition = (1 - (fee / 100)) * (Number(formData.exitPrice) / Number(formData.entryPrice)) ** ((1 + 2 ** parseFloat(leverageTier)) - 1);
-  const collateralPosition = (1 - (fee / 100)) * (Number(formData.exitPrice) / Number(formData.entryPrice)) ** (1 + 2 ** parseFloat(leverageTier));
+  const finalPosition: number = (1 - (fee / 100)) * (Number(formData.exitPrice) / Number(formData.entryPrice)) ** ((1 + 2 ** parseFloat(leverageTier)) - 1);
+  const collateralPosition: number = (1 - (fee / 100)) * (Number(formData.exitPrice) / Number(formData.entryPrice)) ** (1 + 2 ** parseFloat(leverageTier));
   const positionGain = (finalPosition - 1) * 100;
   const collateralGain = (collateralPosition - 1) * 100;
 
@@ -36,7 +36,7 @@ export default function Calculations({
             <span className="text-sm text-gray-300">Returns in <span>{ticker(formData.long)}</span></span>
           </h3>
           <div className="text-md space-x-1">
-            <span>{Number(formData.deposit) * finalPosition.toFixed(2)}</span>
+            <span>{Number(formData.deposit) * Number(finalPosition.toFixed(2))}</span>
             <span className={positionGain < 0 ? "text-red-400" : "text-green-400"}>
               ({positionGain > 0 ? '+' : ''}
               {positionGain.toFixed(2)}%)
@@ -48,7 +48,7 @@ export default function Calculations({
             <span className="text-sm text-gray-300">Returns in <span>{ticker(formData.versus)}</span></span>
           </h3>
           <div className="text-md space-x-1">
-            <span>{Number(formData.deposit) * Number(formData.entryPrice) * collateralPosition.toFixed(2)}</span>
+            <span>{Number(formData.deposit) * Number(formData.entryPrice) * Number(collateralPosition.toFixed(2))}</span>
             <span className={collateralGain < 0 ? "text-red-400" : "text-green-400"}>
               ({collateralGain > 0 ? '+' : ''}
               {collateralGain.toFixed(2)}%)
