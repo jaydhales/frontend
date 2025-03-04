@@ -15,6 +15,7 @@ import { Input } from "../ui/input";
 import { ArrowLeft } from "lucide-react";
 import useRetrieveToken from "./hooks/useRetrieveToken";
 import { Button } from "../ui/button";
+import { useDebounce } from "../shared/hooks/useDebounce";
 
 export default function SearchTokensModal({
   open,
@@ -30,12 +31,13 @@ export default function SearchTokensModal({
   const { setValue } = useFormContext<z.infer<typeof CreateVaultInputValues>>();
   const { tokenlist } = useTokenlistContext();
   const [searchQuery, setSearchQuery] = React.useState("");
+  const { debouncedValue: deSearch } = useDebounce(searchQuery, 400);
   const [enterManually, setEnterManually] = React.useState(false);
   const tokens = useMemo(() => {
     return tokenlist?.filter((token) =>
-      token.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      token.name.toLowerCase().includes(deSearch.toLowerCase()),
     );
-  }, [searchQuery, tokenlist]);
+  }, [deSearch, tokenlist]);
   const [manualAddress, setManualAddress] = React.useState("");
   const { name, symbol, address } = useRetrieveToken({
     tokenAddress: manualAddress,
