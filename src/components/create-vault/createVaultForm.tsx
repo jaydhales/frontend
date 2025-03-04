@@ -29,7 +29,7 @@ import { getLogoAsset } from "@/lib/assets";
 import Show from "../shared/show";
 import SearchTokensModal from "./searchTokensModal";
 import { ChevronDown } from "lucide-react";
-import type { Address} from "viem";
+import type { Address } from "viem";
 import { erc20Abi, zeroAddress } from "viem";
 const tokens = [
   {
