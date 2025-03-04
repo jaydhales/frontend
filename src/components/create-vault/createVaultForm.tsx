@@ -1,14 +1,13 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useCallback, useEffect } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
 import type { z } from "zod";
-import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { Input } from "../ui/input";
+import { FormField, FormItem, FormLabel } from "../ui/form";
 import { Button } from "../ui/button";
 import { CreateVaultInputValues } from "@/lib/schemas";
-import type { TAddressString, TCreateVaultKeys } from "@/lib/types";
+import type { TAddressString } from "@/lib/types";
 import { useCreateVault } from "./hooks/useCreateVault";
 import {
   useAccount,
@@ -31,6 +30,7 @@ import SearchTokensModal from "./searchTokensModal";
 import { ChevronDown } from "lucide-react";
 import type { Address } from "viem";
 import { erc20Abi, zeroAddress } from "viem";
+import { useTokenlistContext } from "@/contexts/tokenListProvider";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -273,12 +273,16 @@ function SelectTokenDialogTrigger({
   onClick: () => void;
   tokenAddress: Address | undefined;
 }) {
+  const { tokenlist } = useTokenlistContext();
+  const token = useMemo(() => {
+    return tokenlist?.find((t) => t.address === tokenAddress);
+  }, [tokenAddress, tokenlist]);
   const symbol = useReadContract({
     address: tokenAddress ?? zeroAddress,
     abi: erc20Abi,
     functionName: "symbol",
     query: {
-      enabled: !!tokenAddress,
+      enabled: !!tokenAddress && !token,
     },
   });
   return (
@@ -295,21 +299,23 @@ function SelectTokenDialogTrigger({
           type="button"
           className="flex w-full justify-between gap-x-2 rounded-md bg-secondary-400 px-3 py-2"
         >
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center gap-x-1">
             {!tokenAddress && <span className="text-[14px]">Select Token</span>}
             {tokenAddress && (
               <>
-                <div className="h-5 w-5">
+                <div className="h-7 w-7">
                   <ImageWithFallback
                     alt=""
-                    className="rounded-full"
+                    className="h-7 w-7 rounded-full"
                     width={25}
                     height={25}
                     src={getLogoAsset(tokenAddress)}
                   />
                 </div>
                 <div className="">
-                  <div className="text-[13px] text-white">{symbol.data}</div>
+                  <div className="text-[14px] font-medium text-white">
+                    {token?.symbol ?? symbol.data}
+                  </div>
                 </div>
               </>
             )}
