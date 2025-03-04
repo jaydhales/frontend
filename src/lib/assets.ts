@@ -32,7 +32,12 @@ export function getLogoAsset(
     return sirIcon as StaticImageData;
   }
   const chainName = getChainName();
-  return `${ASSET_REPO}/blockchains/${chainName}/assets/${getAddress(address)}/logo.png`;
+  try {
+    const asset = `${ASSET_REPO}/blockchains/${chainName}/assets/${getAddress(address)}/logo.png`;
+    return asset;
+  } catch {
+    return "";
+  }
 }
 
 export function getLogoJson(address: `0x${string}` | undefined) {
