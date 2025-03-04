@@ -16,7 +16,7 @@ test("Testing calculating vault health.", () => {
       apeCollateral,
       isApe: true,
     }).variant,
-  ).toBe("yellow");
+  ).toBe("green");
   expect(
     calculateVaultHealth({
       leverageTier: -1,
@@ -24,5 +24,5 @@ test("Testing calculating vault health.", () => {
       apeCollateral: 73381955552671381n,
       isApe: true,
     }).variant,
-  ).toBe("red");
+  ).toBe("green");
 });

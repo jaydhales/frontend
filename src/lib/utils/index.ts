@@ -141,7 +141,35 @@ export function formatNumber(number: number | string, decimals = 3): string {
 
   return n.toString();
 }
+export function formatSmallNumber(number: number) {
+  const num = number.toString();
+  console.log(num, "NUM");
+  if (num.includes("e")) {
+    // number is in scientific notation
+    const sige = parseInt(num.split("e")[1] ?? "0");
+    const nums = parseInt(
+      num.split("e")[0]?.replace(".", "").slice(0, 3) ?? "0",
+    );
 
+    console.log({ sige }, parseInt(num.split("e")[0] ?? "0"));
+    const result = "0.0" + `v${(Math.abs(sige) - 1).toString()}` + nums;
+    console.log({ result });
+    return result;
+  }
+  const decimalPart = num.split(".")[1];
+  if (decimalPart === undefined) {
+    return "0";
+  }
+  let zeros = 0;
+  for (const i of decimalPart) {
+    if (i === "0") {
+      zeros++;
+    }
+  }
+  const sig = decimalPart.slice(zeros, zeros + 3);
+  const result = "0.0" + `v${(zeros - 1).toString()}` + sig;
+  return result;
+}
 export function formatBigInt(b: bigint | undefined, fixed: number) {
   const parsed =
     Math.floor(parseFloat(formatUnits(b ?? 0n, 18)) * 10 ** fixed) /
