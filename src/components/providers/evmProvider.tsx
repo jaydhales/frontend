@@ -3,7 +3,6 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { mainnet } from "wagmi/chains";
 import {
   darkTheme,
-  midnightTheme,
   getDefaultConfig,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
@@ -52,7 +51,9 @@ function EvmProvider({
   //initialState={initialState}
   return (
     <WagmiProvider config={wagmiConfig}>
-      <RainbowKitProvider theme={darkTheme({})}>{children}</RainbowKitProvider>
+      <RainbowKitProvider modalSize="compact" theme={darkTheme({})}>
+        {children}
+      </RainbowKitProvider>
     </WagmiProvider>
   );
 }
