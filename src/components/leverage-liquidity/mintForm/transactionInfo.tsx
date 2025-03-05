@@ -18,7 +18,6 @@ interface Props {
   useEth: boolean;
   quoteData: bigint | undefined;
   vaultId: string;
-  needs0Approval: boolean;
 }
 
 export default function TransactionInfo({
@@ -34,7 +33,6 @@ export default function TransactionInfo({
   useEth,
   userBalanceFetching,
   vaultId,
-  needs0Approval,
 }: Props) {
   if (!isConfirmed) {
     return (
@@ -58,14 +56,9 @@ export default function TransactionInfo({
             Output is estimated.
           </TransactionModal.Disclaimer>
         )}
-        {needsApproval && !needs0Approval && (
+        {needsApproval && (
           <TransactionModal.Disclaimer>
-            Approve SIR to send token funds.
-          </TransactionModal.Disclaimer>
-        )}
-        {needsApproval && needs0Approval && (
-          <TransactionModal.Disclaimer>
-            USDT requires a 0 approval to reset allowance.
+            Approve Funds to Mint.
           </TransactionModal.Disclaimer>
         )}
       </>

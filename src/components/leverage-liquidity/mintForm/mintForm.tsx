@@ -2,7 +2,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { motion } from "motion/react";
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits } from "viem";
 import { type TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
 import VaultParamsInputSelects from "./vaultParamsInputSelects";
@@ -68,21 +68,16 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
 
   const selectedVault = useFindVault(vaultsQuery);
 
-  const {
-    requests,
-    isApproveFetching,
-    isMintFetching,
-    needsApproval,
-    needs0Approval,
-  } = useTransactions({
-    useEth,
-    tokenAllowance: userBalance?.tokenAllowance?.result,
-    vaultId: selectedVault.result?.vaultId,
-    minCollateralOut,
-    isApe,
-    vaultsQuery,
-    decimals: depositDecimals ?? 18,
-  });
+  const { requests, isApproveFetching, isMintFetching, needsApproval } =
+    useTransactions({
+      useEth,
+      tokenAllowance: userBalance?.tokenAllowance?.result,
+      vaultId: selectedVault.result?.vaultId,
+      minCollateralOut,
+      isApe,
+      vaultsQuery,
+      decimals: depositDecimals ?? 18,
+    });
   const { versus, leverageTiers, long } = useFilterVaults({
     vaultsQuery,
   });
@@ -139,6 +134,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     errorMessage,
     rootErrorMessage: formState.errors.root?.message,
   });
+  console.log(requests.mintRequest, "requests.mintRequest");
   const onSubmit = useCallback(() => {
     if (requests.approveWriteRequest && needsApproval) {
       setCurrentTxType("approve");
@@ -207,7 +203,6 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <TransactionModal.Close setOpen={setOpenTransactionModal} />
           <TransactionModal.InfoContainer>
             <TransactionInfo
-              needs0Approval={needs0Approval}
               needsApproval={needsApproval}
               vaultId={selectedVault.result?.vaultId ?? "0"}
               decimals={collateralDecimals ?? 18}
