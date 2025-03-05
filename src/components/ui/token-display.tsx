@@ -2,6 +2,7 @@ import * as React from "react";
 import { cn, formatNumber } from "@/lib/utils";
 import * as classVarianceAuthority from "class-variance-authority";
 import { formatUnits } from "viem";
+import DisplayFormattedNumber from "../shared/displayFormattedNumber";
 
 const AmountVariants = classVarianceAuthority.cva("", {
   variants: {
@@ -55,7 +56,7 @@ const TokenDisplay = React.forwardRef<HTMLInputElement, InputProps>(
         className={cn(AmountVariants({ amountSize, className }))}
         {...props}
       >
-        {tokenAmount}
+        <DisplayFormattedNumber num={tokenAmount} />
         <span className={cn(LabelVariants({ labelSize }))}> {unitLabel}</span>
       </h3>
     );
