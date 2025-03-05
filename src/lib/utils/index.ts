@@ -115,9 +115,10 @@ export function formatNumber(number: number | string, decimals = 3): string {
     ).toString();
   }
   if (n < 0.001) {
-    const factor = Math.pow(10, 10);
-    const roundedDown = Math.floor(n * factor) / factor;
-    return roundedDown.toExponential();
+    return formatSmallNumber(n);
+    // const factor = Math.pow(10, 10);
+    // const roundedDown = Math.floor(n * factor) / factor;
+    // return roundedDown.toExponential();
   }
   if (n > 999) {
     const num = numeral(n);
@@ -152,7 +153,7 @@ export function formatSmallNumber(number: number) {
     );
 
     console.log({ sige }, parseInt(num.split("e")[0] ?? "0"));
-    const result = "0.0" + `v${(Math.abs(sige) - 1).toString()}` + nums;
+    const result = "0.0" + `v${Math.abs(sige).toString()}` + nums;
     console.log({ result });
     return result;
   }
@@ -167,7 +168,7 @@ export function formatSmallNumber(number: number) {
     }
   }
   const sig = decimalPart.slice(zeros, zeros + 3);
-  const result = "0.0" + `v${(zeros - 1).toString()}` + sig;
+  const result = "0.0" + `v${zeros.toString()}` + sig;
   return result;
 }
 export function formatBigInt(b: bigint | undefined, fixed: number) {
