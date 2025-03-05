@@ -3,6 +3,7 @@ import ToolTip from "@/components/ui/tooltip";
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
 import { Dialog, DialogContent } from "../ui/dialog";
+import DisplayFormattedNumber from "./displayFormattedNumber";
 interface Props {
   setOpen: (b: boolean) => void;
   open: boolean;
@@ -84,7 +85,9 @@ function StatRow({
           {title} {info && <ToolTip>{info}</ToolTip>}
         </span>
       </h3>
-      <h4>{value}</h4>
+      <h4>
+        <DisplayFormattedNumber num={value} />
+      </h4>
     </div>
   );
 }
