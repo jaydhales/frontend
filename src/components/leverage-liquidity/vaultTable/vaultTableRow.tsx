@@ -164,7 +164,7 @@ export function VaultTableRow({
       <td className="hidden items-center gap-x-1 text-[13px] font-normal text-red-400 md:flex">
         {roundDown(fee, 2)}%{" "}
       </td>
-      <td className="relative md:flex">
+      <td className="relative items-center md:flex">
         <HoverCard openDelay={0} closeDelay={20}>
           <HoverCardTrigger asChild>
             <motion.div
