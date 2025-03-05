@@ -146,6 +146,7 @@ export function formatSmallNumber(number: number) {
   const num = number.toString();
   console.log(num, "NUM");
   if (num.includes("e")) {
+    console.log("e", num);
     // number is in scientific notation
     const sige = parseInt(num.split("e")[1] ?? "0");
     const nums = parseInt(
@@ -166,8 +167,12 @@ export function formatSmallNumber(number: number) {
     if (i === "0") {
       zeros++;
     }
+    if (i !== "0") {
+      break;
+    }
   }
   const sig = decimalPart.slice(zeros, zeros + 3);
+  console.log({ sig, zeros, decimalPart });
   const result = "0.0" + `v${zeros.toString()}` + sig;
   return result;
 }
