@@ -48,6 +48,7 @@ export function useTransactions({
     tokenAddr: formData.depositToken ?? "",
     approveContract: VaultContract.address,
     amount: parseUnits(formData.deposit ?? "0", decimals),
+    allowance: tokenAllowance ?? 0n,
   });
 
   return {
