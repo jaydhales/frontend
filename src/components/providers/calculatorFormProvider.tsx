@@ -18,8 +18,8 @@ const CalculatorSchema = z.object({
 });
 
 export type TCalculatorFormFields = z.infer<typeof CalculatorSchema>;
-export type TMintForm = UseFormReturn<TCalculatorFormFields, undefined>;
-export type TMintFormFieldKeys = keyof TCalculatorFormFields;
+export type TCalculatorForm = UseFormReturn<TCalculatorFormFields, undefined>;
+export type TCalculatorFormFieldKeys = keyof TCalculatorFormFields;
 export default function CalculatorFormProvider({
 												   children,
 											   }: {
@@ -29,7 +29,7 @@ export default function CalculatorFormProvider({
 		resolver: zodResolver(CalculatorSchema),
 		mode: "onChange",
 		defaultValues: {
-			deposit: "",
+			deposit: "1",
 			slippage: "0.5",
 			leverageTier: "",
 			long: "",

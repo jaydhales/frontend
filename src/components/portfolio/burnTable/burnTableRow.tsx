@@ -67,7 +67,7 @@ export function BurnTableRow({
           <span className="text-[14px]">{row.debtSymbol}</span>
         </td>
         <td className="font-normal text-gray-200">
-          {getLeverageRatio(Number.parseInt(row.leverageTier))}x
+          ^{getLeverageRatio(Number.parseInt(row.leverageTier))}
         </td>
         <td className="col-span-3 space-y-3 font-normal">
           <div className="flex items-start  justify-between">

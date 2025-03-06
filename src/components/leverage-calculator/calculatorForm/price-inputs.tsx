@@ -10,6 +10,7 @@ import { inputPatternMatch } from "@/lib/utils";
 import type { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
+import { useVaultPrices } from "@/components/leverage-calculator/calculatorForm/hooks/useVaultPrices";
 
 // You might need to import or define decimals if not available in this file
 const decimals = 18;
@@ -24,12 +25,15 @@ function Root({ children }: { label: string; children: React.ReactNode }) {
 
 interface Props {
   disabled: boolean;
-  children: ReactNode;
 }
 
 function EntryPrice({ disabled }: Props) {
   const form = useFormContext<TCalculatorFormFields>();
   const formData = form.watch();
+  console.log("FormData: ", formData);
+  // const vaultPrices = useVaultPrices();
+  // console.log("Vault Prices: ", vaultPrices);
+
   return (
     <div className="space-y-2">
       <div>
@@ -74,7 +78,7 @@ function EntryPrice({ disabled }: Props) {
   );
 }
 
-function ExitPrice({ disabled, children }: Props) {
+function ExitPrice({ disabled }: Props) {
   const form = useFormContext<TCalculatorFormFields>();
   const formData = form.watch();
   return (

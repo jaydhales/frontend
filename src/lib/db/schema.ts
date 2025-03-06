@@ -1,4 +1,11 @@
-import { text, integer, pgTable, serial, unique } from "drizzle-orm/pg-core";
+import {
+  text,
+  integer,
+  pgTable,
+  serial,
+  unique,
+  index,
+} from "drizzle-orm/pg-core";
 
 export const payoutTable = pgTable("payouts", {
   id: serial("id_").primaryKey(),
@@ -18,7 +25,23 @@ export const currentApr = pgTable(
     unique().on(table.id), // Ensures only one row
   ],
 );
+
+export const errorLogs = pgTable(
+  "error_logs",
+  {
+    id: serial("id").primaryKey(),
+    error: text("error").notNull(),
+    details: text("details").notNull(),
+    timestamp: integer("timestamp").notNull(),
+    ip: text("ip").notNull(),
+    userAddress: text("user_address").notNull(),
+  },
+  (table) => [index("ip_index").on(table.ip)],
+);
+
 export type InsertPayout = typeof payoutTable.$inferInsert;
 export type SelectPayout = typeof payoutTable.$inferSelect;
 export type InsertCurrentApr = typeof currentApr.$inferInsert;
 export type SelectCurrentApr = typeof currentApr.$inferSelect;
+export type InsertErrorLogs = typeof errorLogs.$inferInsert;
+export type SelectErrorLogs = typeof errorLogs.$inferSelect;

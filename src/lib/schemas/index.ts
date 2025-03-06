@@ -50,6 +50,23 @@ export const tokenSchema = z.object({
     )
     .optional(),
 });
+
+
+const PriceSchema = z.object({
+  currency: z.string(),
+  value: z.string(),
+  lastUpdatedAt: z.string(),
+});
+
+const ZTokenPrice = z.object({
+  symbol: z.string(),
+  prices: z.array(PriceSchema),
+});
+
+export const ZVaultPrices = z.object({
+  data: z.array(ZTokenPrice),
+});
+
 // {
 //     "name": "TrueUSD",
 //     "website": "https://www.trueusd.com/",

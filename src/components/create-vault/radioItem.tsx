@@ -70,7 +70,7 @@ export function RadioItem({
         onClick={handleCardClicked}
       >
         <div className="flex select-none flex-col  gap-y-1">
-          <span className="text-[14px]">{mapLeverage(value)}x</span>
+          <span className="text-[14px]">^{mapLeverage(value)}</span>
           <span className="flex   gap-x-1 text-[12px] text-gray-500">
             {/* <ToolTip>{leverageOptions[index]}</ToolTip> */}
             {leverageDescriptions[index]}

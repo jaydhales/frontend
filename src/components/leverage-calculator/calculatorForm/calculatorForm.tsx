@@ -1,20 +1,15 @@
 "use client";
-import React, { useCallback, useMemo, useState } from "react";
-import { formatUnits } from "viem";
+import React from "react";
 import { type TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
 import PriceInputs from "./price-inputs";
 import VaultParamsInputSelects from "./vaultParamsInputSelects";
-import { useQuoteMint } from "./hooks/useQuoteMint";
 import { Card } from "@/components/ui/card";
 import Show from "@/components/shared/show";
 import { useCalculateMaxApe } from "./hooks/useCalculateMaxApe";
 import { useFilterVaults } from "./hooks/useFilterVaults";
 import Dropdown from "@/components/shared/dropDown";
-import { useIsWeth } from "./hooks/useIsWeth";
 import useSetDepositTokenDefault from "./hooks/useSetDepositTokenDefault";
-import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
-import { useFormContext } from "react-hook-form";
 import { useFindVault } from "./hooks/useFindVault";
 import useIsDebtToken from "./hooks/useIsDebtToken";
 import useGetFormTokensInfo from "./hooks/useGetUserBals";
@@ -23,37 +18,19 @@ import Calculations from "@/components/leverage-calculator/calculatorForm/calcul
 
 interface Props {
   vaultsQuery: TVaults;
-  isApe: boolean;
+  isApe?: boolean;
 }
 
 /**
  * Contains form actions and validition.
  */
-export default function CalculatorForm({ vaultsQuery, isApe }: Props) {
-  const [useEthRaw, setUseEth] = useState(false);
+export default function CalculatorForm({ vaultsQuery }: Props) {
   const {
-    userEthBalance,
-    userBalanceFetching,
-    userBalance,
-    debtDecimals,
     collateralDecimals,
-    depositDecimals,
   } = useGetFormTokensInfo();
-  const isWeth = useIsWeth();
   const { versus, long, leverageTiers } = useFilterVaults({ vaultsQuery });
 
-  // Ensure use eth toggle is not used on non-weth tokens
-  const { setError, formState, setValue, watch, handleSubmit } =
-    useFormContext<TCalculatorFormFields>();
-  const { deposit, leverageTier, long: longInput } = watch();
-  const useEth = useMemo(() => {
-    return isWeth ? useEthRaw : false;
-  }, [isWeth, useEthRaw]);
 
-  const { amountTokens, minCollateralOut } = useQuoteMint({
-    isApe,
-    decimals: debtDecimals ?? 0,
-  });
 
   const selectedVault = useFindVault(vaultsQuery);
 
@@ -62,38 +39,19 @@ export default function CalculatorForm({ vaultsQuery, isApe }: Props) {
   });
 
   const usingDebtToken = useIsDebtToken();
-  const { maxCollateralIn, maxDebtIn, badHealth, isLoading } =
+  const { isLoading } =
     useCalculateMaxApe({
       usingDebtToken,
       collateralDecimals: collateralDecimals ?? 18,
       vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
     });
-  const maxIn = usingDebtToken ? maxDebtIn : maxCollateralIn;
 
-  const onSubmit = useCallback(() => {
-    console.log("submit");
-  }, []);
 
-  const disabledInputs = useMemo(() => {
-    if (!selectedVault.result?.vaultId) {
-      setValue("deposit", "");
-      return false;
-    }
-    if (badHealth) {
-      return true;
-    }
-  }, [selectedVault.result?.vaultId, badHealth, setValue]);
-
-  const depositTokenSymbol = !usingDebtToken
-    ? selectedVault.result?.collateralSymbol
-    : selectedVault.result?.debtSymbol;
-  const maxTokenIn = usingDebtToken
-    ? formatUnits(maxDebtIn ?? 0n, debtDecimals ?? 18)
-    : formatUnits(maxCollateralIn ?? 0n, collateralDecimals ?? 18);
-
+  const disabledPriceInputs = !Boolean(selectedVault.result);
+  console.log("disabledPriceInputs", selectedVault.result)
   return (
     <Card>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form>
         {/* Versus, Long, and Leverage Dropdowns */}
         <VaultParamsInputSelects
           versus={versus}
@@ -130,16 +88,11 @@ export default function CalculatorForm({ vaultsQuery, isApe }: Props) {
           </DepositInputs.Inputs>
         </DepositInputs.Root>
         <PriceInputs.Root label="Entry price">
-          <PriceInputs.EntryPrice disabled={false}>
-            <Input type="number" name="deposit" placeholder="0" />
-          </PriceInputs.EntryPrice>
-          <PriceInputs.ExitPrice disabled={false}>
-            <Input type="number" name="deposit" placeholder="0" />
-          </PriceInputs.ExitPrice>
+          <PriceInputs.EntryPrice disabled={disabledPriceInputs} />
+          <PriceInputs.ExitPrice disabled={disabledPriceInputs}/>
         </PriceInputs.Root>
         <Calculations
             disabled={false}
-            leverageTier={leverageTier}
         />
 
       </form>

@@ -14,10 +14,10 @@ export default function AprDisplay({
 
   return (
     <div className="font-normal text-2xl ">
-      <Show when={APR > 0n} fallback={<h1>N/A</h1>}>
-        {/* remove eth decimals since eth 18 sir 12 === 6 */}
+      <h1>N/A</h1>
+      {/* <Show when={APR > 0n} fallback={<h1>N/A</h1>}>
         <h3>{formatNumber(formatUnits(APR, 6))}%</h3>
-      </Show>
+      </Show>*/}
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { getLeverageRatio } from "@/lib/utils/calculations";
 import SelectWithSearch from "./selectWithSearch";
 import { useMemo } from "react";
 import Show from "@/components/shared/show";
-import type { TMintFormFields } from "@/components/providers/mintFormProvider";
+import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
 import { useFormContext } from "react-hook-form";
 interface Props {
   long: VaultFieldFragment[];
@@ -19,7 +19,7 @@ export default function VaultParamsInputSelects({
   leverageTiers,
 }: Props) {
   const setLeverage = useVaultFilterStore((store) => store.setLeverageTier);
-  const { watch, reset } = useFormContext<TMintFormFields>();
+  const { watch, reset } = useFormContext<TCalculatorFormFields>();
   const formData = watch();
   const allSelected = useMemo(() => {
     if (formData.long || formData.versus || formData.leverageTier) {
@@ -63,15 +63,15 @@ export default function VaultParamsInputSelects({
         }))}
       />
       <Select
-        placeholder="Select Tier"
+        placeholder="Select Leverage"
         setStore={setLeverage}
         items={leverageTiers.map((e) => ({
-          label: getLeverageRatio(e).toString() + "x",
+          label: "^" + getLeverageRatio(e).toString(),
           value: e.toString(),
         }))}
         noSearch
         name="leverageTier"
-        title="Leverage Tier"
+        title="Leverage"
       />
     </div>
   );
