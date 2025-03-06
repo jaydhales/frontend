@@ -187,7 +187,7 @@ export default function BurnForm({
     <FormProvider {...form}>
       <TransactionModal.Root open={open} setOpen={setOpen}>
         <TransactionModal.Close setOpen={setOpen} />
-        <TransactionModal.InfoContainer>
+        <TransactionModal.InfoContainer isConfirming={isConfirming} hash={hash}>
           {!isConfirmed && (
             <>
               <TransactionStatus

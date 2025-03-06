@@ -76,7 +76,7 @@ export default function ContributorClaim() {
     <div>
       <TransactionModal.Root setOpen={setOpen} open={open}>
         <TransactionModal.Close setOpen={setOpen} />
-        <TransactionModal.InfoContainer>
+        <TransactionModal.InfoContainer isConfirming={isConfirming} hash={hash}>
           <TransactionStatus
             action="Claim"
             waitForSign={isPending}

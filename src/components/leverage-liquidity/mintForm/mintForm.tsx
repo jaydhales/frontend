@@ -220,7 +220,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           open={openTransactionModal}
         >
           <TransactionModal.Close setOpen={setOpenTransactionModal} />
-          <TransactionModal.InfoContainer>
+          <TransactionModal.InfoContainer
+            isConfirming={isConfirming}
+            hash={hash}
+          >
             <TransactionInfo
               transactionHash={hash}
               needsApproval={needsApproval}

@@ -4,13 +4,18 @@ import React from "react";
 
 export default function ExplorerLink({
   transactionHash,
+  align = "center",
 }: {
   transactionHash: string | undefined;
+  align?: "center" | "left";
 }) {
   return (
     <>
       {transactionHash && (
-        <div className="flex justify-center gap-x-4">
+        <div
+          data-align={align}
+          className="flex gap-x-4 data-[align=center]:justify-center"
+        >
           <Link
             className="flex items-center gap-x-1 text-sm text-neutral-400"
             target="_blank"
@@ -18,7 +23,7 @@ export default function ExplorerLink({
           >
             <ExternalLink size={15} />
             <div className="flex items-center gap-x-1">
-              <span>View transaction on Explorer</span>
+              <span>View Transaction on Explorer</span>
             </div>
           </Link>
         </div>

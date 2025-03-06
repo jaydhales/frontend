@@ -144,7 +144,10 @@ export default function CreateVaultForm() {
       <form className="space-y-4">
         <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
           <TransactionModal.Close setOpen={setOpenModal} />
-          <TransactionModal.InfoContainer>
+          <TransactionModal.InfoContainer
+            isConfirming={isConfirming}
+            hash={hash}
+          >
             <Show
               fallback={
                 <div>

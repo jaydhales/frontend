@@ -53,7 +53,7 @@ export default function ClaimCard() {
   return (
     <div className=" border-secondary-300">
       <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
-        <TransactionModal.InfoContainer>
+        <TransactionModal.InfoContainer isConfirming={isConfirming} hash={hash}>
           {!isConfirmed && (
             <div>
               <h2>Claim</h2>

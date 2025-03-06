@@ -52,7 +52,7 @@ export default function ClaimCard() {
   return (
     <div className=" border-secondary-300">
       <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
-        <TransactionModal.InfoContainer>
+        <TransactionModal.InfoContainer hash={hash} isConfirming={isConfirming}>
           <TransactionStatus
             waitForSign={isPending}
             action="Claim"

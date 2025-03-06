@@ -57,7 +57,10 @@ const ClaimFees = ({
     <>
       <Card className="">
         <TransactionModal.Root setOpen={setOpen} open={open}>
-          <TransactionModal.InfoContainer>
+          <TransactionModal.InfoContainer
+            isConfirming={isConfirming}
+            hash={hash}
+          >
             <TransactionStatus
               waitForSign={isPending}
               showLoading={isConfirming}
