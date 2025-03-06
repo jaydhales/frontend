@@ -166,7 +166,9 @@ export default function CreateVaultForm() {
         </TransactionModal.Root>
         {/* <h1 className="text-center font-lora text-4xl">Create Vault</h1> */}
         <div>
-          <h2 className="text-xl font-semibold">Initialize a Vault</h2>
+          <h2 className="font-lora text-3xl font-semibold tracking-wide">
+            Initialize a Vault
+          </h2>
           <h4 className="text-sm text-neutral-400">
             Enter any two tokens with a uniswap pool ...
           </h4>
