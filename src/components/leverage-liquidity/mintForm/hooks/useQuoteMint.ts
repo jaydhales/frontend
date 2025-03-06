@@ -20,7 +20,7 @@ export function useQuoteMint({
   );
 
   const allSelected = Boolean(
-    formData.deposit &&
+    depositDebounce &&
       formData.long !== "" &&
       formData.versus !== "" &&
       formData.leverageTier !== "",
