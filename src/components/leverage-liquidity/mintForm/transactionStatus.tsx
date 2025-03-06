@@ -1,4 +1,5 @@
-import { LoaderCircle } from "lucide-react";
+import Spinner from "@/components/shared/spinner";
+// import { LoaderCircle } from "lucide-react";
 import { useMemo } from "react";
 
 interface StatusProps {
@@ -18,12 +19,12 @@ export function TransactionStatus({
       return { message: "Please Sign Transaction." };
     }
     if (showLoading) {
-      return { message: <LoaderCircle className="animate-spin" /> };
+      return { message: <Spinner></Spinner> };
     }
     return { message: action ?? "Mint" };
   }, [waitForSign, showLoading, action]);
   if (isConfirmed) {
     return undefined;
   }
-  return <h2 className="h-[20px] text-left text-lg">{data.message}</h2>;
+  return <h2 className="  text-left text-lg">{data.message}</h2>;
 }
