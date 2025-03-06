@@ -15,7 +15,7 @@ export default function DisplayFormattedNumber({ num }: { num: string }) {
   return (
     <>
       0.0
-      <span className="px-[2px] text-[9px] ">{exp}</span>
+      <sub>{exp}</sub>
       {sig}
     </>
   );
