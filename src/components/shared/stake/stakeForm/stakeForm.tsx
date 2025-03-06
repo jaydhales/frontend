@@ -130,6 +130,7 @@ const StakeForm = ({ closeStakeModal }: { closeStakeModal: () => void }) => {
             )}
             {isConfirmed && (
               <TransactionSuccess
+                hash={hash}
                 decimals={12}
                 amountReceived={tokenReceived}
                 assetReceived="SIR"
@@ -148,7 +149,8 @@ const StakeForm = ({ closeStakeModal }: { closeStakeModal: () => void }) => {
                   onSubmit();
                 }
               }}
-              loading={isPending || isConfirming}
+              isPending={isPending}
+              loading={isConfirming}
               disabled={!isValid && !isConfirmed}
             >
               Confirm stake

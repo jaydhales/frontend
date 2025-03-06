@@ -222,6 +222,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           <TransactionModal.Close setOpen={setOpenTransactionModal} />
           <TransactionModal.InfoContainer>
             <TransactionInfo
+              transactionHash={hash}
               needsApproval={needsApproval}
               vaultId={selectedVault.result?.vaultId ?? "0"}
               decimals={collateralDecimals ?? 18}
@@ -270,7 +271,8 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
                 isConfirming ||
                 (isConfirmed && needsApproval)
               }
-              loading={isPending || isConfirming}
+              isPending={isPending}
+              loading={isConfirming}
               isConfirmed={isConfirmed && !needsApproval}
             >
               <Show

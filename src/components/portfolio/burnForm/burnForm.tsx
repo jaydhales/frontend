@@ -70,18 +70,13 @@ export default function BurnForm({
     },
   );
 
-  const {
-    writeContract,
-    reset,
-    data: writeData,
-    isPending,
-  } = useWriteContract();
+  const { writeContract, reset, data: hash, isPending } = useWriteContract();
   const {
     data: receiptData,
     isLoading: isConfirming,
     isSuccess: isConfirmed,
   } = useWaitForTransactionReceipt({
-    hash: writeData,
+    hash,
   });
   const utils = api.useUtils();
 
@@ -233,6 +228,7 @@ export default function BurnForm({
           )}
           {isConfirmed && !isClaimingRewards && (
             <TransactionSuccess
+              hash={hash}
               assetReceived={row.collateralSymbol}
               amountReceived={tokenReceived}
             />
@@ -249,8 +245,9 @@ export default function BurnForm({
           {/*   </TransactionModal.StatContainer> */}
           {/* )} */}
           <TransactionModal.SubmitButton
-            disabled={false}
-            loading={isConfirming || isPending}
+            disabled={isPending || isConfirming}
+            isPending={isPending}
+            loading={isConfirming}
             onClick={() => onSubmit()}
             isConfirmed={isConfirmed}
           >

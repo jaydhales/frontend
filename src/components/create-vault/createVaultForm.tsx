@@ -169,7 +169,8 @@ export default function CreateVaultForm() {
           <TransactionModal.StatSubmitContainer>
             <TransactionModal.SubmitButton
               disabled={!isValid}
-              loading={isPending || isConfirming}
+              isPending={isPending}
+              loading={isConfirming}
               isConfirmed={isConfirmed}
               onClick={() => {
                 if (isConfirmed) {

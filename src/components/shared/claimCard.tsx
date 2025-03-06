@@ -65,14 +65,15 @@ export default function ClaimCard() {
               {/* <span>{formatUnits(dividends ?? 0n, 18)} Eth</span> */}
             </div>
           )}
-          {isConfirmed && <TransactionSuccess />}
+          {isConfirmed && <TransactionSuccess hash={hash} />}
         </TransactionModal.InfoContainer>
         <TransactionModal.Close setOpen={setOpenModal} />
         <TransactionModal.StatSubmitContainer>
           <TransactionModal.SubmitButton
+            isPending={isPending}
             isConfirmed={isConfirmed}
             disabled={isPending || isConfirming}
-            loading={isPending || isConfirming}
+            loading={isConfirming}
             onClick={() => {
               if (isConfirmed) {
                 setOpenModal(false);

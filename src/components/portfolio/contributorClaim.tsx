@@ -121,7 +121,8 @@ export default function ContributorClaim() {
           </Show>
           <TransactionModal.SubmitButton
             isConfirmed={isConfirmed}
-            loading={isPending || isConfirming}
+            loading={isConfirming}
+            isPending={isPending}
             disabled={isPending || isConfirming}
             onClick={() => onSubmit()}
           >

@@ -139,6 +139,7 @@ const UnstakeForm = ({
             )}
             {isConfirmed && (
               <TransactionSuccess
+                hash={hash}
                 amountReceived={tokenReceived}
                 assetReceived="SIR"
                 decimals={12}
@@ -147,6 +148,7 @@ const UnstakeForm = ({
           </TransactionModal.InfoContainer>
           <TransactionModal.StatSubmitContainer>
             <TransactionModal.SubmitButton
+              isPending={isPending}
               isConfirmed={isConfirmed}
               onClick={() => {
                 if (isConfirmed) {
@@ -156,7 +158,7 @@ const UnstakeForm = ({
                   onSubmit();
                 }
               }}
-              loading={isPending || isConfirming}
+              loading={isConfirming}
               disabled={!isValid && !isConfirmed}
             >
               Confirm Unstake

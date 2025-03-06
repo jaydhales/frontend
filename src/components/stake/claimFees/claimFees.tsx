@@ -67,6 +67,7 @@ const ClaimFees = ({
           </TransactionModal.InfoContainer>
           <TransactionModal.StatSubmitContainer>
             <TransactionModal.SubmitButton
+              isPending={isPending}
               isConfirmed={isConfirmed}
               disabled={Boolean(claimSimulate) && Boolean(claimResult)}
               onClick={() => onSubmit()}
