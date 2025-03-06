@@ -1,4 +1,5 @@
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
+import DisplayFormattedNumber from "@/components/shared/displayFormattedNumber";
 import { getLogoAsset } from "@/lib/assets";
 import { formatNumber } from "@/lib/utils";
 export function DisplayCollateral({
@@ -24,7 +25,9 @@ export function DisplayCollateral({
     <div className={`w-full  ${bg} `}>
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="text-[28px]">{formatNumber(amount, 4)}</h2>
+          <h2 className="text-[28px]">
+            <DisplayFormattedNumber num={formatNumber(amount, 4)} />
+          </h2>
         </div>
         <div>
           <div className={"flex  gap-x-2 "}>
