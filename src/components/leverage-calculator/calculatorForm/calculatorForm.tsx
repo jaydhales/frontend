@@ -94,7 +94,6 @@ export default function CalculatorForm({ vaultsQuery }: Props) {
         <Calculations
             disabled={false}
         />
-
       </form>
     </Card>
   );
