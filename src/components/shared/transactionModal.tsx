@@ -7,13 +7,14 @@ import ExplorerLink from "./explorerLink";
 interface Props {
   setOpen: (b: boolean) => void;
   open: boolean;
+  title: string;
   children: React.ReactNode;
 }
-function Root({ open, setOpen, children }: Props) {
+function Root({ open, title, setOpen, children }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
-        title="Mint Modal"
+        title={title}
         // align="center"
         // animate="none"
         // closeColor={"black"}

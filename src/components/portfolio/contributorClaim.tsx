@@ -74,7 +74,11 @@ export default function ContributorClaim() {
   const unclaimedRewards = unclaimedData ?? 0n;
   return (
     <div>
-      <TransactionModal.Root setOpen={setOpen} open={open}>
+      <TransactionModal.Root
+        title="Claim Rewards"
+        setOpen={setOpen}
+        open={open}
+      >
         <TransactionModal.Close setOpen={setOpen} />
         <TransactionModal.InfoContainer isConfirming={isConfirming} hash={hash}>
           <TransactionStatus

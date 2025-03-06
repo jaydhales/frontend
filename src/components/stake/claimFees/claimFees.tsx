@@ -56,7 +56,7 @@ const ClaimFees = ({
   return (
     <>
       <Card className="">
-        <TransactionModal.Root setOpen={setOpen} open={open}>
+        <TransactionModal.Root title="Claim Fees" setOpen={setOpen} open={open}>
           <TransactionModal.InfoContainer
             isConfirming={isConfirming}
             hash={hash}

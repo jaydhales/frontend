@@ -107,9 +107,12 @@ const StakeForm = ({ closeStakeModal }: { closeStakeModal: () => void }) => {
   return (
     <>
       <div className="w-full px-4 py-4">
-        <TransactionModal.Root setOpen={setOpen} open={open}>
+        <TransactionModal.Root title="Stake" setOpen={setOpen} open={open}>
           <TransactionModal.Close setOpen={setOpen} />
-          <TransactionModal.InfoContainer hash={hash} isConfirming={isConfirming}>
+          <TransactionModal.InfoContainer
+            hash={hash}
+            isConfirming={isConfirming}
+          >
             {!isConfirmed && (
               <>
                 <TransactionStatus

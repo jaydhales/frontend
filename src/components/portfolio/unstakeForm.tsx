@@ -114,7 +114,7 @@ const UnstakeForm = ({
   return (
     <>
       <div className="w-full px-4 py-4">
-        <TransactionModal.Root setOpen={setOpen} open={open}>
+        <TransactionModal.Root title="Unstake" setOpen={setOpen} open={open}>
           <TransactionModal.Close setOpen={setOpen} />
           <TransactionModal.InfoContainer
             isConfirming={isConfirming}

@@ -216,6 +216,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     <Card>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TransactionModal.Root
+          title="Mint"
           setOpen={setOpenTransactionModal}
           open={openTransactionModal}
         >

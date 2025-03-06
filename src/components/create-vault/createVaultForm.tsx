@@ -142,7 +142,11 @@ export default function CreateVaultForm() {
   return (
     <FormProvider {...form}>
       <form className="space-y-4">
-        <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
+        <TransactionModal.Root
+          title="Create Vault"
+          setOpen={setOpenModal}
+          open={openModal}
+        >
           <TransactionModal.Close setOpen={setOpenModal} />
           <TransactionModal.InfoContainer
             isConfirming={isConfirming}
