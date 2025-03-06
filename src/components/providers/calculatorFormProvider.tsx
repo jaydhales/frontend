@@ -29,7 +29,7 @@ export default function CalculatorFormProvider({
 		resolver: zodResolver(CalculatorSchema),
 		mode: "onChange",
 		defaultValues: {
-			deposit: "1",
+			deposit: "",
 			slippage: "0.5",
 			leverageTier: "",
 			long: "",

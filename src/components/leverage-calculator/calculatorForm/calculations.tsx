@@ -38,14 +38,14 @@ export default function Calculations({
   }
 
   // Calculate positions using the provided values.
-  const finalPosition: number =
-      (1 - fee / 100) * (exitPrice / entryPrice) ** ((1 + 2 ** parseFloat(formData.leverageTier)) - 1);
+  const longTokenPosition: number =
+      (1 - fee / 100) * (exitPrice / entryPrice) ** ( 2 ** parseFloat(formData.leverageTier));
 
-  const collateralPosition: number =
+  const debtTokenPosition: number =
       (1 - fee / 100) * (exitPrice / entryPrice) ** (1 + 2 ** parseFloat(formData.leverageTier));
 
-  const positionGain = (finalPosition - 1) * 100;
-  const collateralGain = (collateralPosition - 1) * 100;
+  const positionGain = (longTokenPosition - 1) * 100;
+  const collateralGain = (debtTokenPosition - 1) * 100;
 
   // Extracts the ticker form the token string
   const ticker = (token: string) => token.split(",")[1];
@@ -62,7 +62,7 @@ export default function Calculations({
             </span>
             </h3>
             <div className="text-md space-x-1">
-              <span>{(Number(formData.deposit) * finalPosition).toFixed(2)}</span>
+              <span>{(Number(formData.deposit) * longTokenPosition).toFixed(2)}</span>
               <span className={positionGain < 0 ? "text-red-400" : "text-green-400"}>
               ({positionGain > 0 ? "+" : ""}
                 {positionGain.toFixed(2)}%)
@@ -77,7 +77,7 @@ export default function Calculations({
             </h3>
             <div className="text-md space-x-1">
             <span>
-              {(Number(formData.deposit) * (entryPrice * collateralPosition)).toFixed(2)}
+              {(Number(formData.deposit) * (entryPrice * debtTokenPosition)).toFixed(2)}
             </span>
               <span className={collateralGain < 0 ? "text-red-400" : "text-green-400"}>
               ({collateralGain > 0 ? "+" : ""}

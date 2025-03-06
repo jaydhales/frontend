@@ -13,7 +13,6 @@ import useSetDepositTokenDefault from "./hooks/useSetDepositTokenDefault";
 import { useFindVault } from "./hooks/useFindVault";
 import useIsDebtToken from "./hooks/useIsDebtToken";
 import useGetFormTokensInfo from "./hooks/useGetUserBals";
-import { Input } from "@/components/ui/input";
 import Calculations from "@/components/leverage-calculator/calculatorForm/calculations";
 
 interface Props {
@@ -45,6 +44,7 @@ export default function CalculatorForm({ vaultsQuery }: Props) {
       collateralDecimals: collateralDecimals ?? 18,
       vaultId: Number.parseInt(selectedVault.result?.vaultId ?? "-1"),
     });
+
 
 
   const disabledPriceInputs = !Boolean(selectedVault.result);
