@@ -3,6 +3,7 @@ import ToolTip from "@/components/ui/tooltip";
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
 import { Dialog, DialogContent } from "../ui/dialog";
+import ExplorerLink from "./explorerLink";
 interface Props {
   setOpen: (b: boolean) => void;
   open: boolean;
@@ -40,10 +41,23 @@ function StatSubmitContainer({ children }: { children: ReactNode }) {
   );
 }
 
-function InfoContainer({ children }: { children: ReactNode }) {
+function InfoContainer({
+  children,
+  hash,
+  isConfirming,
+}: {
+  children: ReactNode;
+  hash: string | undefined;
+  isConfirming: boolean;
+}) {
   return (
     <div className="rounded-tl-xl rounded-tr-xl bg-secondary-700 px-6 pb-6 pt-5">
       {children}
+      {isConfirming && (
+        <div className="pt-2">
+          <ExplorerLink align="left" transactionHash={hash} />
+        </div>
+      )}
     </div>
   );
 }
