@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
 import useFormFee from "@/components/leverage-liquidity/mintForm/hooks/useFormFee";
+import useIsDebtToken from "@/components/leverage-calculator/calculatorForm/hooks/useIsDebtToken";
 
 export default function Calculations({
                                        disabled
@@ -16,15 +17,18 @@ export default function Calculations({
     return formData.depositToken && formData.versus && formData.leverageTier;
   }, [formData.depositToken, formData.versus, formData.leverageTier]);
 
+  // TODO: utilize the debt token to switch the ui info
+  const isDebtToken= useIsDebtToken()
+  console.log({ isDebtToken });
+
+  // Extract fee
   const strFee = useFormFee({ leverageTier: formData.leverageTier, isApe: true });
+  const fee = Number(strFee);
+
   // If the required values are not present, show a placeholder
   if (!areRequiredValuesPresent) {
     return <div className="flex h-40 items-center justify-center">Please complete all required fields to display calculations.</div>;
   }
-
-
-
-  const fee = Number(strFee);
 
   // Make sure entryPrice and exitPrice are provided to avoid calculation errors.
   const entryPrice = Number(formData.entryPrice);
@@ -43,11 +47,8 @@ export default function Calculations({
   const positionGain = (finalPosition - 1) * 100;
   const collateralGain = (collateralPosition - 1) * 100;
 
+  // Extracts the ticker form the token string
   const ticker = (token: string) => token.split(",")[1];
-
-  const isLong = (): boolean => formData.long.split(",")[0] === formData.depositToken;
-
-
 
   return (
       <div className={`mt-4 ${disabled ? "opacity-50" : ""}`}>

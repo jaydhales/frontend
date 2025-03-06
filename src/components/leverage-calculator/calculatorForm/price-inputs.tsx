@@ -9,12 +9,13 @@ import { Input } from "@/components/ui/input";
 import { inputPatternMatch } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
 import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
-import { useVaultPrices } from "@/components/leverage-calculator/calculatorForm/hooks/useVaultPrices";
+import { api } from "@/trpc/react";
+import { useEffect } from "react";
 
 // You might need to import or define decimals if not available in this file
 const decimals = 18;
 
-function Root({ children }: { label: string; children: React.ReactNode }) {
+function Root({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative mt-4 flex w-full flex-col gap-4 space-y-4 md:flex-row md:items-baseline md:justify-between">
       {children}
@@ -26,14 +27,34 @@ interface Props {
   disabled: boolean;
 }
 
+
+
 function EntryPrice({ disabled }: Props) {
   const form = useFormContext<TCalculatorFormFields>();
-  const formData = form.watch();
-  console.log("FormData: ", formData);
-  // const vaultPrices = useVaultPrices();
-  // console.log("Vault Prices: ", vaultPrices);
+    const { setValue, control } = form;
 
-  return (
+    const formData = form.watch();
+    const depositTicker =
+        formData.long?.trim()
+            ? formData.long.split(",")[1] ?? "ETH"
+            : "ETH";
+    const collateralTicker =
+        formData.versus?.trim()
+            ? formData.versus.split(",")[1] ?? "USDC"
+            : "USDC";
+
+    const { data: prices } = api.price.getVaultPrices.useQuery(
+        { depositToken: depositTicker, collateralToken: collateralTicker },
+        {
+            enabled:
+                Boolean(formData.depositToken?.trim()) &&
+                Boolean(formData.versus?.trim()),
+        }
+    );
+
+    console.log("Prices:", prices)
+
+    return (
     <div className="space-y-2">
       <div>
         <FormLabel htmlFor="entryPrice">Entry price</FormLabel>

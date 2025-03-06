@@ -87,7 +87,10 @@ export default function CalculatorForm({ vaultsQuery }: Props) {
             </Dropdown.Root>
           </DepositInputs.Inputs>
         </DepositInputs.Root>
-        <PriceInputs.Root label="Entry price">
+        <PriceInputs.Root>
+          {/* TODO: this component will be responsible of fetching and calculating the tokenPrice and,
+                    set it onto entry and exit price
+          */}
           <PriceInputs.EntryPrice disabled={disabledPriceInputs} />
           <PriceInputs.ExitPrice disabled={disabledPriceInputs}/>
         </PriceInputs.Root>

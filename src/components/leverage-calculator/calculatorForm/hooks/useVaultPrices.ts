@@ -8,8 +8,8 @@ export function useVaultPrices() {
 
     // Explicitly provide a fallback value using ?? ""
     const depositTicker =
-        formData.depositToken?.trim()
-            ? (formData.depositToken.split(",")[1] ?? "")
+        formData.long?.trim()
+            ? (formData.long.split(",")[1] ?? "")
             : "";
     const collateralTicker =
         formData.versus?.trim()
@@ -19,8 +19,8 @@ export function useVaultPrices() {
     // Enable the query only when both tickers have a non empty value.
     const { data: vaultPrices, error } = api.price.getVaultPrices.useQuery(
         {
-            depositToken: depositTicker,
-            collateralToken: collateralTicker,
+            depositToken: "ETH",
+            collateralToken: "USDC",
         },
         {
             enabled: Boolean(depositTicker && collateralTicker),
