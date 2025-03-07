@@ -62,7 +62,7 @@ export default function TransactionInfo({
         )}
         {needsApproval && (
           <TransactionModal.Disclaimer>
-            Approve SIR to send token funds .....
+            Approve Funds to Mint.
           </TransactionModal.Disclaimer>
         )}
       </>

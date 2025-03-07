@@ -24,21 +24,36 @@ interface Props {
   className?: string | undefined;
   fallbackImageUrl?: string | StaticImageData;
 }
+
 const ImageWithFallback = (props: Props) => {
   let { fallbackImageUrl } = props;
   const { src, ...rest } = props;
-  const [imgSrc, setImgSrc] = useState<string | StaticImageData>(src);
+  const [imgSrc, setImgSrc] = useState<string | StaticImageData | undefined>(
+    undefined,
+  );
   useEffect(() => {
     setImgSrc(src);
   }, [src]);
   const imgProps = { ...rest };
   fallbackImageUrl = unknownImg as string | StaticImageData;
   delete imgProps.fallbackImageUrl;
+  if (imgSrc) {
+    return (
+      // eslint-disable-next-line jsx-a11y/alt-text
+      <Image
+        {...imgProps}
+        src={imgSrc}
+        onError={() => {
+          setImgSrc(fallbackImageUrl);
+        }}
+      />
+    );
+  }
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
     <Image
-      {...rest}
-      src={imgSrc}
+      {...imgProps}
+      src={src}
       onError={() => {
         setImgSrc(fallbackImageUrl);
       }}

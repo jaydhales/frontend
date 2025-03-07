@@ -99,7 +99,9 @@ function StatRow({
           {title} {info && <ToolTip>{info}</ToolTip>}
         </span>
       </h3>
-      <h4>{value}</h4>
+      <h4>
+        <DisplayFormattedNumber num={value} />
+      </h4>
     </div>
   );
 }

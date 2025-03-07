@@ -2,7 +2,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { motion } from "motion/react";
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits } from "viem";
 import { type TVaults } from "@/lib/types";
 import DepositInputs from "./deposit-inputs";
 import VaultParamsInputSelects from "./vaultParamsInputSelects";
@@ -33,6 +33,10 @@ import { useFormContext } from "react-hook-form";
 import { useFindVault } from "./hooks/useFindVault";
 import useIsDebtToken from "./hooks/useIsDebtToken";
 import useGetFormTokensInfo from "./hooks/useGetUserBals";
+import { IonCalculator } from "@/components/ui/calculator-icon";
+import Link from "next/link";
+import { useVaultProvider } from "@/components/providers/vaultProvider";
+
 interface Props {
   vaultsQuery: TVaults;
   isApe: boolean;
@@ -41,8 +45,9 @@ interface Props {
 /**
  * Contains form actions and validition.
  */
-export default function MintForm({ vaultsQuery, isApe }: Props) {
+export default function MintForm({ isApe }: Props) {
   const [useEthRaw, setUseEth] = useState(false);
+  const { vaults: vaultsQuery } = useVaultProvider();
   const {
     userEthBalance,
     userBalanceFetching,
@@ -66,38 +71,18 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     decimals: depositDecimals ?? 0,
   });
 
-  const selectedVault = useFindVault(vaultsQuery);
+  const selectedVault = useFindVault();
 
-  const needsApproval = useMemo(() => {
-    if (userBalanceFetching) {
-      return false;
-    }
-    const tokenAllowance = userBalance?.tokenAllowance?.result;
-    const decimals = depositDecimals ?? 18;
-    if (useEth) {
-      return false;
-    }
-    if (parseUnits(deposit ?? "0", decimals) > (tokenAllowance ?? 0n)) {
-      return true;
-    } else {
-      return false;
-    }
-  }, [
-    deposit,
-    depositDecimals,
-    useEth,
-    userBalance?.tokenAllowance?.result,
-    userBalanceFetching,
-  ]);
-  const { requests, isApproveFetching, isMintFetching } = useTransactions({
-    useEth,
-    tokenAllowance: userBalance?.tokenAllowance?.result,
-    vaultId: selectedVault.result?.vaultId,
-    minCollateralOut,
-    isApe,
-    vaultsQuery,
-    decimals: depositDecimals ?? 18,
-  });
+  const { requests, isApproveFetching, isMintFetching, needsApproval } =
+    useTransactions({
+      useEth,
+      tokenAllowance: userBalance?.tokenAllowance?.result,
+      vaultId: selectedVault.result?.vaultId,
+      minCollateralOut,
+      isApe,
+      vaultsQuery,
+      decimals: depositDecimals ?? 18,
+    });
   const { versus, leverageTiers, long } = useFilterVaults({
     vaultsQuery,
   });
@@ -154,6 +139,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     errorMessage,
     rootErrorMessage: formState.errors.root?.message,
   });
+  console.log(requests.mintRequest, "requests.mintRequest");
   const onSubmit = useCallback(() => {
     if (requests.approveWriteRequest && needsApproval) {
       setCurrentTxType("approve");
@@ -329,6 +315,18 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
             </Dropdown.Root>
           </DepositInputs.Inputs>
         </DepositInputs.Root>
+        {/* Calculator link */
+          isApe &&
+          <div
+            className="flex justify-start w-full my-2">
+            <Link className="hover:underline" href={"/leverage-calculator"}>
+              <div className="flex flex-row items-center">
+                <IonCalculator className="w-5 h-5 mr-1" />
+                Profit Calculator
+              </div>
+            </Link>
+          </div>
+        }
         {/* opacity-0 */}
         <div
           className={`py-3 ${Boolean(disabledInputs && !isLoading) === true ? "" : "opacity-0"}`}

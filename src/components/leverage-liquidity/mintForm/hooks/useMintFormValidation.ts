@@ -109,7 +109,7 @@ export const useMintFormValidation = ({
     }
     // CHECK ALLOWANCE FIRST
     if (
-      parseUnits(deposit ?? "0", decimals) > (tokenAllowance ?? 0n) &&
+      parseUnits(deposit ?? "0", decimals) >= (tokenAllowance ?? 0n) &&
       requests.approveWriteRequest
     ) {
       if (requests.approveWriteRequest)
