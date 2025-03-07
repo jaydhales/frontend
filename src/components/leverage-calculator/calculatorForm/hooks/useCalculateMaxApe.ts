@@ -6,7 +6,7 @@ import { formatUnits, parseUnits } from "viem";
 import useCalculateVaultHealth from "../../vaultTable/hooks/useCalculateVaultHealth";
 import { useFormContext } from "react-hook-form";
 import { parseAddress } from "@/lib/utils";
-import type { TMintFormFields } from "@/components/providers/mintFormProvider";
+import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
 
 export function useCalculateMaxApe({
   vaultId,
@@ -17,7 +17,7 @@ export function useCalculateMaxApe({
   usingDebtToken: boolean;
   collateralDecimals: number;
 }) {
-  const formData = useFormContext<TMintFormFields>().watch();
+  const formData = useFormContext<TCalculatorFormFields>().watch();
   const { data, isLoading } = api.vault.getReserve.useQuery(
     { vaultId },
     { enabled: vaultId !== -1 && Number.isFinite(vaultId) },

@@ -1,4 +1,4 @@
-import type { TMintFormFields } from "@/components/providers/mintFormProvider";
+import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
 import type { TVaults, VaultFieldFragment } from "@/lib/types";
 import { api } from "@/trpc/react";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ interface Props {
  * Narrows down dropdown items(vaults) when other dropdowns are selected.
  */
 export function useFilterVaults({ vaultsQuery }: Props) {
-  const form = useFormContext<TMintFormFields>();
+  const form = useFormContext<TCalculatorFormFields>();
   const formData = form.watch();
   const { data, isFetching } = api.vault.getVaults.useQuery({
     filterDebtToken: formData.versus.split(",")[0],

@@ -1,4 +1,4 @@
-import type { TMintFormFields } from "@/components/providers/mintFormProvider";
+import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
 import { VaultContract } from "@/contracts/vault";
 import { parseAddress } from "@/lib/utils";
 import { api } from "@/trpc/react";
@@ -12,7 +12,7 @@ import { useAccount } from "wagmi";
 export default function useGetFormTokensInfo() {
   const { address } = useAccount();
 
-  const formData = useFormContext<TMintFormFields>().watch();
+  const formData = useFormContext<TCalculatorFormFields>().watch();
 
   const { data: userBalance, isFetching } =
     api.user.getBalanceAndAllowance.useQuery(

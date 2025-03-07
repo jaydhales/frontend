@@ -18,7 +18,7 @@ export default function LeverageCalculatorContent({
 }) {
   return (
     <Container>
-      <Explainer page={isApe ? EPage.LEVERAGE : EPage.LIQUIDITY} />
+      {/*<Explainer page={isApe ? EPage.LEVERAGE : EPage.LIQUIDITY} />*/}
       <div className="grid w-full gap-x-[16px] gap-y-4 xl:grid-cols-2">
         <MintFormProvider>
           <CalculatorForm vaultsQuery={vaultsQuery} isApe={isApe} />

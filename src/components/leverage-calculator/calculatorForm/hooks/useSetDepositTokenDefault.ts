@@ -1,4 +1,4 @@
-import type { TMintFormFields } from "@/components/providers/mintFormProvider";
+import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
@@ -7,7 +7,7 @@ export default function useSetDepositTokenDefault({
 }: {
   collToken: string | undefined;
 }) {
-  const { setValue } = useFormContext<TMintFormFields>();
+  const { setValue } = useFormContext<TCalculatorFormFields>();
   useEffect(() => {
     setValue("depositToken", collToken ?? "");
   }, [collToken, setValue]);

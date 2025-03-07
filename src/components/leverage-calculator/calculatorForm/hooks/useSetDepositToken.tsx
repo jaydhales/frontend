@@ -1,7 +1,7 @@
 import type {
-  TMintForm,
-  TMintFormFields,
-} from "@/components/providers/mintFormProvider";
+  TCalculatorForm,
+  TCalculatorFormFields,
+} from "@/components/providers/calculatorFormProvider";
 import { useEffect, useState } from "react";
 /**
  * useSetDepositToken
@@ -11,8 +11,8 @@ export default function useSetDepositToken({
   formData,
   form,
 }: {
-  formData: TMintFormFields;
-  form: TMintForm;
+  formData: TCalculatorFormFields;
+  form: TCalculatorForm;
 }) {
   const [tokenDeposits, setTokenDeposits] = useState<{
     versus: { value: string; label: string } | undefined;

@@ -309,11 +309,9 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         </DepositInputs.Root>
         {/* Calculator link */}
         <div
-          className="flex justify-end w-full my-2">
-          <Link href={"/leverage-calculator"}>
-            <Button variant="accent">
-              Calculator
-            </Button>
+          className="flex justify-start w-full my-2">
+          <Link className="hover:underline" href={"/leverage-calculator"}>
+              Profit Calculator
           </Link>
         </div>
         {/* opacity-0 */}

@@ -1,10 +1,10 @@
-import type { TMintFormFields } from "@/components/providers/mintFormProvider";
+import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
 import type { TVaults } from "@/lib/types";
 import { useFormContext } from "react-hook-form";
 import { z } from "zod";
 
 export function useFindVault(vaultQuery: TVaults) {
-  const form = useFormContext<TMintFormFields>();
+  const form = useFormContext<TCalculatorFormFields>();
   const formData = form.watch();
 
   const debtToken = formData.versus.split(",")[0] ?? "", //value formatted : address,symbol
