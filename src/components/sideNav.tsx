@@ -17,7 +17,7 @@ export default function SideNav() {
             <nav className="space-y-4 text-center text-muted-foreground">
               <ul
                 aria-label="Core Navigation"
-                className="rounded-md bg-primary/40"
+                className="space-y-2 rounded-md bg-primary/40 py-2 text-lg"
               >
                 <NavItem onClick={() => setOpen(false)} url={"/"}>
                   Leverage
@@ -29,7 +29,10 @@ export default function SideNav() {
                   Portfolio
                 </NavItem>
               </ul>
-              <ul aria-label="Secondary Navigation">
+              <ul
+                aria-label="Secondary Navigation"
+                className="space-y-2 py-2 text-lg"
+              >
                 <NavItem onClick={() => setOpen(false)} url={"/stake"}>
                   Stake
                 </NavItem>

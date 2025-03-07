@@ -2,7 +2,7 @@
 import useVaultFilterStore from "@/lib/store";
 import type { TVaults } from "@/lib/types";
 import { api } from "@/trpc/react";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface VaultProviderType {
   vaults: TVaults | undefined;
@@ -28,7 +28,9 @@ export const VaultProvider = ({ children }: Props) => {
     ",",
   )[0];
   const filterLeverage = useVaultFilterStore((state) => state.leverageTier);
-
+  useEffect(() => {
+    setPage(1);
+  }, [filterLeverage, filterDebtToken, filterCollateralToken]);
   const { data, isFetching } = api.vault.getTableVaults.useQuery(
     {
       filters: {

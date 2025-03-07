@@ -8,7 +8,7 @@ export default function LeverageLiquidityPage({
   title: string;
 }) {
   return (
-    <div className="xl:w-[1250px]">
+    <div className="xl:w-[1280px]">
       {/* <PageHeader>{title}</PageHeader> */}
       <PageHeadingSpace />
       {/* <div className="pt-[44px]"></div> */}

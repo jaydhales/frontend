@@ -9,7 +9,7 @@ export interface CardProps
     VariantProps<typeof cardVariants> {
   children: ReactNode;
 }
-const cardVariants = cva("rounded-[6px] p-[12px] md:p-[20px]", {
+const cardVariants = cva("rounded-[6px] p-[12px] md:p-[18px]", {
   variants: {
     background: {
       default: "bg-secondary nav-shadow",

@@ -57,7 +57,7 @@ export function useMintApeOrTea({
   }
   const tokenAllowanceCheck = useEth
     ? true
-    : (tokenAllowance ?? 0n) > (tokenAmount ?? 0n);
+    : (tokenAllowance ?? 0n) >= (tokenAmount ?? 0n);
   const tokenCheck = useEth ? (ethAmount ?? 0n) > 0n : (tokenAmount ?? 0n) > 0n;
   const {
     data: Mint,

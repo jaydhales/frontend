@@ -4,11 +4,8 @@ import React from "react";
 import AprDisplay from "./aprDisplay";
 import { syncDividends } from "@/lib/dividendsSync";
 import { selectPayouts } from "@/lib/db/queries/select";
-import {
-  HoverCard,
-  HoverCardTrigger,
-  HoverCardContent,
-} from "@/components/ui/hover-card";
+
+import ToolTip from "@/components/ui/tooltip";
 
 export const dynamic = "force-dynamic";
 
@@ -30,25 +27,18 @@ export default async function AprCard() {
   return (
     <div className="flex flex-col items-center justify-center gap-2 rounded-md bg-secondary py-2">
       <div className="flex w-full flex-row items-center justify-center">
-        {/* Wrapped "Staking APR" with HoverCard */}
-        <HoverCard>
-          <HoverCardTrigger asChild>
-            <div className="px-2 text-sm text-gray-300 cursor-pointer">
-              Staking APR
-            </div>
-          </HoverCardTrigger>
-          <HoverCardContent side="top" alignOffset={10}>
-            <div className="mb-2 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
-              <span>
-                The APR is estimated using the past month&apos;s dividend data.
-                Since SIR isn&apos;t traded yet, the presale price of $0.000165 per SIR is used.
-              </span>
-            </div>
-          </HoverCardContent>
-        </HoverCard>
-        {/* <div className="px-2 text-sm text-gray-300">Staking APR</div> */}
+        <div className="px-2 text-sm text-gray-300">Staking APR</div>
+        <ToolTip size="300">
+          <div className="rounded-sm bg-white text-[13px] font-medium text-gray-800">
+            <span>
+              The APR is estimated using the past month&apos;s dividend data.
+              Since SIR isn&apos;t traded yet, the presale price of $0.000165
+              per SIR is used.
+            </span>
+          </div>
+        </ToolTip>
       </div>
-      <div className="font-normal text-2xl ">
+      <div className="text-2xl font-normal ">
         <AprDisplay currentApr={apr} />
       </div>
     </div>
