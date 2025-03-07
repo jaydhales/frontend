@@ -52,10 +52,10 @@ function InfoContainer({
   isConfirming: boolean;
 }) {
   return (
-    <div className="rounded-tl-xl rounded-tr-xl bg-secondary-700 px-6 pb-6 pt-5">
+    <div className="space-y-2 rounded-tl-xl rounded-tr-xl bg-secondary-700 px-6 pb-6 pt-5">
       {children}
       {isConfirming && (
-        <div className="pt-2">
+        <div className="">
           <ExplorerLink align="left" transactionHash={hash} />
         </div>
       )}
@@ -65,7 +65,7 @@ function InfoContainer({
 
 function Disclaimer({ children }: { children: ReactNode }) {
   return (
-    <div className="w-[300px] items-center pt-2 text-[12px] italic text-gray-400">
+    <div className="w-[300px] items-center  text-[12px] italic text-gray-400">
       <span>{children}</span>
     </div>
   );
@@ -119,19 +119,20 @@ function SubmitButton({
   isPending: boolean;
   isConfirmed: boolean;
 }) {
+  const isLoading = isPending || loading;
   return (
     <Button
       className="text-[16px]"
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       variant="modal"
-      state={loading ? "loading" : "default"}
+      state={isLoading ? "loading" : "default"}
       type="submit"
     >
       <Pending
         isPending={isPending}
         isConfirmed={isConfirmed}
-        isLoading={loading}
+        isLoading={isLoading}
       >
         {children}
       </Pending>
@@ -150,7 +151,7 @@ function Pending({
   isConfirmed: boolean;
 }) {
   if (isPending) {
-    return "Sign Transaction...";
+    return "Signing Transaction";
   }
   if (isLoading) {
     return "Waiting for Confirmation";

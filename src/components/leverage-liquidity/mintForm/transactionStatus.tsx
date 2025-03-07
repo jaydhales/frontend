@@ -16,7 +16,14 @@ export function TransactionStatus({
 }: StatusProps) {
   const data = useMemo(() => {
     if (waitForSign) {
-      return { message: "Please Sign Transaction." };
+      return {
+        message: (
+          <div className="flex items-center gap-x-2">
+            <Spinner />
+            <span className="text-[14px]">Please Sign Transaction.</span>
+          </div>
+        ),
+      };
     }
     if (showLoading) {
       return { message: <Spinner></Spinner> };
