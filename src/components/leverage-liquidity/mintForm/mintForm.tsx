@@ -309,15 +309,18 @@ export default function MintForm({ isApe }: Props) {
             </Dropdown.Root>
           </DepositInputs.Inputs>
         </DepositInputs.Root>
-        {/* Calculator link */}
-        <div className="my-2 flex w-full justify-start">
-          <Link className="hover:underline" href={"/leverage-calculator"}>
-            <div className="flex flex-row items-center">
-              <IonCalculator className="mr-1 h-5 w-5" />
-              Profit Calculator
-            </div>
-          </Link>
-        </div>
+        {/* Calculator link */
+          isApe &&
+          <div
+            className="flex justify-start w-full my-2">
+            <Link className="hover:underline" href={"/leverage-calculator"}>
+              <div className="flex flex-row items-center">
+                <IonCalculator className="w-5 h-5 mr-1" />
+                Profit Calculator
+              </div>
+            </Link>
+          </div>
+        }
         {/* opacity-0 */}
         <div
           className={`py-3 ${Boolean(disabledInputs && !isLoading) === true ? "" : "opacity-0"}`}
