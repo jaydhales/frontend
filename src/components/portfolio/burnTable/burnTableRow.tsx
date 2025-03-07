@@ -11,6 +11,7 @@ import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import { getLeverageRatio } from "@/lib/utils/calculations";
 import { getLogoAsset } from "@/lib/assets";
 import Show from "@/components/shared/show";
+import DisplayFormattedNumber from "@/components/shared/displayFormattedNumber";
 interface Props {
   row: TUserPosition;
   isApe: boolean;
@@ -72,7 +73,9 @@ export function BurnTableRow({
         <td className="col-span-3 space-y-3 font-normal">
           <div className="flex items-start  justify-between">
             <span>
-              {formatNumber(isApe ? apeBalance : teaBalance, 3)}
+              <DisplayFormattedNumber
+                num={formatNumber(isApe ? apeBalance : teaBalance, 3)}
+              />
               <span className="pl-1 text-[12px] text-gray-400"></span>
             </span>
             <div className="space-x-1">
@@ -171,7 +174,9 @@ export function BurnTableRowMobile({
               <div>
                 <span>Claim</span>
                 <span className="pl-1 text-[12px] text-gray-300">
-                  <span>{formatNumber(rewards, 2)}</span>
+                  <span>
+                    <DisplayFormattedNumber num={formatNumber(rewards, 2)} />
+                  </span>
                   <span className="pl-[2px] ">SIR</span>
                 </span>
               </div>

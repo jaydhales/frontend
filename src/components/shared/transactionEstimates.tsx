@@ -2,6 +2,7 @@ import { formatNumber } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
 import { formatUnits } from "viem";
 import type { TMintFormFields } from "../providers/mintFormProvider";
+import DisplayFormattedNumber from "./displayFormattedNumber";
 
 interface EstimateProps {
   collateralEstimate: bigint | undefined;
@@ -27,7 +28,12 @@ export function TransactionEstimates({
       <span className="text-gray-500">{"->"}</span>
       <h3 className="space-x-1">
         <span>
-          {formatNumber(formatUnits(collateralEstimate ?? 0n, decimals), 6)}
+          <DisplayFormattedNumber
+            num={formatNumber(
+              formatUnits(collateralEstimate ?? 0n, decimals),
+              6,
+            )}
+          />
         </span>
         <span className="text-sm text-gray-300">{outAssetName}</span>
       </h3>
