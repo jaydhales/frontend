@@ -72,7 +72,7 @@ export default function Calculations({ disabled }: { disabled: boolean }) {
           </h3>
           <div className="text-md space-x-1">
             <span>
-              {(Number(formData.deposit) * longTokenPosition).toFixed(2)}
+              {(Number(formData.deposit) * (isDebtToken ? Number(entryPrice) : 1) * longTokenPosition).toFixed(2)}
             </span>
             <span
               className={positionGain < 0 ? "text-red-400" : "text-green-400"}
@@ -92,7 +92,7 @@ export default function Calculations({ disabled }: { disabled: boolean }) {
             <span>
               {(
                 Number(formData.deposit) *
-                (entryPrice * debtTokenPosition)
+                ((isDebtToken ? 1 : entryPrice) * debtTokenPosition)
               ).toFixed(2)}
             </span>
             <span
