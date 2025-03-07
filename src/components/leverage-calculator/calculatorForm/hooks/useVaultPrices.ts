@@ -19,8 +19,8 @@ export function useVaultPrices() {
     // Enable the query only when both tickers have a non empty value.
     const { data: vaultPrices, error } = api.price.getVaultPrices.useQuery(
         {
-            depositToken: "ETH",
-            collateralToken: "USDC",
+            collateralToken: "ETH",
+            debtToken: "USDC",
         },
         {
             enabled: Boolean(depositTicker && collateralTicker),
