@@ -8,10 +8,10 @@ export default function Calculations({ disabled }: { disabled: boolean }) {
   const form = useFormContext<TCalculatorFormFields>();
   const formData = form.watch();
 
-  // Check for the required fields
-  // const areRequiredValuesPresent = useMemo(() => {
-  //   return formData.depositToken && formData.versus && formData.leverageTier;
-  // }, [formData.depositToken, formData.versus, formData.leverageTier]);
+//  Check for the required fields
+  const areRequiredValuesPresent = useMemo(() => {
+    return formData.depositToken && formData.versus && formData.leverageTier;
+  }, [formData.depositToken, formData.versus, formData.leverageTier]);
 
   const isDebtToken = useIsDebtToken();
   console.log({ isDebtToken });
@@ -24,13 +24,13 @@ export default function Calculations({ disabled }: { disabled: boolean }) {
   const fee = Number(strFee);
 
   // If the required values are not present, show a placeholder
-  // if (!areRequiredValuesPresent) {
-  //   return (
-  //     <div className="flex h-40 items-center justify-center">
-  //       Please complete all required fields to display calculations.
-  //     </div>
-  //   );
-  // }
+  if (!areRequiredValuesPresent) {
+    return (
+      <div className="flex h-40 items-center justify-center">
+        Please complete all required fields to display calculations.
+      </div>
+    );
+  }
 
   // Make sure entryPrice and exitPrice are provided to avoid calculation errors.
   const entryPrice = Number(formData.entryPrice);
