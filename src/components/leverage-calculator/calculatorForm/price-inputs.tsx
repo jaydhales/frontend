@@ -9,8 +9,6 @@ import { Input } from "@/components/ui/input";
 import { inputPatternMatch } from "@/lib/utils";
 import { useFormContext } from "react-hook-form";
 import type { TCalculatorFormFields } from "@/components/providers/calculatorFormProvider";
-import { api } from "@/trpc/react";
-import { useEffect } from "react";
 
 // You might need to import or define decimals if not available in this file
 const decimals = 18;
@@ -31,28 +29,7 @@ interface Props {
 
 function EntryPrice({ disabled }: Props) {
   const form = useFormContext<TCalculatorFormFields>();
-    const { setValue, control } = form;
 
-    const formData = form.watch();
-    const depositTicker =
-        formData.long?.trim()
-            ? formData.long.split(",")[1] ?? "ETH"
-            : "ETH";
-    const collateralTicker =
-        formData.versus?.trim()
-            ? formData.versus.split(",")[1] ?? "USDC"
-            : "USDC";
-
-    const { data: prices } = api.price.getVaultPrices.useQuery(
-        { depositToken: depositTicker, collateralToken: collateralTicker },
-        {
-            enabled:
-                Boolean(formData.depositToken?.trim()) &&
-                Boolean(formData.versus?.trim()),
-        }
-    );
-
-    console.log("Prices:", prices)
 
     return (
     <div className="space-y-2">
@@ -100,7 +77,6 @@ function EntryPrice({ disabled }: Props) {
 
 function ExitPrice({ disabled }: Props) {
   const form = useFormContext<TCalculatorFormFields>();
-  const formData = form.watch();
   return (
     <div className="space-y-2">
       <div>
