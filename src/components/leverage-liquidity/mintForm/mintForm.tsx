@@ -35,6 +35,7 @@ import useIsDebtToken from "./hooks/useIsDebtToken";
 import useGetFormTokensInfo from "./hooks/useGetUserBals";
 import { IonCalculator } from "@/components/ui/calculator-icon";
 import Link from "next/link";
+import { useVaultProvider } from "@/components/providers/vaultProvider";
 
 interface Props {
   vaultsQuery: TVaults;
@@ -44,8 +45,9 @@ interface Props {
 /**
  * Contains form actions and validition.
  */
-export default function MintForm({ vaultsQuery, isApe }: Props) {
+export default function MintForm({ isApe }: Props) {
   const [useEthRaw, setUseEth] = useState(false);
+  const { vaults: vaultsQuery } = useVaultProvider();
   const {
     userEthBalance,
     userBalanceFetching,
@@ -69,7 +71,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     decimals: depositDecimals ?? 0,
   });
 
-  const selectedVault = useFindVault(vaultsQuery);
+  const selectedVault = useFindVault();
 
   const { requests, isApproveFetching, isMintFetching, needsApproval } =
     useTransactions({
@@ -308,12 +310,10 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
           </DepositInputs.Inputs>
         </DepositInputs.Root>
         {/* Calculator link */}
-        <div
-          className="flex justify-start w-full my-2">
+        <div className="my-2 flex w-full justify-start">
           <Link className="hover:underline" href={"/leverage-calculator"}>
-
             <div className="flex flex-row items-center">
-              <IonCalculator className="w-5 h-5 mr-1" />
+              <IonCalculator className="mr-1 h-5 w-5" />
               Profit Calculator
             </div>
           </Link>
