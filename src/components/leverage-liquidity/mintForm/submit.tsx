@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import React from "react";
 import { useAccount } from "wagmi";
+import { NotoTeapot } from "@/components/ui/teapot-icon";
 
 const SubmitContext = React.createContext(undefined);
 
@@ -53,11 +54,20 @@ const OpenTransactionModalButton = ({
   return (
     <Button
       disabled={!isValid}
-      variant="submit"
+      variant={!needsApproval ? "greenSubmit" : "submit"}
       type="button"
       onClick={onClick}
     >
-      {!needsApproval ? "Mint" : "Approve"}
+      {!needsApproval ? (
+        <div className="flex items-center gap-x-1">
+          <span>Provide Liquidity</span>
+          <span>
+            <NotoTeapot />
+          </span>
+        </div>
+      ) : (
+        "Approve"
+      )}
     </Button>
   );
 };
