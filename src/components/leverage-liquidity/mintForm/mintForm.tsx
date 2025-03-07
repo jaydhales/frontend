@@ -33,7 +33,7 @@ import { useFormContext } from "react-hook-form";
 import { useFindVault } from "./hooks/useFindVault";
 import useIsDebtToken from "./hooks/useIsDebtToken";
 import useGetFormTokensInfo from "./hooks/useGetUserBals";
-import { Button } from "@/components/ui/button";
+import { IonCalculator } from "@/components/ui/calculator-icon";
 import Link from "next/link";
 
 interface Props {
@@ -311,7 +311,11 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
         <div
           className="flex justify-start w-full my-2">
           <Link className="hover:underline" href={"/leverage-calculator"}>
+
+            <div className="flex flex-row items-center">
+              <IonCalculator className="w-5 h-5 mr-1" />
               Profit Calculator
+            </div>
           </Link>
         </div>
         {/* opacity-0 */}
