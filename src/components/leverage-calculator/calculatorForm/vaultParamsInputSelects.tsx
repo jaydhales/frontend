@@ -63,15 +63,15 @@ export default function VaultParamsInputSelects({
         }))}
       />
       <Select
-        placeholder="Select Leverage"
+        placeholder="Select Tier"
         setStore={setLeverage}
         items={leverageTiers.map((e) => ({
-          label: "^" + getLeverageRatio(e).toString(),
+          label: getLeverageRatio(e).toString() + "x",
           value: e.toString(),
         }))}
         noSearch
         name="leverageTier"
-        title="Leverage"
+        title="Leverage Tier"
       />
     </div>
   );
