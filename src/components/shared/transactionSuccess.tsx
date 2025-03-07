@@ -2,6 +2,7 @@ import { formatNumber } from "@/lib/utils";
 import { CircleCheck } from "lucide-react";
 import React from "react";
 import { formatUnits } from "viem";
+import DisplayFormattedNumber from "./displayFormattedNumber";
 
 export default function TransactionSuccess({
   amountReceived,
@@ -21,7 +22,12 @@ export default function TransactionSuccess({
       {amountReceived && (
         <h3 className="text-center">
           {assetReceived} received:{" "}
-          {formatNumber(formatUnits(amountReceived ?? 0n, decimals ?? 18), 6)}
+          <DisplayFormattedNumber
+            num={formatNumber(
+              formatUnits(amountReceived ?? 0n, decimals ?? 18),
+              6,
+            )}
+          />
         </h3>
       )}
     </div>

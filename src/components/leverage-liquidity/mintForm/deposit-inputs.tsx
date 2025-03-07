@@ -15,6 +15,7 @@ import type { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 import type { TMintFormFields } from "@/components/providers/mintFormProvider";
 import MintFormSettings from "./MintFormSettings";
+import DisplayFormattedNumber from "@/components/shared/displayFormattedNumber";
 
 function Root({ children }: { children: React.ReactNode }) {
   return (
@@ -117,7 +118,7 @@ function Inputs({
           {children}
         </div>
         <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-          Balance: {formatNumber(balance ?? "0")}
+          Balance: <DisplayFormattedNumber num={formatNumber(balance ?? "0")} />
         </h2>
         <BalancePercent
           settings={<MintFormSettings />}

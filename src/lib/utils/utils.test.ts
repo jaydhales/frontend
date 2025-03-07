@@ -1,5 +1,5 @@
 import { beforeAll, expect, test } from "vitest";
-import { add, formatNumber } from "./index";
+import { add, formatNumber, formatSmallNumber } from "./index";
 import {
   calculateApr,
   calculateMaxApe,

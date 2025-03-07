@@ -16,6 +16,7 @@ import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/tran
 import { useState } from "react";
 
 import { api } from "@/trpc/react";
+import DisplayFormattedNumber from "@/components/shared/displayFormattedNumber";
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 interface Props {
   ethBalance?: string;
@@ -84,7 +85,9 @@ const ClaimFees = ({
           <div className="flex justify-between">
             <div className="flex flex-col justify-between">
               <div className="h-10 w-40 rounded-md bg-card text-[28px] ring-offset-background">
-                {formatNumber(claimAmount ?? "0", 3)}
+                <DisplayFormattedNumber
+                  num={formatNumber(claimAmount ?? "0", 3)}
+                />
               </div>
               {/* <div className="pt-2 text-sm italic text-gray-500">$66.88</div> */}
             </div>
@@ -102,7 +105,10 @@ const ClaimFees = ({
                   <span className="font-medium">ETH</span>
                 </div>
                 <h2 className="pt-1 text-right text-sm text-[#B6B6C9]">
-                  Balance: {formatNumber(ethBalance ?? "0", 6)}
+                  Balance:{" "}
+                  <DisplayFormattedNumber
+                    num={formatNumber(ethBalance ?? "0", 6)}
+                  />
                 </h2>
               </div>
             </div>

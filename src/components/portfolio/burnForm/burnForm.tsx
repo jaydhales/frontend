@@ -24,6 +24,7 @@ import { DisplayCollateral } from "./displayCollateral";
 import { TokenInput } from "./tokenInput";
 import { subgraphSyncPoll } from "@/lib/utils/sync";
 import { useBurnFormValidation } from "./hooks/useBurnFormValidation";
+import DisplayFormattedNumber from "@/components/shared/displayFormattedNumber";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -204,7 +205,9 @@ export default function BurnForm({
                 <div className=" pt-4 ">
                   <div className="space-x-1">
                     <span className="text-lg">
-                      {formatNumber(formatUnits(reward, 12), 8)}
+                      <DisplayFormattedNumber
+                        num={formatNumber(formatUnits(reward, 12), 8)}
+                      />
                     </span>
                     <span className="text-[14px] text-gray-500">SIR</span>
                   </div>
