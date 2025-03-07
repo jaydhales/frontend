@@ -35,6 +35,7 @@ import useIsDebtToken from "./hooks/useIsDebtToken";
 import useGetFormTokensInfo from "./hooks/useGetUserBals";
 import { IonCalculator } from "@/components/ui/calculator-icon";
 import Link from "next/link";
+import { useVaultProvider } from "@/components/providers/vaultProvider";
 
 interface Props {
   vaultsQuery: TVaults;
@@ -44,8 +45,9 @@ interface Props {
 /**
  * Contains form actions and validition.
  */
-export default function MintForm({ vaultsQuery, isApe }: Props) {
+export default function MintForm({ isApe }: Props) {
   const [useEthRaw, setUseEth] = useState(false);
+  const { vaults: vaultsQuery } = useVaultProvider();
   const {
     userEthBalance,
     userBalanceFetching,
@@ -69,7 +71,7 @@ export default function MintForm({ vaultsQuery, isApe }: Props) {
     decimals: depositDecimals ?? 0,
   });
 
-  const selectedVault = useFindVault(vaultsQuery);
+  const selectedVault = useFindVault();
 
   const { requests, isApproveFetching, isMintFetching, needsApproval } =
     useTransactions({
