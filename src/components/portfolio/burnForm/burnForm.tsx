@@ -7,7 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
-import { formatUnits, parseUnits } from "viem";
+import { Address, formatUnits, parseUnits } from "viem";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
@@ -229,6 +229,7 @@ export default function BurnForm({
           {isConfirmed && !isClaimingRewards && (
             <TransactionSuccess
               hash={hash}
+              assetAddress={row.collateralToken}
               assetReceived={row.collateralSymbol}
               amountReceived={tokenReceived}
             />

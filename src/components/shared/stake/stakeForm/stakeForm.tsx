@@ -121,7 +121,6 @@ const StakeForm = ({ closeStakeModal }: { closeStakeModal: () => void }) => {
                   showLoading={isConfirming}
                 />
                 <div className="flex items-center justify-between py-2">
-                  <h2 className="text-sm text-gray-400">Amount</h2>
                   <h3 className="text-xl">
                     {form.getValues("amount")}
                     <span className="pl-[2px] text-[12px] text-gray-400">
@@ -137,6 +136,7 @@ const StakeForm = ({ closeStakeModal }: { closeStakeModal: () => void }) => {
                 decimals={12}
                 amountReceived={tokenReceived}
                 assetReceived="SIR"
+                assetAddress={SirContract.address}
               />
             )}
           </TransactionModal.InfoContainer>

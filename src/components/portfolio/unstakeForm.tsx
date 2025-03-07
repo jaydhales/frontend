@@ -21,6 +21,7 @@ import ClaimFeesCheckbox from "./claimFeesCheck";
 import { useGetReceivedSir } from "./hooks/useGetReceivedSir";
 import { TokenDisplay } from "../ui/token-display";
 import { useCheckStakeValidity } from "../shared/stake/stakeForm/useCheckStakeValidity";
+import { SirCard } from "./sirCard";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
@@ -46,7 +47,6 @@ const UnstakeForm = ({
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
-
     data: transactionData,
   } = useWaitForTransactionReceipt({ hash });
   const utils = api.useUtils();
@@ -128,7 +128,7 @@ const UnstakeForm = ({
                   showLoading={isConfirming}
                 />
                 <div className="flex items-center justify-between py-2">
-                  <h2 className="text-sm text-gray-400">Amount</h2>
+                  {/* <h2 className="text-sm text-gray-400">Amount</h2> */}
                   <h3 className="text-xl">
                     <TokenDisplay
                       amount={parseUnits(form.getValues("amount") ?? "0", 12)}
@@ -145,6 +145,7 @@ const UnstakeForm = ({
                 hash={hash}
                 amountReceived={tokenReceived}
                 assetReceived="SIR"
+                assetAddress={SirContract.address}
                 decimals={12}
               />
             )}
