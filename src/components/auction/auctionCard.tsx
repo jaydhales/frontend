@@ -20,7 +20,20 @@ interface TAuctionDataContent {
 
 type TAuctionData = TAuctionDataContent[];
 
-const AuctionCard = ({ data }: { data: TAuctionData[] }) => {
+type TAuctionAction = {
+  title: string;
+  onClick: (id?: string) => void;
+};
+
+const AuctionCard = ({
+  data,
+  action,
+  id,
+}: {
+  data: TAuctionData[];
+  action?: TAuctionAction;
+  id?: string;
+}) => {
   return (
     <Card className="flex flex-col gap-8 rounded-2xl">
       {data.map((item, index) => (
@@ -31,7 +44,7 @@ const AuctionCard = ({ data }: { data: TAuctionData[] }) => {
               <div
                 className={cn(
                   subItem.variant
-                    ? "font-lora text-[32px] font-normal leading-[32px]"
+                    ? "font-lora text-[28px] font-normal leading-[32px]"
                     : "text-lg",
                 )}
               >
@@ -41,9 +54,15 @@ const AuctionCard = ({ data }: { data: TAuctionData[] }) => {
           ))}
         </div>
       ))}
-      <Button variant="submit" className="w-full md:w-full">
-        Bid
-      </Button>
+      {action && (
+        <Button
+          variant="submit"
+          className="w-full md:w-full"
+          onClick={() => action.onClick(id)}
+        >
+          {action.title}
+        </Button>
+      )}
     </Card>
   );
 };
