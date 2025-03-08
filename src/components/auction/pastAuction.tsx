@@ -3,18 +3,29 @@ import AuctionContentWrapper from "@/components/auction/auctionContentWrapper";
 import AuctionCard, {
   AuctionCardTitle,
 } from "@/components/auction/auctionCard";
+import type { TAuctions, TVaultsCollateralToken } from "@/lib/types";
+import { TokenDisplay } from "@/components/ui/token-display";
+import { useAccount } from "wagmi";
 
-const PastAuction = () => {
+const PastAuction = ({
+  auctions,
+  tokensForAuctions,
+}: {
+  auctions?: TAuctions[];
+  tokensForAuctions: TVaultsCollateralToken;
+}) => {
+  const { address } = useAccount();
+
   return (
     <div>
       <AuctionContentWrapper header={"Past auctions"}>
-        {[1, 2].map((item, index) => (
+        {auctions?.map(({ bidder, bid, tokenIndex }) => (
           <AuctionCard
             data={[
               [
                 {
                   title: AuctionCardTitle.AUCTION_DETAILS,
-                  content: "XXXX / XXXX",
+                  content: tokensForAuctions.collateralSymbol[tokenIndex],
                   variant: "large",
                 },
               ],
@@ -25,7 +36,18 @@ const PastAuction = () => {
                 },
                 {
                   title: AuctionCardTitle.HIGHEST_BID,
-                  content: "XXX ETH",
+                  content: (
+                    <TokenDisplay
+                      amount={bid}
+                      labelSize="small"
+                      amountSize="large"
+                      decimals={tokensForAuctions.apeDecimals[tokenIndex]}
+                      unitLabel={
+                        tokensForAuctions.collateralSymbol[tokenIndex] ?? ""
+                      }
+                      className={"text-lg"}
+                    />
+                  ),
                 },
               ],
               [
@@ -35,12 +57,12 @@ const PastAuction = () => {
                 },
                 {
                   title: AuctionCardTitle.LEADER,
-                  content: index === 0 ? "YOU WON" : "YOU LOST",
+                  content: bidder === address ? "YOU WON" : "YOU LOST",
                   variant: "large",
                 },
               ],
             ]}
-            key={index}
+            key={tokenIndex}
           />
         ))}
       </AuctionContentWrapper>
