@@ -5,15 +5,42 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OngoingAuction from "@/components/auction/ongoingAuction";
 import NewAuction from "@/components/auction/newAuction";
 import PastAuction from "@/components/auction/pastAuction";
+import type { TVaultsCollateralToken, VaultFieldFragment } from "@/lib/types";
+import { useMemo } from "react";
+import { api } from "@/trpc/react";
 
 const tabsItems = [
   ["ongoing", "Ongoing"],
   ["new", "Start new"],
   ["past", "Past"],
 ] as const;
-export const auctionTabContentHeader = "";
 
-const AuctionPage = () => {
+const AuctionPage = ({ vaults }: { vaults: VaultFieldFragment[] }) => {
+  const uniqueVaultsCollateralToken = useMemo(() => {
+    return vaults.reduce<TVaultsCollateralToken>(
+      (acc, vault) => {
+        if (!acc.collateralToken.some((v) => v === vault.collateralToken)) {
+          acc.collateralToken.push(vault.collateralToken);
+          acc.collateralSymbol.push(vault.collateralSymbol);
+          acc.apeDecimals.push(vault.apeDecimals);
+        }
+        return acc;
+      },
+      {
+        collateralToken: [],
+        collateralSymbol: [],
+        apeDecimals: [],
+      },
+    );
+  }, [vaults]);
+
+  const { data: auctions } = api.auction.getOngoingAuctions.useQuery(
+    uniqueVaultsCollateralToken.collateralToken,
+    {
+      enabled: uniqueVaultsCollateralToken.collateralToken.length > 0,
+    },
+  );
+
   return (
     <div>
       <PageHeadingSpace />
@@ -32,13 +59,19 @@ const AuctionPage = () => {
           </TabsList>
 
           <TabsContent value="ongoing" className="mt-10">
-            <OngoingAuction />
+            <OngoingAuction
+              auctions={auctions?.ongoing}
+              tokensForAuctions={uniqueVaultsCollateralToken}
+            />
           </TabsContent>
           <TabsContent value="new" className="mt-10">
-            <NewAuction />
+            <NewAuction tokensForAuctions={uniqueVaultsCollateralToken} />
           </TabsContent>
           <TabsContent value="past" className="mt-10">
-            <PastAuction />
+            <PastAuction
+              auctions={auctions?.past}
+              tokensForAuctions={uniqueVaultsCollateralToken}
+            />
           </TabsContent>
         </Tabs>
       </Container>
