@@ -54,11 +54,15 @@ export const auctionRouter = createTRPCRouter({
       return input.reduce<Record<"ongoing" | "past", TAuctions[]>>(
         (acc, address, index) => {
           const _data = auctions[index]?.result as unknown as TAuctions;
+
           if (_data.startTime > 0) {
-            if (Date.now() / 1000 < _data.startTime + AUCTION_DURATION) {
-              acc.ongoing.push(_data);
+            if (
+              Math.floor(Date.now() / 1000) <
+              _data.startTime + AUCTION_DURATION
+            ) {
+              acc.ongoing.push({ ..._data, tokenIndex: index });
             } else {
-              acc.past.push(_data);
+              acc.past.push({ ..._data, tokenIndex: index });
             }
           }
           return acc;

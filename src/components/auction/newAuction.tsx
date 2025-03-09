@@ -4,15 +4,28 @@ import AuctionCard, {
   AuctionCardTitle,
 } from "@/components/auction/auctionCard";
 import { api } from "@/trpc/react";
-import type { TVaultsCollateralToken } from "@/lib/types";
+import type { TAuctions, TVaultsCollateralToken } from "@/lib/types";
 import { TokenDisplay } from "@/components/ui/token-display";
 import { useWriteContract } from "wagmi";
 import { useStartAuction } from "@/components/auction/hooks/auctionSimulationHooks";
+import { AUCTION_COOLDOWN } from "@/components/auction/__constants";
+
+type TAuctionData = {
+  collateralSymbol: string | undefined;
+  collateralToken: string;
+  apeDecimals: number | undefined;
+  startTime: number;
+  fees: bigint;
+}[];
 
 const NewAuction = ({
   tokensForAuctions,
+  ongoingAuctions,
+  pastAuctions,
 }: {
   tokensForAuctions: TVaultsCollateralToken;
+  ongoingAuctions: TAuctions[] | undefined;
+  pastAuctions: TAuctions[] | undefined;
 }) => {
   const { data: tokenFeesInVault, refetch } =
     api.vault.getTotalCollateralFeesInVault.useQuery(
@@ -28,6 +41,48 @@ const NewAuction = ({
   const handleAuctionStart = (id: string) => {
     setId(id);
   };
+
+  const newAuctionData = tokensForAuctions.collateralToken.reduce<
+    Record<"readyToStart" | "onHold", TAuctionData>
+  >(
+    (acc, token, index) => {
+      const fees = tokenFeesInVault?.[index] ?? BigInt(0n);
+      if (fees <= BigInt(0n)) {
+        return acc;
+      }
+      const _auctions =
+        ongoingAuctions?.find((auction) => auction.tokenIndex === index) ??
+        pastAuctions?.find((auction) => auction.tokenIndex === index);
+      const updateData = (key: keyof typeof acc) => {
+        acc[key].push({
+          collateralSymbol: tokensForAuctions.collateralSymbol[index],
+          collateralToken: token,
+          apeDecimals: tokensForAuctions.apeDecimals[index],
+          startTime: _auctions ? _auctions?.startTime + AUCTION_COOLDOWN : 0,
+          fees,
+        });
+      };
+
+      if (!_auctions) {
+        updateData("readyToStart");
+      } else {
+        if (
+          _auctions.startTime + AUCTION_COOLDOWN >
+          Math.floor(Date.now() / 1000)
+        ) {
+          updateData("onHold");
+        } else {
+          updateData("readyToStart");
+        }
+      }
+
+      return acc;
+    },
+    {
+      readyToStart: [],
+      onHold: [],
+    },
+  );
 
   useEffect(() => {
     if (id && startAuctionRequest) {
@@ -45,75 +100,54 @@ const NewAuction = ({
 
   return (
     <div>
-      <AuctionContentWrapper header={"Ready to Start"}>
-        {!!tokenFeesInVault &&
-          tokenFeesInVault.map(
-            (fees, index) =>
-              fees > BigInt(0n) && (
-                <AuctionCard
-                  data={[
-                    [
-                      {
-                        title: AuctionCardTitle.AUCTION_DETAILS,
-                        content: tokensForAuctions.collateralSymbol[index],
-                        variant: "large",
-                      },
-                      {
-                        title: AuctionCardTitle.AMOUNT,
-                        content: (
-                          <TokenDisplay
-                            labelSize="small"
-                            amountSize="large"
-                            amount={fees}
-                            decimals={tokensForAuctions.apeDecimals[index]}
-                            unitLabel={
-                              tokensForAuctions.collateralSymbol[index] ?? ""
-                            }
-                            className={
-                              "font-lora text-[32px] font-normal leading-[32px]"
-                            }
-                          />
-                        ),
-                        variant: "large",
-                      },
-                    ],
-                  ]}
-                  action={{
-                    title: "Start Auction",
-                    onClick: (id) => {
-                      if (id) {
-                        handleAuctionStart(id);
-                      }
+      {Object.entries(newAuctionData).map(([key, data]) => (
+        <>
+          <AuctionContentWrapper
+            header={key === "readyToStart" ? "Ready to Start" : "On Hold"}
+            key={key}
+          >
+            {data.map((auction, index) => (
+              <AuctionCard
+                data={[
+                  [
+                    {
+                      title: AuctionCardTitle.AUCTION_DETAILS,
+                      content: auction.collateralSymbol,
+                      variant: "large",
                     },
-                  }}
-                  id={tokensForAuctions.collateralToken[index]}
-                  key={index}
-                />
-              ),
-          )}
-      </AuctionContentWrapper>
-      <div className="h-[64px]" />
-      <AuctionContentWrapper header={"On Hold"}>
-        {[1, 2, 3, 4].map((item, index) => (
-          <AuctionCard
-            data={[
-              [
-                {
-                  title: AuctionCardTitle.AUCTION_DETAILS,
-                  content: "XXXX / XXXX",
-                  variant: "large",
-                },
-                {
-                  title: AuctionCardTitle.AMOUNT,
-                  content: "XXX ETH",
-                  variant: "large",
-                },
-              ],
-            ]}
-            key={index}
-          />
-        ))}
-      </AuctionContentWrapper>
+                    {
+                      title: AuctionCardTitle.AMOUNT,
+                      content: (
+                        <TokenDisplay
+                          labelSize="small"
+                          amountSize="large"
+                          amount={auction.fees}
+                          decimals={auction.apeDecimals}
+                          unitLabel={auction.collateralSymbol ?? ""}
+                          className={
+                            "font-lora text-[32px] font-normal leading-[32px]"
+                          }
+                        />
+                      ),
+                      variant: "large",
+                    },
+                  ],
+                ]}
+                action={{
+                  title: "Start Auction",
+                  onClick: () => {
+                    handleAuctionStart(auction.collateralToken);
+                  },
+                }}
+                actionDelay={auction.startTime}
+                id={auction.collateralToken}
+                key={index}
+              />
+            ))}
+          </AuctionContentWrapper>
+          <div className="h-[64px]" />
+        </>
+      ))}
     </div>
   );
 };

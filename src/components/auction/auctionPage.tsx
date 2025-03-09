@@ -65,7 +65,11 @@ const AuctionPage = ({ vaults }: { vaults: VaultFieldFragment[] }) => {
             />
           </TabsContent>
           <TabsContent value="new" className="mt-10">
-            <NewAuction tokensForAuctions={uniqueVaultsCollateralToken} />
+            <NewAuction
+              tokensForAuctions={uniqueVaultsCollateralToken}
+              ongoingAuctions={auctions?.ongoing}
+              pastAuctions={auctions?.past}
+            />
           </TabsContent>
           <TabsContent value="past" className="mt-10">
             <PastAuction
