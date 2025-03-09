@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import Countdown from "react-countdown";
 
 export enum AuctionCardTitle {
   AUCTION_DETAILS = "Auction details",
@@ -29,11 +30,14 @@ const AuctionCard = ({
   data,
   action,
   id,
+  actionDelay,
 }: {
   data: TAuctionData[];
   action?: TAuctionAction;
   id?: string;
+  actionDelay?: number;
 }) => {
+  const shouldDelay = Boolean(actionDelay && actionDelay > Date.now() / 1000);
   return (
     <Card className="flex flex-col gap-8 rounded-2xl">
       {data.map((item, index) => (
@@ -57,10 +61,20 @@ const AuctionCard = ({
       {action && (
         <Button
           variant="submit"
-          className="w-full md:w-full"
+          className={cn(
+            "w-full md:w-full",
+            shouldDelay && "bg-[#414158] text-white !opacity-100",
+          )}
           onClick={() => action.onClick(id)}
+          disabled={shouldDelay}
         >
-          {action.title}
+          {shouldDelay ? (
+            <div className="flex items-center justify-center gap-1">
+              <>Starting in</> <Countdown date={actionDelay! * 1000} />
+            </div>
+          ) : (
+            action.title
+          )}
         </Button>
       )}
     </Card>
