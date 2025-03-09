@@ -25,7 +25,7 @@ const lora = Bebas_Neue({
 // console.log(Inter, "INTER");
 export const metadata = {
   title: "SIR",
-  description: "Description",
+  description: "SIR is a DeFi protocol designed to address the key challenges of leveraged trading, such as volatility decay and liquidation risks, making it safer for long-term investing.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
