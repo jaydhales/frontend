@@ -26,6 +26,9 @@ type TAuctionAction = {
   onClick: (id?: string) => void;
 };
 
+// const currentTime = Date.now();
+// Date.now = () => currentTime + 86_400_000;
+
 const AuctionCard = ({
   data,
   action,

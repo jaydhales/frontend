@@ -43,61 +43,64 @@ const PastAuction = ({
   return (
     <div>
       <AuctionContentWrapper header={"Past auctions"}>
-        {auctions?.map(({ bidder, bid, tokenIndex }) => (
-          <AuctionCard
-            data={[
-              [
-                {
-                  title: AuctionCardTitle.AUCTION_DETAILS,
-                  content: tokensForAuctions.collateralSymbol[tokenIndex],
-                  variant: "large",
-                },
-              ],
-              [
-                {
-                  title: AuctionCardTitle.YOUR_BID,
-                  content: "XXX ETH",
-                },
-                {
-                  title: AuctionCardTitle.HIGHEST_BID,
-                  content: (
-                    <TokenDisplay
-                      amount={bid}
-                      labelSize="small"
-                      amountSize="large"
-                      decimals={18}
-                      unitLabel={"ETH"}
-                      className={"text-lg"}
-                    />
-                  ),
-                },
-              ],
-              [
-                {
-                  title: AuctionCardTitle.CLOSING_TIME,
-                  content: "Closed",
-                },
-                {
-                  title: AuctionCardTitle.LEADER,
-                  content: bidder === address ? "YOU WON" : "YOU LOST",
-                  variant: "large",
-                },
-              ],
-            ]}
-            action={
-              bidder === address
-                ? {
-                    title: "Claim",
-                    onClick: (id) => {
-                      handleGetAuctionLot(id);
+        {auctions?.map(
+          ({ bidder, bid, tokenIndex }) =>
+            bid > 0n && (
+              <AuctionCard
+                data={[
+                  [
+                    {
+                      title: AuctionCardTitle.AUCTION_DETAILS,
+                      content: tokensForAuctions.collateralSymbol[tokenIndex],
+                      variant: "large",
                     },
-                  }
-                : undefined
-            }
-            id={tokensForAuctions.collateralToken[tokenIndex]}
-            key={tokenIndex}
-          />
-        ))}
+                  ],
+                  [
+                    {
+                      title: AuctionCardTitle.YOUR_BID,
+                      content: "XXX ETH",
+                    },
+                    {
+                      title: AuctionCardTitle.HIGHEST_BID,
+                      content: (
+                        <TokenDisplay
+                          amount={bid}
+                          labelSize="small"
+                          amountSize="large"
+                          decimals={18}
+                          unitLabel={"ETH"}
+                          className={"text-lg"}
+                        />
+                      ),
+                    },
+                  ],
+                  [
+                    {
+                      title: AuctionCardTitle.CLOSING_TIME,
+                      content: "Closed",
+                    },
+                    {
+                      title: AuctionCardTitle.LEADER,
+                      content: bidder === address ? "YOU WON" : "YOU LOST",
+                      variant: "large",
+                    },
+                  ],
+                ]}
+                action={
+                  bidder === address
+                    ? {
+                        title: "Claim",
+                        onClick: (id) => {
+                          handleGetAuctionLot(id);
+                        },
+                      }
+                    : undefined
+                }
+                id={tokensForAuctions.collateralToken[tokenIndex]}
+                key={tokenIndex}
+              />
+            ),
+        )}
       </AuctionContentWrapper>
     </div>
   );

@@ -18,6 +18,9 @@ type TAuctionData = {
   fees: bigint;
 }[];
 
+// const currentTime = Date.now();
+// Date.now = () => currentTime + 86_400_000;
+
 const NewAuction = ({
   tokensForAuctions,
   ongoingAuctions,
@@ -51,8 +54,10 @@ const NewAuction = ({
         return acc;
       }
       const _auctions =
-        ongoingAuctions?.find((auction) => auction.tokenIndex === index) ??
-        pastAuctions?.find((auction) => auction.tokenIndex === index);
+        ongoingAuctions?.find(
+          (auction) =>
+            token === tokensForAuctions.collateralToken[auction.tokenIndex],
+        ) ?? pastAuctions?.find((auction) => auction.tokenIndex === index);
       const updateData = (key: keyof typeof acc) => {
         acc[key].push({
           collateralSymbol: tokensForAuctions.collateralSymbol[index],

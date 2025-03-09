@@ -5,6 +5,9 @@ import { SirContract } from "@/contracts/sir";
 import type { TAuctions } from "@/lib/types";
 import { AUCTION_DURATION } from "@/components/auction/__constants";
 
+// const currentTime = Date.now();
+// Date.now = () => currentTime + 86_400_000;
+
 export const auctionRouter = createTRPCRouter({
   getOngoingAuctions: publicProcedure
     .input(z.array(z.string().startsWith("0x").length(42)))
@@ -28,8 +31,7 @@ export const auctionRouter = createTRPCRouter({
             ) {
               acc.ongoing.push({ ..._data, tokenIndex: index });
             } else {
-              if (_data.bid > 0n)
-                acc.past.push({ ..._data, tokenIndex: index });
+              acc.past.push({ ..._data, tokenIndex: index });
             }
           }
           return acc;
