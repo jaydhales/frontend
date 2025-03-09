@@ -341,6 +341,7 @@ export default function MintForm({ isApe }: Props) {
             </Show>
             <MintFormSubmit.OpenTransactionModalButton
               isValid={isValid}
+              isApe={isApe}
               onClick={() => {
                 setOpenTransactionModal(true);
                 // onSubmit();

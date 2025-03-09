@@ -108,7 +108,7 @@ export function VaultTableRow({
       className="grid cursor-pointer grid-cols-4 rounded-md   px-1 py-1 text-left text-[16px] text-sm font-normal transition-colors hover:bg-primary md:grid-cols-9"
     >
       <td className="">
-        <div className="flex items-center gap-x-2">
+        <div className="flex items-center gap-x-3">
           <span className="w-2">{pool.vaultId}</span>
           {parsedTaxAmount > 0n && (
             <HoverCard openDelay={0} closeDelay={20}>
