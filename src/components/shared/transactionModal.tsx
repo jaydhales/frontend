@@ -4,6 +4,8 @@ import { X } from "lucide-react";
 import type { ReactNode } from "react";
 import { Dialog, DialogContent } from "../ui/dialog";
 import ExplorerLink from "./explorerLink";
+import DisplayFormattedNumber from "@/components/shared/displayFormattedNumber";
+
 interface Props {
   setOpen: (b: boolean) => void;
   open: boolean;
