@@ -1,4 +1,3 @@
-import React from "react";
 import AuctionContentWrapper from "@/components/auction/auctionContentWrapper";
 import AuctionCard, {
   AuctionCardTitle,
@@ -6,6 +5,9 @@ import AuctionCard, {
 import type { TAuctions, TVaultsCollateralToken } from "@/lib/types";
 import { TokenDisplay } from "@/components/ui/token-display";
 import { useAccount } from "wagmi";
+import { useGetAuctionLot } from "@/components/auction/hooks/auctionSimulationHooks";
+import { useState, useEffect } from "react";
+import { useWriteContract } from "wagmi";
 
 const PastAuction = ({
   auctions,
@@ -15,6 +17,28 @@ const PastAuction = ({
   tokensForAuctions: TVaultsCollateralToken;
 }) => {
   const { address } = useAccount();
+
+  const { writeContractAsync } = useWriteContract();
+
+  const [id, setId] = useState<string>();
+  const getAuctionLotRequest = useGetAuctionLot({ id, receiver: address });
+
+  const handleGetAuctionLot = (id?: string) => {
+    setId(id);
+  };
+
+  useEffect(() => {
+    if (id && getAuctionLotRequest) {
+      console.log("getAuctionLotRequest", { getAuctionLotRequest, id });
+      writeContractAsync(getAuctionLotRequest)
+        ?.then(async () => {
+          setId(undefined);
+        })
+        .catch((reason) => {
+          console.log("getAuctionLotRequest error", reason);
+        });
+    }
+  }, [id, , getAuctionLotRequest, writeContractAsync]);
 
   return (
     <div>
@@ -41,10 +65,8 @@ const PastAuction = ({
                       amount={bid}
                       labelSize="small"
                       amountSize="large"
-                      decimals={tokensForAuctions.apeDecimals[tokenIndex]}
-                      unitLabel={
-                        tokensForAuctions.collateralSymbol[tokenIndex] ?? ""
-                      }
+                      decimals={18}
+                      unitLabel={"ETH"}
                       className={"text-lg"}
                     />
                   ),
@@ -62,6 +84,17 @@ const PastAuction = ({
                 },
               ],
             ]}
+            action={
+              bidder === address
+                ? {
+                    title: "Claim",
+                    onClick: (id) => {
+                      handleGetAuctionLot(id);
+                    },
+                  }
+                : undefined
+            }
+            id={tokensForAuctions.collateralToken[tokenIndex]}
             key={tokenIndex}
           />
         ))}

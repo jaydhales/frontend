@@ -7,7 +7,7 @@ import { TokenDisplay } from "@/components/ui/token-display";
 import Countdown from "react-countdown";
 import { AUCTION_DURATION } from "@/components/auction/__constants";
 import { useAccount } from "wagmi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { TAuctionBidModalState } from "@/components/auction/AuctionBidModal";
 import { AuctionBidModal } from "@/components/auction/AuctionBidModal";
 import AuctionBidFormProvider from "@/components/providers/auctionBidFormProvider";
@@ -15,14 +15,22 @@ import AuctionBidFormProvider from "@/components/providers/auctionBidFormProvide
 const OngoingAuction = ({
   auctions,
   tokensForAuctions,
+  refetch,
 }: {
   auctions?: TAuctions[];
   tokensForAuctions: TVaultsCollateralToken;
+  refetch: () => void;
 }) => {
   const [openModal, setOpenModal] = useState<TAuctionBidModalState>({
     open: false,
   });
   const { address } = useAccount();
+
+  useEffect(() => {
+    if (!openModal.open) {
+      refetch();
+    }
+  }, [openModal.open, refetch]);
 
   return (
     <div>
@@ -53,10 +61,8 @@ const OngoingAuction = ({
                       amount={bid}
                       labelSize="small"
                       amountSize="large"
-                      decimals={tokensForAuctions.apeDecimals[tokenIndex]}
-                      unitLabel={
-                        tokensForAuctions.collateralSymbol[tokenIndex] ?? ""
-                      }
+                      decimals={18}
+                      unitLabel={"ETH"}
                       className={"text-lg"}
                     />
                   ),
@@ -87,7 +93,6 @@ const OngoingAuction = ({
                   id,
                   bid,
                   isTopUp: bidder === address,
-                  tokenSymbol: tokensForAuctions.collateralSymbol[tokenIndex],
                 });
               },
             }}

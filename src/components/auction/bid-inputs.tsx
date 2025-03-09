@@ -37,7 +37,6 @@ function Inputs({
   children,
 }: Props) {
   const form = useFormContext<TAuctionBidFormFields>();
-  const formData = form.watch();
   return (
     <div
       data-state={disabled ? "disabled" : "active"}

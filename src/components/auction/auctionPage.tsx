@@ -34,7 +34,7 @@ const AuctionPage = ({ vaults }: { vaults: VaultFieldFragment[] }) => {
     );
   }, [vaults]);
 
-  const { data: auctions } = api.auction.getOngoingAuctions.useQuery(
+  const { data: auctions, refetch } = api.auction.getOngoingAuctions.useQuery(
     uniqueVaultsCollateralToken.collateralToken,
     {
       enabled: uniqueVaultsCollateralToken.collateralToken.length > 0,
@@ -62,6 +62,9 @@ const AuctionPage = ({ vaults }: { vaults: VaultFieldFragment[] }) => {
             <OngoingAuction
               auctions={auctions?.ongoing}
               tokensForAuctions={uniqueVaultsCollateralToken}
+              refetch={async () => {
+                await refetch();
+              }}
             />
           </TabsContent>
           <TabsContent value="new" className="mt-10">
