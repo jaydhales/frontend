@@ -23,7 +23,7 @@ export const auctionRouter = createTRPCRouter({
 
           if (_data.startTime > 0) {
             if (
-              Math.floor(Date.now() + 86400000 / 1000) <
+              Math.floor(Date.now() / 1000) <
               _data.startTime + AUCTION_DURATION
             ) {
               acc.ongoing.push({ ..._data, tokenIndex: index });
