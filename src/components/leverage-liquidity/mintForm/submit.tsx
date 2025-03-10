@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import React from "react";
 import { useAccount } from "wagmi";
-import { NotoTeapot } from "@/components/ui/teapot-icon";
-import { FxemojiMonkeyface } from "@/components/ui/monkey-icon";
+import { NotoTeapot } from "@/components/ui/icons/teapot-icon";
+import { FxemojiMonkeyface } from "@/components/ui/icons/monkey-icon";
 
 const SubmitContext = React.createContext(undefined);
 
