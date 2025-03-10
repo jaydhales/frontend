@@ -12,7 +12,7 @@ import type { CreateVaultInputValues } from "@/lib/schemas";
 import type { z } from "zod";
 import Show from "../shared/show";
 import { Input } from "../ui/input";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Info, LoaderIcon } from "lucide-react";
 import useRetrieveToken from "./hooks/useRetrieveToken";
 import { Button } from "../ui/button";
 import { useDebounce } from "../shared/hooks/useDebounce";
@@ -39,9 +39,10 @@ export default function SearchTokensModal({
     );
   }, [deSearch, tokenlist]);
   const [manualAddress, setManualAddress] = React.useState("");
-  const { name, symbol, address } = useRetrieveToken({
+  const { name, symbol, address, isLoading } = useRetrieveToken({
     tokenAddress: manualAddress,
   });
+  console.log({ name, symbol, address });
   return (
     <Dialog open={open} onOpenChange={onOpen}>
       <DialogContent
@@ -76,7 +77,7 @@ export default function SearchTokensModal({
                   step="any"
                 />
               </div>
-              {address && (
+              {address && symbol && !isLoading && (
                 <div className="flex justify-between pt-4">
                   <div className="flex items-center gap-x-2">
                     <div className="h-10 w-10">
@@ -111,6 +112,16 @@ export default function SearchTokensModal({
                       Select Token
                     </Button>
                   </div>
+                </div>
+              )}
+              {address && !symbol && !isLoading && (
+                <div className="flex items-center gap-x-2 pt-4">
+                  <span className="text-neutral-300">Token not found!</span>
+                </div>
+              )}
+              {isLoading && (
+                <div className="flex pt-4">
+                  <LoaderIcon className="animate-spin" />
                 </div>
               )}
             </div>

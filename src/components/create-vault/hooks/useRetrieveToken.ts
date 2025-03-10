@@ -15,24 +15,28 @@ export default function useRetrieveToken({
       return { address: null };
     }
   }, [tokenAddress]);
-  const { data } = useReadContracts({
+  const { data, error, isLoading } = useReadContracts({
     contracts: [
       {
         address: address ?? zeroAddress,
         abi: erc20Abi,
         functionName: "symbol",
+        chainId: 1,
       },
       {
         address: address ?? zeroAddress,
         abi: erc20Abi,
         functionName: "name",
+        chainId: 1,
       },
     ],
+
     query: {
       enabled: !!address,
     },
   });
+  console.log({ data, error });
   const symbol = data?.[0].result;
   const name = data?.[1].result;
-  return { symbol, name, address };
+  return { symbol, name, address, isLoading };
 }
