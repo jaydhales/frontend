@@ -189,9 +189,13 @@ export function VaultTableRow({
       </td>
 
       <td className="relative flex items-center justify-end gap-x-1 text-right md:col-span-2">
-        <HoverCard>
+        <HoverCard openDelay={0} closeDelay={20}>
           <HoverCardTrigger asChild>
-            <motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1 }}
+            >
               <TokenDisplay
                 labelSize="small"
                 amountSize="small"
@@ -201,7 +205,7 @@ export function VaultTableRow({
               />
             </motion.div>
           </HoverCardTrigger>
-          <HoverCardContent>
+          <HoverCardContent side="top" alignOffset={4}>
             <div className="mb-3 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
               <div className="grid grid-cols-3 gap-x-2">
                 <div className="font-bold text-left">Apes:</div>
