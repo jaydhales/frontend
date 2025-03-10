@@ -1,5 +1,13 @@
 [
   {
+    "name": "Synthetics Implemented Right",
+    "address": "0x1278B112943Abc025a0DF081Ee42369414c3A834",
+    "symbol": "SIR",
+    "decimals": 18,
+    "chainId": 1,
+    "logoURI": "https://app.sir.trading/images/sir-logo.svg"
+  },
+  {
     "name": "Wrapped Ether",
     "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
     "symbol": "WETH",
