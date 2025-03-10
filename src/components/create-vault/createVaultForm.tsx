@@ -301,38 +301,36 @@ function SelectTokenDialogTrigger({
         </label>
       </div>
       <div className="pt-1"></div>
-      <div className="w-full rounded-md bg-secondary-700 p-3">
-        <button
-          onClick={onClick}
-          type="button"
-          className="flex w-full justify-between gap-x-2 rounded-md bg-secondary-400 px-3 py-2"
-        >
-          <div className="flex items-center gap-x-1">
-            {!tokenAddress && <span className="text-[14px]">Select Token</span>}
-            {tokenAddress && (
-              <>
-                <div className="h-7 w-7">
-                  <ImageWithFallback
-                    alt=""
-                    className="h-7 w-7 rounded-full"
-                    width={25}
-                    height={25}
-                    src={getLogoAsset(tokenAddress)}
-                  />
+      <button
+        onClick={onClick}
+        type="button"
+        className="flex w-full justify-between gap-x-2 rounded-md bg-secondary-400 px-3 py-2"
+      >
+        <div className="flex items-center gap-x-1">
+          {!tokenAddress && <span className="text-[14px]">Select Token</span>}
+          {tokenAddress && (
+            <>
+              <div className="h-7 w-7">
+                <ImageWithFallback
+                  alt=""
+                  className="h-7 w-7 rounded-full"
+                  width={25}
+                  height={25}
+                  src={getLogoAsset(tokenAddress)}
+                />
+              </div>
+              <div className="">
+                <div className="text-[14px] font-medium text-white">
+                  {token?.symbol ?? symbol.data}
                 </div>
-                <div className="">
-                  <div className="text-[14px] font-medium text-white">
-                    {token?.symbol ?? symbol.data}
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-          <div className="flex items-center">
-            <ChevronDown size={25} />
-          </div>
-        </button>
-      </div>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="flex items-center">
+          <ChevronDown size={25} />
+        </div>
+      </button>
     </div>
   );
 }
