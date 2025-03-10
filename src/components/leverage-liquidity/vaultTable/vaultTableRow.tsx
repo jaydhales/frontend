@@ -205,11 +205,11 @@ export function VaultTableRow({
             <div className="mb-3 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
               <div className="flex flex-row">
                 <span>Apes own:</span>
-                <span>{apeCollateral}</span>
+                <span>{apeCollateral.toFixed(2)}</span>
               </div>
               <div className="flex flex-row">
                 <span>LPers own:</span>
-                <span>{teaCollateral}</span>
+                <span>{teaCollateral.toFixed(2)}</span>
               </div>
             </div>
           </HoverCardContent>
