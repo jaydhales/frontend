@@ -12,21 +12,6 @@ const TokenlistContext = createContext<TokenlistContextType>({
   tokenlist: [],
 });
 
-const getChainName = () => {
-  const chainId = env.NEXT_PUBLIC_CHAIN_ID;
-  if (chainId === "1") {
-    return "ethereum";
-  }
-  if (chainId === "11155111") {
-    return "sepolia";
-  }
-  if (chainId === "17000") {
-    return "holesky";
-  }
-};
-
-// "https://raw.githubusercontent.com/SIR-trading/assets/master";
-//https://raw.githubusercontent.com/fusionxx23/assets/refs/heads/master/blockchains/ethereum/assets/0x0000000000085d4780B73119b644AE5ecd22b376/logo.png
 export function TokenlistContextProvider({
   children,
 }: {
