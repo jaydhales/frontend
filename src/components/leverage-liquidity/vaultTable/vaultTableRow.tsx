@@ -207,6 +207,7 @@ export function VaultTableRow({
                 <div className="font-bold">Apes:</div>
                 <TokenDisplay
                   amount={reservesData[0]?.reserveApes ?? 0n}
+                  amountSize="small"
                   unitLabel=""
                   decimals={pool.apeDecimals}
                 />
@@ -214,6 +215,7 @@ export function VaultTableRow({
                 <div className="font-bold">LPers:</div>
                 <TokenDisplay
                   amount={reservesData[0]?.reserveLPers ?? 0n}
+                  amountSize="small"
                   unitLabel=""
                   decimals={pool.apeDecimals}
                 />
