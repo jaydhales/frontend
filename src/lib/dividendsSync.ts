@@ -12,6 +12,7 @@ import { NextResponse } from "next/server";
 import { formatUnits, parseUnits } from "viem";
 
 import { kv } from "@vercel/kv";
+import { SIR_USD_PRICE } from "@/data/constants";
 //sleep
 
 export async function syncDividends() {
@@ -70,10 +71,15 @@ async function syncPayouts({ timestamp }: { timestamp: number }) {
     if (!ethPrice) {
       throw new Error("Could not get eth price!");
     }
+
     if (!e.ethAmount || !e.stakedAmount) return;
+    const sirUsdPrice =
+      parseUnits(e.sirUsdPrice, 6) > 0n
+        ? parseUnits(e.sirUsdPrice, 6)
+        : parseUnits(SIR_USD_PRICE, 12);
     const ethParsed = parseUnits(e.ethAmount, 0);
     const sirParsed = parseUnits(e.stakedAmount, 0);
-    const sirUsdPriceBig = parseUnits(e.sirUsdPrice, 6); // sir already in usdc decimals(6)
+    const sirUsdPriceBig = sirUsdPrice; // sir already in usdc decimals(6)
     const ethUsdPriceBig = parseUnits(ethPrice.toString(), 18);
 
     const ethDecimals = 10n ** 18n;

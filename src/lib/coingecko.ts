@@ -40,6 +40,7 @@ export async function getCoinUsdPriceOnDate({
     const data = parse.data;
     return data.market_data.current_price.usd;
   } else {
+    console.log(resp, "RESPONSE");
     console.error("Error parsing CyprtoSchema");
     console.log(parse.error);
   }
