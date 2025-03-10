@@ -206,10 +206,10 @@ export function VaultTableRow({
               <div className="grid grid-cols-3 gap-x-2">
                 <div className="font-bold">Apes:</div>
                 <div>{apeCollateral.toFixed(2)}</div>
-                <div>{(apeCollateral * 100 / (tvl ?? 1)).toFixed(2)}%</div>
+                <div>({(apeCollateral * 100 / (tvl ?? 1)).toFixed(2)}%)</div>
                 <div className="font-bold">LPers:</div>
                 <div>{teaCollateral.toFixed(2)}</div>
-                <div>{(teaCollateral * 100 / (tvl ?? 1)).toFixed(2)}</div>
+                <div>({(teaCollateral * 100 / (tvl ?? 1)).toFixed(2)}%)</div>
               </div>
             </div>
           </HoverCardContent>
