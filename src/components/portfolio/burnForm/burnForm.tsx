@@ -25,6 +25,7 @@ import { TokenInput } from "./tokenInput";
 import { subgraphSyncPoll } from "@/lib/utils/sync";
 import { useBurnFormValidation } from "./hooks/useBurnFormValidation";
 import DisplayFormattedNumber from "@/components/shared/displayFormattedNumber";
+import ExplorerLink from "@/components/shared/explorerLink";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -227,6 +228,7 @@ export default function BurnForm({
                 <CircleCheck size={40} color="#F0C775" />
               </div>
               <h2 className="text-center">Transaction Successful!</h2>
+              <ExplorerLink transactionHash={hash} />
             </div>
           )}
           {isConfirmed && !isClaimingRewards && (

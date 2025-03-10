@@ -14,6 +14,7 @@ import { Button } from "../ui/button";
 import { TokenDisplay } from "../ui/token-display";
 import { Checkbox } from "../ui/checkbox";
 import Show from "../shared/show";
+import ExplorerLink from "../shared/explorerLink";
 // import sirIcon from "../../../public/images/sir-logo.svg";
 // import type { StaticImageData } from "next/image";
 
@@ -98,11 +99,12 @@ export default function ContributorClaim() {
             </div>
           )}
           {isConfirmed && (
-            <div>
+            <div className="space-y-2">
               <div className="flex justify-center">
                 <CircleCheck size={40} color="#F0C775" />
               </div>
               <h2 className="text-center">Transaction Successful!</h2>
+              <ExplorerLink transactionHash={hash} />
             </div>
           )}
         </TransactionModal.InfoContainer>
