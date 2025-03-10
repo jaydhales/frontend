@@ -204,7 +204,7 @@ export function VaultTableRow({
           <HoverCardContent>
             <div className="mb-3 max-w-[200px] rounded-sm bg-white px-2 py-2 text-[13px] font-medium text-gray-800">
               <div className="grid grid-cols-3 gap-x-2">
-                <div className="font-bold">Apes:</div>
+                <div className="font-bold text-left">Apes:</div>
                 <TokenDisplay
                   amount={reservesData[0]?.reserveApes ?? 0n}
                   amountSize="small"
@@ -212,7 +212,7 @@ export function VaultTableRow({
                   decimals={pool.apeDecimals}
                 />
                 <div>({(apeCollateral * 100 / (tvl ?? 1)).toFixed(2)}%)</div>
-                <div className="font-bold">LPers:</div>
+                <div className="font-bold text-left">LPers:</div>
                 <TokenDisplay
                   amount={reservesData[0]?.reserveLPers ?? 0n}
                   amountSize="small"
