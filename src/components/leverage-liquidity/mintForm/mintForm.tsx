@@ -33,7 +33,7 @@ import { useFormContext } from "react-hook-form";
 import { useFindVault } from "./hooks/useFindVault";
 import useIsDebtToken from "./hooks/useIsDebtToken";
 import useGetFormTokensInfo from "./hooks/useGetUserBals";
-import { IonCalculator } from "@/components/ui/calculator-icon";
+import { IonCalculator } from "@/components/ui/icons/calculator-icon";
 import Link from "next/link";
 import { useVaultProvider } from "@/components/providers/vaultProvider";
 
