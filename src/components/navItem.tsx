@@ -42,7 +42,7 @@ export default function NavItem({
   return (
     <li>
       <Link
-        style={{ textShadow: "#00000080 0px 4px 0px 0px" }}
+        style={{ textShadow: "black 0px 4px" }}
         data-active={active ? "true" : "false"}
         data-main={main ? "true" : "false"}
         className={cn(navItemVariants({ theme, className }))}
