@@ -198,7 +198,7 @@ export default function CreateVaultForm() {
           tokenSelection={open.tokenSelection}
           open={open.open}
           onOpen={(b) => setOpen((prev) => ({ ...prev, open: b }))}
-          selectedTokens={[]}
+          selectedTokens={[longToken as Address, versusToken as Address]}
         />
 
         <div className="w-full ">

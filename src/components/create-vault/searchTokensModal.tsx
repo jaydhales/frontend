@@ -12,7 +12,7 @@ import type { CreateVaultInputValues } from "@/lib/schemas";
 import type { z } from "zod";
 import Show from "../shared/show";
 import { Input } from "../ui/input";
-import { ArrowLeft, Info, LoaderIcon } from "lucide-react";
+import { ArrowLeft, LoaderIcon } from "lucide-react";
 import useRetrieveToken from "./hooks/useRetrieveToken";
 import { Button } from "../ui/button";
 import { useDebounce } from "../shared/hooks/useDebounce";
@@ -34,10 +34,12 @@ export default function SearchTokensModal({
   const { debouncedValue: deSearch } = useDebounce(searchQuery, 400);
   const [enterManually, setEnterManually] = React.useState(false);
   const tokens = useMemo(() => {
-    return tokenlist?.filter((token) =>
-      token.name.toLowerCase().includes(deSearch.toLowerCase()),
+    return tokenlist?.filter(
+      (token) =>
+        token.name.toLowerCase().includes(deSearch.toLowerCase()) &&
+        !selectedTokens.includes(token.address as Address),
     );
-  }, [deSearch, tokenlist]);
+  }, [deSearch, selectedTokens, tokenlist]);
   const [manualAddress, setManualAddress] = React.useState("");
   const { name, symbol, address, isLoading } = useRetrieveToken({
     tokenAddress: manualAddress,
