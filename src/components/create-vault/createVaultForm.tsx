@@ -123,9 +123,16 @@ export default function CreateVaultForm() {
   return (
     <FormProvider {...form}>
       <form className="space-y-2">
-        <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
+        <TransactionModal.Root
+          title="Create Vault"
+          setOpen={setOpenModal}
+          open={openModal}
+        >
           <TransactionModal.Close setOpen={setOpenModal} />
-          <TransactionModal.InfoContainer>
+          <TransactionModal.InfoContainer
+            isConfirming={isConfirming}
+            hash={hash}
+          >
             <Show
               fallback={
                 <div>
@@ -150,7 +157,8 @@ export default function CreateVaultForm() {
           <TransactionModal.StatSubmitContainer>
             <TransactionModal.SubmitButton
               disabled={!isValid}
-              loading={isPending || isConfirming}
+              isPending={isPending}
+              loading={isConfirming}
               isConfirmed={isConfirmed}
               onClick={() => {
                 if (isConfirmed) {
