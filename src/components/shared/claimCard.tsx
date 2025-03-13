@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React, { useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import { api } from "@/trpc/react";
@@ -44,16 +42,25 @@ export default function ClaimCard() {
       writeContract(claimData?.request);
     }
   };
+  const utils = api.useUtils();
   useEffect(() => {
     if (isConfirmed && !openModal) {
       reset();
     }
-  }, [isConfirmed, reset, openModal]);
+  }, [isConfirmed, reset, openModal, utils.user.getUserSirDividends]);
 
+  useEffect(() => {
+    if (isConfirmed)
+      utils.user.getUserSirDividends.invalidate().catch((e) => console.log(e));
+  }, [isConfirmed, utils.user.getUserSirDividends]);
   return (
     <div className=" border-secondary-300">
-      <TransactionModal.Root setOpen={setOpenModal} open={openModal}>
-        <TransactionModal.InfoContainer>
+      <TransactionModal.Root
+        title="Claim"
+        setOpen={setOpenModal}
+        open={openModal}
+      >
+        <TransactionModal.InfoContainer isConfirming={isConfirming} hash={hash}>
           {!isConfirmed && (
             <div>
               <h2>Claim</h2>
@@ -65,14 +72,15 @@ export default function ClaimCard() {
               {/* <span>{formatUnits(dividends ?? 0n, 18)} Eth</span> */}
             </div>
           )}
-          {isConfirmed && <TransactionSuccess />}
+          {isConfirmed && <TransactionSuccess hash={hash} />}
         </TransactionModal.InfoContainer>
         <TransactionModal.Close setOpen={setOpenModal} />
         <TransactionModal.StatSubmitContainer>
           <TransactionModal.SubmitButton
+            isPending={isPending}
             isConfirmed={isConfirmed}
             disabled={isPending || isConfirming}
-            loading={isPending || isConfirming}
+            loading={isConfirming}
             onClick={() => {
               if (isConfirmed) {
                 setOpenModal(false);
@@ -92,6 +100,7 @@ export default function ClaimCard() {
         <div className="flex items-center justify-between">
           <TokenDisplay amount={dividends ?? 0n} unitLabel={"ETH"} />
           <Button
+            disabled={!dividends || !isValid.isValid}
             onClick={() => {
               if (isValid.isValid) setOpenModal(true);
             }}
