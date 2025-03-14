@@ -73,7 +73,7 @@ export const useMintFormValidation = ({
       if (parseUnits(deposit ?? "0", decimals) > maxCollateralIn) {
         return {
           isValid: false,
-          errorMessage: "",
+          errorMessage: "Insufficient Collateral in Vault.",
         };
       }
     } else if (!maxCollateralIn && isApe) {
