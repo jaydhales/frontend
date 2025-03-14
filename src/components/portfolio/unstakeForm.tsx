@@ -21,7 +21,8 @@ import ClaimFeesCheckbox from "./claimFeesCheck";
 import { useGetReceivedSir } from "./hooks/useGetReceivedSir";
 import { TokenDisplay } from "../ui/token-display";
 import { useCheckStakeValidity } from "../shared/stake/stakeForm/useCheckStakeValidity";
-import { SirCard } from "./sirCard";
+import Show from "../shared/show";
+import SubmitButton from "../shared/submitButton";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
@@ -191,36 +192,17 @@ const UnstakeForm = ({
             ></ClaimFeesCheckbox>
 
             <div className=" mt-[20px] flex flex-col items-center justify-center">
-              {address && (
-                <Button
-                  variant={"submit"}
-                  onClick={() => {
-                    if (isValid) {
-                      setOpen(true);
-                    }
-                  }}
-                  type="button"
-                  disabled={!isValid}
-                >
-                  Unstake
-                </Button>
-              )}
-              {!address && (
-                <Button
-                  onClick={() => openConnectModal?.()}
-                  variant="submit"
-                  type="button"
-                >
-                  Connect Wallet
-                </Button>
-              )}
-              {form.formState.errors.root?.message && (
-                <div className="flex w-[450px] items-center justify-center pt-[20px]">
-                  <p className="h-[20px] text-center text-sm text-red-400">
-                    {address && <>{form.formState.errors.root?.message}</>}
-                  </p>
-                </div>
-              )}
+              <SubmitButton
+                onClick={() => {
+                  if (isValid) {
+                    setOpen(true);
+                  }
+                }}
+                disabled={!isValid}
+                error={form.formState.errors.root?.message}
+              >
+                Unstake
+              </SubmitButton>
             </div>
           </form>
         </Form>
