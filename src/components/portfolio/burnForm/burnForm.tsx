@@ -26,6 +26,7 @@ import { subgraphSyncPoll } from "@/lib/utils/sync";
 import { useBurnFormValidation } from "./hooks/useBurnFormValidation";
 import DisplayFormattedNumber from "@/components/shared/displayFormattedNumber";
 import ExplorerLink from "@/components/shared/explorerLink";
+import Show from "@/components/shared/show";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -358,13 +359,15 @@ export default function BurnForm({
             className="w-full"
             type="button"
           >
-            {isClaimingRewards && "Claim Rewards"}
-            {!isClaimingRewards && `Burn ${isApe ? "APE" : "TEA"}`}
+            <Show when={!error} fallback={<>{error}</>}>
+              {isClaimingRewards && "Claim Rewards"}
+              {!isClaimingRewards && `Burn ${isApe ? "APE" : "TEA"}`}
+            </Show>
           </Button>
 
-          {error && (
-            <div className="h-5 text-sm text-red-400">{<p>{error}</p>}</div>
-          )}
+          {/* {error && ( */}
+          {/*   <div className="h-5 text-sm text-red-400">{<p>{error}</p>}</div> */}
+          {/* )} */}
         </div>
       </form>
     </FormProvider>

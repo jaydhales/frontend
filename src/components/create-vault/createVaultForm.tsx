@@ -31,6 +31,7 @@ import { ChevronDown } from "lucide-react";
 import type { Address } from "viem";
 import { erc20Abi, zeroAddress } from "viem";
 import { useTokenlistContext } from "@/contexts/tokenListProvider";
+import SubmitButton from "../shared/submitButton";
 const tokens = [
   {
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
@@ -244,37 +245,18 @@ export default function CreateVaultForm() {
           }
         </div>
         <div className="flex flex-col items-center pt-6">
-          {isConnected && (
-            <Button
-              onClick={() => {
-                if (isConnected) {
-                  setOpenModal(true);
-                } else {
-                }
-              }}
-              type="button"
-              disabled={!isValid.isValid}
-              variant={"submit"}
-            >
-              Create
-            </Button>
-          )}
-          {!isConnected && (
-            <Button
-              type="button"
-              variant={"submit"}
-              onClick={() => {
-                openConnectModal?.();
-              }}
-            >
-              Connect Wallet
-            </Button>
-          )}
-          <div className="flex pt-2 md:w-[450px]">
-            <span className="text-[13px] text-red-400">
-              {isValid.error ? isValid.error : ""}
-            </span>
-          </div>
+          <SubmitButton
+            onClick={() => {
+              if (isConnected) {
+                setOpenModal(true);
+              } else {
+              }
+            }}
+            error={isValid.error}
+            disabled={!isValid.isValid}
+          >
+            Create Vault
+          </SubmitButton>
         </div>
       </form>
     </FormProvider>

@@ -1,10 +1,11 @@
 import DisplayFormattedNumber from "@/components/shared/displayFormattedNumber";
 import { Button } from "@/components/ui/button";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import React from "react";
+import React, { useMemo } from "react";
 import { useAccount } from "wagmi";
 import { NotoTeapot } from "@/components/ui/icons/teapot-icon";
 import { FxemojiMonkeyface } from "@/components/ui/icons/monkey-icon";
+import Show from "@/components/shared/show";
 
 const SubmitContext = React.createContext(undefined);
 
@@ -46,11 +47,13 @@ const OpenTransactionModalButton = ({
   isValid,
   isApe,
   needsApproval,
+  error,
 }: {
   needsApproval: boolean;
   onClick: () => void;
   isValid: boolean;
   isApe: boolean;
+  error?: string;
 }) => {
   const { address } = useAccount();
   if (!address) return undefined;
@@ -61,15 +64,23 @@ const OpenTransactionModalButton = ({
       type="button"
       onClick={onClick}
     >
-      {!needsApproval ? (
-        <div className="flex items-center gap-x-1">
-          <span>{isApe ? "Go Long" : "Provide Liquidity"}</span>
-          <span>{isApe ? <FxemojiMonkeyface /> : <NotoTeapot />}
-          </span>
-        </div>
-      ) : (
-        "Approve"
-      )}
+      <Show
+        when={!error}
+        fallback={
+          <div className="flex items-center gap-x-1">
+            <span>{error}</span>
+          </div>
+        }
+      >
+        {!needsApproval ? (
+          <div className="flex items-center gap-x-1">
+            <span>{isApe ? "Go Long" : "Provide Liquidity"}</span>
+            <span>{isApe ? <FxemojiMonkeyface /> : <NotoTeapot />}</span>
+          </div>
+        ) : (
+          "Approve"
+        )}
+      </Show>
     </Button>
   );
 };
@@ -87,16 +98,22 @@ const FeeInfo = ({
   feeValue: string | undefined;
   isValid: boolean;
 }) => {
-  if (
-    feeValue === "" ||
-    deposit === "" ||
-    !isFinite(parseFloat(feeAmount ?? ""))
-  ) {
-    return undefined;
-  }
-  if (!isValid) return;
+  const disabled = useMemo(() => {
+    if (
+      feeValue === "" ||
+      deposit === "" ||
+      !isFinite(parseFloat(feeAmount ?? ""))
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [deposit, feeAmount, feeValue]);
   return (
-    <div className="w-[450px]  text-gray-200">
+    <div
+      data-state={isValid && !disabled ? "valid" : "invalid"}
+      className="w-[450px] text-gray-200 data-[state=invalid]:opacity-0"
+    >
       <div className=" justify-between text-[14px]">
         <div className="relative flex w-full justify-between text-[13px]">
           <h3 className="text-gray-300 ">
