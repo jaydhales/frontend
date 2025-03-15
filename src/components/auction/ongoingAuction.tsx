@@ -2,35 +2,54 @@ import AuctionContentWrapper from "@/components/auction/auctionContentWrapper";
 import AuctionCard, {
   AuctionCardTitle,
 } from "@/components/auction/auctionCard";
-import type { TAuctions, TVaultsCollateralToken } from "@/lib/types";
-import { TokenDisplay } from "@/components/ui/token-display";
-import Countdown from "react-countdown";
-import { AUCTION_DURATION } from "@/components/auction/__constants";
 import { useAccount } from "wagmi";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import type { TAuctionBidModalState } from "@/components/auction/AuctionBidModal";
 import { AuctionBidModal } from "@/components/auction/AuctionBidModal";
 import AuctionBidFormProvider from "@/components/providers/auctionBidFormProvider";
+import { api } from "@/trpc/react";
+import type { AuctionFieldFragment } from "@/lib/types";
+import type { TUniqueAuctionCollection } from "@/components/auction/auctionPage";
+import { TokenDisplay } from "@/components/ui/token-display";
+import { AUCTION_DURATION } from "@/components/auction/__constants";
+import Countdown from "react-countdown";
+import { compareAddress } from "@/lib/utils";
 
 const OngoingAuction = ({
-  auctions,
-  tokensForAuctions,
-  refetch,
+  uniqueAuctionCollection,
 }: {
-  auctions?: TAuctions[];
-  tokensForAuctions: TVaultsCollateralToken;
-  refetch: () => void;
+  uniqueAuctionCollection: TUniqueAuctionCollection;
 }) => {
   const [openModal, setOpenModal] = useState<TAuctionBidModalState>({
     open: false,
   });
   const { address } = useAccount();
 
-  useEffect(() => {
-    if (!openModal.open) {
-      refetch();
+  const { data: auctions } = api.auction.getOngoingAuctions.useQuery(address);
+
+  const { userAuction, otherAuction } = useMemo(() => {
+    const initial: {
+      userAuction: AuctionFieldFragment[];
+      otherAuction: AuctionFieldFragment[];
+    } = { userAuction: [], otherAuction: [] };
+    if (!auctions) {
+      return initial;
     }
-  }, [openModal.open, refetch]);
+    return auctions.reduce((acc, auction) => {
+      if (Boolean(auction.isParticipant.length)) {
+        acc.userAuction.push(auction);
+      } else {
+        acc.otherAuction.push(auction);
+      }
+      return acc;
+    }, initial);
+  }, [auctions]);
+
+  // useEffect(() => {
+  //   if (!openModal.open) {
+  //     refetch();
+  //   }
+  // }, [openModal.open, refetch]);
 
   return (
     <div>
@@ -39,26 +58,143 @@ const OngoingAuction = ({
       </AuctionBidFormProvider>
 
       <AuctionContentWrapper header={"Ongoing auctions you’re Part of"}>
-        {auctions?.map(({ bidder, bid, tokenIndex, startTime }) => (
+        {userAuction.map(
+          ({
+            startTime,
+            highestBid,
+            highestBidder,
+            token,
+            amount,
+            isParticipant,
+          }) => (
+            <AuctionCard
+              data={[
+                [
+                  {
+                    title: AuctionCardTitle.AUCTION_DETAILS,
+                    content: (
+                      <TokenDisplay
+                        amount={BigInt(amount)}
+                        labelSize="small"
+                        amountSize="large"
+                        decimals={
+                          uniqueAuctionCollection.collateralDecimalsMap.get(
+                            token,
+                          ) ?? 18
+                        }
+                        unitLabel={
+                          uniqueAuctionCollection.collateralSymbolMap.get(
+                            token,
+                          ) ?? ""
+                        }
+                        className={
+                          "font-lora text-[28px] font-normal leading-[32px]"
+                        }
+                      />
+                    ),
+                  },
+                ],
+                [
+                  {
+                    title: AuctionCardTitle.YOUR_BID,
+                    content: (
+                      <TokenDisplay
+                        amount={BigInt(isParticipant[0]?.bid ?? "0")}
+                        labelSize="small"
+                        amountSize="large"
+                        decimals={18}
+                        unitLabel={"ETH"}
+                        className={"text-lg"}
+                      />
+                    ),
+                  },
+                  {
+                    title: AuctionCardTitle.HIGHEST_BID,
+                    content: (
+                      <TokenDisplay
+                        amount={BigInt(highestBid)}
+                        labelSize="small"
+                        amountSize="large"
+                        decimals={18}
+                        unitLabel={"ETH"}
+                        className={"text-lg"}
+                      />
+                    ),
+                  },
+                ],
+                [
+                  {
+                    title: AuctionCardTitle.CLOSING_TIME,
+                    content: (
+                      <Countdown
+                        date={(+startTime + AUCTION_DURATION) * 1000}
+                      />
+                    ),
+                  },
+                  {
+                    title: AuctionCardTitle.LEADER,
+                    content: compareAddress(highestBidder, address)
+                      ? "YOU ARE LEADING"
+                      : "SOMEONE ELSE",
+                    variant: "large",
+                  },
+                ],
+              ]}
+              id={token}
+              key={token}
+              action={{
+                title: compareAddress(highestBidder, address)
+                  ? "Top up"
+                  : "Bid",
+                onClick: (id) => {
+                  setOpenModal({
+                    open: true,
+                    id,
+                    bid: BigInt(highestBid),
+                    isTopUp: compareAddress(highestBidder, address),
+                  });
+                },
+              }}
+            />
+          ),
+        )}
+      </AuctionContentWrapper>
+      <div className="h-[64px]" />
+      <AuctionContentWrapper header={"Other ongoing auctions"}>
+        {otherAuction.map(({ startTime, highestBid, token, amount }) => (
           <AuctionCard
             data={[
               [
                 {
                   title: AuctionCardTitle.AUCTION_DETAILS,
-                  content: tokensForAuctions.collateralSymbol[tokenIndex],
-                  variant: "large",
+                  content: (
+                    <TokenDisplay
+                      amount={BigInt(amount)}
+                      labelSize="small"
+                      amountSize="large"
+                      decimals={
+                        uniqueAuctionCollection.collateralDecimalsMap.get(
+                          token,
+                        ) ?? 18
+                      }
+                      unitLabel={
+                        uniqueAuctionCollection.collateralSymbolMap.get(
+                          token,
+                        ) ?? ""
+                      }
+                      className={
+                        "font-lora text-[28px] font-normal leading-[32px]"
+                      }
+                    />
+                  ),
                 },
               ],
               [
                 {
-                  title: AuctionCardTitle.YOUR_BID,
-                  content: "XXX ETH",
-                },
-                {
                   title: AuctionCardTitle.HIGHEST_BID,
                   content: (
                     <TokenDisplay
-                      amount={bid}
+                      amount={BigInt(highestBid)}
                       labelSize="small"
                       amountSize="large"
                       decimals={18}
@@ -67,62 +203,26 @@ const OngoingAuction = ({
                     />
                   ),
                 },
-              ],
-              [
                 {
                   title: AuctionCardTitle.CLOSING_TIME,
                   content: (
-                    <Countdown date={(startTime + AUCTION_DURATION) * 1000} />
+                    <Countdown date={(+startTime + AUCTION_DURATION) * 1000} />
                   ),
-                },
-                {
-                  title: AuctionCardTitle.LEADER,
-                  content:
-                    bidder === address ? "YOU ARE LEADING" : "SOMEONE ELSE",
-                  variant: "large",
                 },
               ],
             ]}
-            id={tokensForAuctions.collateralToken[tokenIndex]}
-            key={tokenIndex}
+            key={token}
+            id={token}
             action={{
-              title: bidder === address ? "Top up" : "Bid",
+              title: "Bid",
               onClick: (id) => {
                 setOpenModal({
                   open: true,
                   id,
-                  bid,
-                  isTopUp: bidder === address,
+                  bid: BigInt(highestBid),
                 });
               },
             }}
-          />
-        ))}
-      </AuctionContentWrapper>
-      <div className="h-[64px]" />
-      <AuctionContentWrapper header={"Other ongoing auctions"}>
-        {[1, 2].map((item, index) => (
-          <AuctionCard
-            data={[
-              [
-                {
-                  title: AuctionCardTitle.AUCTION_DETAILS,
-                  content: "XXXX / XXXX",
-                  variant: "large",
-                },
-              ],
-              [
-                {
-                  title: AuctionCardTitle.YOUR_BID,
-                  content: "XXX ETH",
-                },
-                {
-                  title: AuctionCardTitle.CLOSING_TIME,
-                  content: "DD:HH:MM:SS",
-                },
-              ],
-            ]}
-            key={index}
           />
         ))}
       </AuctionContentWrapper>

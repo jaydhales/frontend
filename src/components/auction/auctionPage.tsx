@@ -3,11 +3,16 @@ import PageHeadingSpace from "@/components/shared/pageHeadingSpace";
 import { Container } from "@/components/ui/container";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OngoingAuction from "@/components/auction/ongoingAuction";
-import NewAuction from "@/components/auction/newAuction";
-import PastAuction from "@/components/auction/pastAuction";
-import type { TVaultsCollateralToken, VaultFieldFragment } from "@/lib/types";
 import { useMemo } from "react";
 import { api } from "@/trpc/react";
+import PastAuction from "@/components/auction/pastAuction";
+import NewAuction from "@/components/auction/newAuction";
+
+export type TUniqueAuctionCollection = {
+  uniqueCollateralToken: Set<string>;
+  collateralSymbolMap: Map<string, string>;
+  collateralDecimalsMap: Map<string, number>;
+};
 
 const tabsItems = [
   ["ongoing", "Ongoing"],
@@ -15,31 +20,38 @@ const tabsItems = [
   ["past", "Past"],
 ] as const;
 
-const AuctionPage = ({ vaults }: { vaults: VaultFieldFragment[] }) => {
-  const uniqueVaultsCollateralToken = useMemo(() => {
-    return vaults.reduce<TVaultsCollateralToken>(
-      (acc, vault) => {
-        if (!acc.collateralToken.some((v) => v === vault.collateralToken)) {
-          acc.collateralToken.push(vault.collateralToken);
-          acc.collateralSymbol.push(vault.collateralSymbol);
-          acc.apeDecimals.push(vault.apeDecimals);
-        }
-        return acc;
-      },
-      {
-        collateralToken: [],
-        collateralSymbol: [],
-        apeDecimals: [],
-      },
-    );
-  }, [vaults]);
+const AuctionPage = () => {
+  const { data: vaults, refetch: refreshVaults } =
+    api.vault.getVaults.useQuery();
 
-  const { data: auctions, refetch } = api.auction.getOngoingAuctions.useQuery(
-    uniqueVaultsCollateralToken.collateralToken,
-    {
-      enabled: uniqueVaultsCollateralToken.collateralToken.length > 0,
-    },
-  );
+  const uniqueAuctionCollection = useMemo<TUniqueAuctionCollection>(() => {
+    const uniqueCollateralToken = new Set<string>();
+    const collateralSymbolMap = new Map<string, string>();
+    const collateralDecimalsMap = new Map<string, number>();
+
+    if (!vaults) {
+      return {
+        uniqueCollateralToken,
+        collateralSymbolMap,
+        collateralDecimalsMap,
+      };
+    }
+
+    vaults.vaults.forEach((vault) => {
+      const token = vault.collateralToken;
+      if (!uniqueCollateralToken.has(token)) {
+        uniqueCollateralToken.add(token);
+        collateralSymbolMap.set(token, vault.collateralSymbol);
+        collateralDecimalsMap.set(token, vault.apeDecimals);
+      }
+    });
+
+    return {
+      uniqueCollateralToken,
+      collateralSymbolMap,
+      collateralDecimalsMap,
+    };
+  }, [vaults]);
 
   return (
     <div>
@@ -59,26 +71,13 @@ const AuctionPage = ({ vaults }: { vaults: VaultFieldFragment[] }) => {
           </TabsList>
 
           <TabsContent value="ongoing" className="mt-10">
-            <OngoingAuction
-              auctions={auctions?.ongoing}
-              tokensForAuctions={uniqueVaultsCollateralToken}
-              refetch={async () => {
-                await refetch();
-              }}
-            />
+            <OngoingAuction uniqueAuctionCollection={uniqueAuctionCollection} />
           </TabsContent>
           <TabsContent value="new" className="mt-10">
-            <NewAuction
-              tokensForAuctions={uniqueVaultsCollateralToken}
-              ongoingAuctions={auctions?.ongoing}
-              pastAuctions={auctions?.past}
-            />
+            <NewAuction uniqueAuctionCollection={uniqueAuctionCollection} />
           </TabsContent>
           <TabsContent value="past" className="mt-10">
-            <PastAuction
-              auctions={auctions?.past}
-              tokensForAuctions={uniqueVaultsCollateralToken}
-            />
+            <PastAuction uniqueAuctionCollection={uniqueAuctionCollection} />
           </TabsContent>
         </Tabs>
       </Container>

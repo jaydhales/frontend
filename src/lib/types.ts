@@ -102,6 +102,19 @@ export type TVaultsCollateralToken = {
   apeDecimals: number[];
 };
 
+export type AuctionFieldFragment = {
+  id: string;
+  token: string;
+  amount: string;
+  highestBid: string;
+  highestBidder: string;
+  startTime: string;
+  isParticipant: {
+    bid: string;
+  }[];
+};
+
+
 export type TAuctions = {
   bidder: Address;
   bid: bigint;

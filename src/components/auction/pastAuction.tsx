@@ -2,19 +2,21 @@ import AuctionContentWrapper from "@/components/auction/auctionContentWrapper";
 import AuctionCard, {
   AuctionCardTitle,
 } from "@/components/auction/auctionCard";
-import type { TAuctions, TVaultsCollateralToken } from "@/lib/types";
 import { TokenDisplay } from "@/components/ui/token-display";
 import { useAccount } from "wagmi";
 import { useGetAuctionLot } from "@/components/auction/hooks/auctionSimulationHooks";
 import { useState, useEffect } from "react";
 import { useWriteContract } from "wagmi";
+import type { TUniqueAuctionCollection } from "@/components/auction/auctionPage";
+import { api } from "@/trpc/react";
+import { AUCTION_DURATION } from "@/components/auction/__constants";
+import { compareAddress } from "@/lib/utils";
+import Countdown from "react-countdown";
 
 const PastAuction = ({
-  auctions,
-  tokensForAuctions,
+  uniqueAuctionCollection,
 }: {
-  auctions?: TAuctions[];
-  tokensForAuctions: TVaultsCollateralToken;
+  uniqueAuctionCollection: TUniqueAuctionCollection;
 }) => {
   const { address } = useAccount();
 
@@ -22,6 +24,7 @@ const PastAuction = ({
 
   const [id, setId] = useState<string>();
   const getAuctionLotRequest = useGetAuctionLot({ id, receiver: address });
+  const { data: auctions } = api.auction.getExpiredAuctions.useQuery(address);
 
   const handleGetAuctionLot = (id?: string) => {
     setId(id);
@@ -44,27 +47,61 @@ const PastAuction = ({
     <div>
       <AuctionContentWrapper header={"Past auctions"}>
         {auctions?.map(
-          ({ bidder, bid, tokenIndex }) =>
-            bid > 0n && (
+          ({
+            amount,
+            highestBid,
+            highestBidder,
+            startTime,
+            token,
+            isParticipant,
+          }) =>
+            BigInt(highestBidder) > 0n && (
               <AuctionCard
                 data={[
                   [
                     {
                       title: AuctionCardTitle.AUCTION_DETAILS,
-                      content: tokensForAuctions.collateralSymbol[tokenIndex],
-                      variant: "large",
+                      content: (
+                        <TokenDisplay
+                          amount={BigInt(amount)}
+                          labelSize="small"
+                          amountSize="large"
+                          decimals={
+                            uniqueAuctionCollection.collateralDecimalsMap.get(
+                              token,
+                            ) ?? 18
+                          }
+                          unitLabel={
+                            uniqueAuctionCollection.collateralSymbolMap.get(
+                              token,
+                            ) ?? ""
+                          }
+                          className={
+                            "font-lora text-[28px] font-normal leading-[32px]"
+                          }
+                        />
+                      ),
                     },
                   ],
                   [
                     {
                       title: AuctionCardTitle.YOUR_BID,
-                      content: "XXX ETH",
+                      content: (
+                        <TokenDisplay
+                          amount={BigInt(isParticipant[0]?.bid ?? "0")}
+                          labelSize="small"
+                          amountSize="large"
+                          decimals={18}
+                          unitLabel={"ETH"}
+                          className={"text-lg"}
+                        />
+                      ),
                     },
                     {
                       title: AuctionCardTitle.HIGHEST_BID,
                       content: (
                         <TokenDisplay
-                          amount={bid}
+                          amount={BigInt(highestBid)}
                           labelSize="small"
                           amountSize="large"
                           decimals={18}
@@ -81,13 +118,16 @@ const PastAuction = ({
                     },
                     {
                       title: AuctionCardTitle.LEADER,
-                      content: bidder === address ? "YOU WON" : "YOU LOST",
+                      content: compareAddress(highestBidder, address)
+                        ? "YOU ARE LEADING"
+                        : "SOMEONE ELSE",
                       variant: "large",
                     },
                   ],
                 ]}
+                key={token}
                 action={
-                  bidder === address
+                  compareAddress(highestBidder, address)
                     ? {
                         title: "Claim",
                         onClick: (id) => {
@@ -96,8 +136,7 @@ const PastAuction = ({
                       }
                     : undefined
                 }
-                id={tokensForAuctions.collateralToken[tokenIndex]}
-                key={tokenIndex}
+                id={token}
               />
             ),
         )}

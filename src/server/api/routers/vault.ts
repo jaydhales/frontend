@@ -173,7 +173,7 @@ export const vaultRouter = createTRPCRouter({
   getTotalCollateralFeesInVault: publicProcedure
     .input(z.array(z.string().startsWith("0x").length(42)))
     .query(async ({ input }) => {
-      const result = await multicall({
+      const totalReservesResult = await multicall({
         contracts: input.map((address) => ({
           ...VaultContract,
           functionName: "totalReserves",
@@ -190,16 +190,19 @@ export const vaultRouter = createTRPCRouter({
         })),
       });
 
-      return result.map(
-        (r, index) =>
-          BigInt(balanceResult[index]?.result ?? 0) -
-          BigInt((r.result as unknown as bigint | undefined) ?? 0),
-      );
+      const tokenWithFeesMap = new Map<string, bigint>();
+      input.forEach((token, index) => {
+        const balance = BigInt(balanceResult[index]?.result ?? 0);
+        const reserve = BigInt(
+          (totalReservesResult[index]?.result as unknown as
+            | bigint
+            | undefined) ?? 0,
+        );
+        const fees = balance - reserve;
+        if (fees > BigInt(0)) tokenWithFeesMap.set(token, fees);
+      });
 
-      // return input.reduce<Record<string, unknown>>((acc, address, index) => {
-      //   acc[address] = result[index]?.result;
-      //   return acc;
-      // }, {});
+      return tokenWithFeesMap;
     }),
 
   quoteBurn: publicProcedure

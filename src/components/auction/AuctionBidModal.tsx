@@ -3,7 +3,7 @@ import TransactionModal from "@/components/shared/transactionModal";
 import AuctionBidInputs from "./bid-inputs";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import { getLogoAsset } from "@/lib/assets";
-import { formatUnits, parseUnits } from "viem";
+import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
 import useAuctionTokenInfo from "@/components/auction/hooks/useAuctionTokenInfo";
 import { useFormContext } from "react-hook-form";
 import type { TAuctionBidFormFields } from "@/components/providers/auctionBidFormProvider";
@@ -33,22 +33,16 @@ export function AuctionBidModal({ open, setOpen }: Props) {
 
   const formData = form.watch();
 
-  const {
-    userBalance,
-    tokenDecimals,
-    userBalanceFetching,
-    needsApproval,
-    approveRequest,
-  } = useAuctionTokenInfo({
-    tokenAddress: WETH_ADDRESS,
-    amount: formData.bid,
-    isOpen: open.open,
-  });
+  const { userBalance, userBalanceFetching, needsApproval, approveRequest } =
+    useAuctionTokenInfo({
+      tokenAddress: WETH_ADDRESS,
+      amount: formData.bid,
+      isOpen: open.open,
+    });
 
   const { request: bidRequest, refetch: reSimulateBid } = useBid({
     token: tokenAddress,
     amount: formData.bid,
-    tokenDecimals,
   });
   console.log({ bidRequest, approveRequest });
 
@@ -105,10 +99,10 @@ export function AuctionBidModal({ open, setOpen }: Props) {
           </h1>
           <AuctionBidInputs.Root>
             <AuctionBidInputs.Inputs
-              decimals={tokenDecimals ?? 18}
+              decimals={18}
               disabled={false}
               inputLoading={false}
-              balance={formatUnits(balance ?? 0n, tokenDecimals ?? 18)}
+              balance={formatEther(balance ?? BigInt(0))}
             >
               <ImageWithFallback
                 src={getLogoAsset(WETH_ADDRESS)}
@@ -125,10 +119,8 @@ export function AuctionBidModal({ open, setOpen }: Props) {
               userBalanceFetching ||
               !formData.bid ||
               !balance ||
-              parseUnits(formData.bid, tokenDecimals ?? 18) > balance ||
-              (!isTopUp &&
-                formData.bid <=
-                  formatUnits(currentBid ?? BigInt(0), tokenDecimals ?? 18))
+              parseEther(formData.bid) > balance ||
+              (!isTopUp && formData.bid <= formatEther(currentBid ?? BigInt(0)))
             }
             variant="submit"
             className="mt-4 w-full md:w-full"
