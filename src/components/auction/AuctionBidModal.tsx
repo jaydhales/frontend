@@ -117,7 +117,7 @@ export function AuctionBidModal({ open, setOpen }: Props) {
             onClick={onSubmit}
             disabled={
               userBalanceFetching ||
-              !formData.bid ||
+              Number(formData.bid) === 0 ||
               !balance ||
               parseEther(formData.bid) > balance ||
               (!isTopUp && formData.bid <= formatEther(currentBid ?? BigInt(0)))

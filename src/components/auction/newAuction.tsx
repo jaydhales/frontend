@@ -4,7 +4,6 @@ import AuctionCard, {
   AuctionCardTitle,
 } from "@/components/auction/auctionCard";
 import { api } from "@/trpc/react";
-import type { TAuctions, TVaultsCollateralToken } from "@/lib/types";
 import { TokenDisplay } from "@/components/ui/token-display";
 import { useWriteContract } from "wagmi";
 import { useStartAuction } from "@/components/auction/hooks/auctionSimulationHooks";
@@ -62,12 +61,28 @@ const NewAuction = ({
         readyToStart.add(newData);
       }
     });
+    uniqueAuctionCollection.uniqueCollateralToken.forEach((token) => {
+      if (
+        allExistingAuctions &&
+        !allExistingAuctions?.some((auction) => auction.token === token)
+      ) {
+        readyToStart.add({
+          amount: tokenWithFeesMap?.get(token) ?? BigInt(0),
+          timeToStart: 0,
+          token,
+        });
+      }
+    });
 
     return {
       readyToStart: Array.from(readyToStart),
       onHold: Array.from(onHold),
     };
-  }, [allExistingAuctions, tokenWithFeesMap]);
+  }, [
+    allExistingAuctions,
+    tokenWithFeesMap,
+    uniqueAuctionCollection.uniqueCollateralToken,
+  ]);
 
   useEffect(() => {
     if (id && startAuctionRequest) {

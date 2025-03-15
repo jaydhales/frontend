@@ -9,9 +9,7 @@ import { useState, useEffect } from "react";
 import { useWriteContract } from "wagmi";
 import type { TUniqueAuctionCollection } from "@/components/auction/auctionPage";
 import { api } from "@/trpc/react";
-import { AUCTION_DURATION } from "@/components/auction/__constants";
 import { compareAddress } from "@/lib/utils";
-import Countdown from "react-countdown";
 
 const PastAuction = ({
   uniqueAuctionCollection,
@@ -25,6 +23,12 @@ const PastAuction = ({
   const [id, setId] = useState<string>();
   const getAuctionLotRequest = useGetAuctionLot({ id, receiver: address });
   const { data: auctions } = api.auction.getExpiredAuctions.useQuery(address);
+  const { data: auctionLots } = api.auction.getAuctionBalances.useQuery(
+    Array.from(uniqueAuctionCollection.uniqueCollateralToken),
+    {
+      enabled: uniqueAuctionCollection.uniqueCollateralToken.size > 0,
+    },
+  );
 
   const handleGetAuctionLot = (id?: string) => {
     setId(id);
@@ -47,98 +51,90 @@ const PastAuction = ({
     <div>
       <AuctionContentWrapper header={"Past auctions"}>
         {auctions?.map(
-          ({
-            amount,
-            highestBid,
-            highestBidder,
-            startTime,
-            token,
-            isParticipant,
-          }) =>
-            BigInt(highestBidder) > 0n && (
-              <AuctionCard
-                data={[
-                  [
-                    {
-                      title: AuctionCardTitle.AUCTION_DETAILS,
-                      content: (
-                        <TokenDisplay
-                          amount={BigInt(amount)}
-                          labelSize="small"
-                          amountSize="large"
-                          decimals={
-                            uniqueAuctionCollection.collateralDecimalsMap.get(
-                              token,
-                            ) ?? 18
-                          }
-                          unitLabel={
-                            uniqueAuctionCollection.collateralSymbolMap.get(
-                              token,
-                            ) ?? ""
-                          }
-                          className={
-                            "font-lora text-[28px] font-normal leading-[32px]"
-                          }
-                        />
-                      ),
-                    },
-                  ],
-                  [
-                    {
-                      title: AuctionCardTitle.YOUR_BID,
-                      content: (
-                        <TokenDisplay
-                          amount={BigInt(isParticipant[0]?.bid ?? "0")}
-                          labelSize="small"
-                          amountSize="large"
-                          decimals={18}
-                          unitLabel={"ETH"}
-                          className={"text-lg"}
-                        />
-                      ),
-                    },
-                    {
-                      title: AuctionCardTitle.HIGHEST_BID,
-                      content: (
-                        <TokenDisplay
-                          amount={BigInt(highestBid)}
-                          labelSize="small"
-                          amountSize="large"
-                          decimals={18}
-                          unitLabel={"ETH"}
-                          className={"text-lg"}
-                        />
-                      ),
-                    },
-                  ],
-                  [
-                    {
-                      title: AuctionCardTitle.CLOSING_TIME,
-                      content: "Closed",
-                    },
-                    {
-                      title: AuctionCardTitle.LEADER,
-                      content: compareAddress(highestBidder, address)
-                        ? "YOU ARE LEADING"
-                        : "SOMEONE ELSE",
-                      variant: "large",
-                    },
-                  ],
-                ]}
-                key={token}
-                action={
-                  compareAddress(highestBidder, address)
-                    ? {
-                        title: "Claim",
-                        onClick: (id) => {
-                          handleGetAuctionLot(id);
-                        },
-                      }
-                    : undefined
-                }
-                id={token}
-              />
-            ),
+          ({ amount, highestBid, highestBidder, token, isParticipant }) => (
+            <AuctionCard
+              data={[
+                [
+                  {
+                    title: AuctionCardTitle.AUCTION_DETAILS,
+                    content: (
+                      <TokenDisplay
+                        amount={BigInt(auctionLots?.get(token) ?? amount)}
+                        labelSize="small"
+                        amountSize="large"
+                        decimals={
+                          uniqueAuctionCollection.collateralDecimalsMap.get(
+                            token,
+                          ) ?? 18
+                        }
+                        unitLabel={
+                          uniqueAuctionCollection.collateralSymbolMap.get(
+                            token,
+                          ) ?? ""
+                        }
+                        className={
+                          "font-lora text-[28px] font-normal leading-[32px]"
+                        }
+                      />
+                    ),
+                  },
+                ],
+                [
+                  {
+                    title: AuctionCardTitle.YOUR_BID,
+                    content: (
+                      <TokenDisplay
+                        amount={BigInt(isParticipant[0]?.bid ?? "0")}
+                        labelSize="small"
+                        amountSize="large"
+                        decimals={18}
+                        unitLabel={"ETH"}
+                        className={"text-lg"}
+                      />
+                    ),
+                  },
+                  {
+                    title: AuctionCardTitle.HIGHEST_BID,
+                    content: (
+                      <TokenDisplay
+                        amount={BigInt(highestBid)}
+                        labelSize="small"
+                        amountSize="large"
+                        decimals={18}
+                        unitLabel={"ETH"}
+                        className={"text-lg"}
+                      />
+                    ),
+                  },
+                ],
+                [
+                  {
+                    title: AuctionCardTitle.CLOSING_TIME,
+                    content: "Closed",
+                  },
+                  {
+                    title: AuctionCardTitle.LEADER,
+                    content: compareAddress(highestBidder, address)
+                      ? "YOU ARE LEADING"
+                      : "SOMEONE ELSE",
+                    variant: "large",
+                  },
+                ],
+              ]}
+              key={token}
+              action={
+                compareAddress(highestBidder, address)
+                  ? {
+                      title: "Claim",
+                      onClick: (id) => {
+                        handleGetAuctionLot(id);
+                      },
+                    }
+                  : undefined
+              }
+              id={token}
+            />
+          ),
         )}
       </AuctionContentWrapper>
     </div>

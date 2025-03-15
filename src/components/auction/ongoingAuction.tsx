@@ -26,6 +26,12 @@ const OngoingAuction = ({
   const { address } = useAccount();
 
   const { data: auctions } = api.auction.getOngoingAuctions.useQuery(address);
+   const { data: auctionLots } = api.auction.getAuctionBalances.useQuery(
+     Array.from(uniqueAuctionCollection.uniqueCollateralToken),
+     {
+       enabled: uniqueAuctionCollection.uniqueCollateralToken.size > 0,
+     },
+   );
 
   const { userAuction, otherAuction } = useMemo(() => {
     const initial: {
@@ -74,7 +80,7 @@ const OngoingAuction = ({
                     title: AuctionCardTitle.AUCTION_DETAILS,
                     content: (
                       <TokenDisplay
-                        amount={BigInt(amount)}
+                        amount={BigInt(auctionLots?.get(token) ?? amount)}
                         labelSize="small"
                         amountSize="large"
                         decimals={
@@ -169,7 +175,7 @@ const OngoingAuction = ({
                   title: AuctionCardTitle.AUCTION_DETAILS,
                   content: (
                     <TokenDisplay
-                      amount={BigInt(amount)}
+                      amount={BigInt(auctionLots?.get(token) ?? amount)}
                       labelSize="small"
                       amountSize="large"
                       decimals={
