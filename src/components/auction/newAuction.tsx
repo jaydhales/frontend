@@ -47,18 +47,20 @@ const NewAuction = ({
     const currentTime = Math.floor(Date.now() / 1000);
 
     allExistingAuctions?.forEach((auction) => {
-      const newData: TNewAuctionData = {
-        amount: tokenWithFeesMap?.get(auction.token) ?? BigInt(0),
-        timeToStart: +auction.startTime + AUCTION_COOLDOWN,
-        token: auction.token,
-      };
-      if (newData.amount === BigInt(0)) {
-        return;
-      }
-      if (newData.timeToStart > currentTime) {
-        onHold.add(newData);
-      } else {
-        readyToStart.add(newData);
+      const amount = tokenWithFeesMap?.get(auction.token);
+
+      if (amount && amount > BigInt(0)) {
+        const newData: TNewAuctionData = {
+          amount,
+          timeToStart: +auction.startTime + AUCTION_COOLDOWN,
+          token: auction.token,
+        };
+
+        if (newData.timeToStart > currentTime) {
+          onHold.add(newData);
+        } else {
+          readyToStart.add(newData);
+        }
       }
     });
     uniqueAuctionCollection.uniqueCollateralToken.forEach((token) => {
@@ -66,11 +68,13 @@ const NewAuction = ({
         allExistingAuctions &&
         !allExistingAuctions?.some((auction) => auction.token === token)
       ) {
-        readyToStart.add({
-          amount: tokenWithFeesMap?.get(token) ?? BigInt(0),
-          timeToStart: 0,
-          token,
-        });
+        const amount = tokenWithFeesMap?.get(token);
+        if (amount && amount > BigInt(0))
+          readyToStart.add({
+            amount,
+            timeToStart: 0,
+            token,
+          });
       }
     });
 
