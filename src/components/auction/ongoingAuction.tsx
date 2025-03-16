@@ -74,6 +74,7 @@ const OngoingAuction = ({
             isParticipant,
           }) => (
             <AuctionCard
+              auctionType="ongoing"
               data={[
                 [
                   {
@@ -169,6 +170,7 @@ const OngoingAuction = ({
       <AuctionContentWrapper header={"Other ongoing auctions"}>
         {otherAuction.map(({ startTime, highestBid, token, amount }) => (
           <AuctionCard
+            auctionType="ongoing"
             data={[
               [
                 {

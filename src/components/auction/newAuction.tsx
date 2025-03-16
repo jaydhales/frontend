@@ -1,14 +1,22 @@
-import React, { useEffect, useMemo } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 import AuctionContentWrapper from "@/components/auction/auctionContentWrapper";
 import AuctionCard, {
   AuctionCardTitle,
 } from "@/components/auction/auctionCard";
 import { api } from "@/trpc/react";
 import { TokenDisplay } from "@/components/ui/token-display";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useStartAuction } from "@/components/auction/hooks/auctionSimulationHooks";
 import { AUCTION_COOLDOWN } from "@/components/auction/__constants";
 import type { TUniqueAuctionCollection } from "@/components/auction/auctionPage";
+import TransactionModal from "@/components/shared/transactionModal";
+import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
+import useFormFee from "@/components/leverage-liquidity/mintForm/hooks/useFormFee";
+import React from "react";
+import { useResetTransactionModal } from "@/components/leverage-liquidity/mintForm/hooks/useResetTransactionModal";
+import useResetAuctionsOnSuccess from "@/components/auction/hooks/useResetAuctionsOnSuccess";
+import { is } from "drizzle-orm";
+import { parseUnits } from "viem";
 
 type TNewAuctionData = {
   amount: bigint;
@@ -16,15 +24,12 @@ type TNewAuctionData = {
   token: string;
 };
 
-// const currentTime = Date.now();
-// Date.now = () => currentTime + 86_400_000;
-
 const NewAuction = ({
   uniqueAuctionCollection,
 }: {
   uniqueAuctionCollection: TUniqueAuctionCollection;
 }) => {
-  const { data: tokenWithFeesMap, refetch } =
+  const { data: tokenWithFeesMap } =
     api.vault.getTotalCollateralFeesInVault.useQuery(
       Array.from(uniqueAuctionCollection.uniqueCollateralToken),
       {
@@ -33,12 +38,23 @@ const NewAuction = ({
     );
   const { data: allExistingAuctions } = api.auction.getallAuctions.useQuery();
 
-  const { writeContractAsync } = useWriteContract();
-  const [id, setId] = React.useState<string>();
+  const { writeContract, data: hash, isPending, reset } = useWriteContract();
+
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    data: transactionData,
+  } = useWaitForTransactionReceipt({ hash });
+
+  const { openTransactionModal, setOpenTransactionModal } =
+    useResetTransactionModal({ reset, isConfirmed });
+
+  const [id, setId] = useState<string>();
   const startAuctionRequest = useStartAuction({ id });
 
   const handleAuctionStart = (id: string) => {
     setId(id);
+    setOpenTransactionModal(true);
   };
 
   const { readyToStart, onHold } = useMemo(() => {
@@ -88,25 +104,66 @@ const NewAuction = ({
     uniqueAuctionCollection.uniqueCollateralToken,
   ]);
 
-  useEffect(() => {
-    if (id && startAuctionRequest) {
-      console.log("startAuctionRequest", { startAuctionRequest, id });
-      writeContractAsync(startAuctionRequest)
-        ?.then(async () => {
-          setId(undefined);
-          await refetch();
-        })
-        .catch((reason) => {
-          console.log("startAuctionRequest error", reason);
-        });
+  const confirmTransaction = () => {
+    if (!isConfirmed) {
+      if (id && startAuctionRequest) {
+        writeContract(startAuctionRequest);
+      }
+    } else {
+      setOpenTransactionModal(false);
     }
-  }, [id, refetch, startAuctionRequest, writeContractAsync]);
+  };
+
+  useResetAuctionsOnSuccess({
+    isConfirming,
+    isConfirmed,
+    txBlock: parseInt(transactionData?.blockNumber.toString() ?? "0"),
+    actions: () => {
+      setId(undefined);
+      setOpenTransactionModal(false);
+    },
+    auctionType: "new",
+  });
 
   return (
     <div>
+      <TransactionModal.Root
+        title="Start Auction"
+        open={openTransactionModal}
+        setOpen={setOpenTransactionModal}
+      >
+        <TransactionModal.Close setOpen={setOpenTransactionModal} />
+        <TransactionModal.InfoContainer isConfirming={isConfirming} hash={hash}>
+          <div className="grid gap-4">
+            <h4 className="text-lg font-bold">
+              {isPending || isConfirming ? "Starting" : "Start"} Auction for{" "}
+              {uniqueAuctionCollection.collateralSymbolMap.get(id ?? "")}
+            </h4>
+            <TransactionStatus
+              showLoading={isConfirming}
+              waitForSign={isPending}
+              action={""}
+            />
+          </div>
+        </TransactionModal.InfoContainer>
+        <TransactionModal.StatSubmitContainer>
+          <TransactionModal.SubmitButton
+            onClick={confirmTransaction}
+            disabled={
+              (!isConfirmed && !Boolean(id)) || isPending || isConfirming
+            }
+            isPending={isPending}
+            loading={isConfirming}
+            isConfirmed={isConfirmed}
+          >
+            {isConfirmed ? "Confirmed" : "Confirm"}
+          </TransactionModal.SubmitButton>
+        </TransactionModal.StatSubmitContainer>
+      </TransactionModal.Root>
       <AuctionContentWrapper header="Ready to Start">
         {readyToStart.map((auction, index) => (
           <AuctionCard
+            auctionType="new"
             data={[
               [
                 {
@@ -148,6 +205,7 @@ const NewAuction = ({
                 handleAuctionStart(auction.token);
               },
             }}
+            disabled={isPending || isConfirming}
             actionDelay={auction.timeToStart}
             id={auction.token}
             key={index}
@@ -158,6 +216,7 @@ const NewAuction = ({
       <AuctionContentWrapper header="On Hold">
         {onHold.map((auction, index) => (
           <AuctionCard
+            auctionType="new"
             data={[
               [
                 {

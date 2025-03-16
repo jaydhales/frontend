@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import Countdown from "react-countdown";
+import { useResetAuctionsOnTrigger } from "@/components/auction/hooks/useResetAuctionsOnSuccess";
 
 export enum AuctionCardTitle {
   AUCTION_DETAILS = "Auction details",
@@ -34,15 +35,20 @@ const AuctionCard = ({
   action,
   id,
   actionDelay,
+  disabled,
+  auctionType,
 }: {
   data: TAuctionData[];
   action?: TAuctionAction;
   id?: string;
   actionDelay?: number;
+  disabled?: boolean;
+  auctionType: "new" | "ongoing" | "past";
 }) => {
   const shouldDelay = Boolean(actionDelay && actionDelay > Date.now() / 1000);
+  const resetAuctionOnTrigger = useResetAuctionsOnTrigger();
   return (
-    <Card className="flex flex-col gap-8 rounded-2xl">
+    <Card className="flex w-full max-w-[436px] flex-col gap-8 rounded-2xl p-[18px] max-md:mx-auto">
       {data.map((item, index) => (
         <div key={index} className="grid grid-cols-2 gap-6">
           {item.map((subItem, subIndex) => (
@@ -69,11 +75,15 @@ const AuctionCard = ({
             shouldDelay && "bg-[#414158] text-white !opacity-100",
           )}
           onClick={() => action.onClick(id)}
-          disabled={shouldDelay}
+          disabled={shouldDelay || disabled}
         >
           {shouldDelay ? (
             <div className="flex items-center justify-center gap-1">
-              <>Starting in</> <Countdown date={actionDelay! * 1000} />
+              <>Starting in</>{" "}
+              <Countdown
+                date={actionDelay! * 1000}
+                onComplete={() => resetAuctionOnTrigger(auctionType)}
+              />
             </div>
           ) : (
             action.title

@@ -21,8 +21,7 @@ const tabsItems = [
 ] as const;
 
 const AuctionPage = () => {
-  const { data: vaults, refetch: refreshVaults } =
-    api.vault.getVaults.useQuery();
+  const { data: vaults } = api.vault.getVaults.useQuery();
 
   const uniqueAuctionCollection = useMemo<TUniqueAuctionCollection>(() => {
     const uniqueCollateralToken = new Set<string>();
@@ -56,7 +55,7 @@ const AuctionPage = () => {
   return (
     <div>
       <PageHeadingSpace />
-      <Container className="max-w-[904px] lg:w-[904px]">
+      <Container className="w-svw max-w-[904px] lg:w-[904px]">
         <Tabs defaultValue="ongoing">
           <TabsList className="mx-auto w-max">
             {tabsItems.map(([value, text]) => (
