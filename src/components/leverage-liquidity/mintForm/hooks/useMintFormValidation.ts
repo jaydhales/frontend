@@ -17,7 +17,6 @@ interface Props {
   ethBalance?: bigint | undefined;
   mintFetching: boolean;
   approveFetching?: boolean;
-  needsApproval: boolean;
   useEth?: boolean;
   isApe: boolean;
   decimals: number;
@@ -35,7 +34,6 @@ export const useMintFormValidation = ({
   tokenAllowance,
   mintFetching,
   requests,
-  needsApproval,
   approveFetching,
   tokenBalance,
   ethBalance,
