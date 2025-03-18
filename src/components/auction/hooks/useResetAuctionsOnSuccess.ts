@@ -8,6 +8,7 @@ interface Props {
   txBlock?: number;
   actions: () => void;
   auctionType: "new" | "ongoing" | "past";
+  halt?: boolean;
 }
 
 export default function useResetAuctionsOnSuccess({
@@ -16,11 +17,21 @@ export default function useResetAuctionsOnSuccess({
   txBlock,
   actions,
   auctionType,
+  halt,
 }: Props) {
   const utils = api.useUtils();
 
+  console.log({
+    here: "useResetAuctionsOnSuccess",
+    isConfirmed,
+    isConfirming,
+    txBlock,
+    actions,
+    auctionType,
+  });
+
   useEffect(() => {
-    if (isConfirmed) {
+    if (isConfirmed && !halt) {
       actions();
       subgraphSyncPoll(txBlock)
         .then(() => {

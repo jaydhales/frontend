@@ -1,4 +1,4 @@
-import { use, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import AuctionContentWrapper from "@/components/auction/auctionContentWrapper";
 import AuctionCard, {
   AuctionCardTitle,
@@ -11,12 +11,9 @@ import { AUCTION_COOLDOWN } from "@/components/auction/__constants";
 import type { TUniqueAuctionCollection } from "@/components/auction/auctionPage";
 import TransactionModal from "@/components/shared/transactionModal";
 import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
-import useFormFee from "@/components/leverage-liquidity/mintForm/hooks/useFormFee";
 import React from "react";
 import { useResetTransactionModal } from "@/components/leverage-liquidity/mintForm/hooks/useResetTransactionModal";
 import useResetAuctionsOnSuccess from "@/components/auction/hooks/useResetAuctionsOnSuccess";
-import { is } from "drizzle-orm";
-import { parseUnits } from "viem";
 
 type TNewAuctionData = {
   amount: bigint;
@@ -34,9 +31,15 @@ const NewAuction = ({
       Array.from(uniqueAuctionCollection.uniqueCollateralToken),
       {
         enabled: uniqueAuctionCollection.uniqueCollateralToken.size > 0,
+        refetchInterval: 60 * 1000,
       },
     );
-  const { data: allExistingAuctions } = api.auction.getallAuctions.useQuery();
+  const { data: allExistingAuctions } = api.auction.getallAuctions.useQuery(
+    undefined,
+    {
+      refetchInterval: 60 * 1000,
+    },
+  );
 
   const { writeContract, data: hash, isPending, reset } = useWriteContract();
 

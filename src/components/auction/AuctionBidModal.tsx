@@ -3,16 +3,19 @@ import TransactionModal from "@/components/shared/transactionModal";
 import AuctionBidInputs from "./bid-inputs";
 import ImageWithFallback from "@/components/shared/ImageWithFallback";
 import { getLogoAsset } from "@/lib/assets";
-import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
+import { formatEther, parseEther } from "viem";
 import useAuctionTokenInfo from "@/components/auction/hooks/useAuctionTokenInfo";
 import { useFormContext } from "react-hook-form";
 import type { TAuctionBidFormFields } from "@/components/providers/auctionBidFormProvider";
-import { Button } from "@/components/ui/button";
 import { useBid } from "@/components/auction/hooks/auctionSimulationHooks";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useResetAfterApprove } from "@/components/leverage-liquidity/mintForm/hooks/useResetAfterApprove";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { WETH_ADDRESS } from "@/data/constants";
+import React from "react";
+import { TransactionStatus } from "@/components/leverage-liquidity/mintForm/transactionStatus";
+import ExplorerLink from "@/components/shared/explorerLink";
+import useResetAuctionsOnSuccess from "@/components/auction/hooks/useResetAuctionsOnSuccess";
 
 export type TAuctionBidModalState = {
   open: boolean;
@@ -44,11 +47,12 @@ export function AuctionBidModal({ open, setOpen }: Props) {
     token: tokenAddress,
     amount: formData.bid,
   });
-  console.log({ bidRequest, approveRequest });
+
+  const [isApproved, setIsApproved] = React.useState(false);
 
   const balance = userBalance?.tokenBalance?.result;
 
-  const { writeContractAsync, reset, data: hash } = useWriteContract();
+  const { writeContract, reset, data: hash, isPending } = useWriteContract();
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
@@ -57,34 +61,46 @@ export function AuctionBidModal({ open, setOpen }: Props) {
 
   const onSubmit = useCallback(async () => {
     if (approveRequest && needsApproval) {
-      await writeContractAsync(approveRequest);
-      await reSimulateBid();
+      writeContract(approveRequest);
+      return;
     }
 
     if (bidRequest) {
-      writeContractAsync(bidRequest)
-        .then(() => {
-          setOpen({ open: false });
-          form.reset();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      writeContract(bidRequest);
+      return;
     }
-  }, [
-    approveRequest,
-    bidRequest,
-    form,
-    needsApproval,
-    reSimulateBid,
-    setOpen,
-    writeContractAsync,
-  ]);
+  }, [approveRequest, bidRequest, needsApproval, writeContract]);
 
   useResetAfterApprove({
     isConfirmed,
-    reset,
+    reset: () => {
+      setIsApproved(true);
+      reset();
+      reSimulateBid()
+        .then((r) => r)
+        .catch((e) => console.log(e));
+    },
     needsApproval,
+  });
+
+  useResetAuctionsOnSuccess({
+    isConfirming: isConfirming,
+    isConfirmed: isConfirmed,
+    txBlock: parseInt(transactionData?.blockNumber.toString() ?? "0"),
+    auctionType: "ongoing",
+    halt: !isApproved,
+    actions: () => {
+      if (!isApproved) {
+        return;
+      } else {
+        form.reset();
+        setIsApproved(false);
+        setOpen({ open: false });
+        setTimeout(() => {
+          reset();
+        }, 2000);
+      }
+    },
   });
 
   return (
@@ -112,23 +128,87 @@ export function AuctionBidModal({ open, setOpen }: Props) {
               />
               <p>WETH</p>
             </AuctionBidInputs.Inputs>
+            <div className="h-6"></div>
+
+            <TransactionStatus
+              showLoading={isConfirming}
+              waitForSign={isPending}
+              action={""}
+            />
+
+            <ExplorerLink align="left" transactionHash={hash} />
           </AuctionBidInputs.Root>
-          <Button
-            onClick={onSubmit}
-            disabled={
-              userBalanceFetching ||
-              Number(formData.bid) === 0 ||
-              !balance ||
-              parseEther(formData.bid) > balance ||
-              (!isTopUp && formData.bid <= formatEther(currentBid ?? BigInt(0)))
-            }
-            variant="submit"
-            className="mt-4 w-full md:w-full"
-          >
-            {" "}
-            {needsApproval ? "Approve" : isTopUp ? "Top up Bid" : "Place Bid"}
-          </Button>
+
+          <TransactionModal.StatSubmitContainer>
+            <TransactionModal.SubmitButton
+              onClick={onSubmit}
+              disabled={
+                userBalanceFetching ||
+                Number(formData.bid) === 0 ||
+                !balance ||
+                parseEther(formData.bid) > balance ||
+                (!isTopUp &&
+                  formData.bid <= formatEther(currentBid ?? BigInt(0)))
+              }
+              isPending={isPending}
+              loading={isConfirming}
+              isConfirmed={isConfirmed}
+            >
+              {isConfirming
+                ? needsApproval
+                  ? "Approving"
+                  : isTopUp
+                    ? "Topping up Bid"
+                    : "Placing Bid"
+                : needsApproval
+                  ? "Approve"
+                  : isTopUp
+                    ? "Top up Bid"
+                    : "Place Bid"}
+            </TransactionModal.SubmitButton>
+          </TransactionModal.StatSubmitContainer>
         </div>
+
+        {/* {openTransactionModal && (
+          <div
+            className={`nav-shadow relative rounded-xl bg-secondary p-4  text-white transition-all duration-700 `}
+          >
+            
+              <div className="grid gap-4">
+                <h4 className="text-lg font-bold">
+                  {isPending || isConfirming ?  : "Place"} bid{" "}
+                  
+                  <TokenDisplay
+                    amount={parseEther(formData.bid)}
+                    labelSize="small"
+                    amountSize="large"
+                    decimals={18}
+                    unitLabel={"WETH"}
+                    className={
+                      "font-lora text-[28px] font-normal leading-[32px]"
+                    }
+                  />
+                </h4>
+              
+                {isConfirming && (
+        <div className="">
+         
+        </div>
+      )}
+              </div>
+            <TransactionModal.StatSubmitContainer>
+              <TransactionModal.SubmitButton
+                onClick={onSubmit}
+                disabled={isPending || isConfirming}
+                isPending={isPending}
+                loading={isConfirming}
+                isConfirmed={isConfirmed}
+              >
+                {isConfirming ? "Confirming" : "Confirm"}
+              </TransactionModal.SubmitButton>
+            </TransactionModal.StatSubmitContainer>
+          </div>
+        )} */}
       </DialogContent>
     </Dialog>
   );

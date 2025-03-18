@@ -3,7 +3,7 @@ import AuctionCard, {
   AuctionCardTitle,
 } from "@/components/auction/auctionCard";
 import { useAccount } from "wagmi";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { TAuctionBidModalState } from "@/components/auction/AuctionBidModal";
 import { AuctionBidModal } from "@/components/auction/AuctionBidModal";
 import AuctionBidFormProvider from "@/components/providers/auctionBidFormProvider";
@@ -14,6 +14,7 @@ import { TokenDisplay } from "@/components/ui/token-display";
 import { AUCTION_DURATION } from "@/components/auction/__constants";
 import Countdown from "react-countdown";
 import { compareAddress } from "@/lib/utils";
+import { useResetAuctionsOnTrigger } from "@/components/auction/hooks/useResetAuctionsOnSuccess";
 
 const OngoingAuction = ({
   uniqueAuctionCollection,
@@ -25,13 +26,19 @@ const OngoingAuction = ({
   });
   const { address } = useAccount();
 
-  const { data: auctions } = api.auction.getOngoingAuctions.useQuery(address);
-   const { data: auctionLots } = api.auction.getAuctionBalances.useQuery(
-     Array.from(uniqueAuctionCollection.uniqueCollateralToken),
-     {
-       enabled: uniqueAuctionCollection.uniqueCollateralToken.size > 0,
-     },
-   );
+  const { data: auctions } = api.auction.getOngoingAuctions.useQuery(address, {
+    refetchInterval: 60 * 1000,
+  });
+  const { data: auctionLots } = api.auction.getAuctionBalances.useQuery(
+    Array.from(uniqueAuctionCollection.uniqueCollateralToken),
+    {
+      enabled: uniqueAuctionCollection.uniqueCollateralToken.size > 0,
+      refetchInterval: 60 * 1000,
+    },
+  );
+
+  const [isTriggered, setIsTriggered] = useState(false);
+  const resetAuctionOnTrigger = useResetAuctionsOnTrigger();
 
   const { userAuction, otherAuction } = useMemo(() => {
     const initial: {
@@ -50,6 +57,18 @@ const OngoingAuction = ({
       return acc;
     }, initial);
   }, [auctions]);
+
+  const handleTrigger = useCallback(() => {
+    if (isTriggered) {
+      return;
+    }
+    setIsTriggered(true);
+    resetAuctionOnTrigger("ongoing");
+
+    return () => {
+      setIsTriggered(false);
+    };
+  }, [isTriggered, resetAuctionOnTrigger]);
 
   // useEffect(() => {
   //   if (!openModal.open) {
@@ -135,6 +154,7 @@ const OngoingAuction = ({
                     content: (
                       <Countdown
                         date={(+startTime + AUCTION_DURATION) * 1000}
+                        onComplete={handleTrigger}
                       />
                     ),
                   },
