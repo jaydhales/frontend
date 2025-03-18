@@ -5,9 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
 import type { z } from "zod";
 import { FormField, FormItem, FormLabel } from "../ui/form";
-import { Button } from "../ui/button";
 import { CreateVaultInputValues } from "@/lib/schemas";
-import type { TAddressString } from "@/lib/types";
 import { useCreateVault } from "./hooks/useCreateVault";
 import {
   useAccount,
@@ -22,7 +20,6 @@ import TransactionModal from "../shared/transactionModal";
 import { TransactionStatus } from "../leverage-liquidity/mintForm/transactionStatus";
 import TransactionInfoCreateVault from "./transactionInfoCreateVault";
 import { api } from "@/trpc/react";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useCheckValidityCreactVault } from "./hooks/useCheckValidityCreateVault";
 import { getLogoAsset } from "@/lib/assets";
 import Show from "../shared/show";
@@ -32,26 +29,8 @@ import type { Address } from "viem";
 import { erc20Abi, zeroAddress } from "viem";
 import { useTokenlistContext } from "@/contexts/tokenListProvider";
 import SubmitButton from "../shared/submitButton";
-const tokens = [
-  {
-    address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" as TAddressString,
-    label: "USDC",
-  },
-  {
-    address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2" as TAddressString,
-    label: "WETH",
-  },
-  {
-    address: "0x6b175474e89094c44da98b954eedeac495271d0f" as TAddressString,
-    label: "DAI",
-  },
-  {
-    address: "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9" as TAddressString,
-    label: "AVE",
-  },
-];
+import ErrorMessage from "../ui/error-message";
 export default function CreateVaultForm() {
-  const { openConnectModal } = useConnectModal();
   const { isConnected } = useAccount();
   const form = useForm<z.infer<typeof CreateVaultInputValues>>({
     resolver: zodResolver(CreateVaultInputValues),
@@ -252,11 +231,11 @@ export default function CreateVaultForm() {
               } else {
               }
             }}
-            error={isValid.error}
             disabled={!isValid.isValid}
           >
             Create Vault
           </SubmitButton>
+          <ErrorMessage>{isValid.error}</ErrorMessage>
         </div>
       </form>
     </FormProvider>
