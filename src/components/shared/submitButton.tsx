@@ -4,17 +4,11 @@ import { Button } from "../ui/button";
 import type { ReactNode } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 interface Props {
-  error?: string;
   onClick: () => void;
   disabled: boolean;
   children: ReactNode;
 }
-export default function SubmitButton({
-  onClick,
-  disabled,
-  error,
-  children,
-}: Props) {
+export default function SubmitButton({ onClick, disabled, children }: Props) {
   const { openConnectModal } = useConnectModal();
   const { address } = useAccount();
   return (
@@ -35,11 +29,9 @@ export default function SubmitButton({
           variant={"submit"}
           onClick={onClick}
           type="button"
-          disabled={disabled || !!error}
+          disabled={disabled}
         >
-          <Show when={!error} fallback={error}>
-            {children}
-          </Show>
+          {children}
         </Button>
       </Show>
     </>

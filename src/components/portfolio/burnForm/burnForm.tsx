@@ -7,7 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { api } from "@/trpc/react";
 import { useBurnApe } from "./hooks/useBurnApe";
-import { Address, formatUnits, parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TUserPosition } from "@/server/queries/vaults";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ import { subgraphSyncPoll } from "@/lib/utils/sync";
 import { useBurnFormValidation } from "./hooks/useBurnFormValidation";
 import DisplayFormattedNumber from "@/components/shared/displayFormattedNumber";
 import ExplorerLink from "@/components/shared/explorerLink";
-import Show from "@/components/shared/show";
+import ErrorMessage from "@/components/ui/error-message";
 
 const BurnSchema = z.object({
   deposit: z.string().optional(),
@@ -347,27 +347,24 @@ export default function BurnForm({
             </div>
           </div>
           <div className="pt-1"></div>
-          <Button
-            disabled={
-              !isValid ||
-              !Boolean(
-                isClaimingRewards ? claimRewardRequest : burnData?.request,
-              )
-            }
-            variant="submit"
-            onClick={() => setOpen(true)}
-            className="w-full"
-            type="button"
-          >
-            <Show when={!error} fallback={<>{error}</>}>
+          <div>
+            <Button
+              disabled={
+                !isValid ||
+                !Boolean(
+                  isClaimingRewards ? claimRewardRequest : burnData?.request,
+                )
+              }
+              variant="submit"
+              onClick={() => setOpen(true)}
+              className="w-full"
+              type="button"
+            >
               {isClaimingRewards && "Claim Rewards"}
               {!isClaimingRewards && `Burn ${isApe ? "APE" : "TEA"}`}
-            </Show>
-          </Button>
-
-          {/* {error && ( */}
-          {/*   <div className="h-5 text-sm text-red-400">{<p>{error}</p>}</div> */}
-          {/* )} */}
+            </Button>
+            {<ErrorMessage>{error}</ErrorMessage>}
+          </div>
         </div>
       </form>
     </FormProvider>

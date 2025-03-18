@@ -24,6 +24,7 @@ import { api } from "@/trpc/react";
 import { useGetReceivedSir } from "@/components/portfolio/hooks/useGetReceivedSir";
 import { useCheckStakeValidity } from "./useCheckStakeValidity";
 import SubmitButton from "../../submitButton";
+import ErrorMessage from "@/components/ui/error-message";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
@@ -177,7 +178,7 @@ const StakeForm = ({ closeStakeModal }: { closeStakeModal: () => void }) => {
 
             <div className=" mt-[20px] flex flex-col items-center justify-center">
               <SubmitButton
-                error={form.formState.errors.root?.message}
+                // error={form.formState.errors.root?.message}
                 disabled={!isValid}
                 onClick={() => {
                   if (isValid) {
@@ -187,6 +188,7 @@ const StakeForm = ({ closeStakeModal }: { closeStakeModal: () => void }) => {
               >
                 Stake
               </SubmitButton>
+              <ErrorMessage>{form.formState.errors.root?.message}</ErrorMessage>
             </div>
           </form>
         </Form>

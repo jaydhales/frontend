@@ -6,6 +6,7 @@ import { useAccount } from "wagmi";
 import { NotoTeapot } from "@/components/ui/icons/teapot-icon";
 import { FxemojiMonkeyface } from "@/components/ui/icons/monkey-icon";
 import Show from "@/components/shared/show";
+import ErrorMessage from "@/components/ui/error-message";
 
 const SubmitContext = React.createContext(undefined);
 
@@ -90,13 +91,14 @@ const FeeInfo = ({
   feeValue,
   deposit,
   isValid,
+  error,
 }: {
   feeAmount: string | undefined;
-
   feePercent: string | undefined;
   deposit: string | undefined;
   feeValue: string | undefined;
   isValid: boolean;
+  error?: string;
 }) => {
   const disabled = useMemo(() => {
     if (
@@ -110,11 +112,14 @@ const FeeInfo = ({
     }
   }, [deposit, feeAmount, feeValue]);
   return (
-    <div
-      data-state={isValid && !disabled ? "valid" : "invalid"}
-      className="w-[450px] text-gray-200 data-[state=invalid]:opacity-0"
-    >
-      <div className=" justify-between text-[14px]">
+    <div className="h-[40px] w-[450px] text-gray-200 ">
+      <Show when={!!error}>
+        <ErrorMessage>{error}</ErrorMessage>
+      </Show>
+      <div
+        data-state={isValid && !disabled ? "valid" : "invalid"}
+        className=" justify-between text-[14px] data-[state=invalid]:opacity-0"
+      >
         <div className="relative flex w-full justify-between text-[13px]">
           <h3 className="text-gray-300 ">
             <span className="z-20 flex items-center gap-x-1">Fee Percent</span>

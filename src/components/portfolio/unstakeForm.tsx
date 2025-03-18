@@ -21,8 +21,8 @@ import ClaimFeesCheckbox from "./claimFeesCheck";
 import { useGetReceivedSir } from "./hooks/useGetReceivedSir";
 import { TokenDisplay } from "../ui/token-display";
 import { useCheckStakeValidity } from "../shared/stake/stakeForm/useCheckStakeValidity";
-import Show from "../shared/show";
 import SubmitButton from "../shared/submitButton";
+import ErrorMessage from "../ui/error-message";
 
 type SimulateReq = SimulateContractReturnType["request"] | undefined;
 
@@ -36,7 +36,6 @@ const UnstakeForm = ({
 
   const balance = useGetStakedSir();
   const { address, isConnected } = useAccount();
-  const { openConnectModal } = useConnectModal();
 
   const [unstakeAndClaimFees, setUnstakeAndClaimFees] = useState(false);
   const { Unstake, isFetching: unstakeFetching } = useUnstake({
@@ -199,10 +198,10 @@ const UnstakeForm = ({
                   }
                 }}
                 disabled={!isValid}
-                error={form.formState.errors.root?.message}
               >
                 Unstake
               </SubmitButton>
+              <ErrorMessage>{form.formState.errors.root?.message}</ErrorMessage>
             </div>
           </form>
         </Form>

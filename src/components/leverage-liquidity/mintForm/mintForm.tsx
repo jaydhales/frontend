@@ -351,7 +351,6 @@ export default function MintForm({ isApe }: Props) {
             </Show>
             <SubmitButton
               disabled={!isValid}
-              error={formState.errors.root?.message}
               onClick={() => {
                 if (isValid) {
                   setOpenTransactionModal(true);
@@ -366,6 +365,7 @@ export default function MintForm({ isApe }: Props) {
               </Show>
             </SubmitButton>
             <MintFormSubmit.FeeInfo
+              error={formState.errors.root?.message}
               feeValue={parseAddress(longInput)}
               isValid={isValid}
               feeAmount={`${formatNumber(
